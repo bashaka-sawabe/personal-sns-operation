@@ -13,6 +13,7 @@ GitHub Project（Projects v2）＋初期Issueの一括セットアップスク�
   ラベル、マイルストーン（Phase 0〜3）、初期Issue約20件（カンバン配置済み）
 - 再実行ガード: 同名Projectが既にある場合は中断する
 """
+import getpass
 import json
 import os
 import sys
@@ -94,6 +95,19 @@ PERMISSION_HINT["unknown"] = (
 
 
 def main():
+    global TOKEN, TOKEN_KIND
+    if TOKEN_KIND == "fine-grained":
+        print("検出: 手元のPATは fine-grained です。Projects v2 APIはclassic PATのみ対応（GitHub公式仕様）。")
+        print("classicトークンの作成: https://github.com/settings/tokens → Generate new token (classic)")
+        print("  → スコープ「repo」「project」にチェック → Generate（セットアップ後にRevokeしてOK）")
+        pasted = getpass.getpass("classicトークン(ghp_...)を貼り付けてEnter（空Enterで中断）: ").strip()
+        if not pasted:
+            sys.exit("中断しました。環境変数でも指定できます: GH_PAT=ghp_xxxx python3 tools/setup_github_board.py")
+        if pasted.startswith("github_pat_"):
+            sys.exit("貼り付けられたトークンもfine-grainedです。classic（ghp_...で始まる）を作成してください。")
+        TOKEN = pasted
+        TOKEN_KIND = "classic" if pasted.startswith(("ghp_", "gho_")) else "unknown"
+
     me = gql("query{viewer{login id}}")["viewer"]
     print(f"認証OK: {me['login']}（トークン種別: {TOKEN_KIND}）")
 

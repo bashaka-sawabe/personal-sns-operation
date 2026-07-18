@@ -1,62 +1,47 @@
 # 個人SNS運用（personal-sns-operation）
 
-ピアノ演奏コンテンツによる個人SNS運用の**戦略・企画・運用データを一元管理するリポジトリ**。調査（市場・競合・トレンド）→ フレームワーク分析 → 企画 → 週次カンバン運用、までをここで回す。
+サカナクション特化のファンチャンネル（**ピアノ×トーク×AI分析**）による個人SNS運用の**戦略・企画・運用データを一元管理するリポジトリ**。調査（市場・競合・トレンド）→ フレームワーク分析 → 企画 → 週次カンバン運用、までをここで回す。
 
 - 👉 まず読む: [docs/00_サマリー.md](./docs/00_サマリー.md)（結論と根拠の要約）
-- 🗂 タスク管理: GitHub Project「個人SNS運用」（下記セットアップ参照）
+- 🗂 タスク管理: [GitHub Project「個人SNS運用」](https://github.com/users/bashaka-sawabe/projects/4)（カンバン＋ロードマップ構築済み）
+
+> **コンセプト: 「チケット外れたので、ピアノ弾きながらサカナクションの話をします」**
+> 技巧・音楽理論では戦わない（v2確定）。愛と悔しさと分析で聴かせる。
 
 ## ドキュメント
 
 | # | ドキュメント | 内容 |
 |---|---|---|
-| 00 | [サマリー](./docs/00_サマリー.md) | 結論・ポジショニング・直近アクション |
+| 00 | [サマリー](./docs/00_サマリー.md) | 結論・コンセプト・直近アクション |
 | 01 | [市場分析](./docs/01_市場分析.md) | PF統計・アルゴリズム・収益化・**権利ルール（重要）** |
 | 02 | [競合分析](./docs/02_競合分析.md) | 競合マップ・勝ちパターン・空白地帯10仮説 |
 | 03 | [トレンド調査](./docs/03_トレンド調査.md) | バズ曲・サカナクション動向・選曲プール |
-| 04 | [戦略](./docs/04_戦略.md) | 3C・STP・SWOT・コンセプト3案・ペルソナ |
+| 04 | [戦略](./docs/04_戦略.md) | 3C・STP・SWOT・ピラー設計・ペルソナ |
 | 05 | [コンテンツ企画](./docs/05_コンテンツ企画.md) | 制作の型・企画30本・投稿前チェックリスト |
 | 06 | [KPI・運用](./docs/06_KPI・運用.md) | KPIツリー・週次レビュー・カンバンのルール |
 | 07 | [ロードマップ](./docs/07_ロードマップ.md) | Phase 0〜3と完了条件 |
 
 ## カンバン（GitHub Project）の運用
 
-- レーン: **Backlog → Next（来週）→ Current(今週) → Previous（完了済み）**。イテレーション=1週間
+- ボード: https://github.com/users/bashaka-sawabe/projects/4 （カンバン＝イテレーション列／ロードマップ＝開始日→目標日）
+- レーン: **Backlog → Next（来週）→ Current（今週）→ Previous（完了済み）**。イテレーション=1週間
 - 週次レビュー（毎週日曜30分）で棚卸し: Current完了分→Previous、Next→Current、Backlogから補充
 - **Currentは3枚まで**（週3〜7時間の稼働制約。積みすぎ防止）
 - 企画・タスクはすべてIssue化。投稿後は実績数値をIssueコメントに残してClose（文脈をリポジトリに残す）
 - 詳細ルール: [docs/06_KPI・運用.md](./docs/06_KPI・運用.md) 6章
 
-## 初回セットアップ（Project・Issue一括作成）
-
-ローカル（Mac）で以下を実行すると、GitHub Project「個人SNS運用」・フィールド（イテレーション/開始日/目標日）・ラベル・マイルストーン・初期Issue約20件が自動作成される:
-
-```bash
-python3 tools/setup_github_board.py
-```
-
-- PATは `GH_PAT` 環境変数、または `~/dev/.cowork-secrets/gh_token_personal.txt` から自動で読む（PAT はコミットしないこと）
-- **Projects v2 APIはclassic PATのみ対応**（`repo`＋`project` スコープ）。fine-grained PATでは動かない（GitHub公式仕様）
-  - classicトークンで実行: `GH_PAT=ghp_xxxx python3 tools/setup_github_board.py`（セットアップ後にRevokeしてよい）
-  - gh CLI利用者: `gh auth refresh -s project,repo && GH_PAT=$(gh auth token) python3 tools/setup_github_board.py`
-- ※ この手順だけローカル実行なのは、Claude（Cowork）のクラウド環境からはGitHubのProjects API（GraphQL）に接続できないため。git push・ドキュメント整備はClaudeが直接行える
-
-> **✅ 2026-07-18: Project構築済み** → https://github.com/users/bashaka-sawabe/projects/4
-> カンバン（イテレーション列）・ロードマップ（開始日→目標日）・Issue 20件・ラベル・マイルストーンまで設定完了。以下は再構築時の参考手順。
-
-実行後、ビューのレイアウトだけブラウザで設定する（Projects v2 APIではビューのlayout設定ができないため）:
-
-1. **New view → Board** → Column by を「イテレーション」に → 名前を「カンバン」に
-2. **New view → Roadmap** → Date fields を「開始日 / 目標日」に → 名前を「ロードマップ」に
-
-※ グルーピング/日付フィールドの変更はネイティブ操作なら自動保存される。もし保存されない場合は、ビューメニューの「Save changes to new view」で新ビューとして確定させると永続化する。
-
 ## データ運用
 
 - `data/`: 週次の投稿実績CSV（`data/2026-W30.csv` の形式、テンプレは [data/template.csv](./data/template.csv)）
-- 集計・可視化スクリプトは `tools/` に追加していく（企画B-8「ダッシュボード自作」と兼用）
+- 集計・可視化スクリプトは `tools/` に追加していく（AI分析企画の成果物置き場も兼ねる）
 
 ## 更新ルール
 
 - docsは生きた文書。**意思決定・前提変更は必ずコミットで残す**（会話ログは消えるがリポジトリは残る）
 - 数値目標は実データ4週分が溜まった時点で見直し（[docs/06](./docs/06_KPI・運用.md) 2章）
 - 包括契約（JASRAC/NexTone）の対象サービス一覧は四半期ごとに再確認
+
+## 更新履歴
+
+- **2026-07-18 v2**: 本人ヒアリングにより「クラシック技巧×解説」路線を破棄。「サカナクション愛×トーク×ピアノ＋AI分析」に全面ピボット。GitHub Projectセットアップスクリプトは役目を終えたため削除
+- 2026-07-18 v1: 初版（調査・戦略・企画・ボード構築）

@@ -31,10 +31,12 @@ def token() -> str:
     t = os.environ.get("GH_PAT", "").strip()
     if t:
         return t
-    p = os.path.expanduser("~/dev/.cowork-secrets/gh_token_personal.txt")
-    if os.path.exists(p):
-        return open(p, encoding="utf-8").read().strip()
-    sys.exit("PATが見つかりません。GH_PAT環境変数を設定するか、~/dev/.cowork-secrets/gh_token_personal.txt を配置してください。")
+    # Projects v2 API はclassic PATのみ対応。classic用ファイルを優先して読む
+    for name in ("classic_token_personal.txt", "gh_token_personal.txt"):
+        p = os.path.expanduser(f"~/dev/.cowork-secrets/{name}")
+        if os.path.exists(p):
+            return open(p, encoding="utf-8").read().strip()
+    sys.exit("PATが見つかりません。GH_PAT環境変数を設定するか、~/dev/.cowork-secrets/classic_token_personal.txt を配置してください。")
 
 
 TOKEN = token()

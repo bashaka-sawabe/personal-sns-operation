@@ -35,7 +35,9 @@ python3 tools/setup_github_board.py
 ```
 
 - PATは `GH_PAT` 環境変数、または `~/dev/.cowork-secrets/gh_token_personal.txt` から自動で読む（PAT はコミットしないこと）
-- PATに `repo` と `project` 権限（classic）／ Issues・Projects の Read and write（fine-grained）が必要
+- **Projects v2 APIはclassic PATのみ対応**（`repo`＋`project` スコープ）。fine-grained PATでは動かない（GitHub公式仕様）
+  - classicトークンで実行: `GH_PAT=ghp_xxxx python3 tools/setup_github_board.py`（セットアップ後にRevokeしてよい）
+  - gh CLI利用者: `gh auth refresh -s project,repo && GH_PAT=$(gh auth token) python3 tools/setup_github_board.py`
 - ※ この手順だけローカル実行なのは、Claude（Cowork）のクラウド環境からはGitHubのProjects API（GraphQL）に接続できないため。git push・ドキュメント整備はClaudeが直接行える
 
 実行後、ブラウザで2ステップだけ手動設定（APIで作成できないため）:

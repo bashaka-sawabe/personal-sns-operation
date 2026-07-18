@@ -75,11 +75,13 @@ def gql(query: str, variables=None, allow_partial: bool = False):
 
 PERMISSION_HINT = {
     "fine-grained": (
-        "このPAT（fine-grained）に Projects 権限がありません。\n"
-        "修正手順: https://github.com/settings/personal-access-tokens → 該当トークンを開く\n"
-        "  1. Account permissions → Projects → 「Read and write」に変更\n"
-        "  2. Repository permissions → Issues が「Read and write」であることを確認（Issue・ラベル・マイルストーン作成に必要）\n"
-        "  3. 保存してから再実行: python3 tools/setup_github_board.py"
+        "fine-grained PATはProjects v2 API（GraphQL）に対応していません（GitHub公式仕様。\n"
+        "classic PATのprojectスコープ、またはGitHub Appトークンのみ対応）。次のどちらかで実行してください:\n"
+        "  A) classicトークンを作成: https://github.com/settings/tokens → Generate new token (classic)\n"
+        "     → スコープ「repo」「project」にチェック → 生成\n"
+        "     → GH_PAT=ghp_xxxx python3 tools/setup_github_board.py\n"
+        "     （セットアップ後はこのclassicトークンをRevokeしてOK）\n"
+        "  B) gh CLI利用者: gh auth refresh -s project,repo && GH_PAT=$(gh auth token) python3 tools/setup_github_board.py"
     ),
     "classic": (
         "このPAT（classic）に project スコープがありません。\n"
@@ -87,7 +89,7 @@ PERMISSION_HINT = {
     ),
 }
 PERMISSION_HINT["unknown"] = (
-    PERMISSION_HINT["fine-grained"] + "\n\n（classicトークン ghp_... の場合）\n" + PERMISSION_HINT["classic"]
+    PERMISSION_HINT["fine-grained"] + "\n\n（classicトークン ghp_... でこのエラーが出た場合）\n" + PERMISSION_HINT["classic"]
 )
 
 

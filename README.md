@@ -40,10 +40,15 @@ python3 tools/setup_github_board.py
   - gh CLI利用者: `gh auth refresh -s project,repo && GH_PAT=$(gh auth token) python3 tools/setup_github_board.py`
 - ※ この手順だけローカル実行なのは、Claude（Cowork）のクラウド環境からはGitHubのProjects API（GraphQL）に接続できないため。git push・ドキュメント整備はClaudeが直接行える
 
-実行後、ブラウザで2ステップだけ手動設定（APIで作成できないため）:
+> **✅ 2026-07-18: Project構築済み** → https://github.com/users/bashaka-sawabe/projects/4
+> カンバン（イテレーション列）・ロードマップ（開始日→目標日）・Issue 20件・ラベル・マイルストーンまで設定完了。以下は再構築時の参考手順。
 
-1. Projectを開く → **New view → Board** → Column by を「イテレーション」に → 名前を「カンバン」に
+実行後、ビューのレイアウトだけブラウザで設定する（Projects v2 APIではビューのlayout設定ができないため）:
+
+1. **New view → Board** → Column by を「イテレーション」に → 名前を「カンバン」に
 2. **New view → Roadmap** → Date fields を「開始日 / 目標日」に → 名前を「ロードマップ」に
+
+※ グルーピング/日付フィールドの変更はネイティブ操作なら自動保存される。もし保存されない場合は、ビューメニューの「Save changes to new view」で新ビューとして確定させると永続化する。
 
 ## データ運用
 

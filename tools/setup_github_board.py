@@ -37,6 +37,11 @@ def token() -> str:
 
 
 TOKEN = token()
+TOKEN_KIND = (
+    "fine-grained" if TOKEN.startswith("github_pat_")
+    else "classic" if TOKEN.startswith("ghp_")
+    else "unknown"
+)
 
 
 def call(method: str, url: str, data=None):
@@ -61,23 +66,54 @@ def rest(method: str, path: str, data=None):
     return call(method, f"{API}{path}", data)
 
 
-def gql(query: str, variables=None):
+def gql(query: str, variables=None, allow_partial: bool = False):
     res = call("POST", f"{API}/graphql", {"query": query, "variables": variables or {}})
-    if res.get("errors"):
+    if res.get("errors") and not (allow_partial and res.get("data")):
         raise RuntimeError(f"GraphQL error: {json.dumps(res['errors'], ensure_ascii=False)[:400]}")
-    return res["data"]
+    return res.get("data")
+
+
+PERMISSION_HINT = {
+    "fine-grained": (
+        "このPAT（fine-grained）に Projects 権限がありません。\n"
+        "修正手順: https://github.com/settings/personal-access-tokens → 該当トークンを開く\n"
+        "  1. Account permissions → Projects → 「Read and write」に変更\n"
+        "  2. Repository permissions → Issues が「Read and write」であることを確認（Issue・ラベル・マイルストーン作成に必要）\n"
+        "  3. 保存してから再実行: python3 tools/setup_github_board.py"
+    ),
+    "classic": (
+        "このPAT（classic）に project スコープがありません。\n"
+        "修正手順: https://github.com/settings/tokens → 該当トークン → 「project」(と「repo」)にチェック → 保存して再実行"
+    ),
+}
+PERMISSION_HINT["unknown"] = (
+    PERMISSION_HINT["fine-grained"] + "\n\n（classicトークン ghp_... の場合）\n" + PERMISSION_HINT["classic"]
+)
 
 
 def main():
     me = gql("query{viewer{login id}}")["viewer"]
-    print(f"認証OK: {me['login']}")
+    print(f"認証OK: {me['login']}（トークン種別: {TOKEN_KIND}）")
 
-    # 再実行ガード
-    existing = gql(
-        "query($l:String!){user(login:$l){projectsV2(first:50){nodes{title url}}}}",
-        {"l": OWNER},
-    )["user"]["projectsV2"]["nodes"]
-    for p in existing:
+    # 権限プリフライト: Projects v2 に触れるかを先に確認
+    try:
+        gql("query{viewer{projectsV2(first:1){totalCount}}}")
+    except RuntimeError as e:
+        if "FORBIDDEN" in str(e) or "Resource not accessible" in str(e):
+            sys.exit(f"\n中断: Projects APIへの権限がありません。\n\n{PERMISSION_HINT[TOKEN_KIND]}")
+        raise
+
+    # 再実行ガード（権限外のProjectが混ざっていても落ちないようにする）
+    try:
+        existing = gql(
+            "query($l:String!){user(login:$l){projectsV2(first:50){nodes{title url}}}}",
+            {"l": OWNER},
+            allow_partial=True,
+        )["user"]["projectsV2"]["nodes"] or []
+    except RuntimeError as e:
+        print(f"警告: 既存Project一覧を確認できませんでした（同名の重複作成に注意）: {str(e)[:150]}")
+        existing = []
+    for p in filter(None, existing):
         if p["title"] == PROJECT_TITLE:
             sys.exit(f"中断: 同名のProjectが既に存在します → {p['url']}\n（作り直す場合は既存Projectを削除してから再実行）")
 

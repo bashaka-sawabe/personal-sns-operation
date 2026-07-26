@@ -214,11 +214,14 @@ def show_channel(interactive: bool = False) -> dict:
     return ch
 
 
-def rename_channel(new_title: str, interactive: bool = False) -> None:
-    """チャンネル名を変更する。
+def rename_channel(new_title: str | None, new_description: str | None = None,
+                   interactive: bool = False) -> None:
+    """チャンネル名・説明文を変更する。
 
     既存の動画・登録者がある場合は破壊的な操作になり得るので、
     呼ぶ前に必ず --channel で中身を確認すること。
+
+    ハンドル（@xxx）はAPIから変更できない。YouTube Studio で手で変える必要がある。
     """
     _, _, _, _, HttpError, _ = _imports()
     service = get_service(interactive=interactive)
@@ -236,19 +239,45 @@ def rename_channel(new_title: str, interactive: bool = False) -> None:
     if videos or subs:
         print(f"注意: このチャンネルには動画{videos}本・登録者{subs}人があります。", file=sys.stderr)
 
+    channel = {}
+    if new_title:
+        channel["title"] = new_title
+    if new_description is not None:
+        channel["description"] = new_description
+    if not channel:
+        raise PipelineError("変更内容がありません（--rename か --description を指定してください）。")
+
     try:
         service.channels().update(
             part="brandingSettings",
-            body={"id": ch["id"], "brandingSettings": {"channel": {"title": new_title}}},
+            body={"id": ch["id"], "brandingSettings": {"channel": channel}},
         ).execute()
     except HttpError as e:
         raise PipelineError(
-            f"名前の変更に失敗しました: {getattr(e, 'reason', '') or e}\n"
+            f"変更に失敗しました: {getattr(e, 'reason', '') or e}\n"
             "YouTubeは名前変更の頻度を制限しています（14日で2回まで）。\n"
             "APIで通らない場合は YouTube Studio → カスタマイズ → ブランディング から手で変更してください。"
         ) from None
-    print(f"変更しました: 「{old}」 → 「{new_title}」")
-    print("反映まで数分かかることがあります。")
+
+    # APIは brandingSettings.channel.title を受け付けて200を返すが、実際には
+    # 無視することがある（既知の挙動）。成功したと偽らないよう必ず読み直して検証する
+    after = service.channels().list(part="snippet", mine=True).execute()["items"][0]
+    now_title = after["snippet"].get("title", "")
+
+    if new_description is not None:
+        print("説明文: 更新しました")
+    if new_title:
+        if now_title == new_title:
+            print(f"チャンネル名: 「{old}」 → 「{new_title}」")
+        else:
+            print(
+                f"チャンネル名: 変更されませんでした（現在も「{now_title}」）。\n"
+                "  YouTube Data API はチャンネル名の変更を受け付けても実際には反映しません。\n"
+                "  YouTube Studio → カスタマイズ → 基本情報 から手で変更してください:\n"
+                "  https://studio.youtube.com/channel/" + ch["id"] + "/editing/details",
+                file=sys.stderr,
+            )
+    print("※ ハンドル（@xxx）もAPIからは変更できません。同じ画面から手で変更してください。")
 
 
 def load_ledger() -> dict:
@@ -281,6 +310,8 @@ def main() -> None:
     p.add_argument("--auth", action="store_true", help="認可を行う（初回・スコープ追加時）")
     p.add_argument("--channel", action="store_true", help="投稿先チャンネルの現状を表示する")
     p.add_argument("--rename", metavar="名前", help="チャンネル名を変更する")
+    p.add_argument("--description", metavar="説明", help="チャンネルの説明文を変更する")
+    p.add_argument("--description-file", metavar="パス", help="説明文をファイルから読んで変更する")
     p.add_argument("--privacy", default="unlisted",
                    choices=["private", "unlisted", "public"],
                    help="公開範囲（既定: unlisted＝限定公開）")
@@ -299,8 +330,12 @@ def main() -> None:
             show_channel(interactive=True)
             return
 
-        if args.rename:
-            rename_channel(args.rename, interactive=True)
+        description = args.description
+        if args.description_file:
+            with open(args.description_file, encoding="utf-8") as f:
+                description = f.read().strip()
+        if args.rename or description is not None:
+            rename_channel(args.rename, description, interactive=True)
             return
 
         targets = []

@@ -47,7 +47,7 @@ python3 tools/fetch_metrics.py --refresh-token  # 長期トークンを延長（
 
 - 初回のトークン取得手順・cron設定・**TikTokがAPI非対応な理由**は [docs/08_自動化.md](./docs/08_自動化.md)
 - 手入力列（`pillar` / `completion_rate` / `hypothesis` 等）はAPIの値で上書きされない
-- トークンは `~/dev/.cowork-secrets/` に置く（**コミットしないこと**）
+- トークンは `~/repo/.cowork-secrets/` に置く（**コミットしないこと**）
 
 ## 更新ルール
 

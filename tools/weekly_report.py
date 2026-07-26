@@ -9,11 +9,13 @@
     python3 tools/weekly_report.py --issue 42       # レポートをIssue #42 にコメント
 
 集計の考え方は docs/06_KPI・運用.md のKPIツリーに合わせている:
-- 北極星は「保存率（saves/1,000再生）」と「完走率」。フォロワー数は遅行指標として併記のみ
-- ピラー別（A/B/C）の比較を必ず出す。Phase 1の最重要目標は「3ピラーの優劣をデータで語れる状態」
+- 北極星は「保存率」「完走率」「コメント率」（コメント率はトーク型＝ピラーAの主指標）。
+  フォロワー数は遅行指標として併記のみ
+- ピラー別（A/B）の比較を必ず出す。Phase 1の最重要目標は
+  「ピラーA/Bのフォーマット優劣がデータで語れる状態」
 
-Issueコメントに使うPATは setup_github_board.py と同じく GH_PAT または
-~/dev/.cowork-secrets/gh_token_personal.txt から読む（fine-grained/classicどちらでも可）。
+IssueコメントにはPATが要る。GH_PAT または ~/dev/.cowork-secrets/gh_token_personal.txt
+から読む（fine-grained/classicどちらでも可）。
 """
 import argparse
 import csv
@@ -33,10 +35,10 @@ OWNER = "bashaka-sawabe"
 REPO = "personal-sns-operation"
 API = "https://api.github.com"
 
+# docs/06_KPI・運用.md 6章のラベル定義に対応（pillar:classic はv2で廃止）
 PILLAR_LABELS = {
-    "sakanaction": "A. サカナクション研究室",
-    "datalab": "B. ピアノ×データラボ",
-    "classic": "C. クラシック翻訳機",
+    "sakanaction": "A. ファントーク×ピアノ",
+    "datalab": "B. AI×サカナクション研究",
 }
 
 
@@ -74,12 +76,12 @@ def has(row: dict, key: str) -> bool:
     return bool((row.get(key) or "").strip())
 
 
-def save_rate(rows: list) -> float:
-    """保存率 = 保存数 / 1,000再生。再生が0なら0を返す。"""
+def rate_per_1k(rows: list, key: str) -> float:
+    """1,000再生あたりの件数（保存率・コメント率）。再生が0なら0を返す。"""
     views = sum(num(r, "views_total") for r in rows)
     if views <= 0:
         return 0.0
-    return sum(num(r, "saves") for r in rows) / views * 1000
+    return sum(num(r, key) for r in rows) / views * 1000
 
 
 def mean(values: list) -> float:
@@ -123,15 +125,21 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
         "",
         "| 指標 | 今週 | 前週 | 目標（docs/06） |",
         "|---|---|---|---|",
-        f"| 保存率（/1,000再生） | {fmt(save_rate(rows), 2)} | {fmt(save_rate(prev_rows), 2)} | ピラー間で比較 |",
+        f"| 保存率（/1,000再生） | {fmt(rate_per_1k(rows, 'saves'), 2)} | "
+        f"{fmt(rate_per_1k(prev_rows, 'saves'), 2)} | ピラー間で比較 |",
         f"| 完走率（記録済みの平均） | {pct(mean(completions))} | "
         f"{pct(mean([num(r, 'completion_rate') for r in prev_rows if has(r, 'completion_rate')]))} | 60%超の型を1つ確立 |",
+        f"| コメント率（/1,000再生） | {fmt(rate_per_1k(rows, 'comments'), 2)} | "
+        f"{fmt(rate_per_1k(prev_rows, 'comments'), 2)} | 共感コメントが安定して付く型を見つける |",
         f"| フォロワー増（合計） | {fmt(follows, 0)} | "
         f"{fmt(sum(num(r, 'follows_gained') for r in prev_rows), 0)} | Phase 1で3PF計1,000 |",
         "",
     ]
 
-    lines += ["### ピラー別（Phase 1の判定材料）", "", "| ピラー | 本数 | 再生 | 保存率 | 完走率 |", "|---|---|---|---|---|"]
+    lines += [
+        "### ピラー別（Phase 1の判定材料）", "",
+        "| ピラー | 本数 | 再生 | 保存率 | コメント率 | 完走率 |", "|---|---|---|---|---|---|",
+    ]
     by_pillar = {}
     for row in rows:
         by_pillar.setdefault((row.get("pillar") or "未設定").strip() or "未設定", []).append(row)
@@ -143,7 +151,8 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
         lines.append(
             f"| {PILLAR_LABELS.get(pillar, pillar)} | {len(pillar_rows)} | "
             f"{sum(num(r, 'views_total') for r in pillar_rows):,.0f} | "
-            f"{fmt(save_rate(pillar_rows), 2)} | {pct(mean(rates))} |"
+            f"{fmt(rate_per_1k(pillar_rows, 'saves'), 2)} | "
+            f"{fmt(rate_per_1k(pillar_rows, 'comments'), 2)} | {pct(mean(rates))} |"
         )
     lines.append("")
 

@@ -12,6 +12,10 @@ Data API と Analytics API で取れるものが違う:
 |---|---|---|
 | 再生・いいね・コメント | Data API `videos.list` | youtube（取得済み） |
 | **完走率（平均視聴率）** | **Analytics API** | **yt-analytics.readonly（未取得）** |
+| **登録者増（動画単位）** | **Analytics API** | 同上 |
+
+YouTubeに「プロフィールアクセス」というmetricは無い。最も近いのが動画単位の
+subscribersGained で、これを「この人が気になる」の指標として使う（docs/07 Phase 3）。
 
 Analytics のスコープは既存トークンに含まれていないため、初回は再認可が要る。
 無くても Data API の分だけ取れるようにしてある（判定のうち保存率・コメント率は成立する）。
@@ -39,14 +43,20 @@ def _analytics_service(creds):
     return build("youtubeAnalytics", "v2", credentials=creds, cache_discovery=False)
 
 
-def _retention(analytics, video_ids: list, since: str, until: str) -> dict:
-    """動画IDごとの平均視聴率（0〜1）。取れなければ空。"""
+def _analytics_rows(analytics, video_ids: list, since: str, until: str) -> dict:
+    """動画IDごとの {完走率, 登録者増}。取れなければ空。
+
+    YouTubeに「プロフィールアクセス」に相当するmetricは無い。
+    最も近いのが動画単位の subscribersGained（この動画を見て登録した人）で、
+    これが「情報が役に立った」から「この人が気になる」への移行を測る指標になる
+    （docs/07 Phase 3）。
+    """
     if not analytics or not video_ids:
         return {}
     try:
         res = analytics.reports().query(
             ids="channel==MINE", startDate=since, endDate=until,
-            metrics="averageViewPercentage,views",
+            metrics="averageViewPercentage,subscribersGained,views",
             dimensions="video",
             filters="video==" + ",".join(video_ids[:200]),
             maxResults=200,
@@ -55,11 +65,21 @@ def _retention(analytics, video_ids: list, since: str, until: str) -> dict:
         # Analytics は反映が遅く、投稿直後は空や404になる。計測全体は止めない
         print(f"YouTube Analytics: 取得できませんでした（{e}）", file=sys.stderr)
         return {}
+    headers = [h["name"] for h in res.get("columnHeaders", [])]
     out = {}
     for row in res.get("rows", []):
-        video_id, avg_pct = row[0], row[1]
+        rec = dict(zip(headers, row))
+        video_id = rec.get("video")
+        if not video_id:
+            continue
+        entry = {}
+        avg_pct = rec.get("averageViewPercentage")
         if isinstance(avg_pct, (int, float)):
-            out[video_id] = avg_pct / 100
+            entry["completion_rate"] = round(avg_pct / 100, 3)
+        subs = rec.get("subscribersGained")
+        if isinstance(subs, (int, float)):
+            entry["follows_gained"] = int(subs)
+        out[video_id] = entry
     return out
 
 
@@ -126,13 +146,12 @@ def fetch(days: int = 14) -> list:
                 "comments": int(stats["commentCount"]) if "commentCount" in stats else None,
             })
 
-    retention = _retention(
+    stats = _analytics_rows(
         analytics, [p["_video_id"] for p in posts],
         since_dt.date().isoformat(), now.date().isoformat(),
     )
     for p in posts:
-        if p["_video_id"] in retention:
-            p["completion_rate"] = round(retention[p["_video_id"]], 3)
+        p.update(stats.get(p["_video_id"], {}))
     return posts
 
 
@@ -143,7 +162,8 @@ def main() -> None:
     try:
         for post in fetch(args.days):
             print(f"{post['post_date']} [{post['genre'] or '未設定'}] {post['title']} "
-                  f"再生{post['views_total']} 完走率{post.get('completion_rate', '-')}")
+                  f"再生{post['views_total']} 完走率{post.get('completion_rate', '-')} "
+                  f"登録増{post.get('follows_gained', '-')}")
     except PipelineError as e:
         sys.exit(f"エラー: {e}")
 

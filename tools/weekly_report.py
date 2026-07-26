@@ -13,6 +13,8 @@
 - **ジャンル別（money / relationship / trivia）の比較を必ず出す。**
   2週間テストの判定はこの比較そのもの（docs/06 2章）
 - 完走率はジャンルではなく「作り」の指標。全ジャンルで低ければ台本か画変化を疑う
+- プロフィールアクセス率は顔出し判断の分母（docs/07 Phase 3）。
+  YouTubeは動画単位の登録者増、Instagramはmedia単位の profile_visits を使う
 
 IssueコメントにはPATが要る。GH_PAT または ~/repo/.cowork-secrets/gh_token_personal.txt
 から読む（fine-grained/classicどちらでも可）。
@@ -137,14 +139,17 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
         f"{pct(mean([num(r, 'completion_rate') for r in prev_rows if has(r, 'completion_rate')]))} | 60%超の型を1つ確立 |",
         f"| コメント率（/1,000再生） | {fmt(rate_per_1k(rows, 'comments'), 2)} | "
         f"{fmt(rate_per_1k(prev_rows, 'comments'), 2)} | 人格への移行の芽 |",
-        f"| フォロワー増（合計） | {fmt(follows, 0)} | "
+        f"| **プロフィールアクセス率**（/1,000表示） | {fmt(rate_per_1k(rows, 'profile_visits'), 2)} | "
+        f"{fmt(rate_per_1k(prev_rows, 'profile_visits'), 2)} | **顔出し判断の分母**（docs/07 Phase 3） |",
+        f"| フォロー・登録増（合計） | {fmt(follows, 0)} | "
         f"{fmt(sum(num(r, 'follows_gained') for r in prev_rows), 0)} | 遅行指標。目標は置かない |",
         "",
     ]
 
     lines += [
         "### ジャンル別（2週間テストの判定材料）", "",
-        "| ジャンル | 本数 | 再生 | 保存率 | コメント率 | 完走率 |", "|---|---|---|---|---|---|",
+        "| ジャンル | 本数 | 再生 | 保存率 | コメント率 | 完走率 | プロフ率 |",
+        "|---|---|---|---|---|---|---|",
     ]
     by_genre = {}
     for row in rows:
@@ -158,7 +163,8 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
             f"| {GENRE_LABELS.get(genre, genre)} | {len(genre_rows)} | "
             f"{sum(num(r, 'views_total') for r in genre_rows):,.0f} | "
             f"{fmt(rate_per_1k(genre_rows, 'saves'), 2)} | "
-            f"{fmt(rate_per_1k(genre_rows, 'comments'), 2)} | {pct(mean(rates))} |"
+            f"{fmt(rate_per_1k(genre_rows, 'comments'), 2)} | {pct(mean(rates))} | "
+            f"{fmt(rate_per_1k(genre_rows, 'profile_visits'), 2)} |"
         )
     lines.append("")
     if len([g for g in by_genre if g in GENRE_LABELS]) >= 2:
@@ -194,8 +200,9 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
     if any(not has(r, "completion_rate") for r in rows):
         todo.append("`completion_rate` 未入力の行がある"
                     "（YouTubeはAnalytics再認可で自動。他PFは手入力）")
-    if any(not has(r, "follows_gained") for r in rows):
-        todo.append("`follows_gained` 未入力の行がある（APIで取れないため手入力）")
+    if any(not has(r, "profile_visits") and not has(r, "follows_gained") for r in rows):
+        todo.append("`profile_visits` / `follows_gained` が両方空の行がある"
+                    "（**顔出し判断の分母が欠ける**。取れないPFは手入力）")
     if not any(r.get("platform") == "tiktok" for r in rows) and rows:
         todo.append("TikTokの行が無い（APIで取得できないため手入力。docs/08_自動化.md 3章）")
     if todo:

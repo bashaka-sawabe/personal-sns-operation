@@ -16,6 +16,7 @@ YouTube / Threads / Instagram の数字を取得し、data/YYYY-Www.csv を作�
 
 仕様メモ:
 - 手入力列（issue_no / follows_gained / hypothesis / result_note）は既存値を温存する
+- profile_visits（プロフィールアクセス）は顔出し判断の分母。取れるPFでは自動で入る
 - genre（money / relationship / trivia）はYouTubeなら投稿台帳から自動で入る。
   Threads/Instagramは投稿ツール実装後に同じ仕組みを入れる（それまでは手入力）
 - views_48h は「投稿から48時間以内に実行したとき」だけ記録し、以後は上書きしない（初速の記録）
@@ -49,14 +50,14 @@ JST = timezone(timedelta(hours=9))
 COLUMNS = [
     "week", "post_date", "platform", "genre", "issue_no", "title", "url",
     "views_48h", "views_total", "completion_rate", "avg_watch_sec",
-    "saves", "shares", "comments", "likes", "follows_gained",
+    "saves", "shares", "comments", "likes", "profile_visits", "follows_gained",
     "hypothesis", "result_note",
 ]
 # 人が書く列。APIの値で上書きしない。
 # genre はYouTubeなら投稿台帳から自動で埋まるので、ここには入れない
 # （ジャンル別集計が判定の本体で、手入力に頼ると埋まらないまま判定日が来る）
 MANUAL_COLUMNS = {
-    "issue_no", "follows_gained", "hypothesis", "result_note",
+    "issue_no", "hypothesis", "result_note",
 }
 
 THREADS_BASE = "https://graph.threads.net/v1.0"
@@ -66,7 +67,12 @@ THREADS_METRICS = ["views", "likes", "replies", "reposts", "quotes", "shares"]
 # Instagram Login（Business Login for Instagram）を前提にする。
 # Facebook Login経由の場合は graph.facebook.com + ページ連携が必要で手順が重い（docs/08）。
 IG_BASE = "https://graph.instagram.com/v23.0"
-IG_METRICS_COMMON = ["views", "likes", "comments", "saved", "shares", "total_interactions", "reach"]
+# profile_visits / follows は投稿種別とAPIバージョンで対応が変わる。
+# 非対応なら fetch_insights の1metricずつのフォールバックで自然に落ちる（docs/06 1章）
+IG_METRICS_COMMON = [
+    "views", "likes", "comments", "saved", "shares", "total_interactions", "reach",
+    "profile_visits", "follows",
+]
 IG_METRICS_REELS = IG_METRICS_COMMON + ["ig_reels_avg_watch_time"]
 
 
@@ -202,6 +208,9 @@ def fetch_instagram(token: str, user_id: str, since_ts: int) -> list:
             "shares": ins.get("shares"),
             "comments": ins.get("comments"),
             "likes": ins.get("likes"),
+            # 「この人が気になった」の直接指標。顔出し判断の分母（docs/07 Phase 3）
+            "profile_visits": ins.get("profile_visits"),
+            "follows_gained": ins.get("follows"),
         })
     return posts
 

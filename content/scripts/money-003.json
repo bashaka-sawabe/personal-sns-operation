@@ -1,0 +1,42 @@
+{
+  "id": "money-003",
+  "title": "法人化で税金はどう変わるか｜一人社長の実額",
+  "first_hand": "自分の直近決算で、法人税・住民税・事業税と役員報酬にかかる所得税・社会保険料が実際にいくらだったか、法人化前の個人事業時代と比べて確認して記入する。",
+  "scenes": [
+    {
+      "caption": "法人化＝節税、は半分ウソ",
+      "narration": "会社にすれば税金が減る、って半分ウソなんです。",
+      "image_prompt": "minimalist dark desk with a closed ledger and a single warm lamp, soft shadows, cinematic, no text, no people"
+    },
+    {
+      "caption": "税率の形が変わるだけ",
+      "narration": "2026年時点でも、個人は所得が増えるほど税率が上がる仕組み。法人はおおむね一定に近い形です。",
+      "image_prompt": "abstract rising staircase versus flat platform, blue gradient, geometric minimal illustration, no text"
+    },
+    {
+      "caption": "社会保険が効いてくる",
+      "narration": "法人だと役員報酬に社会保険が付いてきます。税だけ見て決めると足をすくわれます。",
+      "image_prompt": "paper documents stacked beside a calculator on a clean grey table, top view, soft daylight, no text, no people"
+    },
+    {
+      "caption": "【要実体験】自分の実額",
+      "narration": "【要実体験】法人化の前と後で、税と社会保険を合わせた年間負担がいくら変わったかの実額。",
+      "image_prompt": "open notebook with handwritten-looking marks blurred, pen resting, warm desk light, shallow depth of field, no readable text, no people"
+    },
+    {
+      "caption": "判断は売上より利益",
+      "narration": "目安は売上じゃなく利益。自分の数字で試算するのが一番早いですよ。あなたはどの段階ですか。",
+      "image_prompt": "single sprouting plant in a small pot on a windowsill at dawn, soft backlight, calm minimal, no text, no people"
+    }
+  ],
+  "caption": "会社にすると税金はいくら変わるのか。2026年時点の考え方と、判断の順番を5シーンで整理しました。個人と法人、負担の形が違うだけという話。",
+  "hashtags": [
+    "#一人社長",
+    "#法人化",
+    "#税金",
+    "#社会保険",
+    "#マイクロ法人"
+  ],
+  "genre": "money",
+  "theme": "会社にすると税金はいくら変わるのか"
+}

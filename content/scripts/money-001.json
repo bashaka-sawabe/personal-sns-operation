@@ -1,0 +1,42 @@
+{
+  "id": "money-001",
+  "title": "申告し忘れやすい経費",
+  "first_hand": "自分が実際に経費計上していて、周りが見落としがちだと感じた支出項目と、その判断基準を確認して書く",
+  "scenes": [
+    {
+      "caption": "申告し忘れやすい経費",
+      "narration": "経費にできるのに、申告し忘れられがちな支出があります。",
+      "image_prompt": "minimalist desk with scattered paper receipts, soft morning light, shallow depth of field, muted beige tones, no text, no faces"
+    },
+    {
+      "caption": "家事按分は使える",
+      "narration": "自宅兼事務所の家賃や電気代は、使う割合で分けて計上できます。",
+      "image_prompt": "quiet home office corner, desk lamp and laptop closed, warm neutral interior, abstract composition, no text, no faces"
+    },
+    {
+      "caption": "意外な小額支出",
+      "narration": "書籍やサブスク、移動の交通費。小さくても年間で積み上がります。",
+      "image_prompt": "stack of books beside a coffee cup and train ticket on wooden table, soft natural light, no text, no faces"
+    },
+    {
+      "caption": "【要実体験】自分の実例",
+      "narration": "【要実体験】自分が実際に経費計上している見落とされがちな項目",
+      "image_prompt": "open ledger notebook and calculator on a plain desk, calm overhead view, muted colors, no text, no faces"
+    },
+    {
+      "caption": "領収書は捨てる前に",
+      "narration": "迷った領収書ほど残す価値あり。気になる項目はコメントで教えて。",
+      "image_prompt": "small box of folded receipts on a tidy shelf, evening warm light, minimal aesthetic, no text, no faces"
+    }
+  ],
+  "caption": "経費で落ちるのに見落とされがちな支出をまとめました。2026年時点の一般的な考え方で、判断は業務との関連性次第。迷う項目はコメントで教えてください。",
+  "hashtags": [
+    "#経費",
+    "#一人社長",
+    "#確定申告",
+    "#節税",
+    "#個人事業主"
+  ],
+  "genre": "money",
+  "theme": "経費で落ちるのに申告し忘れやすいもの"
+}

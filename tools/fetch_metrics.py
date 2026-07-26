@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Threads / Instagram のインサイトを取得し、data/YYYY-Www.csv を作成・更新する。
+YouTube / Threads / Instagram の数字を取得し、data/YYYY-Www.csv を作成・更新する。
 
     python3 tools/fetch_metrics.py                # 直近14日の投稿を取得して該当週のCSVを更新
+    python3 tools/fetch_metrics.py --no-youtube   # YouTubeを飛ばす（再認可を促されたくないとき）
     python3 tools/fetch_metrics.py --days 30      # 取得範囲を変える
     python3 tools/fetch_metrics.py --dry-run      # CSVを書かずに取得結果だけ表示
     python3 tools/fetch_metrics.py --refresh-token  # 長期トークンを延長して保存し直す（月1回）
@@ -14,8 +15,9 @@ Threads / Instagram のインサイトを取得し、data/YYYY-Www.csv を作成
               （任意）IG_USER_ID または ~/repo/.cowork-secrets/ig_user_id.txt ※未設定なら me を使う
 
 仕様メモ:
-- 手入力列（pillar / issue_no / completion_rate / follows_gained / hypothesis / result_note）は
-  既存値を温存する。APIの値で上書きしない
+- 手入力列（issue_no / follows_gained / hypothesis / result_note）は既存値を温存する
+- genre（money / relationship / trivia）はYouTubeなら投稿台帳から自動で入る。
+  Threads/Instagramは投稿ツール実装後に同じ仕組みを入れる（それまでは手入力）
 - views_48h は「投稿から48時間以内に実行したとき」だけ記録し、以後は上書きしない（初速の記録）
 - 投稿は post_date のISO週で振り分けるため、複数週のCSVが同時に更新されることがある
 - TikTokは Content Posting / Display API が審査必須で個人運用では実質使えないため対象外。
@@ -32,6 +34,8 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)          # 直接実行でも tools.youtube_metrics を読めるように
+
 DATA_DIR = os.path.join(ROOT, "data")
 # 環境ごとに場所が違うので候補を順に探す（~/dev/ から ~/repo/ に移動した実績あり）
 SECRETS_DIRS = [
@@ -43,14 +47,16 @@ JST = timezone(timedelta(hours=9))
 
 # data/template.csv と同じ並び
 COLUMNS = [
-    "week", "post_date", "platform", "pillar", "issue_no", "title", "url",
+    "week", "post_date", "platform", "genre", "issue_no", "title", "url",
     "views_48h", "views_total", "completion_rate", "avg_watch_sec",
     "saves", "shares", "comments", "likes", "follows_gained",
     "hypothesis", "result_note",
 ]
-# 人が書く列。APIの値で上書きしない
+# 人が書く列。APIの値で上書きしない。
+# genre はYouTubeなら投稿台帳から自動で埋まるので、ここには入れない
+# （ジャンル別集計が判定の本体で、手入力に頼ると埋まらないまま判定日が来る）
 MANUAL_COLUMNS = {
-    "pillar", "issue_no", "completion_rate", "follows_gained", "hypothesis", "result_note",
+    "issue_no", "follows_gained", "hypothesis", "result_note",
 }
 
 THREADS_BASE = "https://graph.threads.net/v1.0"
@@ -282,6 +288,7 @@ def main() -> None:
     parser.add_argument("--days", type=int, default=14, help="何日前までの投稿を取得するか（既定14）")
     parser.add_argument("--dry-run", action="store_true", help="CSVを書かずに結果だけ表示する")
     parser.add_argument("--refresh-token", action="store_true", help="長期トークンを延長して保存し直す")
+    parser.add_argument("--no-youtube", action="store_true", help="YouTubeの取得を飛ばす")
     args = parser.parse_args()
 
     if args.refresh_token:
@@ -291,9 +298,20 @@ def main() -> None:
     now = datetime.now(JST)
     since_ts = int((now - timedelta(days=args.days)).timestamp())
 
+    posts = []
+    if not args.no_youtube:
+        try:
+            from tools import youtube_metrics
+            fetched = youtube_metrics.fetch(args.days)
+            posts += fetched
+            print(f"YouTube: {len(fetched)}件取得")
+        except Exception as e:                              # noqa: BLE001
+            # 1PFの失敗で他PFの計測まで止めない（docs/08 7章）
+            print(f"YouTube: 取得に失敗しました（{e}）", file=sys.stderr)
+
     threads_token = read_secret("THREADS_TOKEN", "threads_token.txt")
     ig_token = read_secret("IG_TOKEN", "ig_token.txt")
-    if not threads_token and not ig_token:
+    if not threads_token and not ig_token and not posts:
         sys.exit(
             "トークンが見つかりません。docs/08_自動化.md の手順で長期トークンを取得し、\n"
             f"  {secret_path('threads_token.txt')}\n"
@@ -301,7 +319,6 @@ def main() -> None:
             "に置くか、環境変数 THREADS_TOKEN / IG_TOKEN を設定してください。"
         )
 
-    posts = []
     if threads_token:
         try:
             fetched = fetch_threads(threads_token, since_ts)
@@ -340,7 +357,7 @@ def main() -> None:
         for post in sorted(week_posts, key=lambda p: p["_dt"]):
             row, is_new = merge_post(rows, post, now)
             added += 1 if is_new else 0
-            if not (row.get("pillar") or "").strip():
+            if not (row.get("genre") or "").strip():
                 needs_input.append(f"{row['post_date']} {row['platform']} {row['title']}")
         if args.dry_run:
             print(f"[dry-run] {path}: 新規{added}件 / 更新{len(week_posts) - added}件")
@@ -349,7 +366,7 @@ def main() -> None:
         print(f"{os.path.relpath(path, ROOT)}: 新規{added}件 / 更新{len(week_posts) - added}件")
 
     if needs_input:
-        print("\n手入力が必要な行（pillar・issue_no・completion_rate・hypothesis）:")
+        print("\nジャンル未設定の行（judgeに入らないので埋めること）:")
         for item in needs_input:
             print(f"  - {item}")
 

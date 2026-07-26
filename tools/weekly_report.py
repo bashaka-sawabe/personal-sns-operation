@@ -9,10 +9,10 @@
     python3 tools/weekly_report.py --issue 42       # レポートをIssue #42 にコメント
 
 集計の考え方は docs/06_KPI・運用.md のKPIツリーに合わせている:
-- 北極星は「保存率」「完走率」「コメント率」（コメント率はトーク型＝ピラーAの主指標）。
-  フォロワー数は遅行指標として併記のみ
-- ピラー別（A/B）の比較を必ず出す。Phase 1の最重要目標は
-  「ピラーA/Bのフォーマット優劣がデータで語れる状態」
+- 北極星は「保存率」「完走率」「コメント率」。フォロワー数は遅行指標として併記のみ
+- **ジャンル別（money / relationship / trivia）の比較を必ず出す。**
+  2週間テストの判定はこの比較そのもの（docs/06 2章）
+- 完走率はジャンルではなく「作り」の指標。全ジャンルで低ければ台本か画変化を疑う
 
 IssueコメントにはPATが要る。GH_PAT または ~/repo/.cowork-secrets/gh_token_personal.txt
 から読む（fine-grained/classicどちらでも可）。
@@ -40,10 +40,11 @@ OWNER = "bashaka-sawabe"
 REPO = "personal-sns-operation"
 API = "https://api.github.com"
 
-# docs/06_KPI・運用.md 6章のラベル定義に対応（pillar:classic はv2で廃止）
-PILLAR_LABELS = {
-    "sakanaction": "A. ファントーク×ピアノ",
-    "datalab": "B. AI×サカナクション研究",
+# data/themes.md の3ジャンル。判定はこの3つの比較で行う（docs/06 2章）
+GENRE_LABELS = {
+    "money": "money（お金・経費・会社）",
+    "relationship": "relationship（人間関係）",
+    "trivia": "trivia（雑学・由来）",
 }
 
 
@@ -131,35 +132,41 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
         "| 指標 | 今週 | 前週 | 目標（docs/06） |",
         "|---|---|---|---|",
         f"| 保存率（/1,000再生） | {fmt(rate_per_1k(rows, 'saves'), 2)} | "
-        f"{fmt(rate_per_1k(prev_rows, 'saves'), 2)} | ピラー間で比較 |",
+        f"{fmt(rate_per_1k(prev_rows, 'saves'), 2)} | ジャンル間で比較（情報系の本丸） |",
         f"| 完走率（記録済みの平均） | {pct(mean(completions))} | "
         f"{pct(mean([num(r, 'completion_rate') for r in prev_rows if has(r, 'completion_rate')]))} | 60%超の型を1つ確立 |",
         f"| コメント率（/1,000再生） | {fmt(rate_per_1k(rows, 'comments'), 2)} | "
-        f"{fmt(rate_per_1k(prev_rows, 'comments'), 2)} | 共感コメントが安定して付く型を見つける |",
+        f"{fmt(rate_per_1k(prev_rows, 'comments'), 2)} | 人格への移行の芽 |",
         f"| フォロワー増（合計） | {fmt(follows, 0)} | "
-        f"{fmt(sum(num(r, 'follows_gained') for r in prev_rows), 0)} | Phase 1で3PF計1,000 |",
+        f"{fmt(sum(num(r, 'follows_gained') for r in prev_rows), 0)} | 遅行指標。目標は置かない |",
         "",
     ]
 
     lines += [
-        "### ピラー別（Phase 1の判定材料）", "",
-        "| ピラー | 本数 | 再生 | 保存率 | コメント率 | 完走率 |", "|---|---|---|---|---|---|",
+        "### ジャンル別（2週間テストの判定材料）", "",
+        "| ジャンル | 本数 | 再生 | 保存率 | コメント率 | 完走率 |", "|---|---|---|---|---|---|",
     ]
-    by_pillar = {}
+    by_genre = {}
     for row in rows:
-        by_pillar.setdefault((row.get("pillar") or "未設定").strip() or "未設定", []).append(row)
-    # A→B→Cの順に並べ、未設定など想定外のpillarは末尾にまとめる
-    order = list(PILLAR_LABELS) + sorted(k for k in by_pillar if k not in PILLAR_LABELS)
-    for pillar in [k for k in order if k in by_pillar]:
-        pillar_rows = by_pillar[pillar]
-        rates = [num(r, "completion_rate") for r in pillar_rows if has(r, "completion_rate")]
+        by_genre.setdefault((row.get("genre") or "未設定").strip() or "未設定", []).append(row)
+    # money→relationship→trivia の順。未設定など想定外は末尾にまとめる
+    order = list(GENRE_LABELS) + sorted(k for k in by_genre if k not in GENRE_LABELS)
+    for genre in [k for k in order if k in by_genre]:
+        genre_rows = by_genre[genre]
+        rates = [num(r, "completion_rate") for r in genre_rows if has(r, "completion_rate")]
         lines.append(
-            f"| {PILLAR_LABELS.get(pillar, pillar)} | {len(pillar_rows)} | "
-            f"{sum(num(r, 'views_total') for r in pillar_rows):,.0f} | "
-            f"{fmt(rate_per_1k(pillar_rows, 'saves'), 2)} | "
-            f"{fmt(rate_per_1k(pillar_rows, 'comments'), 2)} | {pct(mean(rates))} |"
+            f"| {GENRE_LABELS.get(genre, genre)} | {len(genre_rows)} | "
+            f"{sum(num(r, 'views_total') for r in genre_rows):,.0f} | "
+            f"{fmt(rate_per_1k(genre_rows, 'saves'), 2)} | "
+            f"{fmt(rate_per_1k(genre_rows, 'comments'), 2)} | {pct(mean(rates))} |"
         )
     lines.append("")
+    if len([g for g in by_genre if g in GENRE_LABELS]) >= 2:
+        lines += [
+            "> 判定の順番（docs/06 2章）: ①全ジャンルで完走率が低ければ**ジャンルではなく作りの問題**。"
+            "②ジャンル間の**保存率**の差が実力。③**コメント率**が高いジャンルはPhase 2への移行可能性が高い。",
+            "",
+        ]
 
     lines += ["### 投稿別", "", "| 投稿 | PF | 初速(48h) | 再生 | 保存 | シェア | コメント | 平均視聴 |", "|---|---|---|---|---|---|---|---|"]
     for row in sorted(rows, key=lambda r: -num(r, "views_total")):
@@ -182,10 +189,11 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
         lines.append("")
 
     todo = []
-    if any(not has(r, "pillar") for r in rows):
-        todo.append("`pillar` 未設定の行がある（ピラー別比較に入らない）")
+    if any(not has(r, "genre") for r in rows):
+        todo.append("`genre` 未設定の行がある（**ジャンル別比較に入らない＝判定に使えない**）")
     if any(not has(r, "completion_rate") for r in rows):
-        todo.append("`completion_rate` 未入力の行がある（各PFのアナリティクスから手入力）")
+        todo.append("`completion_rate` 未入力の行がある"
+                    "（YouTubeはAnalytics再認可で自動。他PFは手入力）")
     if any(not has(r, "follows_gained") for r in rows):
         todo.append("`follows_gained` 未入力の行がある（APIで取れないため手入力）")
     if not any(r.get("platform") == "tiktok" for r in rows) and rows:

@@ -1,0 +1,42 @@
+{
+  "id": "money-002",
+  "title": "レシートの保存期間、領収書と同じ？",
+  "first_hand": "自社の決算書類・レシートを実際にどう保管・整理しているか（方法と手間の実感）を確認して埋める",
+  "scenes": [
+    {
+      "caption": "レシートも7年、捨てたら終わり",
+      "narration": "レシートは領収書と同じ扱い。捨てたらアウトです。",
+      "image_prompt": "a pile of crumpled paper slips on a dark wooden desk, dramatic side lighting, shallow depth of field, no text, no faces"
+    },
+    {
+      "caption": "どっちも「証憑書類」",
+      "narration": "税務上はレシートも領収書も同じ証拠書類なんです。",
+      "image_prompt": "neatly stacked paper documents in a manila folder on a minimal desk, soft natural window light, no text, no logos"
+    },
+    {
+      "caption": "原則7年、最長10年も",
+      "narration": "2026年時点で原則7年。欠損金があると10年保存の話も出ます。",
+      "image_prompt": "a row of archive boxes on metal shelves in a quiet storage room, cool ambient light, symbolic and clean, no text"
+    },
+    {
+      "caption": "【要実体験】自社の保管方法",
+      "narration": "【要実体験】自分の会社で実際にやっているレシート保管の流れ",
+      "image_prompt": "an open storage box with envelopes and paper slips beside a laptop on a plain desk, warm light, no text, no faces"
+    },
+    {
+      "caption": "迷ったら捨てない",
+      "narration": "迷ったら残す。あとで泣くのは捨てた側です。気になる人はコメントで。",
+      "image_prompt": "a closed drawer with a small paper slip peeking out, minimal desk scene, soft shadow, calm tone, no text"
+    }
+  ],
+  "caption": "領収書は7年。じゃあレシートは？ 2026年時点のルールと、実際に自分の会社でやっている保管の流れをまとめました。捨ててから気づくと詰みます。",
+  "hashtags": [
+    "#一人社長",
+    "#経理",
+    "#領収書",
+    "#会社経営",
+    "#お金の知識"
+  ],
+  "genre": "money",
+  "theme": "領収書は7年、ではレシートは何年か"
+}

@@ -69,14 +69,16 @@ def _imports():
     return Request, Credentials, InstalledAppFlow, build, HttpError, MediaFileUpload
 
 
-def get_service(interactive: bool = False):
+def get_service(interactive: bool = False, force_reauth: bool = False):
     """認証済みの YouTube API クライアントを返す。"""
     Request, Credentials, InstalledAppFlow, build, _, _ = _imports()
 
     token_path = secret_path(TOKEN_FILE)
     creds = None
-    if os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+    if os.path.exists(token_path) and not force_reauth:
+        # scopes を渡さないこと。渡すと「実際に付与されたスコープ」ではなく
+        # 渡した値で上書きされ、has_scopes() が常に True になって検知が効かなくなる
+        creds = Credentials.from_authorized_user_file(token_path)
         # スコープを追加した場合、古いトークンは権限不足のまま「有効」に見える。
         # ここで弾かないと実行時に分かりにくい403になる
         if not creds.has_scopes(SCOPES):
@@ -102,7 +104,17 @@ def get_service(interactive: bool = False):
                 "Google Cloud Console で「デスクトップアプリ」のOAuthクライアントIDを作り、\n"
                 "ダウンロードしたJSONをこのパスに置いてください（手順は本ファイル冒頭）。"
             )
-        creds = InstalledAppFlow.from_client_secrets_file(client_secret, SCOPES).run_local_server(port=0)
+        # prompt="consent" を付けないと、Googleが「許可済み」と判断して
+        # 追加スコープの同意画面を出さず、権限不足のトークンが返ることがある
+        creds = InstalledAppFlow.from_client_secrets_file(client_secret, SCOPES).run_local_server(
+            port=0, access_type="offline", prompt="consent",
+        )
+        if not creds.has_scopes(SCOPES):
+            missing = [s for s in SCOPES if s not in (creds.scopes or [])]
+            raise PipelineError(
+                "必要な権限が許可されませんでした。同意画面で全てのチェックを入れてください。\n"
+                "不足: " + ", ".join(missing)
+            )
 
     os.makedirs(os.path.dirname(token_path), exist_ok=True)
     with open(token_path, "w", encoding="utf-8") as f:
@@ -163,10 +175,25 @@ def upload(video_path: str, script: dict | None, privacy: str, interactive: bool
     return response["id"]
 
 
+def _scope_error(e) -> PipelineError:
+    """403の権限不足は原因が分かりにくいので、対処法つきのメッセージに置き換える。"""
+    if getattr(e, "resp", None) is not None and e.resp.status == 403 and "scope" in str(e).lower():
+        return PipelineError(
+            "権限が不足しています。トークンを作り直してください:\n"
+            "  .venv/bin/python tools/publish_youtube.py --auth\n"
+            "（--auth は毎回まっさらな同意画面を出すので、そこで全ての権限を許可してください）"
+        )
+    return PipelineError(f"APIエラー: {getattr(e, 'reason', '') or e}")
+
+
 def show_channel(interactive: bool = False) -> dict:
     """投稿先チャンネルの現状を表示する。投稿前に「どこに上がるのか」を確認するため。"""
+    _, _, _, _, HttpError, _ = _imports()
     service = get_service(interactive=interactive)
-    res = service.channels().list(part="snippet,statistics,brandingSettings", mine=True).execute()
+    try:
+        res = service.channels().list(part="snippet,statistics,brandingSettings", mine=True).execute()
+    except HttpError as e:
+        raise _scope_error(e) from None
     items = res.get("items", [])
     if not items:
         raise PipelineError(
@@ -195,7 +222,10 @@ def rename_channel(new_title: str, interactive: bool = False) -> None:
     """
     _, _, _, _, HttpError, _ = _imports()
     service = get_service(interactive=interactive)
-    res = service.channels().list(part="snippet,statistics", mine=True).execute()
+    try:
+        res = service.channels().list(part="snippet,statistics", mine=True).execute()
+    except HttpError as e:
+        raise _scope_error(e) from None
     items = res.get("items", [])
     if not items:
         raise PipelineError("チャンネルが見つかりません。")
@@ -258,7 +288,9 @@ def main() -> None:
 
     try:
         if args.auth:
-            get_service(interactive=True)
+            # 既存トークンは無視して必ず取り直す。権限不足のトークンが残っていると
+            # 「認可したのに動かない」状態になり原因が分からなくなる
+            get_service(interactive=True, force_reauth=True)
             print(f"認可が完了しました。トークン: {secret_path(TOKEN_FILE)}")
             print("投稿先の確認: .venv/bin/python tools/publish_youtube.py --channel")
             return

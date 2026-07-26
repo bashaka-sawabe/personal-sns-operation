@@ -9,7 +9,7 @@
     python3 tools/make_video.py --genre money --theme "テスト" --offline
 
     # 3ジャンル分をまとめて（2週間テストの本体）
-    python3 tools/make_video.py --batch data/themes.tsv
+    python3 tools/make_video.py --batch data/themes.md
 
     # 台本だけ先に作って、中身を見てから動画化する
     python3 tools/make_video.py --genre money --theme "..." --script-only
@@ -75,18 +75,26 @@ def make_one(genre: str, theme: str, offline: bool, script_only: bool) -> str:
 
 
 def read_themes(path: str) -> list:
-    """1行1件の `ジャンル<TAB>テーマ`。# 始まりと空行は無視する。"""
-    rows = []
+    """Markdownのテーマ一覧を読む。
+
+    `## ジャンル` の見出し以下の `- テーマ` を拾う。見出しの前にある箇条書きは
+    説明文とみなして無視する。表・引用・コードブロックは自然に対象外になる。
+    """
+    rows, genre = [], None
     with open(path, encoding="utf-8") as f:
         for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):
+            line = line.rstrip()
+            heading = re.match(r"^##\s+(.+)$", line)
+            if heading:
+                title = heading.group(1).strip()
+                # 「## money — お金」のような注釈付きでも先頭の識別子だけを使う
+                token = re.split(r"[\s—–\-:：(（]", title, maxsplit=1)[0].strip()
+                # 設計の説明セクションはジャンルではないので拾わない
+                genre = token if re.fullmatch(r"[A-Za-z0-9_]+", token) else None
                 continue
-            parts = re.split(r"\t+|\s{2,}", line, maxsplit=1)
-            if len(parts) != 2:
-                print(f"  スキップ（形式不正）: {line}", file=sys.stderr)
-                continue
-            rows.append((parts[0].strip(), parts[1].strip()))
+            item = re.match(r"^\s*[-*]\s+(.+)$", line)
+            if item and genre:
+                rows.append((genre, item.group(1).strip()))
     return rows
 
 

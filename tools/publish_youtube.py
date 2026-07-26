@@ -39,7 +39,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from tools.pipeline.common import OUT_DIR, SCRIPTS_DIR, PipelineError, secret_path
 
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+# upload だけでは channels.list / channels.update ができないため youtube も要求する。
+# スコープを増やしたら再認可が必要（get_service が不足を検知して自動で促す）。
+SCOPES = [
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtube",
+]
 CLIENT_SECRET_FILE = "youtube_client_secret.json"
 TOKEN_FILE = "youtube_token.json"
 CATEGORY_PEOPLE_AND_BLOGS = "22"
@@ -72,6 +77,15 @@ def get_service(interactive: bool = False):
     creds = None
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+        # スコープを追加した場合、古いトークンは権限不足のまま「有効」に見える。
+        # ここで弾かないと実行時に分かりにくい403になる
+        if not creds.has_scopes(SCOPES):
+            if not interactive:
+                raise PipelineError(
+                    "権限が不足しています（チャンネル操作の権限が追加されました）。再認可してください:\n"
+                    "  .venv/bin/python tools/publish_youtube.py --auth"
+                )
+            creds = None
 
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
@@ -149,6 +163,64 @@ def upload(video_path: str, script: dict | None, privacy: str, interactive: bool
     return response["id"]
 
 
+def show_channel(interactive: bool = False) -> dict:
+    """投稿先チャンネルの現状を表示する。投稿前に「どこに上がるのか」を確認するため。"""
+    service = get_service(interactive=interactive)
+    res = service.channels().list(part="snippet,statistics,brandingSettings", mine=True).execute()
+    items = res.get("items", [])
+    if not items:
+        raise PipelineError(
+            "このGoogleアカウントにYouTubeチャンネルがありません。\n"
+            "youtube.com でチャンネルを作成してから再実行してください。"
+        )
+    ch = items[0]
+    snippet, stats = ch["snippet"], ch.get("statistics", {})
+    print(f"チャンネル名 : {snippet.get('title', '')}")
+    print(f"ID           : {ch['id']}")
+    print(f"ハンドル     : {snippet.get('customUrl', '(未設定)')}")
+    print(f"登録者       : {stats.get('subscriberCount', '?')}")
+    print(f"動画本数     : {stats.get('videoCount', '?')}")
+    print(f"総再生       : {stats.get('viewCount', '?')}")
+    print(f"作成日       : {snippet.get('publishedAt', '')[:10]}")
+    desc = (snippet.get("description") or "").strip()
+    print(f"説明         : {desc[:80] + '...' if len(desc) > 80 else desc or '(未設定)'}")
+    return ch
+
+
+def rename_channel(new_title: str, interactive: bool = False) -> None:
+    """チャンネル名を変更する。
+
+    既存の動画・登録者がある場合は破壊的な操作になり得るので、
+    呼ぶ前に必ず --channel で中身を確認すること。
+    """
+    _, _, _, _, HttpError, _ = _imports()
+    service = get_service(interactive=interactive)
+    res = service.channels().list(part="snippet,statistics", mine=True).execute()
+    items = res.get("items", [])
+    if not items:
+        raise PipelineError("チャンネルが見つかりません。")
+    ch = items[0]
+    old = ch["snippet"].get("title", "")
+    videos = int(ch.get("statistics", {}).get("videoCount", 0) or 0)
+    subs = int(ch.get("statistics", {}).get("subscriberCount", 0) or 0)
+    if videos or subs:
+        print(f"注意: このチャンネルには動画{videos}本・登録者{subs}人があります。", file=sys.stderr)
+
+    try:
+        service.channels().update(
+            part="brandingSettings",
+            body={"id": ch["id"], "brandingSettings": {"channel": {"title": new_title}}},
+        ).execute()
+    except HttpError as e:
+        raise PipelineError(
+            f"名前の変更に失敗しました: {getattr(e, 'reason', '') or e}\n"
+            "YouTubeは名前変更の頻度を制限しています（14日で2回まで）。\n"
+            "APIで通らない場合は YouTube Studio → カスタマイズ → ブランディング から手で変更してください。"
+        ) from None
+    print(f"変更しました: 「{old}」 → 「{new_title}」")
+    print("反映まで数分かかることがあります。")
+
+
 def load_ledger() -> dict:
     if os.path.exists(LEDGER):
         with open(LEDGER, encoding="utf-8") as f:
@@ -176,7 +248,9 @@ def main() -> None:
     p.add_argument("video", nargs="?", help="投稿する動画ファイル")
     p.add_argument("--script", help="台本JSON（省略時は同名のものを自動で探す）")
     p.add_argument("--all", action="store_true", help="content/out/ の未投稿を全部投稿する")
-    p.add_argument("--auth", action="store_true", help="初回の認可を行う")
+    p.add_argument("--auth", action="store_true", help="認可を行う（初回・スコープ追加時）")
+    p.add_argument("--channel", action="store_true", help="投稿先チャンネルの現状を表示する")
+    p.add_argument("--rename", metavar="名前", help="チャンネル名を変更する")
     p.add_argument("--privacy", default="unlisted",
                    choices=["private", "unlisted", "public"],
                    help="公開範囲（既定: unlisted＝限定公開）")
@@ -186,6 +260,15 @@ def main() -> None:
         if args.auth:
             get_service(interactive=True)
             print(f"認可が完了しました。トークン: {secret_path(TOKEN_FILE)}")
+            print("投稿先の確認: .venv/bin/python tools/publish_youtube.py --channel")
+            return
+
+        if args.channel:
+            show_channel(interactive=True)
+            return
+
+        if args.rename:
+            rename_channel(args.rename, interactive=True)
             return
 
         targets = []

@@ -45,10 +45,28 @@ def slugify(genre: str, theme: str) -> str:
     return f"{base}-{n:03d}"
 
 
+def warn_unfilled(data: dict, script_id: str) -> None:
+    """本人が埋めるべき一次情報が残っていたら知らせる。
+
+    止めはしない（絵を先に確認したいことがある）が、この状態で投稿すると
+    画面に「【要実体験】」が焼き込まれたまま公開される。
+    """
+    spots = script_mod.unfilled(data)
+    if not spots:
+        return
+    print(f"  ⚠️ 一次情報が未記入です（{len(spots)}箇所）: {'、'.join(spots)}", file=sys.stderr)
+    print(f"     content/scripts/{script_id}.json を開いて "
+          f"「{script_mod.PLACEHOLDER}」を実際の内容に置き換え、"
+          f"--from-script で作り直してください。", file=sys.stderr)
+    print("     このまま投稿すると、画面に目印が焼き込まれたまま公開されます。",
+          file=sys.stderr)
+
+
 def build_from_script(data: dict, script_id: str) -> str:
     asset_dir = os.path.join(ASSETS_DIR, script_id)
     ensure_dirs(asset_dir, OUT_DIR)
     out_path = os.path.join(OUT_DIR, f"{script_id}.mp4")
+    warn_unfilled(data, script_id)
 
     print(f"  素材を生成中（{len(data['scenes'])}シーン）...")
     scenes = media.build_scene_assets(data, asset_dir)
@@ -70,6 +88,7 @@ def make_one(genre: str, theme: str, offline: bool, script_only: bool) -> str:
     path = script_mod.save(data, script_id, SCRIPTS_DIR)
     print(f"  台本: {os.path.relpath(path)}")
     if script_only:
+        warn_unfilled(data, script_id)
         return path
     return build_from_script(data, script_id)
 

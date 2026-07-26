@@ -31,6 +31,7 @@ Blocked by は GitHub 公式の依存関係API（/issues/{n}/dependencies/blocke
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -69,9 +70,17 @@ _cache: dict = {}
 
 
 def repo() -> str:
+    """owner/name。remote URLから読む。
+
+    `gh repo view` はGraphQLを使うため、GraphQLのレート制限に当たると
+    RESTだけで済む操作（Blocked byの付け外し等）まで巻き添えで動かなくなる。
+    """
     if "repo" not in _cache:
-        _cache["repo"] = gh("repo", "view", "--json", "nameWithOwner",
-                            "--jq", ".nameWithOwner")
+        url = git("remote", "get-url", "origin")
+        m = re.search(r"(?:github\.com[:/])([^/]+/[^/]+?)(?:\.git)?$", url)
+        if not m:
+            raise BoardError(f"originのURLからリポジトリを判定できません: {url}")
+        _cache["repo"] = m.group(1)
     return _cache["repo"]
 
 

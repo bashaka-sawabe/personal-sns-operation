@@ -20,6 +20,7 @@
 | 05 | [コンテンツ企画](./docs/05_コンテンツ企画.md) | 制作の型・企画30本・投稿前チェックリスト |
 | 06 | [KPI・運用](./docs/06_KPI・運用.md) | KPIツリー・週次レビュー・カンバンのルール |
 | 07 | [ロードマップ](./docs/07_ロードマップ.md) | Phase 0〜3と完了条件 |
+| 08 | [自動化](./docs/08_自動化.md) | 自動化の線引き・**PF別の可否**・計測自動化のセットアップ |
 
 ## カンバン（GitHub Project）の運用
 
@@ -34,6 +35,19 @@
 
 - `data/`: 週次の投稿実績CSV（`data/2026-W30.csv` の形式、テンプレは [data/template.csv](./data/template.csv)）
 - 集計・可視化スクリプトは `tools/` に追加していく（AI分析企画の成果物置き場も兼ねる）
+
+### 計測の自動化
+
+```bash
+python3 tools/fetch_metrics.py              # Threads/Instagramのインサイトを取得し週次CSVを更新
+python3 tools/weekly_report.py              # 週次レビュー用のレポートを生成
+python3 tools/weekly_report.py --issue 42   # レポートをIssue #42 にコメント
+python3 tools/fetch_metrics.py --refresh-token  # 長期トークンを延長（60日で失効するため月1回）
+```
+
+- 初回のトークン取得手順・cron設定・**TikTokがAPI非対応な理由**は [docs/08_自動化.md](./docs/08_自動化.md)
+- 手入力列（`pillar` / `completion_rate` / `hypothesis` 等）はAPIの値で上書きされない
+- トークンは `~/dev/.cowork-secrets/` に置く（**コミットしないこと**）
 
 ## 更新ルール
 

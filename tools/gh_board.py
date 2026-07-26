@@ -165,20 +165,16 @@ def board(force: bool = False) -> dict:
 
     data = _fetch_board()
     _cache["board"] = data
+    _save_cache(data)
+    return data
+
+
+def _save_cache(data: dict) -> None:
     try:
         with open(CACHE_PATH, "w", encoding="utf-8") as f:
             json.dump(data, f)
     except OSError:
         pass  # キャッシュは書けなくても動作に影響しない
-    return data
-
-
-def invalidate() -> None:
-    _cache.pop("board", None)
-    try:
-        os.remove(CACHE_PATH)
-    except OSError:
-        pass
 
 
 # ---------------------------------------------------------------- 依存関係
@@ -225,16 +221,28 @@ def set_field(item_id: str, name: str, value: str) -> None:
     gh("project", "item-edit", "--id", item_id, "--project-id", b["id"],
        "--field-id", field["id"], "--single-select-option-id", option)
 
+    # 書いた内容をキャッシュに反映する。捨てるだけにすると、次の読み出しが
+    # Projects v2 の反映待ちで古い値を返すことがある。
+    # 自分の書き込み結果を古いまま報告するツールは、無いより悪い
+    for rec in b["items"].values():
+        if rec["id"] == item_id:
+            rec.setdefault("values", {})[name] = value
+            break
+    _save_cache(b)
+
 
 def ensure_item(number: int) -> str:
     """IssueをProjectに載せて item id を返す。既に載っていればそれを使う。"""
-    known = board()["items"].get(number)
+    b = board()
+    known = b["items"].get(number)
     if known:
         return known["id"]
     url = f"https://github.com/{repo()}/issues/{number}"
     added = gh("project", "item-add", str(PROJECT_NUMBER), "--owner", PROJECT_OWNER,
                "--url", url, "--format", "json", parse=True)
-    invalidate()
+    # 取り直さずキャッシュに足す。1コマンドあたりの再取得を1回に抑える
+    b["items"][number] = {"id": added["id"], "values": {}}
+    _save_cache(b)
     return added["id"]
 
 

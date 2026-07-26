@@ -5,3 +5,6 @@ __pycache__/
 # 生成物。台本(content/scripts)だけは残し、重いバイナリは追跡しない
 content/assets/
 content/out/
+
+# Python仮想環境
+.venv/

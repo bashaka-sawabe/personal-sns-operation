@@ -17,7 +17,13 @@ CONTENT_DIR = os.path.join(ROOT, "content")
 SCRIPTS_DIR = os.path.join(CONTENT_DIR, "scripts")
 ASSETS_DIR = os.path.join(CONTENT_DIR, "assets")
 OUT_DIR = os.path.join(CONTENT_DIR, "out")
-SECRETS_DIR = os.path.expanduser("~/dev/.cowork-secrets")
+# シークレット置き場。環境ごとに場所が違うので候補を順に探す
+# （実際 ~/dev/ から ~/repo/ に移動していた。1箇所決め打ちだと静かに壊れる）
+SECRETS_DIRS = [
+    os.path.expanduser("~/repo/.cowork-secrets"),
+    os.path.expanduser("~/dev/.cowork-secrets"),
+    os.path.expanduser("~/.cowork-secrets"),
+]
 
 # 縦動画の規格。IG Reels / TikTok / YouTube Shorts 共通
 WIDTH, HEIGHT, FPS = 1080, 1920, 30
@@ -35,12 +41,21 @@ class PipelineError(RuntimeError):
     pass
 
 
+def secret_path(filename: str) -> str:
+    """既存ファイルがあればそのパス、無ければ最優先候補のパスを返す（保存先の決定にも使う）。"""
+    for d in SECRETS_DIRS:
+        p = os.path.join(d, filename)
+        if os.path.exists(p):
+            return p
+    return os.path.join(SECRETS_DIRS[0], filename)
+
+
 def read_secret(env_name: str, filename: str) -> str:
-    """環境変数を優先し、無ければ ~/dev/.cowork-secrets/ を読む（fetch_metrics.py と同じ規約）。"""
+    """環境変数を優先し、無ければシークレット置き場を順に探す。"""
     v = os.environ.get(env_name, "").strip()
     if v:
         return v
-    p = os.path.join(SECRETS_DIR, filename)
+    p = secret_path(filename)
     if os.path.exists(p):
         return open(p, encoding="utf-8").read().strip()
     return ""

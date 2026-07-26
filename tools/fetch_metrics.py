@@ -9,9 +9,9 @@ Threads / Instagram のインサイトを取得し、data/YYYY-Www.csv を作成
     python3 tools/fetch_metrics.py --refresh-token  # 長期トークンを延長して保存し直す（月1回）
 
 トークン（いずれも「長期トークン」。取得手順は docs/08_自動化.md）:
-  Threads   : THREADS_TOKEN  または ~/dev/.cowork-secrets/threads_token.txt
-  Instagram : IG_TOKEN       または ~/dev/.cowork-secrets/ig_token.txt
-              （任意）IG_USER_ID または ~/dev/.cowork-secrets/ig_user_id.txt ※未設定なら me を使う
+  Threads   : THREADS_TOKEN  または ~/repo/.cowork-secrets/threads_token.txt
+  Instagram : IG_TOKEN       または ~/repo/.cowork-secrets/ig_token.txt
+              （任意）IG_USER_ID または ~/repo/.cowork-secrets/ig_user_id.txt ※未設定なら me を使う
 
 仕様メモ:
 - 手入力列（pillar / issue_no / completion_rate / follows_gained / hypothesis / result_note）は
@@ -33,7 +33,12 @@ from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(ROOT, "data")
-SECRETS_DIR = os.path.expanduser("~/dev/.cowork-secrets")
+# 環境ごとに場所が違うので候補を順に探す（~/dev/ から ~/repo/ に移動した実績あり）
+SECRETS_DIRS = [
+    os.path.expanduser("~/repo/.cowork-secrets"),
+    os.path.expanduser("~/dev/.cowork-secrets"),
+    os.path.expanduser("~/.cowork-secrets"),
+]
 JST = timezone(timedelta(hours=9))
 
 # data/template.csv と同じ並び
@@ -67,11 +72,16 @@ class ApiError(RuntimeError):
 
 
 def secret_path(filename: str) -> str:
-    return os.path.join(SECRETS_DIR, filename)
+    """既存ファイルがあればそのパス、無ければ最優先候補（＝新規保存先）を返す。"""
+    for d in SECRETS_DIRS:
+        p = os.path.join(d, filename)
+        if os.path.exists(p):
+            return p
+    return os.path.join(SECRETS_DIRS[0], filename)
 
 
 def read_secret(env_name: str, filename: str) -> str:
-    """環境変数を優先し、無ければ ~/dev/.cowork-secrets/ のファイルを読む。無ければ空文字。"""
+    """環境変数を優先し、無ければ ~/repo/.cowork-secrets/ のファイルを読む。無ければ空文字。"""
     v = os.environ.get(env_name, "").strip()
     if v:
         return v

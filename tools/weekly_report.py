@@ -14,7 +14,7 @@
 - ピラー別（A/B）の比較を必ず出す。Phase 1の最重要目標は
   「ピラーA/Bのフォーマット優劣がデータで語れる状態」
 
-IssueコメントにはPATが要る。GH_PAT または ~/dev/.cowork-secrets/gh_token_personal.txt
+IssueコメントにはPATが要る。GH_PAT または ~/repo/.cowork-secrets/gh_token_personal.txt
 から読む（fine-grained/classicどちらでも可）。
 """
 import argparse
@@ -28,7 +28,12 @@ from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(ROOT, "data")
-SECRETS_DIR = os.path.expanduser("~/dev/.cowork-secrets")
+# 環境ごとに場所が違うので候補を順に探す（~/dev/ から ~/repo/ に移動した実績あり）
+SECRETS_DIRS = [
+    os.path.expanduser("~/repo/.cowork-secrets"),
+    os.path.expanduser("~/dev/.cowork-secrets"),
+    os.path.expanduser("~/.cowork-secrets"),
+]
 JST = timezone(timedelta(hours=9))
 
 OWNER = "bashaka-sawabe"
@@ -203,10 +208,14 @@ def github_token() -> str:
     token = os.environ.get("GH_PAT", "").strip()
     if token:
         return token
-    path = os.path.join(SECRETS_DIR, "gh_token_personal.txt")
-    if os.path.exists(path):
-        return open(path, encoding="utf-8").read().strip()
-    sys.exit("PATが見つかりません。GH_PAT を設定するか ~/dev/.cowork-secrets/gh_token_personal.txt を配置してください。")
+    for d in SECRETS_DIRS:
+        path = os.path.join(d, "gh_token_personal.txt")
+        if os.path.exists(path):
+            return open(path, encoding="utf-8").read().strip()
+    sys.exit(
+        "PATが見つかりません。GH_PAT を設定するか "
+        f"{os.path.join(SECRETS_DIRS[0], 'gh_token_personal.txt')} を配置してください。"
+    )
 
 
 def post_comment(issue_number: int, body: str) -> None:

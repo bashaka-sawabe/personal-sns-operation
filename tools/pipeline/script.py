@@ -16,10 +16,29 @@ from .common import PipelineError, read_secret
 # 台本の型。フック（0〜3秒）→ 本編3点 → 締め、が最も完走率が安定する構成
 SCENE_COUNT = 5
 
+# シーン4は一次情報の置き場（docs/05 1章）。ここが空だと類型D（AI量産）と
+# 区別がつかず、2026年のプラットフォーム規制の直撃を受ける（docs/01 4章）。
+FIRST_HAND_SCENE = 4
+
+# 本人が埋めるまで残る目印。この文字列が残っている台本は投稿できない
+PLACEHOLDER = "【要実体験】"
+
+# 一次情報が原理的に乗らないジャンルはスロットを求めない
+GENRES_WITHOUT_FIRST_HAND = {"trivia"}
+
 SCRIPT_SCHEMA = {
     "type": "object",
     "properties": {
         "title": {"type": "string", "description": "社内管理用のタイトル。40字以内"},
+        "first_hand": {
+            "type": "string",
+            "description": (
+                "本人が埋めるべき一次情報の指示。"
+                "「実際に払った月額の社会保険料」のように、"
+                "何を入れるかだけを書く。具体的な金額・数値・体験は書かない。"
+                "一次情報が不要なジャンルでは空文字。"
+            ),
+        },
         "scenes": {
             "type": "array",
             "items": {
@@ -49,7 +68,7 @@ SCRIPT_SCHEMA = {
             "description": "先頭に#を含むタグ。5個",
         },
     },
-    "required": ["title", "scenes", "caption", "hashtags"],
+    "required": ["title", "first_hand", "scenes", "caption", "hashtags"],
     "additionalProperties": False,
 }
 
@@ -64,13 +83,51 @@ SYSTEM = f"""あなたは日本語のショート動画（Instagram Reels / TikT
 - 字幕(caption)は20字以内。読み切れない長さにしない。
 - ナレーション(narration)は話し言葉。書き言葉にしない。
 - image_promptは英語。抽象的・象徴的な背景に留め、人物の顔・文字・ロゴは入れない。
-- 誇張・断定しすぎ・医療や投資の助言に踏み込む表現は避ける。"""
+- 誇張・断定しすぎ・医療や投資の助言に踏み込む表現は避ける。
+- 制度・税率・金額に触れるときは「2026年時点」と分かる書き方にし、断定しない。
+
+一次情報について（最重要）:
+発信者は一人社長です。この動画の価値は「実際に会社を回している人しか言えないこと」
+にあります。シーン{FIRST_HAND_SCENE}を、その一次情報の置き場にしてください。
+
+ただし、**あなたは発信者の実体験を知りません。絶対に作らないでください。**
+- 具体的な金額・年数・社名・体験談を、それらしく書いてはいけません。
+- シーン{FIRST_HAND_SCENE}のnarrationとcaptionには、必ず「{PLACEHOLDER}」という
+  文字列をそのまま含め、その後ろに「何を入れるべきか」だけを書いてください。
+  例: 「{PLACEHOLDER}実際に毎月引かれている社会保険料の額」
+- first_handには、本人が何を調べて埋めればよいかを1文で書いてください。
+  ここにも具体的な数値を書いてはいけません。
+
+嘘の数字は、その1本が滑るだけでなく発信者の信用ごと壊します。
+分からないことは「分からないので本人が埋める」と示すのが正解です。"""
+
+SYSTEM_NO_FIRST_HAND = SYSTEM.split("一次情報について（最重要）:")[0] + """一次情報について:
+このジャンルは一般に知られた事実を扱うため、発信者個人の体験は不要です。
+first_handは空文字にしてください。
+ただし、**発信者の実体験や具体的な金額を勝手に作ってはいけません。**"""
+
+
+def needs_first_hand(genre: str) -> bool:
+    return genre not in GENRES_WITHOUT_FIRST_HAND
+
+
+def unfilled(script: dict) -> list:
+    """本人がまだ埋めていない箇所を返す。空なら投稿できる状態。"""
+    spots = []
+    if PLACEHOLDER in (script.get("first_hand") or ""):
+        spots.append("first_hand")
+    for i, scene in enumerate(script.get("scenes", []), 1):
+        for key in ("caption", "narration"):
+            if PLACEHOLDER in (scene.get(key) or ""):
+                spots.append(f"シーン{i}の{key}")
+    return spots
 
 
 def _fallback(genre: str, theme: str) -> dict:
     """APIキーが無いときのテンプレ。パイプラインの疎通確認用で、投稿には使わない。"""
     return {
         "title": f"[offline] {theme}",
+        "first_hand": "",
         "scenes": [
             {
                 "caption": f"{theme}",
@@ -116,7 +173,7 @@ def generate(genre: str, theme: str, offline: bool = False) -> dict:
     response = client.messages.create(
         model="claude-opus-5",
         max_tokens=4000,
-        system=SYSTEM,
+        system=SYSTEM if needs_first_hand(genre) else SYSTEM_NO_FIRST_HAND,
         output_config={"format": {"type": "json_schema", "schema": SCRIPT_SCHEMA}},
         messages=[{
             "role": "user",

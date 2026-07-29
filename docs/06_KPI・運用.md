@@ -104,11 +104,12 @@ flowchart TD
 
 ```
 テーマ（data/themes.md から）
-  → 台本生成（make_video.py --script-only）
-  → 事実確認（人がやる。05の5章）
-  → 動画生成（make_video.py --from-script）
-  → 投稿前チェックリスト（05の5章）
-  → 投稿（YouTubeは3チャンネルへ振り分け・限定公開 → 中身を見て公開。他PFは1アカウント）
+  → 台本生成（make_video.py --script-only）                      status: draft
+  → 事実確認・一次情報（人がやる。05の6章）                     status: checked
+  → 動画生成（make_video.py --from-script）                      status: rendered
+  → 投稿前チェックリスト（05の6章）
+  → 投稿（YouTubeは3チャンネルへ振り分け・限定公開）             status: posted
+  → 中身を見て公開へ切り替え                                     status: measuring
   → 投稿直後30〜60分は手動でコメント返信
   → 48時間後に初速記録
   → 週次レビュー
@@ -116,6 +117,30 @@ flowchart TD
 
 工数目安: 12本で**生成14分＋事実確認1〜2時間**。
 手作業なら12本で18〜24時間かかる。**浮いた時間は事実確認と一次情報の掘り起こしに使う。**
+
+### 投稿ステータス台帳（`data/status.csv`）
+
+各動画がフローのどこにいるかは**台帳だけを見れば分かる**ようにする
+（台本ファイルからは状態が読めない。v3期に「1本だけレンダ済み」がどこにも記録されていなかった）。
+
+| 列 | 内容 |
+|---|---|
+| `video_id` / `channel` | 台本の `id` とチャンネル（`girls` / `biz` / `meme`） |
+| `status` | 上のフローの5状態（`draft` → `checked` → `rendered` → `posted` → `measuring`） |
+| `updated` | 状態が変わった日付 |
+| `url` | 投稿URL（`posted` 以降は必須） |
+| `note` | 補足（何待ちか・関連Issue） |
+
+| status | 誰がいつ更新するか |
+|---|---|
+| `draft` | 台本生成時に行を足す(人) |
+| `checked` | 事実確認・一次情報・チェックリストを終えた人がその場で |
+| `rendered` | 動画化した人がその場で |
+| `posted` | **投稿ツールが自動更新する**（設計方針。実装は [#29](https://github.com/bashaka-sawabe/personal-sns-operation/issues/29) / [#30](https://github.com/bashaka-sawabe/personal-sns-operation/issues/30) / [#31](https://github.com/bashaka-sawabe/personal-sns-operation/issues/31) の投稿実装に含める） |
+| `measuring` | 公開へ切り替えた人がその場で |
+
+台帳は**状態だけ**を持つ。数値は週次CSV（3章）、台本の中身は `content/scripts/` が正で、
+台帳に重複して書かない（二重管理は必ずズレる）。
 
 ---
 

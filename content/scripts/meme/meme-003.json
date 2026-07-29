@@ -1,0 +1,108 @@
+{
+  "id": "meme-003",
+  "title": "インターネット老人会：Flash黄金時代を語る",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "消えた「あの再生ボタン」",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "あーっ！ボクの思い出が動かないのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "落ち着きなさい。Flashのことかしら？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "そうなのだ、クリックしても無反応なのだ…"
+        }
+      ],
+      "image_prompt": "dark computer screen with abstract broken puzzle piece icon, dim blue glow, retro CRT monitor silhouette, nostalgic empty room, no text, no faces"
+    },
+    {
+      "caption": "2000年代の遊び場",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "2000年代、個人サイトの主役だったのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "重い回線でぐるぐる待ったのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "あの待ち時間まで含めて娯楽だったわね"
+        }
+      ],
+      "image_prompt": "early 2000s style abstract web page layout, pixelated loading spinner, beige desktop tower, dial-up era atmosphere, warm nostalgic light, no text, no faces"
+    },
+    {
+      "caption": "職人という呼び名",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "作ってた人、みんな「職人」なのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "一人で絵も音も動きも作っていたものね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクも職人になりたかったのだ…"
+        }
+      ],
+      "image_prompt": "abstract workshop desk with drawing tablet and headphones, warm lamp light, scattered sketch papers, craft atmosphere, no text, no faces"
+    },
+    {
+      "caption": "配信終了は2020年末",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "Flash Playerの配布は2020年末で終了よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "えっ、じゃあ全部消えたのだ！？"
+        },
+        {
+          "speaker": "metan",
+          "text": "保存に動いた有志もいるの。ありがたいわ"
+        }
+      ],
+      "image_prompt": "abstract archive shelves with glowing data boxes, twilight blue tone, symbolic time capsule, quiet museum atmosphere, no text, no faces"
+    },
+    {
+      "caption": "あなたの一本は？",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ボク、タイトル思い出せないのだ…"
+        },
+        {
+          "speaker": "metan",
+          "text": "覚えている人が書いてくれるかしらね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "みんなの一本、コメントで教えるのだ！"
+        }
+      ],
+      "image_prompt": "abstract night cityscape reflected in old monitor glass, floating light particles, nostalgic warm glow, open notebook silhouette, no text, no faces"
+    }
+  ],
+  "caption": "クリックしても動かないあの再生ボタン。2000年代の個人サイトを支えたFlash文化と、2020年末の配信終了までを2人が振り返ります。あなたの記憶に残る一本は？",
+  "hashtags": [
+    "#インターネット老人会",
+    "#Flash",
+    "#ずんだもん",
+    "#四国めたん",
+    "#ネットミーム"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "インターネット老人会：Flash黄金時代"
+}

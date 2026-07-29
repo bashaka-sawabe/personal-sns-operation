@@ -1,0 +1,108 @@
+{
+  "id": "biz-001",
+  "title": "法人化で税金はいくら変わったか｜一人社長のホンネ",
+  "first_hand": "法人化する前と後で、税金と社会保険料の年間負担が合計でどう変わったかを、自分の申告書と決算書から実額で確認して入れる。",
+  "scenes": [
+    {
+      "caption": "法人化＝節税は本当か",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "法人にすれば税金が減るって本当なのだ！？"
+        },
+        {
+          "speaker": "metan",
+          "text": "減る人もいれば、増える人もいるわよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "どっちなのだー！はっきりしてほしいのだ"
+        }
+      ],
+      "image_prompt": "abstract split road diverging into two paths, soft blue and amber gradient, minimal geometric shapes, no text, no people"
+    },
+    {
+      "caption": "分かれ目は残る利益",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "2026年時点でも、目安は手元に残る利益ね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ざっくりいくらくらいなのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "利益800万円前後でよく比較されるわ"
+        }
+      ],
+      "image_prompt": "minimal line chart crossing point on soft paper texture, warm neutral background, abstract, no text, no numbers, no people"
+    },
+    {
+      "caption": "税率の伸び方が違う",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "個人は稼ぐほど税率が上がる仕組みなの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "会社なら上がらないのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "ほぼ一定。でも社会保険料が丸ごと乗るわ"
+        }
+      ],
+      "image_prompt": "two abstract rising curves, one steep one flat, soft gradient background, minimal design, no text, no people"
+    },
+    {
+      "caption": "【要実体験】前後の実額",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "実際のところ、どうだったのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "このチャンネルの中の人は一人社長でね"
+        },
+        {
+          "speaker": "metan",
+          "text": "【要実体験】法人化前後の税金と社保の年間負担の変化額"
+        }
+      ],
+      "image_prompt": "desk with closed ledger book and calculator silhouette, warm evening light, shallow depth of field, no text, no people"
+    },
+    {
+      "caption": "見るのは手取り",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "税金だけ見ると判断を誤るわ。手取りで比べて"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクも自分の数字を並べてみるのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "あなたの利益はいくら？コメントで教えて"
+        }
+      ],
+      "image_prompt": "simple balance scale silhouette on soft gradient background, calm blue tones, minimal, no text, no people"
+    }
+  ],
+  "caption": "法人化すると税金は本当に減るのか。分かれ目は「残る利益」と社会保険料。税金ではなく手取りで比べるのが結論です。あなたの年間利益はいくらですか？",
+  "hashtags": [
+    "#フリーランス",
+    "#法人化",
+    "#節税",
+    "#社会保険料",
+    "#一人社長"
+  ],
+  "channel": "biz",
+  "genre": "biz",
+  "theme": "法人化で税金はいくら変わったか"
+}

@@ -1,0 +1,108 @@
+{
+  "id": "biz-003",
+  "title": "独立1年目に踏む落とし穴｜後から来る請求",
+  "first_hand": "独立1年目に自分が実際に見落として資金繰りが苦しくなった支払いと、その来た時期・どう乗り切ったかを1つ書き出す",
+  "scenes": [
+    {
+      "caption": "1年目より2年目が本番",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "独立1年目、手元のお金が消えたのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "それね、1年目より2年目が本番なのよ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "え、まだ何か来るのだ…？"
+        }
+      ],
+      "image_prompt": "empty desk with scattered unopened envelopes, dim morning light, muted tones, minimal abstract composition, no text, no faces"
+    },
+    {
+      "caption": "後から届く住民税と保険",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "会社員時代の分の住民税、独立後に届くの。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "給料ないのに請求だけ来るのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "国民健康保険も、前の年の所得で決まるわ。"
+        }
+      ],
+      "image_prompt": "calendar pages turning with a paper bill on a wooden table, soft shadow, quiet muted color palette, no text, no faces"
+    },
+    {
+      "caption": "経費で落とす、の誤解",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "でも経費でいっぱい落とせば平気なのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "経費は税が減るだけ。お金自体は出ていくのよ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "全額返ってくるわけじゃないのだ…"
+        }
+      ],
+      "image_prompt": "receipts pinned on a board, coins in a small dish, soft desk lamp light, abstract still life, no text, no faces"
+    },
+    {
+      "caption": "【要実体験】1年目の誤算",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "このチャンネルの中の人も一人社長でね。"
+        },
+        {
+          "speaker": "metan",
+          "text": "【要実体験】独立1年目に見落とした支払いと、来た時期"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "うわ…想像より重いのだ。"
+        }
+      ],
+      "image_prompt": "small home office at night, laptop closed, notebook and mug, warm lamp glow, symbolic and quiet, no text, no faces"
+    },
+    {
+      "caption": "1年目は貯める年",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "2026年時点でも、備え方の基本は変わらないわ。"
+        },
+        {
+          "speaker": "metan",
+          "text": "売上の一部は最初から別口座へ。使わない前提でね。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "みんなは何で一番驚いたのだ？教えてほしいのだ！"
+        }
+      ],
+      "image_prompt": "two separate glass jars with coins, one sealed, clean minimal background, soft daylight, symbolic saving concept, no text, no faces"
+    }
+  ],
+  "caption": "独立1年目、手取りが増えた気がするのは一瞬。後から来る住民税と国民健康保険で詰む人が多いです。2026年時点の考え方で、最初にやる備えを整理しました。",
+  "hashtags": [
+    "#フリーランス",
+    "#独立1年目",
+    "#住民税",
+    "#国民健康保険",
+    "#確定申告"
+  ],
+  "channel": "biz",
+  "genre": "biz",
+  "theme": "独立1年目に踏む落とし穴"
+}

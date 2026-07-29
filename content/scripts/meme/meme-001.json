@@ -1,0 +1,108 @@
+{
+  "id": "meme-001",
+  "title": "猫ミーム元ネタ全部言えるか選手権",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "猫ミーム、実は全部別人",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "えっ、あの猫たち全部別の猫なのだ！？"
+        },
+        {
+          "speaker": "metan",
+          "text": "当然でしょう。同じ猫だと思ってたの？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボク、ずっと兄弟だと思ってたのだ…"
+        }
+      ],
+      "image_prompt": "minimal pastel background with abstract cat silhouettes floating, soft gradient, playful internet meme collage feel, no text, no faces"
+    },
+    {
+      "caption": "happy happy happy猫",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "まずは頭を揺らす『ハッピーキャット』ね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "あれ元は普通の飼い猫の動画なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "そう。音楽を後から乗せた合成なのよ"
+        }
+      ],
+      "image_prompt": "cozy living room corner with sunlight, soft cushions, rhythmic sound wave patterns in the air, warm tones, no text, no faces"
+    },
+    {
+      "caption": "チピチピチャパチャパ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "チピチピチャパチャパ！これは歌なのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "チリのChristellの『Dubidubidu』よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "2003年の曲なのだ！？猫より年上なのだ"
+        }
+      ],
+      "image_prompt": "vintage european record player on wooden table, retro vinyl sleeve abstract shapes, warm sepia light, no text, no faces"
+    },
+    {
+      "caption": "泣き猫と黙る猫",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "泣いてる猫、あれは加工された表情よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "じゃあ本人は泣いてないのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "ええ。悲しい寸劇の担当に育てられたの"
+        }
+      ],
+      "image_prompt": "rainy window with blurred droplets, soft blue evening light, single empty chair silhouette, melancholic mood, no text, no faces"
+    },
+    {
+      "caption": "流行の本当の理由",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "猫が主役だと、重い話も見られるのよね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "なるほど、だから退職報告まで猫なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "あなたの推し猫はどれ？名前で言える？"
+        }
+      ],
+      "image_prompt": "night city skyline with glowing phone screen light, soft bokeh, abstract paw shapes in the glow, calm atmosphere, no text, no faces"
+    }
+  ],
+  "caption": "猫ミーム、実は全部ちがう猫。チピチピはイタリアの古い曲が元ネタ。あなたの推し猫、名前で言える？",
+  "hashtags": [
+    "#猫ミーム",
+    "#ミーム解説",
+    "#元ネタ",
+    "#ずんだもん",
+    "#四国めたん"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "猫ミームの元ネタ、全部知ってる？"
+}

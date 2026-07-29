@@ -1,0 +1,108 @@
+{
+  "id": "girls-003",
+  "title": "同期と比べて落ち込む夜の抜け出し方",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "夜の同期チェック",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "うわああ、また同期のSNS見ちゃったのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "あら、夜中の一番やってはいけない遊びね。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクだけ何も進んでない気がするのだ…"
+        }
+      ],
+      "image_prompt": "a dim bedroom at night, faint blue glow from a phone screen on a bed sheet, soft shadows, no people, no text, cinematic"
+    },
+    {
+      "caption": "比べる材料が偏る",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "同期は昇進、ボクは残業なのだ。差がすごいのだ。"
+        },
+        {
+          "speaker": "metan",
+          "text": "でも相手の落ち込んだ夜は見えてないでしょう？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "…たしかに、いいところしか見てないのだ。"
+        }
+      ],
+      "image_prompt": "two unequal stacks of paper on a desk lit by a single lamp, night window in background, no people, no text"
+    },
+    {
+      "caption": "落ち込みが加速する時間",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "それに夜の判断って、だいたい荒れてるのよ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "朝には忘れてるのに、夜は世界の終わりなのだ。"
+        },
+        {
+          "speaker": "metan",
+          "text": "わたくしも昔、夜中に転職サイト巡ってたわ。"
+        }
+      ],
+      "image_prompt": "clock hands near 2 am on a wall, dark room, faint moonlight through curtains, quiet mood, no people, no text"
+    },
+    {
+      "caption": "比較を質問に変える",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "じゃあどうすれば抜け出せるのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "「羨ましい」を「何が欲しいの？」に言い換えるの。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "おお、ちょっと頭が冷えた気がするのだ。"
+        }
+      ],
+      "image_prompt": "a notebook and pen on a table with warm desk lamp light, blank page, calm night atmosphere, no people, no text"
+    },
+    {
+      "caption": "持ち帰れる一言",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "比べる相手は同期じゃなく、去年の自分でいいのよ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "去年のボクよりは、たしかにマシなのだ…！"
+        },
+        {
+          "speaker": "metan",
+          "text": "落ち込んだ夜が来たら、また思い出しなさいね。"
+        }
+      ],
+      "image_prompt": "soft sunrise light entering a quiet room, window silhouette, gentle warm gradient sky, no people, no text"
+    }
+  ],
+  "caption": "同期と比べて眠れない夜に。羨ましいを質問に変えるだけで、朝の顔が少し変わります。比べる相手は去年の自分で十分。",
+  "hashtags": [
+    "#同期",
+    "#比較しない",
+    "#働く女性",
+    "#夜の思考整理",
+    "#めたんとずんだもん"
+  ],
+  "channel": "girls",
+  "genre": "girls",
+  "theme": "同期と比べて落ち込む夜の抜け出し方"
+}

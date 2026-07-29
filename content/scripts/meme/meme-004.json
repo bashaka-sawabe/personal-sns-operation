@@ -1,0 +1,108 @@
+{
+  "id": "meme-004",
+  "title": "Xあるある寸劇 通知が止まらない編",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "通知が止まらない",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ぎゃー！通知が止まらないのだー！"
+        },
+        {
+          "speaker": "metan",
+          "text": "あら、ずんだもん。バズったのかしら？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクの昼ごはんの写真が伸びてるのだ！"
+        }
+      ],
+      "image_prompt": "abstract glowing smartphone screen on a dark desk, endless stream of blue notification bubbles floating upward, no text, no logos, no people, cinematic soft light"
+    },
+    {
+      "caption": "リプ欄に謎の人",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "なんか知らない言語のリプが大量なのだ…"
+        },
+        {
+          "speaker": "metan",
+          "text": "「インプレゾンビ」ね。2024年に大発生したのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクの昼ごはんはどこ行ったのだ！"
+        }
+      ],
+      "image_prompt": "abstract swarm of grey speech bubbles crowding around one small glowing bubble, dark blue background, symbolic, no text, no faces, no logos"
+    },
+    {
+      "caption": "引用で殴られる",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "引用リポストで知らん人に説教されたのだ…"
+        },
+        {
+          "speaker": "metan",
+          "text": "賛同ではなく反論の引用ね。定番の流れだわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボク昼ごはんの話しかしてないのだ！"
+        }
+      ],
+      "image_prompt": "two abstract paper cards, one pinned on top of the other with a chain, moody blue lighting, symbolic conflict, no text, no faces, no logos"
+    },
+    {
+      "caption": "深夜の重いポスト",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "深夜3時に長文を投稿して、朝に消すのもあるあるよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "消したのに引用でスクショが残ってるのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "インターネットは忘れないのよ…"
+        }
+      ],
+      "image_prompt": "dim bedroom at 3am, faint blue glow from a device on the sheets, curtain silhouette, melancholic, no text, no faces, no logos"
+    },
+    {
+      "caption": "それでも開く",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "もうやめるのだ！…と言いつつ5分後に開くのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "名前が2023年7月にXへ変わっても、この習性は変わらないわね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "みんなのXあるある、コメントで教えてほしいのだ！"
+        }
+      ],
+      "image_prompt": "sunrise light through a window onto a dark phone screen showing abstract blue swirls, quiet morning desk, no text, no faces, no logos"
+    }
+  ],
+  "caption": "バズった瞬間から始まる地獄をずんだもんが実演。インプレゾンビも引用リポストも深夜の長文も、全部あるある。あなたのXあるあるも教えてほしいのだ。",
+  "hashtags": [
+    "#ずんだもん",
+    "#四国めたん",
+    "#Xあるある",
+    "#ミーム",
+    "#あるあるネタ"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "Xあるある寸劇"
+}

@@ -1,0 +1,108 @@
+{
+  "id": "biz-002",
+  "title": "手取りが少ない本当の理由｜引かれる順番の話",
+  "first_hand": "直近1年の納付書や口座履歴を見て、毎月実際に引かれている社会保険料と税金の額・内訳を確認して書く",
+  "scenes": [
+    {
+      "caption": "売上増えたのに手取り減",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "売上は増えたのに手取りが減ったのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "あら。それは引かれる順番の問題かしら"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "順番…？ボク何も悪くないのだ"
+        }
+      ],
+      "image_prompt": "abstract flat illustration of coins flowing through a narrowing funnel, muted blue and beige tones, no text, no people"
+    },
+    {
+      "caption": "手取りは一番最後",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "売上から経費、そこに税と保険が乗るの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "三段構えなのだ…最後がボクなのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "ええ。手取りは残り物になりやすいのよ"
+        }
+      ],
+      "image_prompt": "minimal layered bar stack diagram shapes in soft gradient colors, symbolic subtraction steps, no text, no faces"
+    },
+    {
+      "caption": "重いのは税より保険",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "じゃあ犯人は税金なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "2026年時点だと、保険料の方が重い人も多いわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "稼ぐほど追いかけてくるのだ…"
+        }
+      ],
+      "image_prompt": "abstract heavy stone weight resting on a thin plank, symbolic burden, soft muted palette, no text, no people"
+    },
+    {
+      "caption": "【要実体験】毎月の実額",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "このチャンネルの中の人は一人社長なのだけど"
+        },
+        {
+          "speaker": "metan",
+          "text": "【要実体験】毎月実際に引かれている社会保険料の額"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "数字で見ると急に現実なのだ…"
+        }
+      ],
+      "image_prompt": "close-up of blank ledger paper and a plain envelope on a wooden desk, warm soft light, no text, no faces"
+    },
+    {
+      "caption": "先に取り置く発想",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "入金の時点で、引かれる分を別口座に逃がすの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "残ったお金だけ見てたのが敗因なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "あなたは毎月いくら引かれてる？聞かせて"
+        }
+      ],
+      "image_prompt": "two simple jars separating small pebbles, calm minimal still life, soft daylight, no text, no people"
+    }
+  ],
+  "caption": "売上は増えたのに手取りが増えない。原因は税金だけじゃなく、引かれる順番と社会保険料。2026年時点の考え方で整理しました。あなたの毎月の引かれ方も教えてください。",
+  "hashtags": [
+    "#フリーランス",
+    "#手取り",
+    "#社会保険料",
+    "#確定申告",
+    "#独立"
+  ],
+  "channel": "biz",
+  "genre": "biz",
+  "theme": "手取りが少ない本当の理由"
+}

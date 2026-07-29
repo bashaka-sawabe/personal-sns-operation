@@ -1,0 +1,108 @@
+{
+  "id": "biz-004",
+  "title": "角を立てない仕事の断り方｜フリーランス",
+  "first_hand": "自分が実際に断った案件について、断った理由・伝えた言い回し・その後その相手との取引がどうなったかを1件分そのまま書き出す。",
+  "scenes": [
+    {
+      "caption": "断ったら次はない？",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "断ったら二度と声かからないのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "その恐怖、みんな持っているわね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "だから全部受けてパンクするのだ…"
+        }
+      ],
+      "image_prompt": "abstract desk scene, overflowing stack of paper documents, dim warm light, soft shadows, no text, no people, minimal composition"
+    },
+    {
+      "caption": "断り方は理由が9割",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "結論。理由を相手のせいにしないことよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "え、金額が安いからじゃダメなのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "それは相手の否定になるの。角が立つわ"
+        }
+      ],
+      "image_prompt": "two abstract paper shapes facing each other on a plain desk, soft neutral lighting, symbolic negotiation, no text, no people"
+    },
+    {
+      "caption": "使える言い回しは3つ",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "軸は「時期」「体制」「品質」の3つよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "体制ってなんなのだ？難しいのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "今の人数だと質が落ちる、と伝えるだけ"
+        }
+      ],
+      "image_prompt": "three simple wooden blocks arranged in a row on a clean desk, calm daylight, minimalist still life, no text, no people"
+    },
+    {
+      "caption": "【要実体験】断った後の話",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "このチャンネルの中の人も一人社長なの"
+        },
+        {
+          "speaker": "metan",
+          "text": "【要実体験】断った案件と、その後の関係"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "断っても切れない場合があるのだ？"
+        }
+      ],
+      "image_prompt": "abstract image of two paths on a desk surface, one folded paper set aside, soft morning light, quiet mood, no text, no people"
+    },
+    {
+      "caption": "断る線は先に決める",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "肝心なのは、断る基準を先に決めることよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "その場で悩むから断れないのだ…"
+        },
+        {
+          "speaker": "metan",
+          "text": "あなたの線引きは何かしら。聞かせて"
+        }
+      ],
+      "image_prompt": "a single clean line drawn on paper with a ruler, soft desk lighting, symbolic boundary, minimal, no text, no people"
+    }
+  ],
+  "caption": "断ると次がない…は思い込み。角を立てない断り方は「時期・体制・品質」の3語で足ります。あなたが仕事を断る基準、コメントで教えてください。",
+  "hashtags": [
+    "#フリーランス",
+    "#独立",
+    "#一人社長",
+    "#仕事術",
+    "#断り方"
+  ],
+  "channel": "biz",
+  "genre": "biz",
+  "theme": "角を立てない仕事の断り方"
+}

@@ -1,0 +1,108 @@
+{
+  "id": "girls-001",
+  "title": "飲み会を感じよく断る一言",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "また行けない飲み会",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "うわあ、また金曜の飲み会のお誘いなのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "あら、その顔は行きたくないわね。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "行きたくないけど断り方が分からないのだ…"
+        }
+      ],
+      "image_prompt": "a smartphone lying face up on an office desk at dusk, soft blue light, blurred background, no text, no people"
+    },
+    {
+      "caption": "やりがちな断り方",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ボク、いつも「ちょっと用事が」で逃げるのだ。"
+        },
+        {
+          "speaker": "metan",
+          "text": "それ、毎回だと不自然に見えてしまうのよね。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "バレてるのだ…！？"
+        }
+      ],
+      "image_prompt": "empty meeting room with chairs slightly out of place, warm evening light through blinds, quiet mood, no text"
+    },
+    {
+      "caption": "角が立つのは順番",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "断り方でこじれるのは、順番のせいが多いわ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "順番って何なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "先に「嬉しい」、それから「行けない」よ。"
+        }
+      ],
+      "image_prompt": "two paper cups on a wooden counter, soft golden lighting, cozy izakaya atmosphere, empty seats, no text"
+    },
+    {
+      "caption": "言い方を変えるだけ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "「誘ってもらえて嬉しいのだ、でも今回は…」"
+        },
+        {
+          "speaker": "metan",
+          "text": "そこで理由を盛らないのがコツかしら。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "言い訳を長くしなくていいのだ！？"
+        }
+      ],
+      "image_prompt": "close-up of a notebook and pen on a desk, soft natural window light, calm minimal composition, no text"
+    },
+    {
+      "caption": "次に繋げる一言",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "最後に「次は声かけてね」を足すのよ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "断ったのに、関係は切れないのだ…！"
+        },
+        {
+          "speaker": "metan",
+          "text": "断るのは予定だけ。人は断らないの。"
+        }
+      ],
+      "image_prompt": "evening city street with warm streetlights and soft bokeh, gentle atmosphere, no people, no text"
+    }
+  ],
+  "caption": "断るのは予定だけ、人は断らない。飲み会を感じよくかわす言い方3ステップ。あなたはいつもどう断ってる？",
+  "hashtags": [
+    "#飲み会",
+    "#断り方",
+    "#職場の人間関係",
+    "#社会人あるある",
+    "#会社員"
+  ],
+  "channel": "girls",
+  "genre": "girls",
+  "theme": "飲み会の上手な断り方"
+}

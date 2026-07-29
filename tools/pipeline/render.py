@@ -5,8 +5,8 @@
 設計:
 - シーンごとに独立した mp4 を書き出してから concat する。
   1本のフィルタグラフで全部やると、1シーン失敗しただけで全体が落ちる上に
-  どのシーンが原因か分からない。分けておくと切り分けが効く（docs/09 4-5）。
-- 各シーンの尺はナレーション音声の長さに従う（docs/09 4-6）。
+  どのシーンが原因か分からない。分けておくと切り分けが効く（docs/09 4-6）。
+- 各シーンの尺はナレーション音声の長さに従う（docs/09 4-7）。
 - 字幕はASSで焼く。フレーズごとに音声と同期して表示し、数字は色を変える。
   drawtext ではなく ASS なのは、行内の色変え・ポップイン・複数スタイルの
   同時表示（見出し＋フレーズ）が1ファイルで済むため（docs/09 4-3）。
@@ -30,9 +30,17 @@ ACCENT = r"\1c&H00D7FF&"   # 数字の強調色（金）。ASSはBGR並び
 WHITE = r"\1c&HFFFFFF&"
 POP = r"{\fscx132\fscy132\t(0,110,\fscx100\fscy100)}"  # フレーズのポップイン
 
-# フォールバック背景（静止画）用 Ken Burns
-ZOOM_PER_FRAME = 0.0006
-ZOOM_MAX = 1.12
+# 静止画背景の Ken Burns。
+# 中央固定の微ズームは「動いていない」と見える（毎秒1.8%・1フレーム0.06%では目が拾えない上に、
+# 中心が動かないと画面の端に手がかりが出ない）。シーンごとに寄り／引きとパンの向きを変え、
+# 端が流れる量を付ける（docs/09 4-5）。
+# (ズーム開始, ズーム終了, x開始, x終了, y開始, y終了)。位置は取り得る範囲に対する 0〜1 の割合
+MOTIONS = [
+    (1.05, 1.24, 0.35, 0.62, 0.50, 0.50),  # 寄りながら右へ
+    (1.24, 1.05, 0.50, 0.50, 0.34, 0.62),  # 引きながら下へ
+    (1.05, 1.24, 0.65, 0.38, 0.50, 0.50),  # 寄りながら左へ
+    (1.24, 1.05, 0.50, 0.50, 0.66, 0.38),  # 引きながら上へ
+]
 
 # ストック映像の敷き込み。彩度を少し上げ、字幕のためにわずかに暗くする
 _VIDEO_PREP = (
@@ -64,6 +72,24 @@ def _font_family() -> str:
     except (OSError, subprocess.SubprocessError):
         _font_cache["family"] = FONT_FALLBACK
     return _font_cache["family"]
+
+
+def _ken_burns(index: int, dur: float) -> str:
+    """シーン番号で動きを変える zoompan を組み立てる。
+
+    zoompan の x/y は切り出し矩形の左上を入力座標で指すので、可動域 (iw - iw/zoom) に
+    割合を掛ける。ズームが1.0まで戻ると可動域が0になってパンが止まるため、
+    下限は1.05に取ってある。
+    """
+    z0, z1, x0, x1, y0, y1 = MOTIONS[index % len(MOTIONS)]
+    frames = max(1, int(round(dur * FPS)))
+    p = f"min(on/{frames},1)"
+    return (
+        f"zoompan=z='{z0}+{z1 - z0:.4f}*{p}'"
+        f":x='(iw-iw/zoom)*({x0}+{x1 - x0:.4f}*{p})'"
+        f":y='(ih-ih/zoom)*({y0}+{y1 - y0:.4f}*{p})'"
+        f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS}"
+    )
 
 
 def _ass_time(sec: float) -> str:
@@ -162,9 +188,7 @@ def render_scene(scene: dict, index: int, work_dir: str) -> str:
         vf = (
             f"scale={WIDTH * 2}:{HEIGHT * 2}:force_original_aspect_ratio=increase,"
             f"crop={WIDTH * 2}:{HEIGHT * 2},"
-            f"zoompan=z='min(1+{ZOOM_PER_FRAME}*on,{ZOOM_MAX})'"
-            f":x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
-            f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS},"
+            + _ken_burns(index, scene["dur"]) + ","
             "eq=contrast=1.04:saturation=1.08:brightness=-0.04,"
             + subs
         )
@@ -182,7 +206,13 @@ def render_scene(scene: dict, index: int, work_dir: str) -> str:
 
 def concat(parts: list, out_path: str, work_dir: str,
            bgm: str | None = None, total_dur: float = 0.0) -> str:
-    """シーンmp4を連結する。BGMがあればダッキングして重ねる。"""
+    """シーンmp4を連結する。BGMがあればダッキングして重ねる。
+
+    映像は再エンコードしない。シーンmp4は同一パラメータのh264なので copy で繋がる上に、
+    BGMのフィルタグラフと libx264 を同時に走らせると音声が末尾2秒ほど早くEOFする
+    （実行ごとに切れる位置がブレる＝ffmpeg側の競合。docs/09 4-4）。
+    copy にすると再現しなくなり、世代劣化も無くなる。
+    """
     listfile = os.path.join(work_dir, "concat.txt")
     with open(listfile, "w", encoding="utf-8") as f:
         for p in parts:
@@ -190,24 +220,25 @@ def concat(parts: list, out_path: str, work_dir: str,
             f.write("file '%s'\n" % os.path.abspath(p).replace("'", r"'\''"))
 
     args = ["-f", "concat", "-safe", "0", "-i", listfile]
+    audio = ["-c:a", "copy"]
     if bgm:
         # ナレーションが鳴っている間だけBGMを下げる（サイドチェーン）。
         # 最後は全体をフェードアウトして切り上がりの唐突さを消す
         fade = f",afade=t=out:st={max(0.0, total_dur - 0.9)}:d=0.9" if total_dur else ""
+        # BGMは無限ループのままにせず尺で打ち切る。少し長めに取るのは、
+        # total_dur が四捨五入値でここが短いと末尾のBGMが先に切れるため。
+        # 出力長は amix の duration=first ＝ シーン音声側で決まる
+        loop = ["-stream_loop", "-1"] + (["-t", f"{total_dur + 1:.3f}"] if total_dur else [])
         args += [
-            "-stream_loop", "-1", "-i", bgm,
+            *loop, "-i", bgm,
             "-filter_complex",
             "[1:a]volume=0.25[bgm];"
             "[bgm][0:a]sidechaincompress=threshold=0.02:ratio=12:attack=40:release=500[duck];"
             f"[0:a][duck]amix=inputs=2:duration=first:normalize=0{fade}[a]",
             "-map", "0:v", "-map", "[a]",
         ]
-    ffmpeg([
-        *args,
-        "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
-        "-c:a", "aac", "-b:a", "128k", "-ar", "44100",
-        "-movflags", "+faststart", out_path,
-    ])
+        audio = ["-c:a", "aac", "-b:a", "128k", "-ar", "44100"]
+    ffmpeg([*args, "-c:v", "copy", *audio, "-movflags", "+faststart", out_path])
     return out_path
 
 

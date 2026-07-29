@@ -31,6 +31,7 @@
 **1日6本まで**。週5本運用なら十分に収まる。
 """
 import argparse
+import glob
 import json
 import os
 import sys
@@ -304,10 +305,14 @@ def save_ledger(ledger: dict) -> None:
 
 def script_for(video_path: str) -> dict | None:
     stem = os.path.splitext(os.path.basename(video_path))[0]
-    path = os.path.join(SCRIPTS_DIR, f"{stem}.json")
-    if os.path.exists(path):
-        with open(path, encoding="utf-8") as f:
-            return json.load(f)
+    # v4はチャンネル別ディレクトリ（content/scripts/<ch>/）。直下は旧配置の互換
+    candidates = [os.path.join(SCRIPTS_DIR, f"{stem}.json")] + sorted(
+        glob.glob(os.path.join(SCRIPTS_DIR, "*", f"{stem}.json"))
+    )
+    for path in candidates:
+        if os.path.exists(path):
+            with open(path, encoding="utf-8") as f:
+                return json.load(f)
     return None
 
 

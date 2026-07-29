@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""ショート動画を1本作る（台本 → 素材 → 縦動画）。
+"""ショート動画を1本作る（掛け合い台本 → 素材 → 縦動画）。
 
     # 1本作る
-    python3 tools/make_video.py --genre money --theme "経費で落とせるもの3選"
+    python3 tools/make_video.py --channel biz --theme "法人化で税金はいくら変わったか"
 
     # APIキー無しで疎通確認（テンプレ台本＋ローカル素材だけで最後まで通す）
-    python3 tools/make_video.py --genre money --theme "テスト" --offline
+    python3 tools/make_video.py --channel biz --theme "テスト" --offline
 
-    # 3ジャンル分をまとめて（2週間テストの本体）
+    # 3チャンネル分をまとめて（2週間テストの本体）
     python3 tools/make_video.py --batch data/themes.md
 
     # 台本だけ先に作って、中身を見てから動画化する
-    python3 tools/make_video.py --genre money --theme "..." --script-only
-    python3 tools/make_video.py --from-script content/scripts/money-001.json
+    python3 tools/make_video.py --channel biz --theme "..." --script-only
+    python3 tools/make_video.py --from-script content/scripts/biz/biz-001.json
 
 出力:
-    content/scripts/<id>.json   台本（手直しして再実行できる）
-    content/assets/<id>/        背景・音声・シーンmp4（中間物）
-    content/out/<id>.mp4        完成した縦動画
+    content/scripts/<ch>/<id>.json  台本（手直しして再実行できる）
+    content/assets/<id>/            背景・音声・シーンmp4（中間物）
+    content/out/<id>.mp4            完成した縦動画
 
 前提: ffmpeg（必須）／台本生成に anthropic SDK と ANTHROPIC_API_KEY
       （どちらも無ければ --offline 相当で動く）
+      立ち絵は content/assets/characters/<キャラ>.png に手動で置く（docs/09 4-8）
 """
 import argparse
 import os
@@ -30,22 +31,22 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline import media, render, script as script_mod
+from tools.pipeline import channels, media, render, script as script_mod
 from tools.pipeline.common import (
     ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, ensure_dirs,
 )
 
 
-def slugify(genre: str, theme: str) -> str:
+def slugify(channel: str) -> str:
     """ファイル名に使える id を作る。日本語は落ちるので連番で担保する。"""
-    base = re.sub(r"[^a-z0-9]+", "-", f"{genre}".lower()).strip("-") or "video"
+    base = re.sub(r"[^a-z0-9]+", "-", f"{channel}".lower()).strip("-") or "video"
     n = 1
-    while os.path.exists(os.path.join(SCRIPTS_DIR, f"{base}-{n:03d}.json")):
+    while os.path.exists(os.path.join(SCRIPTS_DIR, channel, f"{base}-{n:03d}.json")):
         n += 1
     return f"{base}-{n:03d}"
 
 
-def warn_unfilled(data: dict, script_id: str) -> None:
+def warn_unfilled(data: dict, script_id: str, channel: str) -> None:
     """本人が埋めるべき一次情報が残っていたら知らせる。
 
     止めはしない（絵を先に確認したいことがある）が、この状態で投稿すると
@@ -55,44 +56,70 @@ def warn_unfilled(data: dict, script_id: str) -> None:
     if not spots:
         return
     print(f"  ⚠️ 一次情報が未記入です（{len(spots)}箇所）: {'、'.join(spots)}", file=sys.stderr)
-    print(f"     content/scripts/{script_id}.json を開いて "
+    print(f"     content/scripts/{channel}/{script_id}.json を開いて "
           f"「{script_mod.PLACEHOLDER}」を実際の内容に置き換え、"
           f"--from-script で作り直してください。", file=sys.stderr)
     print("     このまま投稿すると、画面に目印が焼き込まれたまま公開されます。",
           file=sys.stderr)
 
 
+def load_cast(cfg: dict) -> list:
+    """配役の立ち絵を集める。無いキャラは知らせた上で立ち絵なしで続ける。"""
+    cast, missing = [], []
+    for key in channels.cast_keys(cfg):
+        img = media.character_image(key)
+        cast.append((key, img))
+        if not img:
+            missing.append(key)
+    if missing:
+        print("  ⚠️ 立ち絵がありません（立ち絵なしで続けます・投稿品質ではありません）:",
+              file=sys.stderr)
+        for key in missing:
+            print(f"     content/assets/characters/{key}.png に配置してください"
+                  "（素材規約は docs/08）", file=sys.stderr)
+    return cast
+
+
 def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
+    script_mod.validate(data)  # 旧形式（ナレーション形式）はここで明確に落とす
+    channel = data.get("channel") or data.get("genre") or ""
+    cfg = channels.load(channel)
+
     asset_dir = os.path.join(ASSETS_DIR, script_id)
     ensure_dirs(asset_dir, OUT_DIR)
     out_path = os.path.join(OUT_DIR, f"{script_id}.mp4")
-    warn_unfilled(data, script_id)
+    warn_unfilled(data, script_id, channel)
 
     print(f"  素材を生成中（{len(data['scenes'])}シーン）...")
+    # 立ち絵のクレジット（サイドカー）は media 側が credits.txt に書く
     scenes = media.build_scene_assets(data, asset_dir, offline=offline)
+    cast = load_cast(cfg)
     total = sum(s["dur"] for s in scenes)
     bgm = media.bgm_track(script_id)
     if bgm:
         # CC BY 楽曲はクレジット表記が利用条件。投稿時の説明文に自動で入る
         media.append_credit(asset_dir, media.bgm_credit(bgm))
     print(f"  合成中（尺 {total:.1f}秒{'・BGMあり' if bgm else '・BGMなし'}）...")
-    render.build(scenes, out_path, asset_dir, bgm=bgm)
+    render.build(scenes, out_path, asset_dir, bgm=bgm, cast=cast)
     return out_path
 
 
-def make_one(genre: str, theme: str, offline: bool, script_only: bool) -> str:
-    ensure_dirs(SCRIPTS_DIR)
-    script_id = slugify(genre, theme)
-    print(f"[{script_id}] {genre} / {theme}")
+def make_one(channel: str, theme: str, offline: bool, script_only: bool) -> str:
+    cfg = channels.load(channel)
+    scripts_dir = os.path.join(SCRIPTS_DIR, channel)
+    ensure_dirs(scripts_dir)
+    script_id = slugify(channel)
+    print(f"[{script_id}] {channel} / {theme}")
 
     print("  台本を生成中...")
-    data = script_mod.generate(genre, theme, offline=offline)
-    data["genre"] = genre
+    data = script_mod.generate(cfg, theme, offline=offline)
+    data["channel"] = channel
+    data["genre"] = channel  # 計測（fetch_metrics）の集計キーとの互換。値はチャンネル名
     data["theme"] = theme
-    path = script_mod.save(data, script_id, SCRIPTS_DIR)
+    path = script_mod.save(data, script_id, scripts_dir)
     print(f"  台本: {os.path.relpath(path)}")
     if script_only:
-        warn_unfilled(data, script_id)
+        warn_unfilled(data, script_id, channel)
         return path
     return build_from_script(data, script_id, offline=offline)
 
@@ -100,36 +127,38 @@ def make_one(genre: str, theme: str, offline: bool, script_only: bool) -> str:
 def read_themes(path: str) -> list:
     """Markdownのテーマ一覧を読む。
 
-    `## ジャンル` の見出し以下の `- テーマ` を拾う。見出しの前にある箇条書きは
+    `## チャンネル` の見出し以下の `- テーマ` を拾う。見出しの前にある箇条書きは
     説明文とみなして無視する。表・引用・コードブロックは自然に対象外になる。
     """
-    rows, genre = [], None
+    rows, channel = [], None
     with open(path, encoding="utf-8") as f:
         for line in f:
             line = line.rstrip()
             heading = re.match(r"^##\s+(.+)$", line)
             if heading:
                 title = heading.group(1).strip()
-                # 「## money — お金」のような注釈付きでも先頭の識別子だけを使う
+                # 「## biz — お金」のような注釈付きでも先頭の識別子だけを使う
                 token = re.split(r"[\s—–\-:：(（]", title, maxsplit=1)[0].strip()
-                # 設計の説明セクションはジャンルではないので拾わない
-                genre = token if re.fullmatch(r"[A-Za-z0-9_]+", token) else None
+                # 設計の説明セクションはチャンネルではないので拾わない
+                channel = token if re.fullmatch(r"[A-Za-z0-9_]+", token) else None
                 continue
             item = re.match(r"^\s*[-*]\s+(.+)$", line)
-            if item and genre:
-                rows.append((genre, item.group(1).strip()))
+            if item and channel:
+                rows.append((channel, item.group(1).strip()))
     return rows
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description="ショート動画を生成する")
-    p.add_argument("--genre", help="ジャンル（money / psychology / history など）")
+    p = argparse.ArgumentParser(description="掛け合いショート動画を生成する")
+    p.add_argument("--channel", help=f"チャンネル（{' / '.join(channels.available()) or 'girls / biz / meme'}）")
+    p.add_argument("--genre", help=argparse.SUPPRESS)  # 旧名。--channel の別名として残す
     p.add_argument("--theme", help="テーマ（動画1本の中身）")
-    p.add_argument("--batch", help="ジャンルとテーマの一覧ファイル（1行1本）")
+    p.add_argument("--batch", help="チャンネルとテーマの一覧ファイル（1行1本）")
     p.add_argument("--from-script", help="既存の台本JSONから動画だけ作り直す")
     p.add_argument("--offline", action="store_true", help="APIを一切使わず疎通確認する")
     p.add_argument("--script-only", action="store_true", help="台本だけ作って止める")
     args = p.parse_args()
+    channel = args.channel or args.genre
 
     try:
         if args.from_script:
@@ -145,22 +174,22 @@ def main() -> None:
                 sys.exit(f"{args.batch} に有効な行がありません。")
             print(f"{len(rows)}本を生成します\n")
             done, failed = [], []
-            for genre, theme in rows:
+            for ch, theme in rows:
                 try:
-                    done.append(make_one(genre, theme, args.offline, args.script_only))
+                    done.append(make_one(ch, theme, args.offline, args.script_only))
                 except PipelineError as e:
                     # 1本の失敗でバッチ全体を止めない。残りを作り切ってから報告する
                     print(f"  失敗: {e}\n", file=sys.stderr)
-                    failed.append((genre, theme))
+                    failed.append((ch, theme))
             print(f"\n完了: {len(done)}本 / 失敗: {len(failed)}本")
-            for genre, theme in failed:
-                print(f"  - {genre} / {theme}", file=sys.stderr)
+            for ch, theme in failed:
+                print(f"  - {ch} / {theme}", file=sys.stderr)
             return
 
-        if not args.genre or not args.theme:
-            p.error("--genre と --theme（または --batch / --from-script）を指定してください")
+        if not channel or not args.theme:
+            p.error("--channel と --theme（または --batch / --from-script）を指定してください")
 
-        out = make_one(args.genre, args.theme, args.offline, args.script_only)
+        out = make_one(channel, args.theme, args.offline, args.script_only)
         print(f"完成: {os.path.relpath(out)}")
 
     except PipelineError as e:

@@ -28,6 +28,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+from .channels import CHARACTERS
 from .common import (
     ASSETS_DIR, HEIGHT, WIDTH, PipelineError, ffmpeg, probe_duration,
     read_secret, require, run, split_phrases,
@@ -63,8 +64,6 @@ _PROMPT_NOISE = {
 }
 
 VOICEVOX_URL = "http://127.0.0.1:50021"
-# 既定は青山龍星（ノーマル）。落ち着いた男声で「大人のメモ帳」のトーンに合わせている
-VOICEVOX_SPEAKER = int(os.environ.get("VOICEVOX_SPEAKER", "13"))
 # 1.0だと間延びする。ショートの標準的な語速に寄せる
 VOICEVOX_SPEED = 1.1
 # エンジンの置き場候補。GUI版（VOICEVOX.app）にも同じエンジンが同梱されている
@@ -74,8 +73,11 @@ VOICEVOX_ENGINES = [
     "/Applications/VOICEVOX.app/Contents/Resources/vv-engine/run",
 ]
 
+# 立ち絵の置き場。素材は規約の都合で本人が手動で置く（docs/08・docs/09 4-8）
+CHARACTERS_DIR = os.path.join(ASSETS_DIR, "characters")
+
 # エンジンの起動は1プロセスに1回で足りるのでモジュール内に持つ
-_voicevox = {"checked": False, "up": False, "speaker_name": ""}
+_voicevox = {"checked": False, "up": False}
 
 
 def _http(url: str, method: str = "GET", body: bytes | None = None,
@@ -94,19 +96,6 @@ def _voicevox_alive() -> bool:
         return True
     except OSError:
         return False
-
-
-def _voicevox_speaker_name(speaker: int) -> str:
-    """クレジット表記用のキャラ名。取れなくても合成は続ける。"""
-    try:
-        speakers = json.loads(_http(f"{VOICEVOX_URL}/speakers", timeout=5))
-        for s in speakers:
-            for style in s.get("styles", []):
-                if style.get("id") == speaker:
-                    return s.get("name", "")
-    except (OSError, ValueError):
-        pass
-    return ""
 
 
 def ensure_voicevox() -> bool:
@@ -129,19 +118,15 @@ def ensure_voicevox() -> bool:
                 time.sleep(0.5)
 
     _voicevox["up"] = _voicevox_alive()
-    if _voicevox["up"]:
-        _voicevox["speaker_name"] = _voicevox_speaker_name(VOICEVOX_SPEAKER)
-    else:
+    if not _voicevox["up"]:
         print("  VOICEVOXエンジンが見つからないため say で代用します（投稿品質ではありません）",
               file=sys.stderr)
     return _voicevox["up"]
 
 
-def voicevox_credit() -> str:
-    """クレジット表記（利用条件）。VOICEVOXを使っていなければ空。"""
-    if _voicevox["up"] and _voicevox["speaker_name"]:
-        return f"VOICEVOX:{_voicevox['speaker_name']}"
-    return ""
+def voicevox_used() -> bool:
+    """クレジット表記（利用条件）が必要か。VOICEVOXの声を使ったときだけ True。"""
+    return _voicevox["up"]
 
 
 def _voicevox_wav(text: str, path: str, speaker: int) -> None:
@@ -167,16 +152,17 @@ def _say_wav(text: str, path: str, voice: str = "Kyoko", rate: int = 180) -> Non
         run([require("say"), "-r", str(rate), "-o", path, text])
 
 
-def narration(text: str, path: str) -> str:
-    """ナレーション1フレーズ分の音声を作り、44.1kHzモノラルwavで返す。
+def narration(text: str, path: str, speaker: int) -> str:
+    """セリフ1フレーズ分の音声を作り、44.1kHzモノラルwavで返す。
 
+    speaker はVOICEVOXのスタイルID（キャラごとに固定。channels.CHARACTERS）。
     末尾に短い無音を足す。フレーズ間が詰まって聞こえるのを防ぐと同時に、
     「音声の長さ＝字幕の表示時間」の余韻にもなる（docs/09 4-3）。
     """
     raw = path + ".raw"
     if ensure_voicevox():
         try:
-            _voicevox_wav(text, raw + ".wav", VOICEVOX_SPEAKER)
+            _voicevox_wav(text, raw + ".wav", speaker)
             os.rename(raw + ".wav", raw)
         except (OSError, ValueError):
             _say_wav(text, raw + ".aiff")
@@ -187,6 +173,29 @@ def narration(text: str, path: str) -> str:
     ffmpeg(["-i", raw, "-af", "apad=pad_dur=0.12", "-ar", "44100", "-ac", "1", path])
     os.remove(raw)
     return path
+
+
+# ---------------------------------------------------------------- 立ち絵
+
+def character_image(key: str) -> str | None:
+    """立ち絵のパス。無ければ None（立ち絵なしで劣化継続する）。
+
+    素材はファンメイド立ち絵など規約のあるものなので、自動ダウンロードせず
+    本人が content/assets/characters/<key>.png に置く（docs/09 4-8）。
+    """
+    path = os.path.join(CHARACTERS_DIR, f"{key}.png")
+    return path if os.path.exists(path) else None
+
+
+def character_credit(key: str) -> str:
+    """立ち絵素材のクレジット。画像と同名の .txt（サイドカー）に書いてある。
+
+    BGM（bgm_credit）と同じ約束。素材を置くときは必ず対で置く（docs/08）。
+    """
+    sidecar = os.path.join(CHARACTERS_DIR, f"{key}.txt")
+    if os.path.exists(sidecar):
+        return open(sidecar, encoding="utf-8").read().strip()
+    return ""
 
 
 # ---------------------------------------------------------------- 背景
@@ -428,21 +437,30 @@ def background(index: int, image_prompt: str, asset_dir: str,
 # ---------------------------------------------------------------- 組み立て
 
 def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> list:
-    """台本の全シーン分の素材を作る。
+    """台本の全シーン分の素材を作る（掛け合い形式）。
 
-    返り値: [{bg, bg_kind, caption, phrases: [{text, audio, dur}], dur}]
+    返り値: [{bg, bg_kind, caption, phrases: [{text, audio, dur, speaker}], dur}]
     フレーズごとに音声を分けるのは、字幕を音声に同期させるため（docs/09 4-3）。
+    話者はフレーズ単位で持ち、声・字幕色・立ち絵の強調をそこから引く。
     """
     api_key = read_secret("PEXELS_API_KEY", "pexels_key.txt")
 
-    scenes, providers = [], []
+    scenes, providers, used_speakers = [], [], []
     for i, scene in enumerate(script["scenes"]):
         bg = background(i, scene.get("image_prompt", ""), asset_dir, api_key, offline)
         providers.append(bg["provider"])
         phrases = []
-        for j, text in enumerate(split_phrases(scene["narration"])):
-            audio = narration(text, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"))
-            phrases.append({"text": text, "audio": audio, "dur": probe_duration(audio)})
+        for line in scene["dialogue"]:
+            key = line["speaker"]
+            if key not in used_speakers:
+                used_speakers.append(key)
+            style_id = CHARACTERS[key]["voicevox_speaker"]
+            for text in split_phrases(line["text"]):
+                j = len(phrases)
+                audio = narration(text, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"),
+                                  speaker=style_id)
+                phrases.append({"text": text, "audio": audio,
+                                "dur": probe_duration(audio), "speaker": key})
         # 読み終わりで即カットすると詰まって聞こえるのでシーン末尾に余白を足す
         dur = round(sum(p["dur"] for p in phrases) + 0.35, 2)
         scenes.append({
@@ -453,8 +471,9 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
             "dur": dur,
         })
 
-    _write_credits(asset_dir, providers)
-    voice = voicevox_credit() or "macOS say（フォールバック）"
+    _write_credits(asset_dir, providers, used_speakers)
+    voice = ("VOICEVOX: " + "・".join(CHARACTERS[k]["name"] for k in used_speakers)
+             if voicevox_used() else "macOS say（フォールバック）")
     stock = sum(p != "gradient" for p in providers)
     print(f"  背景: ストック素材 {stock}/{len(scenes)}シーン ／ 音声: {voice}")
     if stock < len(scenes) and not offline:
@@ -462,11 +481,15 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
     return scenes
 
 
-def _write_credits(asset_dir: str, providers: list) -> None:
+def _write_credits(asset_dir: str, providers: list, used_speakers: list) -> None:
     """投稿時の説明文に入れるクレジットを書き出す（VOICEVOXは表記が利用条件）。"""
     lines = []
-    if voicevox_credit():
-        lines.append(voicevox_credit())
+    if voicevox_used():
+        lines.extend(CHARACTERS[k]["credit"] for k in used_speakers)
+    for key in used_speakers:
+        # 立ち絵素材のクレジット（サイドカー）。素材が無ければ何も出ない
+        if character_image(key) and character_credit(key):
+            lines.append(character_credit(key))
     if "pexels" in providers:
         lines.append("映像素材: Pexels")
     if "openverse" in providers:

@@ -157,12 +157,16 @@ def render_scene(scene: dict, index: int, work_dir: str) -> str:
     else:
         inputs = ["-loop", "1", "-framerate", str(FPS), "-t", str(scene["dur"]),
                   "-i", scene["bg"], "-i", audio]
-        # 先に2倍に拡大してからズームすることで、拡大時の劣化を避ける
+        # 任意アスペクト比の写真が来るので、まずcover-cropで縦画角に切り出す。
+        # 2倍で作業するのはズーム時の劣化を避けるため
         vf = (
-            f"scale={WIDTH * 2}:{HEIGHT * 2},"
+            f"scale={WIDTH * 2}:{HEIGHT * 2}:force_original_aspect_ratio=increase,"
+            f"crop={WIDTH * 2}:{HEIGHT * 2},"
             f"zoompan=z='min(1+{ZOOM_PER_FRAME}*on,{ZOOM_MAX})'"
             f":x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
-            f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS},{subs}"
+            f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS},"
+            "eq=contrast=1.04:saturation=1.08:brightness=-0.04,"
+            + subs
         )
 
     ffmpeg([

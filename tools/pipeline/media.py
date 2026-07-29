@@ -15,6 +15,7 @@
 
 生成AIを使わない理由・本人の声にしない理由は docs/09 4-1 / 4-2 を参照。
 """
+import base64
 import glob
 import hashlib
 import json
@@ -43,6 +44,11 @@ PALETTE = [
 
 STOCK_DIR = os.path.join(ASSETS_DIR, "stock")
 PEXELS_SEARCH = "https://api.pexels.com/videos/search"
+# Openverse はサインアップ不要（Pexelsに登録できない環境のための本命。#50）。
+# CC0/パブリックドメインに絞れば帰属表示も不要になる
+OPENVERSE_SEARCH = "https://api.openverse.org/v1/images/"
+# 素材ホストがボット除けで python-urllib を弾くことがあるため名乗りを揃える
+_UA = {"User-Agent": "personal-sns-operation/1.0 (content pipeline)"}
 
 # image_prompt から検索語を作るときに捨てる語。
 # プロンプトは「様式の指定」が大半で、Pexels検索に効くのは被写体の名詞だけ
@@ -74,7 +80,8 @@ _voicevox = {"checked": False, "up": False, "speaker_name": ""}
 
 def _http(url: str, method: str = "GET", body: bytes | None = None,
           headers: dict | None = None, timeout: float = 15) -> bytes:
-    req = urllib.request.Request(url, data=body, method=method, headers=headers or {})
+    req = urllib.request.Request(url, data=body, method=method,
+                                 headers={**_UA, **(headers or {})})
     with urllib.request.urlopen(req, timeout=timeout) as res:
         return res.read()
 
@@ -231,6 +238,159 @@ def stock_background(image_prompt: str, api_key: str) -> str | None:
     return None
 
 
+def openverse_background(image_prompt: str) -> str | None:
+    """Openverse（キーレス）からCC0/PDの縦写真を1枚取る。取れなければ None。
+
+    匿名利用はレート制限が厳しめなので、429は一度だけ待って引き直す。
+    写真は静止画なので、動きは render 側の Ken Burns に任せる。
+    """
+    query = _stock_query(image_prompt)
+    if not query:
+        return None
+    cached = os.path.join(STOCK_DIR, "ov_" + hashlib.sha1(query.encode()).hexdigest()[:16] + ".jpg")
+    if os.path.exists(cached):
+        return cached
+
+    # CC0/PDに絞ると母数が小さく、具体的な検索語は0件になりやすい。
+    # 語を後ろから削り、縦向き指定→指定なしの順で段階的に緩める
+    # （横写真でも render 側が中央をcover-cropするので使える）。
+    # まず写真ソースを絞った検索を全段試し、駄目なら制限なしでもう一周する
+    words = query.split()
+    variants = [" ".join(words[:n]) for n in range(len(words), 0, -1)]
+    attempts = [
+        (q_text, aspect, source)
+        for source in ("flickr,rawpixel,stocksnap", "")
+        for q_text in variants
+        for aspect in ("tall", "")
+    ]
+    # 検索結果の並びは信用できない（商品パッケージ等が先頭に来る）ため、
+    # 候補はClaudeの目で選別する。ただし選別の呼び出しは1シーン3回まで
+    # （全滅が続く=検索語が悪いので、それ以上払っても良い画は出ない）
+    judge_budget = 3
+    for q_text, aspect, source in attempts:
+        params = {"q": q_text, "license": "cc0,pdm", "category": "photograph", "per_page": 8}
+        if aspect:
+            params["aspect_ratio"] = aspect
+        if source:
+            params["source"] = source
+        items = _openverse_results(urllib.parse.urlencode(params), q_text)
+        if not items:
+            continue
+        if judge_budget > 0:
+            judge_budget -= 1
+            chosen = _vision_pick(items, image_prompt)
+            if chosen is None:
+                continue  # 全候補が不適 → 検索を緩めて次へ
+        else:
+            chosen = items[0]
+        try:
+            data = _http(chosen.get("url", ""), timeout=60)
+        except OSError:
+            continue  # ホスト側で弾かれたら次の緩め方へ
+        os.makedirs(STOCK_DIR, exist_ok=True)
+        with open(cached, "wb") as fp:
+            fp.write(data)
+        return cached
+    return None
+
+
+def _openverse_results(params: str, query: str) -> list:
+    """検索を1回投げて候補一覧を返す。429は一度だけ待って引き直す。"""
+    for attempt in (1, 2):
+        try:
+            res = json.loads(_http(f"{OPENVERSE_SEARCH}?{params}", timeout=20))
+            return [i for i in res.get("results", []) if i.get("url")]
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt == 1:
+                time.sleep(20)  # 匿名のレート制限。1回だけ待って引き直す
+                continue
+            print(f"  Openverse検索に失敗（{query}）: {e}", file=sys.stderr)
+            return []
+        except (OSError, ValueError) as e:
+            print(f"  Openverse検索に失敗（{query}）: {e}", file=sys.stderr)
+            return []
+    return []
+
+
+# 目視判定の返答スキーマ。番号だけを構造化出力で受け取る（パース事故を防ぐ）
+_PICK_SCHEMA = {
+    "type": "object",
+    "properties": {"choice": {"type": "integer"}},
+    "required": ["choice"],
+    "additionalProperties": False,
+}
+
+
+def _vision_pick(items: list, image_prompt: str) -> dict | None:
+    """候補のサムネイルをClaudeに見せて、背景に使える1枚を選ばせる。
+
+    検索の並び順だけでは商品パッケージ・文字だらけの画像を弾けない
+    （タイトル文字列でも判別できない）ため、画像そのものを見て選ぶ。
+    APIキーが無い・判定に失敗した場合は先頭候補で続行し、
+    「全候補が不適（choice=0）」のときだけ None を返して検索をやり直させる。
+    """
+    fallback = items[0]
+    api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
+    if not api_key:
+        return fallback
+    try:
+        import anthropic
+    except ImportError:
+        return fallback
+
+    thumbs = []
+    for item in items[:6]:
+        url = item.get("thumbnail") or item.get("url")
+        try:
+            data = _http(url, timeout=30)
+        except OSError:
+            continue
+        thumbs.append((item, data))
+    if not thumbs:
+        return fallback
+
+    content = []
+    for i, (_, data) in enumerate(thumbs, 1):
+        media_type = "image/png" if data[:8] == b"\x89PNG\r\n\x1a\n" else "image/jpeg"
+        content.append({"type": "text", "text": f"候補{i}:"})
+        content.append({
+            "type": "image",
+            "source": {"type": "base64", "media_type": media_type,
+                       "data": base64.b64encode(data).decode()},
+        })
+    content.append({"type": "text", "text": (
+        "縦型ショート動画の背景素材を選んでいます。\n"
+        f"欲しい画のイメージ（英語）: {image_prompt}\n\n"
+        "不適: 商品パッケージ・ラベル・ロゴ・文字が主体・スクリーンショット・"
+        "図表や地図の文字だらけのもの・画質が低いもの。\n"
+        "適切: 実写の風景・情景・静物で、上に字幕を載せても邪魔にならないもの。\n"
+        "最も適切な候補の番号を choice に入れてください。どれも不適なら 0。"
+    )})
+
+    try:
+        client = anthropic.Anthropic(api_key=api_key)
+        resp = client.messages.create(
+            model="claude-opus-5",
+            max_tokens=2048,
+            output_config={
+                "effort": "low",  # 番号を1つ選ぶだけの判定。深い思考は要らない
+                "format": {"type": "json_schema", "schema": _PICK_SCHEMA},
+            },
+            messages=[{"role": "user", "content": content}],
+        )
+        if resp.stop_reason == "refusal":
+            return fallback
+        text = next((b.text for b in resp.content if b.type == "text"), "")
+        n = int(json.loads(text)["choice"])
+    except (OSError, ValueError, KeyError, anthropic.APIError):
+        return fallback  # 判定の失敗でパイプラインは止めない
+    if n == 0:
+        return None
+    if 1 <= n <= len(thumbs):
+        return thumbs[n - 1][0]
+    return fallback
+
+
 def gradient_background(index: int, path: str) -> str:
     """フォールバックのグラデ背景。連番で色が変わり、単調さを避ける。"""
     c0, c1 = PALETTE[index % len(PALETTE)]
@@ -249,13 +409,20 @@ def gradient_background(index: int, path: str) -> str:
 
 def background(index: int, image_prompt: str, asset_dir: str,
                api_key: str, offline: bool) -> dict:
-    """背景素材を返す。{"path": ..., "kind": "video" | "image"}"""
-    if api_key and not offline:
-        path = stock_background(image_prompt, api_key)
+    """背景素材を返す。{"path", "kind": "video" | "image", "provider"}
+
+    Pexels（キーがあれば映像）→ Openverse（キーレス・CC0写真）→ グラデ、の順で落ちる。
+    """
+    if not offline:
+        if api_key:
+            path = stock_background(image_prompt, api_key)
+            if path:
+                return {"path": path, "kind": "video", "provider": "pexels"}
+        path = openverse_background(image_prompt)
         if path:
-            return {"path": path, "kind": "video"}
+            return {"path": path, "kind": "image", "provider": "openverse"}
     return {"path": gradient_background(index, os.path.join(asset_dir, f"bg{index:02d}.png")),
-            "kind": "image"}
+            "kind": "image", "provider": "gradient"}
 
 
 # ---------------------------------------------------------------- 組み立て
@@ -267,14 +434,11 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
     フレーズごとに音声を分けるのは、字幕を音声に同期させるため（docs/09 4-3）。
     """
     api_key = read_secret("PEXELS_API_KEY", "pexels_key.txt")
-    if not api_key and not offline:
-        print("  Pexels APIキーが無いためグラデ背景で代用します（投稿品質ではありません。#50）",
-              file=sys.stderr)
 
-    scenes, stock_hits = [], 0
+    scenes, providers = [], []
     for i, scene in enumerate(script["scenes"]):
         bg = background(i, scene.get("image_prompt", ""), asset_dir, api_key, offline)
-        stock_hits += bg["kind"] == "video"
+        providers.append(bg["provider"])
         phrases = []
         for j, text in enumerate(split_phrases(scene["narration"])):
             audio = narration(text, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"))
@@ -289,21 +453,47 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
             "dur": dur,
         })
 
-    _write_credits(asset_dir, stock_hits)
+    _write_credits(asset_dir, providers)
     voice = voicevox_credit() or "macOS say（フォールバック）"
-    print(f"  背景: ストック映像 {stock_hits}/{len(scenes)}シーン ／ 音声: {voice}")
+    stock = sum(p != "gradient" for p in providers)
+    print(f"  背景: ストック素材 {stock}/{len(scenes)}シーン ／ 音声: {voice}")
+    if stock < len(scenes) and not offline:
+        print("  ⚠️ グラデ背景に落ちたシーンがあります（投稿品質ではありません）", file=sys.stderr)
     return scenes
 
 
-def _write_credits(asset_dir: str, stock_hits: int) -> None:
+def _write_credits(asset_dir: str, providers: list) -> None:
     """投稿時の説明文に入れるクレジットを書き出す（VOICEVOXは表記が利用条件）。"""
     lines = []
     if voicevox_credit():
         lines.append(voicevox_credit())
-    if stock_hits:
+    if "pexels" in providers:
         lines.append("映像素材: Pexels")
+    if "openverse" in providers:
+        # CC0/PDのみ取得しているため表記義務は無いが、出所は明示しておく
+        lines.append("写真素材: Openverse（CC0 / Public Domain）")
     with open(os.path.join(asset_dir, "credits.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + ("\n" if lines else ""))
+
+
+def append_credit(asset_dir: str, line: str) -> None:
+    """後段（BGM選定など）で決まるクレジットを追記する。"""
+    if not line:
+        return
+    with open(os.path.join(asset_dir, "credits.txt"), "a", encoding="utf-8") as f:
+        f.write(line.rstrip() + "\n")
+
+
+def bgm_credit(track: str) -> str:
+    """BGMのクレジット。曲と同名の .txt（サイドカー）に書いてある。
+
+    CC BY はクレジット表記が利用条件なので、サイドカーが無い曲は表記漏れの
+    危険がある。曲を足すときは必ず対で置く（docs/09 4-4）。
+    """
+    sidecar = os.path.splitext(track)[0] + ".txt"
+    if os.path.exists(sidecar):
+        return open(sidecar, encoding="utf-8").read().strip()
+    return ""
 
 
 def bgm_track(seed: str) -> str | None:

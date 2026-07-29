@@ -37,7 +37,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline.common import OUT_DIR, SCRIPTS_DIR, PipelineError, secret_path
+from tools.pipeline.common import ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, secret_path
 
 # upload だけでは channels.list / channels.update ができないため youtube も要求する。
 # スコープを増やしたら再認可が必要（get_service が不足を検知して自動で促す）。
@@ -123,11 +123,19 @@ def get_service(interactive: bool = False, force_reauth: bool = False):
     return build("youtube", "v3", credentials=creds, cache_discovery=False)
 
 
+def read_credits(stem: str) -> str:
+    """生成時に media.py が書き出したクレジット（VOICEVOXは表記が利用条件）。"""
+    path = os.path.join(ASSETS_DIR, stem, "credits.txt")
+    if os.path.exists(path):
+        return open(path, encoding="utf-8").read().strip()
+    return ""
+
+
 def build_metadata(video_path: str, script: dict | None) -> dict:
     """台本があればそこから、無ければファイル名からタイトル等を作る。"""
     stem = os.path.splitext(os.path.basename(video_path))[0]
     if not script:
-        return {"title": f"{stem} #Shorts", "description": "", "tags": []}
+        return {"title": f"{stem} #Shorts", "description": read_credits(stem), "tags": []}
 
     # Shortsとして認識させるため #Shorts を必ず入れる。タイトルは100字上限
     title = f"{script.get('title', stem)} #Shorts"[:100]
@@ -137,6 +145,7 @@ def build_metadata(video_path: str, script: dict | None) -> dict:
         " ".join(script.get("hashtags", [])),
         # 合成音声を使っている間は明示する。YouTubeは改変コンテンツの開示を求めている
         "※ナレーションに音声合成を使用しています。",
+        read_credits(stem),
     ]))[:5000]
     return {"title": title, "description": description, "tags": tags}
 

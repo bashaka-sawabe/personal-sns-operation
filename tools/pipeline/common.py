@@ -8,6 +8,7 @@
 - APIキーが1つも無くても --offline で一気通貫が動くこと。課金前に構造を検証できる。
 """
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -108,6 +109,23 @@ def probe_duration(path: str) -> float:
 def ensure_dirs(*paths: str) -> None:
     for p in paths:
         os.makedirs(p, exist_ok=True)
+
+
+def split_phrases(text: str, min_len: int = 6) -> list:
+    """ナレーションを字幕表示の単位（フレーズ）に割る。
+
+    句読点で切り、短すぎる断片は前に併合する。フレーズごとに音声を合成して
+    「音声の長さ＝字幕の表示時間」にするのが狙い（タイミング計算を持たないための設計。
+    docs/09 4-3）。
+    """
+    parts = [p for p in re.split(r"(?<=[、。！？!?])", " ".join((text or "").split())) if p.strip()]
+    phrases = []
+    for p in parts:
+        if phrases and (len(p.strip("、。！？!? ")) < min_len or len(phrases[-1].strip("、。！？!? ")) < min_len):
+            phrases[-1] += p
+        else:
+            phrases.append(p)
+    return [p.strip() for p in phrases if p.strip()]
 
 
 def wrap_japanese(text: str, per_line: int) -> str:

@@ -62,17 +62,21 @@ def warn_unfilled(data: dict, script_id: str) -> None:
           file=sys.stderr)
 
 
-def build_from_script(data: dict, script_id: str) -> str:
+def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
     asset_dir = os.path.join(ASSETS_DIR, script_id)
     ensure_dirs(asset_dir, OUT_DIR)
     out_path = os.path.join(OUT_DIR, f"{script_id}.mp4")
     warn_unfilled(data, script_id)
 
     print(f"  素材を生成中（{len(data['scenes'])}シーン）...")
-    scenes = media.build_scene_assets(data, asset_dir)
+    scenes = media.build_scene_assets(data, asset_dir, offline=offline)
     total = sum(s["dur"] for s in scenes)
-    print(f"  合成中（尺 {total:.1f}秒）...")
-    render.build(scenes, out_path, asset_dir)
+    bgm = media.bgm_track(script_id)
+    if bgm:
+        # CC BY 楽曲はクレジット表記が利用条件。投稿時の説明文に自動で入る
+        media.append_credit(asset_dir, media.bgm_credit(bgm))
+    print(f"  合成中（尺 {total:.1f}秒{'・BGMあり' if bgm else '・BGMなし'}）...")
+    render.build(scenes, out_path, asset_dir, bgm=bgm)
     return out_path
 
 
@@ -90,7 +94,7 @@ def make_one(genre: str, theme: str, offline: bool, script_only: bool) -> str:
     if script_only:
         warn_unfilled(data, script_id)
         return path
-    return build_from_script(data, script_id)
+    return build_from_script(data, script_id, offline=offline)
 
 
 def read_themes(path: str) -> list:
@@ -132,7 +136,7 @@ def main() -> None:
             data = script_mod.load(args.from_script)
             script_id = data.get("id") or os.path.splitext(os.path.basename(args.from_script))[0]
             print(f"[{script_id}] 台本から再生成")
-            print(f"完成: {os.path.relpath(build_from_script(data, script_id))}")
+            print(f"完成: {os.path.relpath(build_from_script(data, script_id, offline=args.offline))}")
             return
 
         if args.batch:

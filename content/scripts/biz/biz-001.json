@@ -1,7 +1,7 @@
 {
   "id": "biz-001",
-  "title": "法人化で税金はいくら変わったか｜一人社長のホンネ",
-  "first_hand": "法人化する前と後で、税金と社会保険料の年間負担が合計でどう変わったかを、自分の申告書と決算書から実額で確認して入れる。",
+  "title": "法人化で税金は減るのか｜一人社長のホンネ",
+  "first_hand": "法人化の前と後で実際に何が変わったか（手続き・お金の管理・想定外だったこと）を、自分の体験から1つ書き出す。金額そのものは書かない（実額は公開しない方針）。",
   "scenes": [
     {
       "caption": "法人化＝節税は本当か",
@@ -58,7 +58,7 @@
       "image_prompt": "two abstract rising curves, one steep one flat, soft gradient background, minimal design, no text, no people"
     },
     {
-      "caption": "【要実体験】前後の実額",
+      "caption": "【要実体験】法人化のリアル",
       "dialogue": [
         {
           "speaker": "zundamon",
@@ -70,7 +70,7 @@
         },
         {
           "speaker": "metan",
-          "text": "【要実体験】法人化前後の税金と社保の年間負担の変化額"
+          "text": "【要実体験】法人化して想定外だったこと・変わったこと"
         }
       ],
       "image_prompt": "desk with closed ledger book and calculator silhouette, warm evening light, shallow depth of field, no text, no people"
@@ -104,5 +104,5 @@
   ],
   "channel": "biz",
   "genre": "biz",
-  "theme": "法人化で税金はいくら変わったか"
+  "theme": "法人化で税金は減るのか"
 }

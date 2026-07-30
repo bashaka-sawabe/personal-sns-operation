@@ -1,7 +1,7 @@
 {
   "id": "biz-002",
   "title": "手取りが少ない本当の理由｜引かれる順番の話",
-  "first_hand": "直近1年の納付書や口座履歴を見て、毎月実際に引かれている社会保険料と税金の額・内訳を確認して書く",
+  "first_hand": "社会保険料や税金の通知・引き落としで実際に誤算だったこと（いつ・何に驚き・どう対応したか）を、自分の体験から書く。金額そのものは書かない（実額は公開しない方針）。",
   "scenes": [
     {
       "caption": "売上増えたのに手取り減",
@@ -58,7 +58,7 @@
       "image_prompt": "abstract heavy stone weight resting on a thin plank, symbolic burden, soft muted palette, no text, no people"
     },
     {
-      "caption": "【要実体験】毎月の実額",
+      "caption": "【要実体験】中の人の誤算",
       "dialogue": [
         {
           "speaker": "metan",
@@ -66,11 +66,11 @@
         },
         {
           "speaker": "metan",
-          "text": "【要実体験】毎月実際に引かれている社会保険料の額"
+          "text": "【要実体験】保険料の引かれ方で実際に誤算だったこと"
         },
         {
           "speaker": "zundamon",
-          "text": "数字で見ると急に現実なのだ…"
+          "text": "経験者の話は急に現実なのだ…"
         }
       ],
       "image_prompt": "close-up of blank ledger paper and a plain envelope on a wooden desk, warm soft light, no text, no faces"

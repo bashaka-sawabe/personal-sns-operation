@@ -15,6 +15,9 @@
     # 生成済みを全部まとめて（未投稿のものだけ）
     .venv/bin/python tools/publish_youtube.py --all
 
+    # 投稿せずに、何が上がって何が止まるかだけ見る
+    .venv/bin/python tools/publish_youtube.py --all --dry-run
+
 なぜYouTubeを入れるか（docs/09 6章）:
 - Shortsのエンゲージメント率はTikTokの約2倍と報告されている
 - YouTubeは検索エンジンでもあるため、IG/TikTokと違い**投稿の寿命が長い**。
@@ -38,6 +41,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from tools.pipeline import script as script_mod
 from tools.pipeline.common import ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, secret_path
 
 # upload だけでは channels.list / channels.update ができないため youtube も要求する。
@@ -151,10 +155,35 @@ def build_metadata(video_path: str, script: dict | None) -> dict:
     return {"title": title, "description": description, "tags": tags}
 
 
+def blocking_reason(script: dict | None) -> str | None:
+    """投稿してはいけない台本かを判定する。問題なければ None。
+
+    make_video.py の警告（warn_unfilled）は処理を止めないため、未記入のままでも
+    レンダリングまで通ってしまう。外部に出る直前のここで機械的に止めないと、
+    画面に目印が焼き込まれたまま公開される（docs/09 4章）。
+
+    台本JSONが見つからない動画（旧世代のmp4など）は検査しようがないので対象外。
+    """
+    if not script:
+        return None
+    spots = script_mod.unfilled(script)
+    if not spots:
+        return None
+    return (
+        f"一次情報が未記入です（{len(spots)}箇所: {'、'.join(spots)}）。"
+        f"台本の「{script_mod.PLACEHOLDER}」を実際の内容に置き換え、"
+        "make_video.py --from-script で動画を作り直してから投稿してください。"
+    )
+
+
 def upload(video_path: str, script: dict | None, privacy: str, interactive: bool = False) -> str:
     _, _, _, _, HttpError, MediaFileUpload = _imports()
     if not os.path.exists(video_path):
         raise PipelineError(f"動画が見つかりません: {video_path}")
+    # 呼び出し側の事前チェックを信用しない。投稿は取り消せないので最後にもう一度見る
+    reason = blocking_reason(script)
+    if reason:
+        raise PipelineError(f"{os.path.basename(video_path)}: {reason}")
 
     meta = build_metadata(video_path, script)
     service = get_service(interactive=interactive)
@@ -329,6 +358,8 @@ def main() -> None:
     p.add_argument("--privacy", default="unlisted",
                    choices=["private", "unlisted", "public"],
                    help="公開範囲（既定: unlisted＝限定公開）")
+    p.add_argument("--dry-run", action="store_true",
+                   help="投稿せず、対象と検査結果だけ表示する")
     args = p.parse_args()
 
     try:
@@ -368,6 +399,7 @@ def main() -> None:
             p.error("動画ファイルか --all を指定してください")
 
         ledger = load_ledger()
+        skipped = []
         for path in targets:
             script = None
             if args.script:
@@ -375,11 +407,39 @@ def main() -> None:
                     script = json.load(f)
             else:
                 script = script_for(path)
-            print(f"投稿中: {os.path.basename(path)} ...")
+            name = os.path.basename(path)
+            # --dry-run が存在しない動画を「投稿予定」と言わないよう、ここでも見る
+            if not os.path.exists(path):
+                raise PipelineError(f"動画が見つかりません: {path}")
+
+            reason = blocking_reason(script)
+            if reason:
+                # --all は1本の未記入で残りを道連れにしない。末尾にまとめて報告する
+                if args.all:
+                    skipped.append((name, reason))
+                    continue
+                raise PipelineError(f"{name}: {reason}")
+
+            if args.dry_run:
+                print(f"投稿予定: {name} → 「{build_metadata(path, script)['title']}」"
+                      f" ({args.privacy})")
+                continue
+
+            print(f"投稿中: {name} ...")
             video_id = upload(path, script, args.privacy)
-            ledger[os.path.basename(path)] = {"video_id": video_id, "privacy": args.privacy}
+            ledger[name] = {"video_id": video_id, "privacy": args.privacy}
             save_ledger(ledger)
             print(f"  完了: https://youtube.com/shorts/{video_id}  ({args.privacy})")
+
+        if skipped:
+            # パイプに繋ぐとstdoutがまとめて後から出るため、明示的に吐き切ってから
+            # まとめを出す。そうしないと「末尾の一覧」が先頭に現れる
+            sys.stdout.flush()
+            # 終了コードは0のまま。恒久的に止まる動画があるだけで全体が失敗扱いになると、
+            # 残りが投稿できているのに毎回エラーとして扱うことになり運用が回らない
+            print(f"\n投稿しなかった動画（{len(skipped)}本）:", file=sys.stderr)
+            for name, reason in skipped:
+                print(f"  - {name}: {reason}", file=sys.stderr)
 
     except PipelineError as e:
         sys.exit(f"エラー: {e}")

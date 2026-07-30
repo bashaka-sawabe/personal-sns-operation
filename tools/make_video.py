@@ -3,7 +3,7 @@
 """ショート動画を1本作る（掛け合い台本 → 素材 → 縦動画）。
 
     # 1本作る
-    python3 tools/make_video.py --channel biz --theme "法人化で税金はいくら変わったか"
+    python3 tools/make_video.py --channel biz --theme "法人化で税金は減るのか"
 
     # APIキー無しで疎通確認（テンプレ台本＋ローカル素材だけで最後まで通す）
     python3 tools/make_video.py --channel biz --theme "テスト" --offline

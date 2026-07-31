@@ -51,7 +51,10 @@ SCOPES = [
     "https://www.googleapis.com/auth/youtube",
 ]
 CLIENT_SECRET_FILE = "youtube_client_secret.json"
-TOKEN_FILE = "youtube_token.json"
+# チャンネルを分けたので、トークンもチャンネルごとに要る（docs/09 3章）。
+# 分割前に取った youtube_token.json は biz のものとして読めるようにしておく
+LEGACY_TOKEN_FILE = "youtube_token.json"
+LEGACY_TOKEN_CHANNEL = "biz"
 CATEGORY_PEOPLE_AND_BLOGS = "22"
 # 投稿済みの記録。--all で二重投稿しないために使う
 LEDGER = os.path.join(OUT_DIR, ".published_youtube.json")
@@ -74,11 +77,41 @@ def _imports():
     return Request, Credentials, InstalledAppFlow, build, HttpError, MediaFileUpload
 
 
-def get_service(interactive: bool = False, force_reauth: bool = False):
+def _as_hint(channel: str | None) -> str:
+    return f" --as {channel}" if channel else ""
+
+
+def token_path_for(channel: str | None) -> str:
+    """チャンネルのトークンの置き場を返す。
+
+    girls / biz / meme はそれぞれ別のYouTubeチャンネルなので、投稿先は
+    「どのトークンを使うか」で決まる。分割前の youtube_token.json しか無い環境では、
+    biz の投稿に限りそれを読む（移行の途中で静かに壊さないため）。
+    """
+    if channel:
+        path = secret_path(f"youtube_token_{channel}.json")
+        if os.path.exists(path):
+            return path
+        legacy = secret_path(LEGACY_TOKEN_FILE)
+        if channel == LEGACY_TOKEN_CHANNEL and os.path.exists(legacy):
+            return legacy
+        return path  # 未取得。get_service が取り方を案内して落とす
+    return secret_path(LEGACY_TOKEN_FILE)
+
+
+def script_channel(script: dict | None) -> str | None:
+    """台本から投稿先チャンネルを引く。旧世代の台本には無いので None もある。"""
+    if not script:
+        return None
+    return script.get("channel") or script.get("genre") or None
+
+
+def get_service(channel: str | None = None, interactive: bool = False,
+                force_reauth: bool = False):
     """認証済みの YouTube API クライアントを返す。"""
     Request, Credentials, InstalledAppFlow, build, _, _ = _imports()
 
-    token_path = secret_path(TOKEN_FILE)
+    token_path = token_path_for(channel)
     creds = None
     if os.path.exists(token_path) and not force_reauth:
         # scopes を渡さないこと。渡すと「実際に付与されたスコープ」ではなく
@@ -90,7 +123,7 @@ def get_service(interactive: bool = False, force_reauth: bool = False):
             if not interactive:
                 raise PipelineError(
                     "権限が不足しています（チャンネル操作の権限が追加されました）。再認可してください:\n"
-                    "  .venv/bin/python tools/publish_youtube.py --auth"
+                    f"  .venv/bin/python tools/publish_youtube.py --auth{_as_hint(channel)}"
                 )
             creds = None
 
@@ -99,8 +132,10 @@ def get_service(interactive: bool = False, force_reauth: bool = False):
     elif not creds or not creds.valid:
         if not interactive:
             raise PipelineError(
-                "YouTubeの認可がまだです。先に実行してください:\n"
-                "  .venv/bin/python tools/publish_youtube.py --auth"
+                f"{channel or 'YouTube'} の認可がまだです（{os.path.basename(token_path)} がありません）。\n"
+                "先に実行してください:\n"
+                f"  .venv/bin/python tools/publish_youtube.py --auth{_as_hint(channel)}\n"
+                "同意画面では、投稿先にしたいチャンネルを選んでください。"
             )
         client_secret = secret_path(CLIENT_SECRET_FILE)
         if not os.path.exists(client_secret):
@@ -176,6 +211,16 @@ def blocking_reason(script: dict | None) -> str | None:
     )
 
 
+def channel_title(service) -> str:
+    """トークンが実際に紐づいているチャンネル名。投稿先の取り違えを見えるようにする。"""
+    _, _, _, _, HttpError, _ = _imports()
+    try:
+        items = service.channels().list(part="snippet", mine=True).execute().get("items", [])
+    except HttpError:
+        return "(取得できず)"
+    return items[0]["snippet"].get("title", "") if items else "(チャンネルなし)"
+
+
 def upload(video_path: str, script: dict | None, privacy: str, interactive: bool = False) -> str:
     _, _, _, _, HttpError, MediaFileUpload = _imports()
     if not os.path.exists(video_path):
@@ -186,7 +231,7 @@ def upload(video_path: str, script: dict | None, privacy: str, interactive: bool
         raise PipelineError(f"{os.path.basename(video_path)}: {reason}")
 
     meta = build_metadata(video_path, script)
-    service = get_service(interactive=interactive)
+    service = get_service(channel=script_channel(script), interactive=interactive)
     body = {
         "snippet": {
             "title": meta["title"],
@@ -225,10 +270,10 @@ def _scope_error(e) -> PipelineError:
     return PipelineError(f"APIエラー: {getattr(e, 'reason', '') or e}")
 
 
-def show_channel(interactive: bool = False) -> dict:
+def show_channel(channel: str | None = None, interactive: bool = False) -> dict:
     """投稿先チャンネルの現状を表示する。投稿前に「どこに上がるのか」を確認するため。"""
     _, _, _, _, HttpError, _ = _imports()
-    service = get_service(interactive=interactive)
+    service = get_service(channel=channel, interactive=interactive)
     try:
         res = service.channels().list(part="snippet,statistics,brandingSettings", mine=True).execute()
     except HttpError as e:
@@ -254,7 +299,7 @@ def show_channel(interactive: bool = False) -> dict:
 
 
 def rename_channel(new_title: str | None, new_description: str | None = None,
-                   interactive: bool = False) -> None:
+                   channel: str | None = None, interactive: bool = False) -> None:
     """チャンネル名・説明文を変更する。
 
     既存の動画・登録者がある場合は破壊的な操作になり得るので、
@@ -263,7 +308,7 @@ def rename_channel(new_title: str | None, new_description: str | None = None,
     ハンドル（@xxx）はAPIから変更できない。YouTube Studio で手で変える必要がある。
     """
     _, _, _, _, HttpError, _ = _imports()
-    service = get_service(interactive=interactive)
+    service = get_service(channel=channel, interactive=interactive)
     try:
         res = service.channels().list(part="snippet,statistics", mine=True).execute()
     except HttpError as e:
@@ -360,19 +405,25 @@ def main() -> None:
                    help="公開範囲（既定: unlisted＝限定公開）")
     p.add_argument("--dry-run", action="store_true",
                    help="投稿せず、対象と検査結果だけ表示する")
+    p.add_argument("--as", dest="as_channel", metavar="ch",
+                   help="どのチャンネルとして扱うか（girls / biz / meme）。"
+                        "投稿時は台本から自動で決まるので、--auth などで使う")
     args = p.parse_args()
 
     try:
         if args.auth:
             # 既存トークンは無視して必ず取り直す。権限不足のトークンが残っていると
             # 「認可したのに動かない」状態になり原因が分からなくなる
-            get_service(interactive=True, force_reauth=True)
-            print(f"認可が完了しました。トークン: {secret_path(TOKEN_FILE)}")
-            print("投稿先の確認: .venv/bin/python tools/publish_youtube.py --channel")
+            service = get_service(channel=args.as_channel, interactive=True, force_reauth=True)
+            print(f"認可が完了しました。トークン: {token_path_for(args.as_channel)}")
+            # 同意画面でチャンネルを選び間違えると投稿先がずれる。すぐ気づけるよう出す
+            print(f"このトークンのチャンネル: 「{channel_title(service)}」")
+            if args.as_channel:
+                print(f"（{args.as_channel} の投稿先がこれで合っているか確認してください）")
             return
 
         if args.channel:
-            show_channel(interactive=True)
+            show_channel(args.as_channel, interactive=True)
             return
 
         description = args.description
@@ -380,7 +431,7 @@ def main() -> None:
             with open(args.description_file, encoding="utf-8") as f:
                 description = f.read().strip()
         if args.rename or description is not None:
-            rename_channel(args.rename, description, interactive=True)
+            rename_channel(args.rename, description, channel=args.as_channel, interactive=True)
             return
 
         targets = []
@@ -399,7 +450,7 @@ def main() -> None:
             p.error("動画ファイルか --all を指定してください")
 
         ledger = load_ledger()
-        skipped = []
+        skipped, seen_channels = [], {}
         for path in targets:
             script = None
             if args.script:
@@ -420,11 +471,16 @@ def main() -> None:
                     continue
                 raise PipelineError(f"{name}: {reason}")
 
+            ch = script_channel(script)
             if args.dry_run:
                 print(f"投稿予定: {name} → 「{build_metadata(path, script)['title']}」"
-                      f" ({args.privacy})")
+                      f" ({args.privacy} / {ch or 'チャンネル不明'})")
                 continue
 
+            # 投稿先の取り違えは取り消せない。1チャンネルにつき1回だけ確認して出す
+            if ch not in seen_channels:
+                seen_channels[ch] = channel_title(get_service(channel=ch))
+                print(f"[{ch or '既定'}] 投稿先: {seen_channels[ch]}")
             print(f"投稿中: {name} ...")
             video_id = upload(path, script, args.privacy)
             ledger[name] = {"video_id": video_id, "privacy": args.privacy}

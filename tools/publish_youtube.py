@@ -364,6 +364,62 @@ def rename_channel(new_title: str | None, new_description: str | None = None,
     print("※ ハンドル（@xxx）もAPIからは変更できません。同じ画面から手で変更してください。")
 
 
+def release(video_ids: list, dry_run: bool = False) -> None:
+    """レビューを通ったものを限定公開から公開に切り替える（#68）。
+
+    投稿は限定公開で止め、本人が中身を見てから公開にする運用（docs/06 5章）。
+    その切り替えを YouTube Studio の手作業から外し、台帳の更新まで一度に済ませる。
+
+    台帳が `posted` の行しか受け付けない。レビュー前（rendered）や公開済み
+    （measuring）を指定したら、取り違えなので止める。公開は取り消せない。
+    """
+    _, _, _, _, HttpError, _ = _imports()
+    fields, rows = status_mod.load()
+    if not rows:
+        raise PipelineError(f"台帳がありません: {status_mod.STATUS_CSV}")
+
+    targets = []
+    for vid in video_ids:
+        row = next((r for r in rows if r.get("video_id") == vid), None)
+        if row is None:
+            raise PipelineError(f"台帳に {vid} がありません。video_id を確認してください。")
+        if row.get("status") != "posted":
+            raise PipelineError(
+                f"{vid} は今 `{row.get('status')}` です。公開に切り替えられるのは "
+                "`posted`（限定公開で上がっていて、まだレビュー前）のものだけです。"
+            )
+        if not row.get("url"):
+            raise PipelineError(f"{vid} に投稿URLが記録されていません。台帳を確認してください。")
+        targets.append(row)
+
+    for row in targets:
+        vid = row["video_id"]
+        yt_id = row["url"].rstrip("/").rsplit("/", 1)[-1]
+        if dry_run:
+            print(f"公開予定: {vid} → {row['url']}  ({row.get('channel', '?')})")
+            continue
+
+        service = get_service(channel=row.get("channel") or None)
+        try:
+            # snippet を省くと既存のタイトル・説明が消えるため、読んでから返す
+            got = service.videos().list(part="snippet,status", id=yt_id).execute()
+            items = got.get("items", [])
+            if not items:
+                raise PipelineError(f"{vid} の動画が見つかりません（{yt_id}）。")
+            snippet = items[0]["snippet"]
+            service.videos().update(part="status", body={
+                "id": yt_id,
+                "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False},
+            }).execute()
+        except HttpError as e:
+            raise PipelineError(
+                f"{vid} の公開切り替えに失敗しました: {getattr(e, 'reason', '') or e}"
+            ) from None
+
+        status_mod.advance(vid, "measuring")
+        print(f"公開: {vid}「{snippet.get('title', '')}」 {row['url']}")
+
+
 def load_ledger() -> dict:
     if os.path.exists(LEDGER):
         with open(LEDGER, encoding="utf-8") as f:
@@ -405,6 +461,8 @@ def main() -> None:
                    help="公開範囲（既定: unlisted＝限定公開）")
     p.add_argument("--dry-run", action="store_true",
                    help="投稿せず、対象と検査結果だけ表示する")
+    p.add_argument("--release", nargs="+", metavar="video_id",
+                   help="レビューを通ったものを限定公開から公開に切り替える（例: --release girls-001）")
     p.add_argument("--as", dest="as_channel", metavar="ch",
                    help="どのチャンネルとして扱うか（girls / biz / meme）。"
                         "投稿時は台本から自動で決まるので、--auth などで使う")
@@ -424,6 +482,10 @@ def main() -> None:
 
         if args.channel:
             show_channel(args.as_channel, interactive=True)
+            return
+
+        if args.release:
+            release(args.release, dry_run=args.dry_run)
             return
 
         description = args.description

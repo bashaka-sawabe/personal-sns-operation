@@ -41,7 +41,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline import script as script_mod
+from tools.pipeline import script as script_mod, status as status_mod
 from tools.pipeline.common import ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, secret_path
 
 # upload だけでは channels.list / channels.update ができないため youtube も要求する。
@@ -485,7 +485,11 @@ def main() -> None:
             video_id = upload(path, script, args.privacy)
             ledger[name] = {"video_id": video_id, "privacy": args.privacy}
             save_ledger(ledger)
-            print(f"  完了: https://youtube.com/shorts/{video_id}  ({args.privacy})")
+            url = f"https://youtube.com/shorts/{video_id}"
+            print(f"  完了: {url}  ({args.privacy})")
+            # 台帳にURLを残す。限定公開のURLは、レビューのときにここから開く
+            if status_mod.advance(os.path.splitext(name)[0], "posted", url=url):
+                print(f"  台帳: {os.path.splitext(name)[0]} を posted に更新しました")
 
         if skipped:
             # パイプに繋ぐとstdoutがまとめて後から出るため、明示的に吐き切ってから

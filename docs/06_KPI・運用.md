@@ -131,13 +131,20 @@ flowchart TD
 | `url` | 投稿URL（`posted` 以降は必須） |
 | `note` | 補足（何待ちか・関連Issue） |
 
-| status | 誰がいつ更新するか |
+**ツールが確実に知っている遷移だけを機械が書く。** 人の判断が要るところは手のまま。
+工程が進むたびに人が手で写していると、必ず実態とずれる。
+
+| status | 誰が更新するか |
 |---|---|
-| `draft` | 台本生成時に行を足す(人) |
-| `checked` | 事実確認・一次情報・チェックリストを終えた人がその場で |
-| `rendered` | 動画化した人がその場で |
-| `posted` | **投稿ツールが自動更新する**（設計方針。実装は [#29](https://github.com/bashaka-sawabe/personal-sns-operation/issues/29) / [#30](https://github.com/bashaka-sawabe/personal-sns-operation/issues/30) / [#31](https://github.com/bashaka-sawabe/personal-sns-operation/issues/31) の投稿実装に含める） |
-| `measuring` | 公開へ切り替えた人がその場で |
+| `draft` | **人**。台本生成時に行を足す |
+| `checked` | **人**。事実確認・一次情報・チェックリストを終えた人がその場で |
+| `rendered` | ツール（`make_video.py`） |
+| `posted` | ツール（`publish_youtube.py`）。`url` 列も同時に書く |
+| `measuring` | ツール（公開への切り替え時）。切り替えの判断は人 |
+
+状態は戻らない。投稿済みの行を作り直しで `rendered` に戻すと、公開済みかどうかが
+台帳から読めなくなるため、進行方向にしか書き換えない。
+台帳に無い `video_id`（旧世代の動画）は、ツールが静かに無視して先に進む。
 
 台帳は**状態だけ**を持つ。数値は週次CSV（3章）、台本の中身は `content/scripts/` が正で、
 台帳に重複して書かない（二重管理は必ずズレる）。

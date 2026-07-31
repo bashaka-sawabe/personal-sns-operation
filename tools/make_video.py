@@ -31,7 +31,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline import channels, media, render, script as script_mod
+from tools.pipeline import channels, media, render, script as script_mod, status as status_mod
 from tools.pipeline.common import (
     ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, ensure_dirs,
 )
@@ -101,6 +101,8 @@ def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
         media.append_credit(asset_dir, media.bgm_credit(bgm))
     print(f"  合成中（尺 {total:.1f}秒{'・BGMあり' if bgm else '・BGMなし'}）...")
     render.build(scenes, out_path, asset_dir, bgm=bgm, cast=cast)
+    if status_mod.advance(script_id, "rendered"):
+        print(f"  台帳: {script_id} を rendered に更新しました")
     return out_path
 
 

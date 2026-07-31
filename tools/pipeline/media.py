@@ -220,7 +220,11 @@ def _pick_video_file(video: dict) -> dict | None:
 
 
 def stock_background(image_prompt: str, api_key: str) -> str | None:
-    """Pexelsからストック映像を1本取る。取れない理由が何であれ None（グラデへ）。"""
+    """Pexelsからストック映像を1本取る。取れない理由が何であれ None（Openverseへ）。
+
+    検索の質はOpenverseより高いが、「題材は合っているがトーンが違う」「暗すぎて画に
+    ならない」は検索語では防げない。Openverseと同じ目視選別を通す（#83）。
+    """
     query = _stock_query(image_prompt)
     if not query:
         return None
@@ -230,18 +234,25 @@ def stock_background(image_prompt: str, api_key: str) -> str | None:
 
     try:
         q = urllib.parse.urlencode({
-            "query": query, "orientation": "portrait", "size": "medium", "per_page": 3,
+            "query": query, "orientation": "portrait", "size": "medium", "per_page": 8,
         })
         res = json.loads(_http(f"{PEXELS_SEARCH}?{q}", headers={"Authorization": api_key}))
-        for video in res.get("videos", []):
-            f = _pick_video_file(video)
-            if not f:
-                continue
-            os.makedirs(STOCK_DIR, exist_ok=True)
-            data = _http(f["link"], timeout=120)
-            with open(cached, "wb") as fp:
-                fp.write(data)
-            return cached
+        # 動画そのものは見せられないので、APIが返すプレビュー静止画で判定する
+        candidates = [
+            {"url": v.get("image", ""), "video": v}
+            for v in res.get("videos", []) if v.get("image") and _pick_video_file(v)
+        ]
+        if not candidates:
+            return None
+        chosen = _vision_pick(candidates, image_prompt)
+        if chosen is None:
+            return None  # 全候補が不適 → Openverse に任せる
+        f = _pick_video_file(chosen["video"])
+        os.makedirs(STOCK_DIR, exist_ok=True)
+        data = _http(f["link"], timeout=120)
+        with open(cached, "wb") as fp:
+            fp.write(data)
+        return cached
     except (OSError, ValueError) as e:
         print(f"  ストック映像の取得に失敗（{query}）: {e}", file=sys.stderr)
     return None
@@ -408,8 +419,11 @@ def _vision_pick(items: list, image_prompt: str) -> dict | None:
         "CC0は著作権の許諾でしかなく肖像権は別に残るため、他人が写った写真は使えません。\n"
         "その他の不適: 商品パッケージ・ラベル・ロゴ・文字が主体・スクリーンショット・"
         "図表や地図の文字だらけのもの・画質が低いもの。\n"
+        "**暗すぎて何が写っているか分からないもの、ほぼ単色で画として成立しないものも不適。**\n"
         "上のイメージと**題材が違うものも不適**（机が欲しいのに乗り物、など）。"
         "雰囲気が近ければ細部の一致は問いません。\n"
+        "**トーンが合わないものも不適**。日常の悩みや雑談の動画に、有刺鉄線・鎖・銃器・"
+        "医療現場のような緊張感の強い画は合いません。\n"
         "適切: 人のいない実写の風景・情景・静物で、上に字幕を載せても邪魔にならないもの。\n"
         "最も適切な候補の番号を choice に入れてください。"
         "**迷ったら 0 を選んでください**（不適な画を使うより、背景なしで作り直すほうが安全）。"

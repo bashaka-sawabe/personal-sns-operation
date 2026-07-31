@@ -273,10 +273,12 @@ def openverse_background(image_prompt: str) -> str | None:
         for aspect in ("tall", "")
     ]
     # 検索結果の並びは信用できない（商品パッケージ等が先頭に来る）ため、
-    # 候補はClaudeの目で選別する。ただし選別の呼び出しは1シーン3回まで
+    # 候補はClaudeの目で選別する。ただし選別の呼び出しは1シーン5回まで
     # （全滅が続く=検索語が悪いので、それ以上払っても良い画は出ない）
-    judge_budget = 3
+    judge_budget = 5
     for q_text, aspect, source in attempts:
+        if judge_budget <= 0:
+            break
         params = {"q": q_text, "license": "cc0,pdm", "category": "photograph", "per_page": 8}
         if aspect:
             params["aspect_ratio"] = aspect
@@ -285,13 +287,12 @@ def openverse_background(image_prompt: str) -> str | None:
         items = _openverse_results(urllib.parse.urlencode(params), q_text)
         if not items:
             continue
-        if judge_budget > 0:
-            judge_budget -= 1
-            chosen = _vision_pick(items, image_prompt)
-            if chosen is None:
-                continue  # 全候補が不適 → 検索を緩めて次へ
-        else:
-            chosen = items[0]
+        judge_budget -= 1
+        # 未検証の画は採らない。検索順で拾うと、題材が全く違う写真や
+        # 他人が写り込んだ写真がそのまま動画に焼き込まれる（#74）
+        chosen = _vision_pick(items, image_prompt)
+        if chosen is None:
+            continue  # 全候補が不適 → 検索を緩めて次へ
         try:
             data = _http(chosen.get("url", ""), timeout=60)
         except OSError:
@@ -321,6 +322,34 @@ def _openverse_results(params: str, query: str) -> list:
     return []
 
 
+def _media_type(data: bytes) -> str | None:
+    """画像のMIMEタイプをマジックバイトから判定する。対応外なら None。
+
+    拡張子やContent-Typeは当てにならない。Openverseのサムネイルは拡張子が .jpg でも
+    実体がWebPのことがあり、jpegと偽って送るとAPIが400で落ちる（#74）。
+    """
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return "image/png"
+    if data[:3] == b"\xff\xd8\xff":
+        return "image/jpeg"
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "image/webp"
+    if data[:6] in (b"GIF87a", b"GIF89a"):
+        return "image/gif"
+    return None
+
+
+# 選別できなかった理由は毎シーン同じなので、1回だけ出す
+_unjudged_warned = set()
+
+
+def _warn_unjudged(reason: str) -> None:
+    if reason in _unjudged_warned:
+        return
+    _unjudged_warned.add(reason)
+    print(f"  ⚠️ {reason}。背景はグラデになります。", file=sys.stderr)
+
+
 # 目視判定の返答スキーマ。番号だけを構造化出力で受け取る（パース事故を防ぐ）
 _PICK_SCHEMA = {
     "type": "object",
@@ -335,17 +364,20 @@ def _vision_pick(items: list, image_prompt: str) -> dict | None:
 
     検索の並び順だけでは商品パッケージ・文字だらけの画像を弾けない
     （タイトル文字列でも判別できない）ため、画像そのものを見て選ぶ。
-    APIキーが無い・判定に失敗した場合は先頭候補で続行し、
-    「全候補が不適（choice=0）」のときだけ None を返して検索をやり直させる。
+
+    **判定できなかった場合も None を返す**（#74）。以前は先頭候補で続行していたが、
+    それだと題材の違う写真や他人が写った写真が無検査で動画に入る。
+    背景が無いほうが、確認できていない画を焼き込むより安全。
     """
-    fallback = items[0]
     api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
     if not api_key:
-        return fallback
+        _warn_unjudged("ANTHROPIC_API_KEY が無いため背景を選別できません")
+        return None
     try:
         import anthropic
     except ImportError:
-        return fallback
+        _warn_unjudged("anthropic SDK が無いため背景を選別できません")
+        return None
 
     thumbs = []
     for item in items[:6]:
@@ -354,13 +386,15 @@ def _vision_pick(items: list, image_prompt: str) -> dict | None:
             data = _http(url, timeout=30)
         except OSError:
             continue
-        thumbs.append((item, data))
+        media_type = _media_type(data)
+        if not media_type:
+            continue  # 番号がずれるので、送れないものはここで落とす
+        thumbs.append((item, data, media_type))
     if not thumbs:
-        return fallback
+        return None
 
     content = []
-    for i, (_, data) in enumerate(thumbs, 1):
-        media_type = "image/png" if data[:8] == b"\x89PNG\r\n\x1a\n" else "image/jpeg"
+    for i, (_, data, media_type) in enumerate(thumbs, 1):
         content.append({"type": "text", "text": f"候補{i}:"})
         content.append({
             "type": "image",
@@ -370,10 +404,15 @@ def _vision_pick(items: list, image_prompt: str) -> dict | None:
     content.append({"type": "text", "text": (
         "縦型ショート動画の背景素材を選んでいます。\n"
         f"欲しい画のイメージ（英語）: {image_prompt}\n\n"
-        "不適: 商品パッケージ・ラベル・ロゴ・文字が主体・スクリーンショット・"
+        "**人が写り込んでいるものは、顔が写っていなくても全て不適**。"
+        "CC0は著作権の許諾でしかなく肖像権は別に残るため、他人が写った写真は使えません。\n"
+        "その他の不適: 商品パッケージ・ラベル・ロゴ・文字が主体・スクリーンショット・"
         "図表や地図の文字だらけのもの・画質が低いもの。\n"
-        "適切: 実写の風景・情景・静物で、上に字幕を載せても邪魔にならないもの。\n"
-        "最も適切な候補の番号を choice に入れてください。どれも不適なら 0。"
+        "上のイメージと**題材が違うものも不適**（机が欲しいのに乗り物、など）。"
+        "雰囲気が近ければ細部の一致は問いません。\n"
+        "適切: 人のいない実写の風景・情景・静物で、上に字幕を載せても邪魔にならないもの。\n"
+        "最も適切な候補の番号を choice に入れてください。"
+        "**迷ったら 0 を選んでください**（不適な画を使うより、背景なしで作り直すほうが安全）。"
     )})
 
     try:
@@ -388,16 +427,15 @@ def _vision_pick(items: list, image_prompt: str) -> dict | None:
             messages=[{"role": "user", "content": content}],
         )
         if resp.stop_reason == "refusal":
-            return fallback
+            return None
         text = next((b.text for b in resp.content if b.type == "text"), "")
         n = int(json.loads(text)["choice"])
-    except (OSError, ValueError, KeyError, anthropic.APIError):
-        return fallback  # 判定の失敗でパイプラインは止めない
-    if n == 0:
-        return None
+    except (OSError, ValueError, KeyError, anthropic.APIError) as e:
+        _warn_unjudged(f"背景の選別に失敗しました: {e}")
+        return None  # 判定の失敗でパイプラインは止めないが、未検証の画も使わない
     if 1 <= n <= len(thumbs):
         return thumbs[n - 1][0]
-    return fallback
+    return None  # 0（全候補が不適）と範囲外は、どちらも「使えるものが無い」
 
 
 def gradient_background(index: int, path: str) -> str:
@@ -477,7 +515,9 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
     stock = sum(p != "gradient" for p in providers)
     print(f"  背景: ストック素材 {stock}/{len(scenes)}シーン ／ 音声: {voice}")
     if stock < len(scenes) and not offline:
-        print("  ⚠️ グラデ背景に落ちたシーンがあります（投稿品質ではありません）", file=sys.stderr)
+        print(f"  ⚠️ {len(scenes) - stock}シーンがグラデ背景に落ちました"
+              "（投稿品質ではありません）。素材が見つからないか、"
+              "候補が全て不適でした。", file=sys.stderr)
     return scenes
 
 

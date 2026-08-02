@@ -4,7 +4,7 @@
   "format": "「実は◯◯」フック→意外な事実→根拠（一次ソース）→もう一段の意外。裏取りの無い雑学は扱わない。医療・投資の助言に踏み込まない",
   "first_hand": false,
   "nakanohito": false,
-  "thread_source": true,
+  "fact_source": true,
   "cast": [
     {"speaker": "zundamon", "role": "驚く役。視聴者の代弁者として「え、そうなの!?」を担当"},
     {"speaker": "metan", "role": "種明かし役。根拠と出典を軽やかに補う"}

@@ -10,6 +10,7 @@ APIキーが無い場合は --offline のテンプレ台本にフォールバッ
 """
 import json
 import os
+import re
 
 from .channels import CHARACTERS, cast_keys
 from .common import PipelineError, read_secret
@@ -164,7 +165,10 @@ def _list_rules(cfg: dict, count: int) -> str:
   実測ベンチマークは **2.5秒/ネタ** です。解説を入れると必ず超えます。
   良い例:「MD。33年で終了」「たまごっち1000万個」「プリクラは1995年」
   悪い例:「MDは1992年から33年続いたのよ」（長い）
-  ずんだもんの反応は入れても**6字以内**（「早いのだ」「異常なのだ」）。省いてもよい。
+  ずんだもんの反応は入れても**10字以内**。ただし**感想を言わせない**。
+  ✗「多すぎなのだ」「すごいのだ」（感想＝入れる意味がない）
+  ○「ボクの親より年上」「まだ持ってるのだ」「え、去年!?」（自分の話・驚き・具体）
+  反応が思いつかないシーンは、**めたんの1行だけ**にして省く。
 - 各ネタの caption は**その品名・名称そのもの**（10字以内）。
 - **与えられたネタ以外を足さない。** 年代・名称は与えられたものだけを使う。
 
@@ -260,7 +264,6 @@ def _system(cfg: dict) -> str:
 - シーンはちょうど{SCENE_COUNT}個。
 - シーン1はフック。3秒で指を止めさせる。最初のセリフは悲鳴・疑問・意外な断定のどれか。
 - 各シーンの dialogue は1〜3行。1行は35字以内の話し言葉。
-- 会話として自然に繋がること。説明文の分担読みにしない（相槌・ツッコミ・感情を挟む）。
 - キャラの口調を守る。2人の声の違いだけで誰のセリフか分かる書き方にする。
 - 42歳の普通の会社員が見ても分かる言葉で書く。専門用語を裸で使わない（docs/05 1章の下限）。
 - caption は20字以内。シーン1の caption はスレタイとして全編画面上部に出しつづけるので、
@@ -269,7 +272,40 @@ def _system(cfg: dict) -> str:
 - シーン5は締め。保存かコメントを促す流れにする（露骨な「保存してね」は避ける）。
 - image_promptは英語。抽象的・象徴的な背景に留め、人物の顔・文字・ロゴは入れない。
 - 誇張・断定しすぎ・医療や投資の助言に踏み込む表現は避ける。
-- 制度・税率・金額に触れるときは「2026年時点」と分かる書き方にし、断定しない。"""
+- 制度・税率・金額に触れるときは「2026年時点」と分かる書き方にし、断定しない。
+
+**会話の書き分け（ここが動画の面白さを決める・最重要）:**
+
+**① 相槌を書かない。**
+「すごいのだ」「そうなのだ」「なるほどなのだ」のような、
+**形容詞や感想だけで終わる行を1行も入れない。**
+聞き役が口を開くときは、必ず**新しい何か**（疑問・たとえ・自分の話・反論・飛躍）を足す。
+
+  ✗ 悪い: 「1000万個も売れたのよ」→「すごいのだ」
+  ○ 良い: 「1000万個も売れたのよ」→「ボクの町の人口の何倍なのだ？」
+  ○ 良い: 「1000万個も売れたのよ」→「それ、全部世話されたわけないのだ」
+
+**② 語尾を連続させない。**
+同じ語尾（〜のだ / 〜なのだ / 〜のよ / 〜かしら）を**2行以上続けて使わない。**
+疑問形・体言止め・言い切り・途中で切る、を混ぜる。
+  例: 「は？」「待つのだ、今なんて言ったのだ」「……ボクは信じないのだ」「で、結局どうなったのだ？」
+
+**③ 2人の役割を非対称にする。**
+- 情報を持っている側は**長く**（25〜35字）、数字・固有名詞・当時の文脈を入れて言い切る
+- 聞き役は**短く**（5〜20字）、食い気味に差し込む
+- **同じ長さの行が続いたら失敗**。長短のリズムで会話に見せる
+
+**④ スムーズに進めない。**
+きれいに噛み合う会話は説明文の分担読みと同じで、見ていて面白くありません。
+- 相手の話の途中で被せる（「待つのだ、その前に――」）
+- 見当違いのことを言い、正される
+- 一度脱線して、戻される
+- 最後まで納得しない／別の結論に飛ぶ
+これらを**1本に最低2回**入れる。
+
+**⑤ 素直に感心して終わらない。**
+聞き役が「勉強になったのだ」で終わると、視聴者は何も持ち帰りません。
+引っかかりを残すか、笑わせるか、次の疑問を投げて終わる。"""
 
     if cfg.get("first_hand"):
         base += f"""
@@ -330,6 +366,59 @@ def validate(script: dict) -> None:
                 )
             if not (line.get("text") or "").strip():
                 raise PipelineError(f"シーン{i}に空のセリフがあります。")
+
+
+# 語尾とみなす末尾の長さ。日本語の終止形はだいたい3文字で型が出る（「のだ」「わよ」「かしら」）
+_TAIL = 3
+# 相槌だけの行を拾う。感想・同意だけで新しい情報が無いもの
+_AIZUCHI = re.compile(
+    r"^(そう|なるほど|すごい|やば|ほんと|たしか|わかる|へえ|ふーん|まじ|えっ)"
+    r"[^。！？]{0,6}(のだ|なのだ|だのだ|よ|ね|わ|かしら)?[！？!?…。]*$"
+)
+
+
+def dialogue_issues(script: dict) -> list:
+    """会話が平坦になっていないかを調べる（#127）。
+
+    生成物が「形容詞＋のだ」の相槌だらけになる事故が実際に起きた（94%が同じ語尾）。
+    止めはしない（会話の善し悪しは最後は人が見る）が、気づけるように警告を返す。
+    """
+    lines = [(l["speaker"], l["text"]) for s in script.get("scenes", [])
+             for l in s.get("dialogue", [])]
+    if not lines:
+        return []
+    issues = []
+
+    # 同じ語尾の連続。3行以上続くと読み上げが単調になる
+    run, prev = 1, None
+    for _, text in lines:
+        tail = re.sub(r"[！？!?…。、\s]+$", "", text)[-_TAIL:]
+        if tail and tail == prev:
+            run += 1
+            if run == 3:
+                issues.append(f"同じ語尾「…{tail}」が3行以上続いています")
+        else:
+            run, prev = 1, tail
+
+    # 相槌だけの行
+    aizuchi = [t for _, t in lines if _AIZUCHI.match(t.strip())]
+    if aizuchi:
+        issues.append(f"相槌だけの行が{len(aizuchi)}行あります: "
+                      + "、".join(f"「{t}」" for t in aizuchi[:3]))
+
+    # 2人の情報量の非対称。全員が同じ長さだと分担読みに見える
+    by_speaker: dict[str, list] = {}
+    for sp, t in lines:
+        by_speaker.setdefault(sp, []).append(len(t))
+    if len(by_speaker) == 2:
+        avgs = {sp: sum(v) / len(v) for sp, v in by_speaker.items()}
+        if max(avgs.values()) - min(avgs.values()) < 4:
+            issues.append(
+                "2人のセリフの長さがほぼ同じです（"
+                + " / ".join(f"{sp} {a:.0f}字" for sp, a in avgs.items())
+                + "）。情報を持つ側を長く、聞き役を短くすると会話に見えます"
+            )
+    return issues
 
 
 def unfilled(script: dict) -> list:
@@ -461,7 +550,9 @@ def generate(cfg: dict, theme: str, offline: bool = False,
     client = anthropic.Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-opus-5",
-        max_tokens=4000,
+        # 「◯◯選」リストは20シーン超になることがあり、4000では途中で切れて
+        # JSONが壊れる（実際に起きた。#127）
+        max_tokens=16000,
         system=system,
         output_config={"format": {"type": "json_schema", "schema": _schema(cfg)}},
         messages=[{"role": "user", "content": user}],
@@ -472,7 +563,16 @@ def generate(cfg: dict, theme: str, offline: bool = False,
     text = next((b.text for b in response.content if b.type == "text"), "")
     if not text:
         raise PipelineError("台本が空で返りました。テーマを変えて再実行してください。")
-    data = json.loads(text)
+    if response.stop_reason == "max_tokens":
+        raise PipelineError(
+            "台本が長すぎて途中で切れました。ネタの数を減らすか、"
+            "script.py の max_tokens を上げてください。"
+        )
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as e:
+        # 生の JSONDecodeError はスタックトレースだけで原因が分からない
+        raise PipelineError(f"台本のJSONが壊れています（{e}）。再実行してください。") from None
     validate(data)
     return data
 

@@ -1,0 +1,97 @@
+{
+  "id": "meme-009",
+  "title": "元警備員に質問スレ、最後は盛り疑惑で終わる",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【盛り疑惑】元警備員の質問スレ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "元警備員だけど質問あるのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "警備は法律で派遣禁止。意外でしょ"
+        }
+      ],
+      "image_prompt": "empty office building lobby at night, dim security lighting, glossy floor reflections, no people, no text, cinematic wide shot"
+    },
+    {
+      "caption": "派遣じゃなく請負",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "じゃあ何なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "請負よ。会社ごと引き受けるの"
+        }
+      ],
+      "image_prompt": "abstract paper contract documents stacked on a desk, soft window light, shallow depth of field, no text, no faces"
+    },
+    {
+      "caption": "立ち仕事の極意",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "立ちっぱなしは無理なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "慣れるって。足を高くして寝ると良いそうよ"
+        }
+      ],
+      "image_prompt": "quiet corridor of a facility at midnight, long shadows, emergency exit glow, empty chair by the wall, no people, no text"
+    },
+    {
+      "caption": "成果物ゼロの魅力",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "楽しいことはあるのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "成果物が何も残らないのが良かったって"
+        }
+      ],
+      "image_prompt": "completely empty desk surface, single desk lamp, minimal composition, muted colors, no text, no people"
+    },
+    {
+      "caption": "最後に総ツッコミ",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "急に日本一の給料、役員も独立も余裕だと"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？ 盛りすぎなのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "「キミはすぐ境遇を大きく見せるよね」"
+        }
+      ],
+      "image_prompt": "night city skyline seen from a high window, glass reflection, cold blue tones, no people, no text, no logos"
+    }
+  ],
+  "caption": "質問スレのはずが、最後は本人が一番盛られてた。あなたはどっち派？",
+  "hashtags": [
+    "#ずんだもん",
+    "#四国めたん",
+    "#スレまとめ",
+    "#警備員",
+    "#ゆっくり解説"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "元警備員に質問ありゅ？",
+  "source_thread": {
+    "id": "livejupiter-1785672652",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785672652/",
+    "title": "元警備員に質問ありゅ？"
+  }
+}

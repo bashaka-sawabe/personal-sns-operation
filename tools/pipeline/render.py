@@ -17,19 +17,54 @@ import re
 import subprocess
 
 from .channels import CHARACTERS
-from .common import FPS, HEIGHT, WIDTH, ffmpeg, font_path, require, wrap_japanese
+from .common import (
+    FPS,
+    HEIGHT,
+    WIDTH,
+    PipelineError,
+    ffmpeg,
+    font_path,
+    require,
+    wrap_japanese,
+)
 
 # 字幕の見た目。ショートは小さい画面で見られるので、太く・大きく・縁を厚く
 FONT_FALLBACK = "Hiragino Kaku Gothic StdN W8"
-SIZE_HOOK = 100        # シーン1の見出し（フック）。画面中央寄りに大きく
-SIZE_HEAD = 76         # シーン2以降の見出し。画面上部に置き続ける
-SIZE_LINE = 62         # フレーズ字幕（セリフと同期。話者の色で塗る）
-WRAP_HOOK = 9
-WRAP_HEAD = 12
-WRAP_LINE = 14
+SIZE_HOOK = 116        # シーン1の見出し（フック）。画面中央寄りに大きく
+SIZE_HEAD = 90         # シーン2以降の見出し。画面上部に置き続ける
+SIZE_LINE = 74         # フレーズ字幕（セリフと同期。話者の色で塗る）
+TEXT_MARGIN_X = 60     # 字幕の左右マージン（ASSスタイルの MarginL / MarginR）
+# 折り返し幅。日本語は全角1文字＝ほぼフォントサイズ1つぶんなので、
+# サイズ × 文字数が使える幅を超えると画面外に切れる。サイズを上げるときは必ずここも下げる。
+# 下の _check_text_width() が読み込み時に見張る
+WRAP_HOOK = 8
+WRAP_HEAD = 10
+WRAP_LINE = 12
 ACCENT = r"\1c&H00D7FF&"   # 数字の強調色（金）。ASSはBGR並び
 WHITE_BGR = "FFFFFF"
 POP = r"{\fscx132\fscy132\t(0,110,\fscx100\fscy100)}"  # フレーズのポップイン
+
+
+def _check_text_width() -> None:
+    """サイズと折り返し幅の組み合わせが画面幅に収まるかを読み込み時に確かめる。
+
+    はみ出しは動画を作り切ってから目視で気づくしかなく、8本作り直す羽目になる。
+    定数をいじった瞬間に落としたほうが安い。
+    """
+    usable = WIDTH - TEXT_MARGIN_X * 2
+    for name, size, wrap in (
+        ("Hook", SIZE_HOOK, WRAP_HOOK),
+        ("Head", SIZE_HEAD, WRAP_HEAD),
+        ("Line", SIZE_LINE, WRAP_LINE),
+    ):
+        if size * wrap > usable:
+            raise PipelineError(
+                f"字幕 {name} が画面幅を超えます（{size}px × {wrap}文字 = {size * wrap}px > {usable}px）。"
+                f"SIZE_{name.upper()} を下げるか WRAP_{name.upper()} を減らしてください。"
+            )
+
+
+_check_text_width()
 
 # 立ち絵。左右の下端に置き、話しているキャラだけ明るくする（誰のセリフか一目で分かる）
 CHAR_HEIGHT = 560      # 画面の約3割。字幕（下寄せ・MarginV=560）とは重ならない高さ
@@ -153,15 +188,16 @@ def _scene_ass(scene: dict, index: int, path: str, font: str) -> str:
 
     # 話者ごとのセリフスタイル。色の違いは立ち絵の明滅と対で「誰の声か」を伝える
     speaker_styles = [
-        (f"Line_{key}", SIZE_LINE, 8, 2, 560, CHARACTERS[key]["color_bgr"])
+        (f"Line_{key}", SIZE_LINE, 10, 2, 560, CHARACTERS[key]["color_bgr"])
         for key in sorted({p["speaker"] for p in scene["phrases"]})
     ]
     styles = "\n".join(
         f"Style: {name},{font},{size},&H00{color},&H00{color},&H00000000,&H78000000,"
-        f"-1,0,0,0,100,100,0,0,1,{outline},2,{align},60,60,{margin_v},1"
+        f"-1,0,0,0,100,100,0,0,1,{outline},2,{align},"
+        f"{TEXT_MARGIN_X},{TEXT_MARGIN_X},{margin_v},1"
         for name, size, outline, align, margin_v, color in (
-            ("Hook", SIZE_HOOK, 11, 8, 620, WHITE_BGR),   # 上中央合わせで画面中央寄り
-            ("Head", SIZE_HEAD, 9, 8, 210, WHITE_BGR),    # 画面上部（UIに隠れない位置）
+            ("Hook", SIZE_HOOK, 13, 8, 620, WHITE_BGR),   # 上中央合わせで画面中央寄り
+            ("Head", SIZE_HEAD, 11, 8, 210, WHITE_BGR),   # 画面上部（UIに隠れない位置）
             *speaker_styles,                              # 下寄せ（キャプション欄を避ける）
         )
     )

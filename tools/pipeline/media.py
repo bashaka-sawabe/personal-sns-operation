@@ -64,8 +64,8 @@ _PROMPT_NOISE = {
 }
 
 VOICEVOX_URL = "http://127.0.0.1:50021"
-# 1.0だと間延びする。ショートの標準的な語速に寄せる
-VOICEVOX_SPEED = 1.1
+# 1.0だと間延びする。1.1でもまだ遅く見えたので、ショートで見慣れた語速まで上げた（#85）
+VOICEVOX_SPEED = 1.22
 # エンジンの置き場候補。GUI版（VOICEVOX.app）にも同じエンジンが同梱されている
 VOICEVOX_ENGINES = [
     os.path.expanduser("~/.voicevox/macos-arm64/run"),

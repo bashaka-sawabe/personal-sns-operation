@@ -30,15 +30,13 @@ from .common import (
 
 # 字幕の見た目。ショートは小さい画面で見られるので、太く・大きく・縁を厚く
 FONT_FALLBACK = "Hiragino Kaku Gothic StdN W8"
-SIZE_HOOK = 116        # シーン1の見出し（フック）。画面中央寄りに大きく
-SIZE_HEAD = 90         # シーン2以降の見出し。画面上部に置き続ける
+SIZE_HOOK = 116        # スレタイ（フック）。全シーンの画面上部に出しつづける（#93）
 SIZE_LINE = 74         # フレーズ字幕（セリフと同期。話者の色で塗る）
 TEXT_MARGIN_X = 60     # 字幕の左右マージン（ASSスタイルの MarginL / MarginR）
 # 折り返し幅。日本語は全角1文字＝ほぼフォントサイズ1つぶんなので、
 # サイズ × 文字数が使える幅を超えると画面外に切れる。サイズを上げるときは必ずここも下げる。
 # 下の _check_text_width() が読み込み時に見張る
 WRAP_HOOK = 8
-WRAP_HEAD = 10
 WRAP_LINE = 12
 ACCENT = r"\1c&H00D7FF&"   # 数字の強調色（金）。ASSはBGR並び
 WHITE_BGR = "FFFFFF"
@@ -60,7 +58,6 @@ def _check_text_width() -> None:
     usable = WIDTH - TEXT_MARGIN_X * 2
     for name, size, wrap in (
         ("Hook", SIZE_HOOK, WRAP_HOOK),
-        ("Head", SIZE_HEAD, WRAP_HEAD),
         ("Line", SIZE_LINE, WRAP_LINE),
     ):
         if size * wrap > usable:
@@ -169,17 +166,19 @@ def _speaker_windows(scene: dict) -> dict:
     return wins
 
 
-def _scene_ass(scene: dict, index: int, path: str, font: str) -> str:
-    """1シーン分の字幕（見出し＋セリフ同期）を書き出す。セリフは話者の色で塗る。"""
-    hook = index == 0
-    head_style = "Hook" if hook else "Head"
-    head_wrap = WRAP_HOOK if hook else WRAP_HEAD
-    dur = scene["dur"]
+def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str) -> str:
+    """1シーン分の字幕（スレタイ＋セリフ同期）を書き出す。セリフは話者の色で塗る。
 
+    シーンごとのセクション見出しは出さない（#93）。登録者10万超の同形式チャンネルは
+    スレタイだけを全編上部に出しつづける型で、セクション見出しは教材感が出てテンポを削ぐ。
+    「スクショ1枚で意味が通る」要件はスレタイ常時表示で維持する。
+    """
+    dur = scene["dur"]
+    # フェードはシーン1だけ。2以降は前シーンから出続けている体なので、明滅させない
+    fade = "{\\fad(150,0)}" if index == 0 else ""
     events = [
-        # 見出しはシーンの間ずっと出す。スクショ1枚でも意味が通るようにする
-        f"Dialogue: 0,{_ass_time(0)},{_ass_time(dur)},{head_style},,0,0,0,,"
-        + "{\\fad(150,0)}" + _ass_text(scene["caption"], head_wrap),
+        f"Dialogue: 0,{_ass_time(0)},{_ass_time(dur)},Hook,,0,0,0,,"
+        + fade + _ass_text(hook, WRAP_HOOK),
     ]
     t = 0.0
     for i, p in enumerate(scene["phrases"]):
@@ -202,8 +201,7 @@ def _scene_ass(scene: dict, index: int, path: str, font: str) -> str:
         f"-1,0,0,0,100,100,0,0,1,{outline},2,{align},"
         f"{TEXT_MARGIN_X},{TEXT_MARGIN_X},{margin_v},1"
         for name, size, outline, align, margin_v, color in (
-            ("Hook", SIZE_HOOK, 13, 8, 620, WHITE_BGR),   # 上中央合わせで画面中央寄り
-            ("Head", SIZE_HEAD, 11, 8, 210, WHITE_BGR),   # 画面上部（UIに隠れない位置）
+            ("Hook", SIZE_HOOK, 13, 8, 210, WHITE_BGR),   # 画面上部（UIに隠れない位置）に常時
             *speaker_styles,                              # 下寄せ（キャプション欄を避ける）
         )
     )
@@ -255,15 +253,18 @@ def _enable_expr(windows: list) -> str:
     return "+".join(f"between(t,{a:.3f},{b:.3f})" for a, b in windows)
 
 
-def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = None) -> str:
+def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = None,
+                 hook: str | None = None) -> str:
     """1シーンを mp4 にする。背景が映像ならループで敷き、静止画ならKen Burnsで動かす。
 
     cast は [(話者キー, 立ち絵パス), ...]（cast の並び順に 左・右 へ置く）。
     立ち絵は常時2体を減光して置き、発話中のキャラだけ通常の明るさを重ねる。
     素材が無いキャラは黙って省く（劣化継続。素材の置き場は docs/09 4-8）。
+    hook はスレタイ（全シーン共通の見出し）。省略時はこのシーンの caption を使う。
     """
     out = os.path.join(work_dir, f"scene{index:02d}.mp4")
-    ass = _scene_ass(scene, index, os.path.join(work_dir, f"sub{index:02d}.ass"), _font_family())
+    ass = _scene_ass(scene, index, os.path.join(work_dir, f"sub{index:02d}.ass"),
+                     _font_family(), hook or scene["caption"])
     audio = _scene_audio(scene, index, work_dir)
     subs = f"ass='{ass}':fontsdir='{os.path.dirname(font_path())}'"
 
@@ -362,6 +363,9 @@ def concat(parts: list, out_path: str, work_dir: str,
 
 def build(scenes: list, out_path: str, work_dir: str, bgm: str | None = None,
           cast: list | None = None) -> str:
-    parts = [render_scene(s, i, work_dir, cast=cast) for i, s in enumerate(scenes)]
+    # スレタイ＝シーン1の caption。全シーンの上部に出しつづける（#93）
+    hook = scenes[0]["caption"]
+    parts = [render_scene(s, i, work_dir, cast=cast, hook=hook)
+             for i, s in enumerate(scenes)]
     total = sum(s["dur"] for s in scenes)
     return concat(parts, out_path, work_dir, bgm=bgm, total_dur=total)

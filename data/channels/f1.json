@@ -4,7 +4,7 @@
   "format": "速報→何が起きた→数字・背景→意外な一言で締め。事実は必ず自分の言葉で語り、記事の表現をコピーしない。憶測を断定しない。FOMの映像・画像・スクショは一切使わない（docs/04 2-2章）",
   "first_hand": false,
   "nakanohito": false,
-  "thread_source": true,
+  "news_source": true,
   "cast": [
     {"speaker": "zundamon", "role": "にわかファンの質問役。「それってすごいの？」を担当"},
     {"speaker": "metan", "role": "解説役。数字と裁定を分かりやすく言い換える"}

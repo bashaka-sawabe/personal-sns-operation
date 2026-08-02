@@ -1,0 +1,97 @@
+{
+  "id": "meme-008",
+  "title": "登録者13人のVtuberが質問受付、しかし売名は拒否",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【矛盾の塊】売名しないV",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "登録者13人のVtuberが質問受付なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "同時に見てる人は3人だそうよ"
+        }
+      ],
+      "image_prompt": "minimalist dark studio desk with a ring light and microphone silhouette, faint glow, empty chair, abstract, no text, no faces"
+    },
+    {
+      "caption": "リンクを貼らない",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "『チャンネル貼れ』と言われて"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "『売名はしない』と断ったのだ"
+        }
+      ],
+      "image_prompt": "abstract broken chain link floating over a dim purple gradient, subtle glow, minimal, no text, no faces"
+    },
+    {
+      "caption": "目的が矛盾",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "なぜ始めたか聞かれてね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "『ちやほやされたい』のだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "でもファンにはなるなと"
+        }
+      ],
+      "image_prompt": "two arrows pointing in opposite directions carved in soft neon light, dark background, abstract symbolism, no text, no faces"
+    },
+    {
+      "caption": "初期費用と借金",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "機材で25万、借金したのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "本気度だけは高いのね"
+        }
+      ],
+      "image_prompt": "stack of camera lens, microphone and monitor silhouettes on a dark blue backdrop, dramatic rim light, abstract, no text, no faces"
+    },
+    {
+      "caption": "オチ：媚び売ってる",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "では伸びるために何を？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "『媚び売ってる』"
+        }
+      ],
+      "image_prompt": "single spotlight beam hitting an empty stage floor, deep shadows, minimal abstract composition, no text, no faces"
+    }
+  ],
+  "caption": "売名はしない、ファンもいらない。でも伸びるためにやってることは……この一言、強すぎませんか。",
+  "hashtags": [
+    "#Vtuber",
+    "#ネット民の生態",
+    "#ずんだもん",
+    "#四国めたん",
+    "#ゆっくり解説"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "ワイはVtuberだけど質問ある？",
+  "source_thread": {
+    "id": "livejupiter-1785665604",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785665604/",
+    "title": "ワイはVtuberだけど質問ある？"
+  }
+}

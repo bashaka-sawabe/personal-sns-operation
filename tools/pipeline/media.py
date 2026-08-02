@@ -43,6 +43,26 @@ PALETTE = [
     ("0x2b1d1d", "0x40282a"),
 ]
 
+# ---- テンポ（#90: 本人フィードバック「会話の間をもっと詰めて」） ----
+# フレーズ末尾の無音。0.12秒は登録者10万超の2chショートのラリーより間延びして
+# 聞こえた。0にすると息継ぎが消えて機械的になるので、知覚できる最小限に留める
+PHRASE_GAP = 0.05
+# シーン末尾の余白。読み終わり即カットの「詰まり」を避けられる最小限（0.35 → 0.15）
+SCENE_TAIL = 0.15
+
+# シーン頭の効果音。大手2chショートは場面転換の「ドン」とオチの音でリズムを作っている。
+# 既定音源はffmpegで合成した自作（規約リスクなし）。差し替えるときは同名ファイルを置き、
+# クレジットが要る素材なら同名 .txt（サイドカー）を対で置く（BGM・立ち絵と同じ約束）
+SE_DIR = os.path.join(ASSETS_DIR, "se")
+_SE_SPECS = {
+    # 転換の「ドン」: 減衰する低音＋短いノイズの立ち上がり
+    "don": "aevalsrc='exp(-16*t)*0.9*sin(2*PI*68*t)"
+           "+exp(-46*t)*0.35*(random(0)-0.5)':d=0.4:s=44100",
+    # オチの「チャン・チャン」: 2音下がりの短いフレーズ
+    "ochi": "aevalsrc='exp(-13*t)*0.5*sin(2*PI*523*t)*lt(t\\,0.18)"
+            "+exp(-9*(t-0.22))*0.55*sin(2*PI*392*t)*gte(t\\,0.22)':d=0.7:s=44100",
+}
+
 STOCK_DIR = os.path.join(ASSETS_DIR, "stock")
 PEXELS_SEARCH = "https://api.pexels.com/videos/search"
 # Openverse はサインアップ不要（Pexelsに登録できない環境のための本命。#50）。
@@ -156,8 +176,8 @@ def narration(text: str, path: str, speaker: int) -> str:
     """セリフ1フレーズ分の音声を作り、44.1kHzモノラルwavで返す。
 
     speaker はVOICEVOXのスタイルID（キャラごとに固定。channels.CHARACTERS）。
-    末尾に短い無音を足す。フレーズ間が詰まって聞こえるのを防ぐと同時に、
-    「音声の長さ＝字幕の表示時間」の余韻にもなる（docs/09 4-3）。
+    末尾に PHRASE_GAP の無音を足す（息継ぎの最小限。値の根拠は定数のコメント）。
+    「音声の長さ＝字幕の表示時間」なので、この無音は字幕の余韻でもある（docs/09 4-3）。
     """
     raw = path + ".raw"
     if ensure_voicevox():
@@ -170,9 +190,34 @@ def narration(text: str, path: str, speaker: int) -> str:
     else:
         _say_wav(text, raw + ".aiff")
         os.rename(raw + ".aiff", raw)
-    ffmpeg(["-i", raw, "-af", "apad=pad_dur=0.12", "-ar", "44100", "-ac", "1", path])
+    ffmpeg(["-i", raw, "-af", f"apad=pad_dur={PHRASE_GAP}", "-ar", "44100", "-ac", "1", path])
     os.remove(raw)
     return path
+
+
+# ---------------------------------------------------------------- 効果音
+
+def se_track(kind: str) -> str:
+    """効果音のパス。無ければ合成して SE_DIR に作る（同じ動画は常に同じ音）。"""
+    os.makedirs(SE_DIR, exist_ok=True)
+    path = os.path.join(SE_DIR, f"{kind}.wav")
+    if not os.path.exists(path):
+        ffmpeg(["-f", "lavfi", "-i", _SE_SPECS[kind], "-ar", "44100", "-ac", "1", path])
+        sidecar = os.path.join(SE_DIR, f"{kind}.txt")
+        if not os.path.exists(sidecar):
+            # 自作音にクレジット義務は無いが、差し替え時の表記漏れを防ぐため
+            # サイドカーの仕組み自体は最初から通しておく
+            with open(sidecar, "w", encoding="utf-8") as f:
+                f.write("効果音: 自作（ffmpeg合成）\n")
+    return path
+
+
+def se_credit(kind: str) -> str:
+    """効果音のクレジット。同名 .txt（サイドカー）に書いてある。BGMと同じ約束。"""
+    sidecar = os.path.join(SE_DIR, f"{kind}.txt")
+    if os.path.exists(sidecar):
+        return open(sidecar, encoding="utf-8").read().strip()
+    return ""
 
 
 # ---------------------------------------------------------------- 立ち絵
@@ -498,6 +543,7 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
     api_key = read_secret("PEXELS_API_KEY", "pexels_key.txt")
 
     scenes, providers, used_speakers = [], [], []
+    n_scenes = len(script["scenes"])
     for i, scene in enumerate(script["scenes"]):
         bg = background(i, scene.get("image_prompt", ""), asset_dir, api_key, offline)
         providers.append(bg["provider"])
@@ -514,16 +560,21 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
                 phrases.append({"text": text, "audio": audio,
                                 "dur": probe_duration(audio), "speaker": key})
         # 読み終わりで即カットすると詰まって聞こえるのでシーン末尾に余白を足す
-        dur = round(sum(p["dur"] for p in phrases) + 0.35, 2)
+        dur = round(sum(p["dur"] for p in phrases) + SCENE_TAIL, 2)
+        # シーン頭の効果音。最終シーン（オチ）だけ音を変え、それ以外は転換の「ドン」
+        se_kind = "ochi" if i == n_scenes - 1 else "don"
         scenes.append({
             "bg": bg["path"],
             "bg_kind": bg["kind"],
             "caption": scene["caption"],
             "phrases": phrases,
             "dur": dur,
+            "se": se_track(se_kind),
+            "se_kind": se_kind,
         })
 
-    _write_credits(asset_dir, providers, used_speakers)
+    _write_credits(asset_dir, providers, used_speakers,
+                   sorted({s["se_kind"] for s in scenes}))
     voice = ("VOICEVOX: " + "・".join(CHARACTERS[k]["name"] for k in used_speakers)
              if voicevox_used() else "macOS say（フォールバック）")
     stock = sum(p != "gradient" for p in providers)
@@ -535,7 +586,8 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
     return scenes
 
 
-def _write_credits(asset_dir: str, providers: list, used_speakers: list) -> None:
+def _write_credits(asset_dir: str, providers: list, used_speakers: list,
+                   se_kinds: list | None = None) -> None:
     """投稿時の説明文に入れるクレジットを書き出す（VOICEVOXは表記が利用条件）。"""
     lines = []
     if voicevox_used():
@@ -544,6 +596,11 @@ def _write_credits(asset_dir: str, providers: list, used_speakers: list) -> None
         # 立ち絵素材のクレジット（サイドカー）。素材が無ければ何も出ない
         if character_image(key) and character_credit(key):
             lines.append(character_credit(key))
+    for kind in se_kinds or []:
+        # 効果音のクレジット（サイドカー）。同文は1行にまとめる
+        line = se_credit(kind)
+        if line and line not in lines:
+            lines.append(line)
     if "pexels" in providers:
         lines.append("映像素材: Pexels")
     if "openverse" in providers:

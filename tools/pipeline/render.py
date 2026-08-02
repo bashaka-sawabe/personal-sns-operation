@@ -44,6 +44,12 @@ ACCENT = r"\1c&H00D7FF&"   # 数字の強調色（金）。ASSはBGR並び
 WHITE_BGR = "FFFFFF"
 POP = r"{\fscx132\fscy132\t(0,110,\fscx100\fscy100)}"  # フレーズのポップイン
 
+# シーン頭のパンチイン（#90）。効果音の「ドン」と同時に画面全体を一瞬寄せて戻す。
+# 大手2chショートの場面転換の型。深追いすると酔うので「軽い」揺れに留める
+PUNCH_ZOOM = 1.09      # 寄りの深さ
+PUNCH_FRAMES = 7       # 戻り切るまでのフレーム数（30fpsで約0.23秒）
+SE_VOLUME = 0.55       # ナレーションを塗り潰さない音量
+
 
 def _check_text_width() -> None:
     """サイズと折り返し幅の組み合わせが画面幅に収まるかを読み込み時に確かめる。
@@ -221,16 +227,26 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 
 def _scene_audio(scene: dict, index: int, work_dir: str) -> str:
-    """フレーズ音声を連結し、シーン尺まで無音を足す。"""
+    """フレーズ音声を連結し、シーン尺まで無音を足す。効果音があれば頭に重ねる。"""
     listfile = os.path.join(work_dir, f"au{index:02d}.txt")
     with open(listfile, "w", encoding="utf-8") as f:
         for p in scene["phrases"]:
             f.write("file '%s'\n" % os.path.abspath(p["audio"]).replace("'", r"'\''"))
     out = os.path.join(work_dir, f"audio{index:02d}.wav")
-    ffmpeg([
-        "-f", "concat", "-safe", "0", "-i", listfile,
-        "-af", f"apad=whole_dur={scene['dur']}", out,
-    ])
+    args = ["-f", "concat", "-safe", "0", "-i", listfile]
+    if scene.get("se"):
+        # シーン頭の「ドン」。パンチイン（render_scene）と同じタイミングで音でも突く（#90）
+        args += [
+            "-i", scene["se"],
+            "-filter_complex",
+            f"[0:a]apad=whole_dur={scene['dur']}[na];"
+            f"[1:a]volume={SE_VOLUME}[se];"
+            "[na][se]amix=inputs=2:duration=first:normalize=0[a]",
+            "-map", "[a]",
+        ]
+    else:
+        args += ["-af", f"apad=whole_dur={scene['dur']}"]
+    ffmpeg([*args, out])
     return out
 
 
@@ -286,7 +302,14 @@ def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = Non
         if wins:
             graph.append(f"[{last}][c{n}on]overlay=x={x}:y={y}:enable='{_enable_expr(wins)}'[b{n}]")
             last = f"b{n}"
-    graph.append(f"[{last}]{subs}[vout]")
+    graph.append(f"[{last}]{subs}[vsub]")
+    # シーン頭のパンチイン。字幕ごと寄せるのは意図（大手の型はテロップも一緒に揺れる）
+    graph.append(
+        f"[vsub]zoompan=z='if(lte(on,{PUNCH_FRAMES}),"
+        f"{PUNCH_ZOOM}-{PUNCH_ZOOM - 1:.2f}*on/{PUNCH_FRAMES},1)'"
+        f":x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2'"
+        f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS}[vout]"
+    )
 
     ffmpeg([
         *inputs,

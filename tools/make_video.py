@@ -110,9 +110,11 @@ def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
 
 
 def make_one(channel: str, theme: str, offline: bool, script_only: bool,
-             thread_id: str | None = None, fact_id: str | None = None) -> str:
+             thread_id: str | None = None, fact_id: str | None = None,
+             fact_ids: list | None = None) -> str:
     cfg = channels.load(channel)
     thread = fact = None
+    facts = None
     if thread_id:
         # 未採用スレは load_adopted が拒否する（目視選別を飛ばして生成させない）
         thread = fetch_threads.load_adopted(thread_id)
@@ -121,13 +123,18 @@ def make_one(channel: str, theme: str, offline: bool, script_only: bool,
         # 裏取り（一次ソース）の無いネタは load_adopted が拒否する
         fact = fetch_facts.load_adopted(fact_id)
         theme = theme or fact["fact"][:40]
+    if fact_ids:
+        # 複数指定は「◯◯選」リスト形式になる（heisei。docs/02 4章）
+        facts = [fetch_facts.load_adopted(i) for i in fact_ids]
+        theme = theme or f"{len(facts)}選"
     scripts_dir = os.path.join(SCRIPTS_DIR, channel)
     ensure_dirs(scripts_dir)
     script_id = slugify(channel)
     print(f"[{script_id}] {channel} / {theme}")
 
     print("  台本を生成中...")
-    data = script_mod.generate(cfg, theme, offline=offline, thread=thread, fact=fact)
+    data = script_mod.generate(cfg, theme, offline=offline, thread=thread, fact=fact,
+                               facts=facts)
     data["channel"] = channel
     data["genre"] = channel  # 計測（fetch_metrics）の集計キーとの互換。値はチャンネル名
     data["theme"] = theme
@@ -136,11 +143,11 @@ def make_one(channel: str, theme: str, offline: bool, script_only: bool,
         # 「引用元が転載自由ソース」をファイルだけで確認できるようにする
         data["source_thread"] = {"id": thread["id"], "url": thread["url"],
                                  "title": thread["title"]}
-    if fact:
+    for f in ([fact] if fact else []) + (facts or []):
         # 裏取りの来歴。「一次ソースURLが台本に記録されている」チェックの実体
-        data["source_fact"] = {"id": fact["id"], "fact": fact["fact"],
-                               "backing_url": fact["backing_url"],
-                               "backing_note": fact.get("backing_note", "")}
+        data.setdefault("source_facts", []).append(
+            {"id": f["id"], "fact": f["fact"], "backing_url": f["backing_url"],
+             "backing_note": f.get("backing_note", "")})
     path = script_mod.save(data, script_id, scripts_dir)
     print(f"  台本: {os.path.relpath(path)}")
     if script_only:
@@ -180,6 +187,8 @@ def main() -> None:
     p.add_argument("--theme", help="テーマ（動画1本の中身。--thread があれば省略可）")
     p.add_argument("--thread", help="採用済みスレのID（fetch_threads.py --adopt 済みのもの）")
     p.add_argument("--fact", help="採用済みネタのID（fetch_facts.py --adopt 済み・裏取り必須）")
+    p.add_argument("--facts", nargs="+", metavar="ID",
+                   help="採用済みネタを複数指定して「◯◯選」形式にする（heisei）")
     p.add_argument("--batch", help="チャンネルとテーマの一覧ファイル（1行1本）")
     p.add_argument("--from-script", help="既存の台本JSONから動画だけ作り直す")
     p.add_argument("--offline", action="store_true", help="APIを一切使わず疎通確認する")
@@ -213,12 +222,12 @@ def main() -> None:
                 print(f"  - {ch} / {theme}", file=sys.stderr)
             return
 
-        if not channel or not (args.theme or args.thread or args.fact):
-            p.error("--channel と、ネタの指定（--theme / --thread / --fact）"
+        if not channel or not (args.theme or args.thread or args.fact or args.facts):
+            p.error("--channel と、ネタの指定（--theme / --thread / --fact / --facts）"
                     "（または --batch / --from-script）を指定してください")
 
         out = make_one(channel, args.theme, args.offline, args.script_only,
-                       thread_id=args.thread, fact_id=args.fact)
+                       thread_id=args.thread, fact_id=args.fact, fact_ids=args.facts)
         print(f"完成: {os.path.relpath(out)}")
 
     except PipelineError as e:

@@ -144,6 +144,45 @@ def _thread_rules(cfg: dict) -> str:
 1行は25字以内。テンポが命なので、説明的な行を入れない。"""
 
 
+def _list_rules(cfg: dict, count: int) -> str:
+    """「◯◯選」リスト形式のルール（heisei。docs/02 4章の実測）。
+
+    掛け合い5シーンとは別の型。平成懐古で伸びているのは 2.5秒/ネタ の高速リストで、
+    1本1ネタの情報提示型は185本出して1,000〜3,000回しか出ていない。
+    """
+    return f"""
+
+**この動画は「◯◯選」のリスト形式です（掛け合い5シーンではありません）:**
+裏取り済みのネタが複数与えられます。それを**次々に投げつける**構成にします。
+
+- シーンは全部で{count + 2}個にします:
+  - **シーン1 = 導入**。「◯◯年生まれ位が懐かしい△△{count}選」と宣言する（掛け合い2〜3行）
+  - **シーン2〜{count + 1} = 各ネタ**。1シーン1ネタ。**セリフは1〜2行だけ**。
+    めたんが名称を言い、ずんだもんが一言で反応する（または、めたんの1行だけ）
+  - **シーン{count + 2} = 締め**（掛け合い2〜3行）
+- **各ネタは極端に短く。1シーンのセリフ合計は16字以内**（2.5秒で読み切れる長さ）。
+  実測ベンチマークは **2.5秒/ネタ** です。解説を入れると必ず超えます。
+  良い例:「MD。33年で終了」「たまごっち1000万個」「プリクラは1995年」
+  悪い例:「MDは1992年から33年続いたのよ」（長い）
+  ずんだもんの反応は入れても**6字以内**（「早いのだ」「異常なのだ」）。省いてもよい。
+- 各ネタの caption は**その品名・名称そのもの**（10字以内）。
+- **与えられたネタ以外を足さない。** 年代・名称は与えられたものだけを使う。
+
+**タイトル（title）と シーン1の caption:**
+- 「◯◯年生まれ**位**が懐かしい△△{count}選」の型にする。
+- **「位（くらい）」を必ず入れる。** 断定すると対象年代の人しか自分ごとにできませんが、
+  「位」があると前後10年が自分の話として見られます（実測でこの型が最も伸びている）。
+- シーン1の caption は16字以内（画面は8字で折り返すので2行まで）。
+  例: 「平成生まれが懐かしい{count}選」
+
+**締めの作り方:**
+- 「今どうなったか」か「当時は当たり前だった」の落差で終わる。
+- **視聴者が年齢を名乗りたくなる終わり方にする**（「何年生まれ？」と直接聞くのではなく、
+  「あなたはどれを覚えている？」のように思い出を語らせる）。
+- リストは全部を網羅しません。**入りきらないものがあるのが正解**
+  （視聴者が「◯◯が無い」と補完コメントを打つ余地を残す）。"""
+
+
 def _fact_rules(cfg: dict) -> str:
     """裏取り済みの事実から作るときの追加ルール（trivia / heisei。docs/05 2章）。
 
@@ -180,13 +219,15 @@ def _fact_rules(cfg: dict) -> str:
 - シーン{SCENE_COUNT}は、もう一段の意外か現代との接続で締める（まとめ・説教にしない）。"""
 
 
-def _fact_context(fact: dict) -> str:
-    """採用ネタ（fetch_facts.load_adopted の1件）をユーザーメッセージに展開する。"""
-    lines = [f"事実: {fact['fact']}"]
-    if fact.get("backing_note"):
-        lines.append(f"一次ソース: {fact['backing_note']}（{fact['backing_url']}）")
-    else:
-        lines.append(f"一次ソース: {fact['backing_url']}")
+def _fact_context(facts: list) -> str:
+    """採用ネタをユーザーメッセージに展開する。リスト形式では複数件を渡す。"""
+    lines = []
+    for i, f in enumerate(facts, 1):
+        head = f"事実{i}: " if len(facts) > 1 else "事実: "
+        lines.append(head + f["fact"])
+        src = f.get("backing_note") or ""
+        lines.append(f"  一次ソース: {src}（{f['backing_url']}）" if src
+                     else f"  一次ソース: {f['backing_url']}")
     return "\n".join(lines)
 
 
@@ -372,7 +413,8 @@ def _require_source(cfg: dict, **given) -> None:
 
 
 def generate(cfg: dict, theme: str, offline: bool = False,
-             thread: dict | None = None, fact: dict | None = None) -> dict:
+             thread: dict | None = None, fact: dict | None = None,
+             facts: list | None = None) -> dict:
     """台本JSONを返す。offline=True かAPIキー未設定ならテンプレを返す。
 
     thread は採用スレ（fetch_threads）、fact は裏取り済みネタ（fetch_facts）。
@@ -380,7 +422,7 @@ def generate(cfg: dict, theme: str, offline: bool = False,
     LLMの0からの創作は展開もオチも平均値になり、つまらない（docs/04 2-2章・v5）。
     """
     if not offline:
-        _require_source(cfg, thread=thread, fact=fact)
+        _require_source(cfg, thread=thread, fact=fact or (facts[0] if facts else None))
     api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
     if offline or not api_key:
         if not offline:
@@ -400,11 +442,17 @@ def generate(cfg: dict, theme: str, offline: bool = False,
         system += _thread_rules(cfg)
         user = (f"チャンネル: {cfg['name']}\n\n{_thread_context(thread)}\n\n"
                 "このスレを翻案して、オチから逆算した掛け合いショート動画の台本を作ってください。")
-    elif fact:
+    elif facts and len(facts) > 1:
+        # 「◯◯選」リスト形式。ネタが複数あるときだけこの型になる（docs/02 4章）
+        system += _fact_rules(cfg) + _list_rules(cfg, len(facts))
+        user = (f"チャンネル: {cfg['name']}\n\n{_fact_context(facts)}\n\n"
+                f"この{len(facts)}件で「◯◯選」形式のショート動画の台本を作ってください。")
+    elif fact or facts:
+        one = fact or facts[0]
         system += _fact_rules(cfg)
         shape = ("「あれ覚えてる？」型の懐かし掛け合い" if cfg["name"] == "heisei"
                  else "「実は◯◯」型の掛け合い")
-        user = (f"チャンネル: {cfg['name']}\n\n{_fact_context(fact)}\n\n"
+        user = (f"チャンネル: {cfg['name']}\n\n{_fact_context([one])}\n\n"
                 f"この事実で{shape}ショート動画の台本を作ってください。")
     else:
         user = (f"チャンネル: {cfg['name']}\nテーマ: {theme}\n\n"

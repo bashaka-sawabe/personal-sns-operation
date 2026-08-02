@@ -1,0 +1,10 @@
+{
+  "id": "heisei-be90c1e097",
+  "channel": "heisei",
+  "fact": "ポケベルは1996年に東京テレメッセージだけで契約数120万を超えたが、2019年9月30日のサービス終了時には契約者が1500人を下回っていた。端末の製造終了から20年が経過していた",
+  "discovered_from": "https://nlab.itmedia.co.jp/cont/articles/3285281/",
+  "backing_url": "https://www.watch.impress.co.jp/docs/news/1156347.html",
+  "backing_note": "Impress Watch（東京テレメッセージの発表を報じた一次報道）",
+  "fetched_at": "2026-08-02 21:56:32",
+  "status": "adopted"
+}

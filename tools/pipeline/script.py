@@ -111,19 +111,40 @@ def _thread_rules() -> str:
 - シーン1の caption はスレタイを20字以内に整えたもの（スレタイとして全編表示される）。"""
 
 
-def _fact_rules() -> str:
-    """裏取り済みの事実から作るときの追加ルール（trivia。docs/05 2章）。"""
-    return f"""
+def _fact_rules(cfg: dict) -> str:
+    """裏取り済みの事実から作るときの追加ルール（trivia / heisei。docs/05 2章）。
+
+    同じ「事実＋裏取り」でも、triviaは知らない話の種明かし、heiseiは
+    知っている話の掘り起こしで、フックの作り方が正反対になる（#113）。
+    """
+    common = """
 
 ネタ元の事実について（最重要）:
-裏取り済みの事実が1つ与えられます。**事実の水増し・別の雑学の混入をしません。**
+裏取り済みの事実が1つ与えられます。**事実の水増し・別の話の混入をしません。**
+与えられた事実と一次ソースの範囲を超えて断定せず、数字・年代を盛りません。
+事実が英語なら自然な日本語に直します。医療・投資・法律の助言に踏み込みません。"""
+
+    if cfg["name"] == "heisei":
+        return common + f"""
+
+このチャンネルの作り方:
+- シーン1のフックは「あれ、覚えてる？」型。**視聴者が思い出せる入口**から入る
+  （知らない話の種明かしではなく、知っている話の掘り起こし）。
+- めたんが懐かしがり、平成を知らないずんだもんが現代の目線でツッコむ構図にする。
+  これで同世代以外にも「そんな時代があったのか」で成立させる。
+- **年代・製品名・出来事の名称は、与えられた事実に書かれているものだけを使う。**
+  「確か◯年頃」のような曖昧な記憶を書かない（世代ネタの誤りは一発で刺される）。
+- シーン{SCENE_COUNT}は「今どうなったか」か「当時は当たり前だった」の落差で締める。
+  コメントで思い出を語りたくなる終わり方にする（露骨に「コメントして」とは書かない）。
+- 懐かしむ対象を馬鹿にしない。特定の企業・商品を貶さない。"""
+
+    return common + f"""
+
+このチャンネルの作り方:
 - シーン1は「実は◯◯！？」型のフック。事実のいちばん意外な点を一言で言い切る。
 - 本編は「よくある思い込み → 実は → 根拠」の順。シーン4で出典に軽く触れる
   （「◯◯の資料にある話なのだ」程度。URLや正式名称の羅列はしない）。
-- シーン{SCENE_COUNT}は、もう一段の意外か現代との接続で締める（まとめ・説教にしない）。
-- 与えられた事実と一次ソースの範囲を超えて断定しない。数字・年代を盛らない。
-- 事実が英語なら自然な日本語に直す。
-- 医療・投資・法律の助言に踏み込まない。"""
+- シーン{SCENE_COUNT}は、もう一段の意外か現代との接続で締める（まとめ・説教にしない）。"""
 
 
 def _news_rules() -> str:
@@ -334,6 +355,35 @@ def _fallback(cfg: dict, theme: str) -> dict:
     }
 
 
+# チャンネル設定のフラグ → 入力の種類と、それを用意する手順。
+# 複数のフラグを立てたチャンネル（heisei など）は、**どれか1つ**あれば作れる:
+# heisei は事実ベースを主にしつつ、良い懐かしスレが出た日は引用型でも作れる（#113）
+_SOURCE_KINDS = (
+    ("fact_source", "fact", "裏取り済みのネタ",
+     "tools/fetch_facts.py で収集し、--back で一次ソースを付けて --adopt してから\n"
+     "  make_video.py --channel <ch> --fact <ネタID>"),
+    ("thread_source", "thread", "引用スレ",
+     "tools/fetch_threads.py --board ... で収集し、--adopt で採用してから\n"
+     "  make_video.py --channel <ch> --thread <スレID>"),
+    ("news_source", "news", "採用済みのニュース",
+     "tools/fetch_f1.py --news で収集し、--adopt で採用してから\n"
+     "  make_video.py --channel <ch> --news <ニュースID>"),
+)
+
+
+def _require_source(cfg: dict, **given) -> None:
+    """ネタ元が渡されているかを確かめる。0からの創作を防ぐ最後の関門（docs/04 2-2章）。"""
+    allowed = [(key, label, how) for flag, key, label, how in _SOURCE_KINDS if cfg.get(flag)]
+    if not allowed or any(given.get(key) is not None for key, _, _ in allowed):
+        return
+    labels = " か ".join(label for _, label, _ in allowed)
+    steps = "\n  ".join(how for _, _, how in allowed)
+    raise PipelineError(
+        f"{cfg['name']} は{labels}が必要です（v5: 0からの創作はしない。docs/04 2-2章）。\n"
+        f"  {steps}"
+    )
+
+
 def generate(cfg: dict, theme: str, offline: bool = False,
              thread: dict | None = None, fact: dict | None = None,
              news: dict | None = None, race_data: dict | None = None) -> dict:
@@ -344,24 +394,8 @@ def generate(cfg: dict, theme: str, offline: bool = False,
     どのチャンネルもソース無しでは生成しない:
     LLMの0からの創作は展開もオチも平均値になり、つまらない（docs/04 2-2章・v5）。
     """
-    if cfg.get("thread_source") and thread is None and not offline:
-        raise PipelineError(
-            f"{cfg['name']} は引用スレが必要です（v5: 0からの創作はしない。docs/04 2-2章）。\n"
-            "  tools/fetch_threads.py --board ... で収集し、--adopt で採用してから\n"
-            "  make_video.py --channel ... --thread <スレID> で作ってください。"
-        )
-    if cfg.get("fact_source") and fact is None and not offline:
-        raise PipelineError(
-            f"{cfg['name']} は裏取り済みのネタが必要です（docs/05 3章）。\n"
-            "  tools/fetch_facts.py で収集し、--back で一次ソースを付けて --adopt してから\n"
-            "  make_video.py --channel ... --fact <ネタID> で作ってください。"
-        )
-    if cfg.get("news_source") and news is None and not offline:
-        raise PipelineError(
-            f"{cfg['name']} は採用済みのニュースが必要です（docs/05 3章）。\n"
-            "  tools/fetch_f1.py --news で収集し、--adopt で採用してから\n"
-            "  make_video.py --channel ... --news <ニュースID> で作ってください。"
-        )
+    if not offline:
+        _require_source(cfg, thread=thread, fact=fact, news=news)
     api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
     if offline or not api_key:
         if not offline:
@@ -382,9 +416,11 @@ def generate(cfg: dict, theme: str, offline: bool = False,
         user = (f"チャンネル: {cfg['name']}\n\n{_thread_context(thread)}\n\n"
                 "このスレを翻案して、オチから逆算した掛け合いショート動画の台本を作ってください。")
     elif fact:
-        system += _fact_rules()
+        system += _fact_rules(cfg)
+        shape = ("「あれ覚えてる？」型の懐かし掛け合い" if cfg["name"] == "heisei"
+                 else "「実は◯◯」型の掛け合い")
         user = (f"チャンネル: {cfg['name']}\n\n{_fact_context(fact)}\n\n"
-                "この事実で「実は◯◯」型の掛け合いショート動画の台本を作ってください。")
+                f"この事実で{shape}ショート動画の台本を作ってください。")
     elif news:
         system += _news_rules()
         user = (f"チャンネル: {cfg['name']}\n\n{_news_context(news, race_data)}\n\n"

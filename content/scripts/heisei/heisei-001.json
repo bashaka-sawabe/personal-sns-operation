@@ -1,0 +1,114 @@
+{
+  "id": "heisei-001",
+  "title": "ポケベル最後の1500人｜1996年120万契約からの終わり",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "ポケベル、最後は1500人だった",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "120万人いたのに、最後は1500人だったのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "なんの話なのだ!? 減りすぎなのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "ポケベル。覚えてる人、いるかしら"
+        }
+      ],
+      "image_prompt": "minimalist still life of a small vintage pager device on a plain desk, soft window light, muted 1990s color palette, no text, no logos, shallow depth of field"
+    },
+    {
+      "caption": "1996年、東京テレメッセージだけで120万",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ポケベルって、何ができるのだ?"
+        },
+        {
+          "speaker": "metan",
+          "text": "番号を送ると、相手の小さな端末に届くの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "届くだけ!? 返信はどうするのだ"
+        }
+      ],
+      "image_prompt": "abstract retro pattern of numeric digits floating over a dark blue gradient, glowing dot matrix texture, no readable words, no faces"
+    },
+    {
+      "caption": "公衆電話に並んだ時代",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "返信は公衆電話。だから電話の前に列ができたわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "え、返事のために外へ走るのだ?"
+        },
+        {
+          "speaker": "metan",
+          "text": "それが普通だったのよ。走ったわよ、わたくしも"
+        }
+      ],
+      "image_prompt": "empty public telephone booth at dusk on a quiet Japanese street, warm streetlight, nostalgic film grain, no people, no text"
+    },
+    {
+      "caption": "端末の製造終了から20年",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "それで、いつ終わったのだ?"
+        },
+        {
+          "speaker": "metan",
+          "text": "2019年9月30日。端末の製造終了から20年後よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "20年も作られないまま続いてたのだ!?"
+        }
+      ],
+      "image_prompt": "closed shutter of an old electronics shop, faded paint, late afternoon shadows, quiet nostalgic mood, no text, no logos"
+    },
+    {
+      "caption": "締め：あの列を覚えてる人",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "120万から1500人。数字で見ると切ないわね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "最後まで使ってた人、気になるのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "公衆電話に並んだ記憶、まだ残ってるかしら"
+        }
+      ],
+      "image_prompt": "single empty public phone booth seen from far away in an urban twilight landscape, soft bokeh city lights, melancholic tone, no text"
+    }
+  ],
+  "caption": "1996年に120万契約を超えたポケベルは、2019年9月30日のサービス終了時に1500人を下回っていました。公衆電話に並んだあの時代、覚えてますか。",
+  "hashtags": [
+    "#平成レトロ",
+    "#ポケベル",
+    "#あったあった",
+    "#昭和平成",
+    "#懐かしい"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "ポケベルは1996年に東京テレメッセージだけで契約数120万を超えたが、2019",
+  "source_fact": {
+    "id": "heisei-be90c1e097",
+    "fact": "ポケベルは1996年に東京テレメッセージだけで契約数120万を超えたが、2019年9月30日のサービス終了時には契約者が1500人を下回っていた。端末の製造終了から20年が経過していた",
+    "backing_url": "https://www.watch.impress.co.jp/docs/news/1156347.html",
+    "backing_note": "Impress Watch（東京テレメッセージの発表を報じた一次報道）"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "id": "meme-006",
+  "title": "70歳「誰かバトルしてくれ」→昭和ノスタルジー化するスレ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "70歳「誰かバトルしてくれ」",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "70歳がバトルを募集してるのだ！？"
+        },
+        {
+          "speaker": "metan",
+          "text": "掲示板にスレを立てた70歳の男性よ。お題は自由ですって"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクが相手になるのだ！"
+        }
+      ],
+      "image_prompt": "A dimly lit retro living room at night, an old CRT monitor glowing faintly on a wooden desk, dust in the light beam, nostalgic warm tones, no people, no text"
+    },
+    {
+      "caption": "シーン2：全然バトルにならない",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "最初の挑戦者が来たのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "一言目が「バスケうるさいのどうなったん」よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "バトルじゃなくて近所トラブルの続報なのだ!?"
+        }
+      ],
+      "image_prompt": "An empty neighborhood basketball court at dusk, chain-link fence, long shadows on asphalt, quiet suburban mood, no people, no text"
+    },
+    {
+      "caption": "シーン3：昭和のパソコン談義に脱線",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "話はどんどん昔のパソコンと無線に流れていくのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今も真空管のラジオを年に一台作ってるらしいのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "そして一言、「2ちゃんはむしろ後輩だよ」"
+        }
+      ],
+      "image_prompt": "Close-up of vintage vacuum tubes and an old amateur radio set on a workbench, solder iron, warm amber glow, shallow depth of field, no people, no text"
+    },
+    {
+      "caption": "シーン4：証明を迫られる",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "「手を見せてよ」って疑われたのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "返しがね。「信じられないならレスしないほうがいい」"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "落ち着きすぎててかっこいいのだ…"
+        }
+      ],
+      "image_prompt": "An old wooden desk with a closed notebook and a cooling cup of tea, soft window light, calm dignified atmosphere, no people, no text"
+    },
+    {
+      "caption": "シーン5：オチ",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "終盤の話題は東京オリンピックと力道山よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "バトル募集が覆面レスラー談義になったのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "唯一のバトルはテレビの中。あなたの昔話も聞かせて"
+        }
+      ],
+      "image_prompt": "A vintage wooden-cased television set in a shadowy tatami room, static-lit screen glow, 1960s Japanese living room, nostalgic sepia tone, no people, no text"
+    }
+  ],
+  "caption": "70歳がバトルを募集した結果、真空管ラジオと覆面レスラーの話で終わったスレ。あなたの「初めて」の思い出も教えてほしいのだ。",
+  "hashtags": [
+    "#ずんだもん",
+    "#四国めたん",
+    "#おーぷん2ちゃんねる",
+    "#昭和レトロ",
+    "#ネット老人会"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "70歳(昭和31年生まれ)の おん爺民なんだが誰かバトルしてくれ",
+  "source_thread": {
+    "id": "livejupiter-1785665616",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785665616/",
+    "title": "70歳(昭和31年生まれ)の おん爺民なんだが誰かバトルしてくれ"
+  }
+}

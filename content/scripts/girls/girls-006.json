@@ -1,0 +1,113 @@
+{
+  "id": "girls-006",
+  "title": "ゲーム時間ゼロのスレが料理実況に乗っ取られる件",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "時間ないスレが料理実況に",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ゲームする時間、完全にゼロなのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "あら、結婚して赤ちゃんが産まれた方のスレね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "このスレ、なぜか最後は料理実況になるのだ"
+        }
+      ],
+      "image_prompt": "soft pastel abstract background, faint game controller silhouette fading into blurred household shapes, warm evening light, no text, no faces"
+    },
+    {
+      "caption": "レスは優しい",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "レスは優しいのよ。子供と一緒にやればって"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "本人は真顔で、格ゲーできるかな?って返してるのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "レースゲームを用意しろ、で即解決してるわね"
+        }
+      ],
+      "image_prompt": "cozy living room abstract shapes, tv glow, soft toys silhouette, pastel colors, dreamy blur, no text, no faces"
+    },
+    {
+      "caption": "ツッコまれる",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "でも突っ込まれるのだ。掲示板やる時間はあるんかって"
+        },
+        {
+          "speaker": "metan",
+          "text": "赤ちゃんを膝に乗せて幼児番組を見てるそうよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "スマホのゲームはやってるらしいのだ…"
+        }
+      ],
+      "image_prompt": "abstract smartphone glow in dim room, floating soft bubbles, muted pastel palette, gentle bokeh, no text, no faces"
+    },
+    {
+      "caption": "本音がしみる",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "じゃあゲームしてるじゃない"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "やりたいゲームと違うのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "寝てからできるけど、寝た方が体調がいいって"
+        }
+      ],
+      "image_prompt": "night window abstract, dim lamp light, blanket texture, calm blue and cream tones, quiet mood, no text, no faces"
+    },
+    {
+      "caption": "オチ：スレ乗っ取り",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "そこへ別の人が急に夏野菜の焼き浸しを作り出すの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "時間ない話は!? ごま油が跳ねてるのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "最後のレス、インスタでやれば？身バレ怖いわよって"
+        }
+      ],
+      "image_prompt": "abstract kitchen scene, sizzling pan steam, summer vegetables color blocks, warm golden light, painterly blur, no text, no faces"
+    }
+  ],
+  "caption": "「ゲームする時間がない」の相談スレ、途中から知らん人の料理実況になって終わる。最後の一言で全部持っていかれました。",
+  "hashtags": [
+    "#スレまとめ",
+    "#あるある",
+    "#ずんだもん",
+    "#四国めたん",
+    "#共感"
+  ],
+  "channel": "girls",
+  "genre": "girls",
+  "theme": "結婚して赤ちゃん産まれたらほんまにゲームやる時間なくなった",
+  "source_thread": {
+    "id": "livejupiter-1785662021",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785662021/",
+    "title": "結婚して赤ちゃん産まれたらほんまにゲームやる時間なくなった"
+  }
+}

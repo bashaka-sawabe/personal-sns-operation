@@ -111,6 +111,31 @@ def _thread_rules() -> str:
 - シーン1の caption はスレタイを20字以内に整えたもの（スレタイとして全編表示される）。"""
 
 
+def _fact_rules() -> str:
+    """裏取り済みの事実から作るときの追加ルール（trivia。docs/05 2章）。"""
+    return f"""
+
+ネタ元の事実について（最重要）:
+裏取り済みの事実が1つ与えられます。**事実の水増し・別の雑学の混入をしません。**
+- シーン1は「実は◯◯！？」型のフック。事実のいちばん意外な点を一言で言い切る。
+- 本編は「よくある思い込み → 実は → 根拠」の順。シーン4で出典に軽く触れる
+  （「◯◯の資料にある話なのだ」程度。URLや正式名称の羅列はしない）。
+- シーン{SCENE_COUNT}は、もう一段の意外か現代との接続で締める（まとめ・説教にしない）。
+- 与えられた事実と一次ソースの範囲を超えて断定しない。数字・年代を盛らない。
+- 事実が英語なら自然な日本語に直す。
+- 医療・投資・法律の助言に踏み込まない。"""
+
+
+def _fact_context(fact: dict) -> str:
+    """採用ネタ（fetch_facts.load_adopted の1件）をユーザーメッセージに展開する。"""
+    lines = [f"事実: {fact['fact']}"]
+    if fact.get("backing_note"):
+        lines.append(f"一次ソース: {fact['backing_note']}（{fact['backing_url']}）")
+    else:
+        lines.append(f"一次ソース: {fact['backing_url']}")
+    return "\n".join(lines)
+
+
 def _thread_context(thread: dict) -> str:
     """採用スレをユーザーメッセージに展開する。レスは翻案に足りるぶんだけ渡す。"""
     lines = [f"スレタイ: {thread['title']}", "", "レス:"]
@@ -267,11 +292,11 @@ def _fallback(cfg: dict, theme: str) -> dict:
 
 
 def generate(cfg: dict, theme: str, offline: bool = False,
-             thread: dict | None = None) -> dict:
+             thread: dict | None = None, fact: dict | None = None) -> dict:
     """台本JSONを返す。offline=True かAPIキー未設定ならテンプレを返す。
 
-    thread は採用スレ（fetch_threads.adopted_threads の1件）。
-    thread_source のチャンネル（girls / meme）はスレなしで生成しない:
+    thread は採用スレ（fetch_threads）、fact は裏取り済みネタ（fetch_facts）。
+    どのチャンネルもソース無しでは生成しない:
     LLMの0からの創作は展開もオチも平均値になり、つまらない（docs/04 2-2章・v5）。
     """
     if cfg.get("thread_source") and thread is None and not offline:
@@ -279,6 +304,12 @@ def generate(cfg: dict, theme: str, offline: bool = False,
             f"{cfg['name']} は引用スレが必要です（v5: 0からの創作はしない。docs/04 2-2章）。\n"
             "  tools/fetch_threads.py --board ... で収集し、--adopt で採用してから\n"
             "  make_video.py --channel ... --thread <スレID> で作ってください。"
+        )
+    if cfg.get("fact_source") and fact is None and not offline:
+        raise PipelineError(
+            f"{cfg['name']} は裏取り済みのネタが必要です（docs/05 3章）。\n"
+            "  tools/fetch_facts.py で収集し、--back で一次ソースを付けて --adopt してから\n"
+            "  make_video.py --channel ... --fact <ネタID> で作ってください。"
         )
     api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
     if offline or not api_key:
@@ -299,6 +330,10 @@ def generate(cfg: dict, theme: str, offline: bool = False,
         system += _thread_rules()
         user = (f"チャンネル: {cfg['name']}\n\n{_thread_context(thread)}\n\n"
                 "このスレを翻案して、オチから逆算した掛け合いショート動画の台本を作ってください。")
+    elif fact:
+        system += _fact_rules()
+        user = (f"チャンネル: {cfg['name']}\n\n{_fact_context(fact)}\n\n"
+                "この事実で「実は◯◯」型の掛け合いショート動画の台本を作ってください。")
     else:
         user = (f"チャンネル: {cfg['name']}\nテーマ: {theme}\n\n"
                 "このテーマで掛け合いショート動画の台本を作ってください。")

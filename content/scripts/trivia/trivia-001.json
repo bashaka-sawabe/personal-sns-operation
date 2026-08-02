@@ -1,0 +1,110 @@
+{
+  "id": "trivia-001",
+  "title": "トラのオレンジは獲物には緑に見えている",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "トラは獲物には緑色",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "え、トラってオレンジじゃないのだ!?"
+        },
+        {
+          "speaker": "metan",
+          "text": "わたくしたちにはね。でも鹿には緑よ"
+        }
+      ],
+      "image_prompt": "abstract jungle foliage in deep green, blurred stripes of warm orange dissolving into leaves, painterly, no text, no faces"
+    },
+    {
+      "caption": "思い込み:目立つ色",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "あんな派手な色、森で目立つのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "隠れるなら緑になればいいのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "それが、鹿の目にはもう緑なのよ"
+        }
+      ],
+      "image_prompt": "dense forest undergrowth at dusk, soft bokeh, warm and green tones blending together, no animals, no text"
+    },
+    {
+      "caption": "実は:色の受け取り方の差",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "どういうことなのだ?"
+        },
+        {
+          "speaker": "metan",
+          "text": "人は色を三種類の感覚で見分けるの"
+        },
+        {
+          "speaker": "metan",
+          "text": "鹿や猪は二種類。緑と赤が混ざるのよ"
+        }
+      ],
+      "image_prompt": "two overlapping abstract color fields, one rich full-spectrum, one reduced to blue and yellow tones, minimal geometric art, no text"
+    },
+    {
+      "caption": "根拠:大学の研究",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "それ、ちゃんとした話なのだ?"
+        },
+        {
+          "speaker": "metan",
+          "text": "ええ。英国の大学の研究にある話よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "じゃあトラは正しく迷彩なのだ…"
+        }
+      ],
+      "image_prompt": "stack of academic papers and a magnifying glass on a wooden desk, warm library lighting, no readable text, no faces"
+    },
+    {
+      "caption": "締め:もう一段の意外",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "ちなみに猫も同じ二色型と言われるわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "えっ、うちの猫にも緑なのだ!?"
+        },
+        {
+          "speaker": "metan",
+          "text": "世界の見え方、誰かに話したくなるわね"
+        }
+      ],
+      "image_prompt": "silhouette of tall grass at golden hour, soft gradient sky, calm minimal nature scene, no animals, no text"
+    }
+  ],
+  "caption": "トラのオレンジは、鹿や猪の目には緑。派手に見えるあの色こそ、森で消えるための迷彩だったという話。",
+  "hashtags": [
+    "#雑学",
+    "#トラ",
+    "#動物の不思議",
+    "#へえボタン",
+    "#ずんだもん"
+  ],
+  "channel": "trivia",
+  "genre": "trivia",
+  "theme": "Tigers look orange to humans because we ",
+  "source_fact": {
+    "id": "til-6ee474dd9d",
+    "fact": "Tigers look orange to humans because we are trichromats, but they appear green to deer and wild boars because they are dichromats",
+    "backing_url": "https://www.bristol.ac.uk/news/2019/may/camouflage-study.html",
+    "backing_note": "ブリストル大学の研究（Journal of the Royal Society Interface 掲載）"
+  }
+}

@@ -64,6 +64,16 @@ def warn_unfilled(data: dict, script_id: str, channel: str) -> None:
           file=sys.stderr)
 
 
+def warn_flat_dialogue(data: dict) -> None:
+    """会話が平坦（相槌だらけ・語尾が同じ）なら知らせる。
+
+    止めはしない。会話の善し悪しは最後は人が見るものだが、
+    「形容詞＋のだ」だけの台本が黙って通ると気づけない（#127）。
+    """
+    for issue in script_mod.dialogue_issues(data):
+        print(f"  ⚠️ 会話が平坦です: {issue}", file=sys.stderr)
+
+
 def load_cast(cfg: dict) -> list:
     """配役の立ち絵を集める。無いキャラは知らせた上で立ち絵なしで続ける。"""
     cast, missing = [], []
@@ -150,6 +160,7 @@ def make_one(channel: str, theme: str, offline: bool, script_only: bool,
              "backing_note": f.get("backing_note", "")})
     path = script_mod.save(data, script_id, scripts_dir)
     print(f"  台本: {os.path.relpath(path)}")
+    warn_flat_dialogue(data)
     if script_only:
         warn_unfilled(data, script_id, channel)
         return path

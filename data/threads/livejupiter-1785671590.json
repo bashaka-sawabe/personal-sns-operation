@@ -1,0 +1,492 @@
+{
+  "id": "livejupiter-1785671590",
+  "board": "livejupiter",
+  "thread": "1785671590",
+  "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785671590/",
+  "title": "負けたら安価でシコるオセロ",
+  "res_count": 120,
+  "res": [
+    {
+      "no": 1,
+      "text": "さぁ来い"
+    },
+    {
+      "no": 2,
+      "text": "!osero"
+    },
+    {
+      "no": 3,
+      "text": "やる？"
+    },
+    {
+      "no": 4,
+      "text": ">>3\n!cap1\n▲1 をセット：>>3"
+    },
+    {
+      "no": 5,
+      "text": ">>2\n!osero:w:......../......../...b..../...bb.../...bw.../......../......../........:D3:D4"
+    },
+    {
+      "no": 6,
+      "text": ">>5\n!osero:b:......../......../...bw.../...bw.../...bw.../......../......../........:E3:E4"
+    },
+    {
+      "no": 7,
+      "text": "イッチ枠じゃないのか"
+    },
+    {
+      "no": 8,
+      "text": ">>6\n!osero:w:......../......../...bw.../...bbb../...bw.../......../......../........:F4:E4"
+    },
+    {
+      "no": 9,
+      "text": ">>8\n!osero:b:......../......../..www.../...wbb../...bw.../......../......../........:C3:D3,D4"
+    },
+    {
+      "no": 10,
+      "text": ">>9\n!osero:w:......../......../..www.../...wbb../...bbb../......../......../........:F5:E5"
+    },
+    {
+      "no": 11,
+      "text": ">>10\n!osero:b:......../......../..www.../...wbb../...bwb../.....w../......../........:F6:E5"
+    },
+    {
+      "no": 12,
+      "text": "たのしそうやんけ"
+    },
+    {
+      "no": 13,
+      "text": ">>11\n!osero:w:......../......../..www.../...wbb../...bbb../....bw../......../........:E6:E5"
+    },
+    {
+      "no": 14,
+      "text": ">>13\n!osero:b:......../......../..www.../...wbb../...wbb../...www../......../........:D6:D5,E6"
+    },
+    {
+      "no": 15,
+      "text": "長考やな"
+    },
+    {
+      "no": 16,
+      "text": ">>15\nそらそうよ"
+    },
+    {
+      "no": 17,
+      "text": "23て先を読まないと"
+    },
+    {
+      "no": 18,
+      "text": "小学のころオセロクラブやったで"
+    },
+    {
+      "no": 19,
+      "text": ">>14\n!osero:w:......../......../..www.../..bbbb../...wbb../...www../......../........:C4:D4"
+    },
+    {
+      "no": 20,
+      "text": ">>19\n!osero:b:......../......../..www.../..wwbb../..wwbb../...www../......../........:C5:C4,D4"
+    },
+    {
+      "no": 21,
+      "text": ">>20\n!osero:w:......../......../..www.../..wwbb../..wbbb../..bwww../......../........:C6:D5"
+    },
+    {
+      "no": 22,
+      "text": ">>21\n!osero:b:......../......../..wwww../..wwbw../..wbbw../..bwww../......../........:F3:F4,F5"
+    },
+    {
+      "no": 23,
+      "text": "ワイはイッチに勝たんなアカン"
+    },
+    {
+      "no": 24,
+      "text": "先に言っておくとワイはかなり長く考えるはやからゆるちて"
+    },
+    {
+      "no": 25,
+      "text": ">>22\n!osero:w:......../......../..wwww../..wwbw../..wbbw../..bbww../...b..../........:D7:D6"
+    },
+    {
+      "no": 26,
+      "text": "ええで考え"
+    },
+    {
+      "no": 27,
+      "text": ">>25\n!osero:b:......../......../..wwww../..wwbw../..wwbw../..bwww../...w..../...w....:D8:D7,D6,D5"
+    },
+    {
+      "no": 28,
+      "text": "黒有利ですね?"
+    },
+    {
+      "no": 29,
+      "text": ">>28\nそうなん？"
+    },
+    {
+      "no": 30,
+      "text": ">>27\n!osero:w:......../......../..wwww../.bbbbw../..wwbw../..bwww../...w..../...w....:B4:C4,D4"
+    },
+    {
+      "no": 31,
+      "text": ">>30\n!osero:b:......../......../..wwww../wwwwww../..wwbw../..bwww../...w..../...w....:A4:B4,C4,D4,E4"
+    },
+    {
+      "no": 32,
+      "text": ">>29\nそうです?"
+    },
+    {
+      "no": 33,
+      "text": ">>32\nワイバカやからわからんやったわ"
+    },
+    {
+      "no": 34,
+      "text": ">>31\n!osero:w:......../......../..wwwwb./wwwwwb../..wwbw../..bwww../...w..../...w....:G3:F4"
+    },
+    {
+      "no": 35,
+      "text": "でも黒やらかしたぞ"
+    },
+    {
+      "no": 36,
+      "text": ">>34\n!osero:b:......../......../..wwwwww/wwwwwb../..wwbw../..bwww../...w..../...w....:H3:G3"
+    },
+    {
+      "no": 37,
+      "text": ">>35\nこれでええんや"
+    },
+    {
+      "no": 38,
+      "text": "ワイの知らない考えが相手にあるんかな"
+    },
+    {
+      "no": 39,
+      "text": "序盤は自分の色少ない方が手数多いから有利やな"
+    },
+    {
+      "no": 40,
+      "text": ">>36\n!osero:w:......../......../..wwwwww/wwwwwb../..wwbw../..bwbw../...wb.../...w....:E7:E6"
+    },
+    {
+      "no": 41,
+      "text": ">>39\n確かに"
+    },
+    {
+      "no": 42,
+      "text": ">>37\n4-2に置いたのはやらかしやと思うけどなあ"
+    },
+    {
+      "no": 43,
+      "text": ">>40\n!osero:b:......../......../..wwwwww/wwwwwb../..wwww../..bwww../...ww.../...ww...:E8:E7,E6,E5"
+    },
+    {
+      "no": 44,
+      "text": "これで黒が負けでもしたらうんちブリブリですね?"
+    },
+    {
+      "no": 45,
+      "text": "一応オセロクラブのプライドを守りたい"
+    },
+    {
+      "no": 46,
+      "text": ">>43\n!osero:w:......../......../..wwwwww/wwwwwb../..wwbw../..bbww../..bww.../...ww...:C7:D6,E5"
+    },
+    {
+      "no": 47,
+      "text": ">>46\n!osero:b:......../......../..wwwwww/wwwwwb../..wwbw../..wbww../..www.../..www...:C8:C7,C6"
+    },
+    {
+      "no": 48,
+      "text": "ワイ頭回らんくなってきたわ"
+    },
+    {
+      "no": 49,
+      "text": "そろそろしかけますかね?"
+    },
+    {
+      "no": 50,
+      "text": "どうしよ"
+    },
+    {
+      "no": 51,
+      "text": "これ他人が勝手に石置けるんやな\nまあそんな野暮な事せんけどな"
+    },
+    {
+      "no": 52,
+      "text": ">>47\n!osero:w:......../......../..wwwwww/wwwwwb../..wwbbb./..wbww../..www.../..www...:G5:F5"
+    },
+    {
+      "no": 53,
+      "text": "バカのワイの代わりに誰か解説求む"
+    },
+    {
+      "no": 54,
+      "text": ">>52\n!osero:b:......../......../..wwwwww/wwwwwb../..wwwwww/..wbww../..www.../..www...:H5:G5,F5,E5"
+    },
+    {
+      "no": 55,
+      "text": ">>51\ncapないと置けないで"
+    },
+    {
+      "no": 56,
+      "text": ">>51\nおいても判定されないから大丈夫やぞ"
+    },
+    {
+      "no": 57,
+      "text": ">>54\n!osero:w:......../.....b../..wwwbww/wwwwwb../..wwwwww/..wbww../..www.../..www...:F2:F3"
+    },
+    {
+      "no": 58,
+      "text": ">>57\n!osero:b:.....w../.....w../..wwwwww/wwwwww../..wwwwww/..wbww../..www.../..www...:F1:F2,F3,F4"
+    },
+    {
+      "no": 59,
+      "text": ">>55\nほんまか安心や"
+    },
+    {
+      "no": 60,
+      "text": ">>58\n!osero:w:.....w../.....w../b.wwwwww/wbwwww../..bwwwww/..wbww../..www.../..www...:A3:B4,C5"
+    },
+    {
+      "no": 61,
+      "text": ">>60\n!osero:b:.....w../.....w../b.wwwwww/wwwwww../w.bwwwww/..wbww../..www.../..www...:A5:B4"
+    },
+    {
+      "no": 62,
+      "text": ">>61\n!osero:w:.....w../.....w../b.wwwwww/bwwwww../b.bwwwww/b.wbww../..www.../..www...:A6:A5,A4"
+    },
+    {
+      "no": 63,
+      "text": "あ?"
+    },
+    {
+      "no": 64,
+      "text": "ワイ負けたらショタとかはやめろよ(フリ)"
+    },
+    {
+      "no": 65,
+      "text": ">>62\n!osero:b:.....w../.....w../b.wwwwww/bwwwww../bwwwwwww/b.wbww../..www.../..www...:B5:C5"
+    },
+    {
+      "no": 66,
+      "text": "そっちおいたか"
+    },
+    {
+      "no": 67,
+      "text": "もう勝負ありましたね?"
+    },
+    {
+      "no": 68,
+      "text": "どっちや！？怖いで"
+    },
+    {
+      "no": 69,
+      "text": "どの秘孔から突いてやろうか"
+    },
+    {
+      "no": 70,
+      "text": ">>65\n!osero:w:.....w../.....w../b.wwwwww/bwwwww../bwwwwwww/bbbbww../..www.../..www...:B6:C6"
+    },
+    {
+      "no": 71,
+      "text": "黒の勝ちです?"
+    },
+    {
+      "no": 72,
+      "text": ">>70\n!osero:b:.....w../.....w../b.wwwwww/bwwwww../bwwwwwww/bwwbww../.wwww.../..www...:B7:B6,C6"
+    },
+    {
+      "no": 73,
+      "text": ">>72\n!osero:w:.....w../.....w../b.wwwwww/bwwwww../bwwwwwww/bwwbbbb./.wwww.../..www...:G6:F6,E6"
+    },
+    {
+      "no": 74,
+      "text": "ヒエェ"
+    },
+    {
+      "no": 75,
+      "text": ">>73\n!osero:b:.....w../.....w../b.wwwwww/bwwwww../bwwwwwww/bwwwwwww/.wwww.../..www...:H6:G6,F6,E6,D6"
+    },
+    {
+      "no": 76,
+      "text": "えっなんで"
+    },
+    {
+      "no": 77,
+      "text": ">>75\n!osero:w:.....w../.....w../b.wwwwww/bbwwww../bwbwwwww/bwwbwwww/.wwwb.../..wwwb..:F8:E7,D6,C5,B4"
+    },
+    {
+      "no": 78,
+      "text": ">>77\n!osero:b:.....w../.....w../bwwwwwww/bwwwww../bwbwwwww/bwwbwwww/.wwwb.../..wwwb..:B3:B4"
+    },
+    {
+      "no": 79,
+      "text": "なんでそこ置くんかなぁこれ(どんでん)"
+    },
+    {
+      "no": 80,
+      "text": ">>78\n!osero:w:.....w../.....w../bwwwwwww/bbbbbbb./bwbwwwww/bwwbwwww/.wwwb.../..wwwb..:G4:F4,E4,D4,C4,B4"
+    },
+    {
+      "no": 81,
+      "text": ">>80\n!osero:b:.....w../.....w../bwwwwwww/bbbbbbb./bwbwwwww/bwwbwwww/.wwwww../..wwwb..:F7:E7"
+    },
+    {
+      "no": 82,
+      "text": ">>81\n!osero:w:.....w../.....w../bwwwwwww/bbbbbbb./bwbwwwww/bbwbwwww/bwwwww../..wwwb..:A7:B6"
+    },
+    {
+      "no": 83,
+      "text": "(´・_・`)"
+    },
+    {
+      "no": 84,
+      "text": ">>82\n!osero:b:.....w../.....w../bwwwwwww/bbbbbbb./bwbwwwww/bbwbwwww/bwwwww../..wwwww.:G8:F8"
+    },
+    {
+      "no": 85,
+      "text": "40石差ぐらいつくやろか"
+    },
+    {
+      "no": 86,
+      "text": ">>84\n!osero:w:.....w../.....w../bwwwwwww/bbbbbbb./bwbbwwww/bbbbwwww/bbwwww../b.wwwww.:A8:B7,C6,D5"
+    },
+    {
+      "no": 87,
+      "text": ">>86\n!osero:b:.....w../.....w../bwwwwwww/bbbbbbb./bwbbwwww/bwbbwwww/bwwwww../bwwwwww.:B8:B7,B6"
+    },
+    {
+      "no": 88,
+      "text": "イッチ強いなぁ?"
+    },
+    {
+      "no": 89,
+      "text": ">>85\nもっとや"
+    },
+    {
+      "no": 90,
+      "text": "イッチシコりたいだけちゃうんけw"
+    },
+    {
+      "no": 91,
+      "text": ">>87\n!osero:w:.....w../.....w../bwwwwwww/bbbbbbb./bwbbwwww/bwbbwwww/bwwwww../bbbbbbbb:H8:G8,F8,E8,D8,C8,B8"
+    },
+    {
+      "no": 92,
+      "text": "ヒエェやめてぇ"
+    },
+    {
+      "no": 93,
+      "text": ">>91\n!osero:w:.....w../.....w../bwwwwwww/bbbbbbb./bwbbbwbw/bwbbwbbw/bbbbbbb./bbbbbbbb:G7:F6,G6,F7,E5,G5,E7,D7,C7,B7"
+    },
+    {
+      "no": 94,
+      "text": ">>93\n!osero:b:.....w../.....w../bwwwwwww/bbbbbbb./bwbbbwbw/bwbbwbww/bbbbbbbw/bbbbbbbb:H7:G6"
+    },
+    {
+      "no": 95,
+      "text": ">>94\n!osero:w:.....w../.....w../bwwwwwww/bbbbbbbb/bwbbbwbb/bwbbwbwb/bbbbbbbb/bbbbbbbb:H4:H5,H6,H7"
+    },
+    {
+      "no": 96,
+      "text": "イッチってプロかなんかなの？"
+    },
+    {
+      "no": 97,
+      "text": ">>95\n!osero:w:.....w../.....wb./bwwwwbbw/bbbbbbbb/bwbbbwbb/bwbbwbwb/bbbbbbbb/bbbbbbbb:G2:F3,G3"
+    },
+    {
+      "no": 98,
+      "text": ">>97\n!osero:b:.....ww./.....ww./bwwwwbww/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:G1:G2,G3,G4,G5"
+    },
+    {
+      "no": 99,
+      "text": ">>96\nせやぞ"
+    },
+    {
+      "no": 100,
+      "text": "あっイッチが黒やったw"
+    },
+    {
+      "no": 101,
+      "text": ">>98\n!osero:w:....bww./.....bw./bwwwwbbw/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:E1:F2,G3"
+    },
+    {
+      "no": 102,
+      "text": ">>99\nはえーすごいなあ"
+    },
+    {
+      "no": 103,
+      "text": ">>101\n!osero:b:...wwww./.....bw./bwwwwbbw/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:D1:E1"
+    },
+    {
+      "no": 104,
+      "text": ">>103\n!osero:w:...wwwwb/.....bb./bwwwwbbw/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:H1:G2"
+    },
+    {
+      "no": 105,
+      "text": "やめでよぉ"
+    },
+    {
+      "no": 106,
+      "text": ">>104\n!osero:b:...wwwwb/....wbb./bwwwwwbw/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:E2:F3"
+    },
+    {
+      "no": 107,
+      "text": ">>106\n!osero:w:...wwwwb/....wbbb/bwwwwwbb/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:H2:H3"
+    },
+    {
+      "no": 108,
+      "text": "これオセロいる？もうシコってええやろ"
+    },
+    {
+      "no": 109,
+      "text": ">>107\n!osero:w:..bbbbbb/....wbbb/bwwwwwbb/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:C1:D1,E1,F1,G1"
+    },
+    {
+      "no": 110,
+      "text": ">>109\n!osero:w:..bbbbbb/...bbbbb/bwbbbwbb/bbbbbbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:D2:E2,C3,D3,E3"
+    },
+    {
+      "no": 111,
+      "text": ">>110\n!osero:b:..bbbbbb/..wbbbbb/bwbwbwbb/bbbbwbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:C2:D3,E4"
+    },
+    {
+      "no": 112,
+      "text": ">>108\n負けてイきたいMなんやろ"
+    },
+    {
+      "no": 113,
+      "text": ">>111\n!osero:w:..bbbbbb/b.wbbbbb/bbbwbwbb/bbbbwbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:A2:B3"
+    },
+    {
+      "no": 114,
+      "text": ">>108\nオセロでしこれな問題ない"
+    },
+    {
+      "no": 115,
+      "text": ">>113\n!osero:b:..bbbbbb/bwwbbbbb/bwbwbwbb/bwbbwbwb/bwbbbwwb/bwbbwbwb/bbbbbbbb/bbbbbbbb:B2:B3,B4"
+    },
+    {
+      "no": 116,
+      "text": ">>115\n!osero:w:.bbbbbbb/bbbbbbbb/bbbbbwbb/bbbbbbwb/bbbbbbwb/bbbbwbbb/bbbbbbbb/bbbbbbbb:B1:B2,C2,B3,D3,B4,E4,B5,F5,B6,G6"
+    },
+    {
+      "no": 117,
+      "text": "やめでよぉ"
+    },
+    {
+      "no": 118,
+      "text": "はい"
+    },
+    {
+      "no": 119,
+      "text": "安価はよ"
+    },
+    {
+      "no": 120,
+      "text": ">>117\nいい声で鳴くねぇ"
+    }
+  ],
+  "fetched_at": "2026-08-02 21:41:43",
+  "status": "candidate"
+}

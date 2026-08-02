@@ -44,8 +44,11 @@ BOARDS = {
     "news4vip": "hayabusa",      # VIP。ネタ・大喜利系
 }
 
-# 相手サーバーに負荷をかけない取得間隔（秒）
-FETCH_INTERVAL = 1.5
+# 相手サーバーに負荷をかけない取得間隔（秒）。
+# 1.5秒では8本連続の取得で429（Too Many Requests）が出て半分取りこぼした（#99）
+FETCH_INTERVAL = 6.0
+# 429を食らったときに待つ秒数。相手のレート制限が明けるのを待つ
+RETRY_WAIT = 25.0
 
 # 候補にするレス数の範囲。少なすぎると展開もオチも無く、
 # 多すぎるとショートの尺（15〜40秒）に刈り込めない
@@ -72,10 +75,20 @@ def _check_domain(url: str) -> None:
 
 
 def _http(url: str, timeout: float = 20) -> bytes:
+    """取得する。429は一度だけ待って引き直す（media.py の Openverse と同じ約束）。"""
     _check_domain(url)
     req = urllib.request.Request(url, headers=_UA)
-    with urllib.request.urlopen(req, timeout=timeout) as res:
-        return res.read()
+    for attempt in (1, 2):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as res:
+                return res.read()
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt == 1:
+                print(f"  レート制限のため{RETRY_WAIT:.0f}秒待ちます", file=sys.stderr)
+                time.sleep(RETRY_WAIT)
+                continue
+            raise
+    raise PipelineError(f"取得に失敗しました（429が続いています）: {url}")
 
 
 def _decode(data: bytes) -> str:
@@ -99,6 +112,28 @@ def _clean_body(body: str) -> str:
     text = re.sub(r"<[^>]+>", "", text)
     text = html.unescape(text)
     return re.sub(r"[ \t]+", " ", text).strip()
+
+
+# 候補から外すスレタイの型。目視選別のノイズを減らすためのもので、
+# 面白いスレを機械が落とすリスクの方が高いので、確実に使えないものだけを対象にする
+_NOISE_PATTERNS = (
+    # 実況スレ: レスが試合経過の断片で、ショートのオチにならない
+    re.compile(r"^【(実況|速報)】"),
+    re.compile(r"(実況|放送)スレ"),
+    # 続き物: 前提知識が要る。「Part10」「・22」「part995」「総合スレ69」など
+    re.compile(r"(part|pt\.|★)\s*\d+", re.I),
+    re.compile(r"[・･]\s*\d+\s*$"),
+    # 末尾が2桁以上の通し番号だけのもの（「ファンクラブ69」「〜部10」）。
+    # 1桁は「FF15」「Windows 7」のような題材そのものと紛れるので対象にしない
+    re.compile(r"[^\d]\d{2,}\s*$"),
+    # 定期の雑談・避難所系: 常連の内輪の会話でオチが無い
+    re.compile(r"(雑談|待避所|避難所|総合)"),
+)
+
+
+def _is_noise(title: str) -> bool:
+    """目視選別に載せる価値が無いスレタイか。"""
+    return any(p.search(title) for p in _NOISE_PATTERNS)
 
 
 def list_threads(board: str) -> list:
@@ -200,8 +235,7 @@ def collect(board: str, limit: int) -> list:
     for row in list_threads(board):
         if not (MIN_RES <= row["res_count"] <= MAX_RES):
             continue
-        # 「Part2」「★3」のような続き物は前提知識が要るので、単発で完結するスレを優先する
-        if re.search(r"(part|Part|PART|★|\bpt\.)\s*\d+", row["title"]):
+        if _is_noise(row["title"]):
             continue
         if f"{board}-{row['thread']}" in known:
             continue

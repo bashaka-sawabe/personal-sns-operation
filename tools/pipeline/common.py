@@ -129,11 +129,22 @@ def split_phrases(text: str, min_len: int = 6) -> list:
 
 
 def wrap_japanese(text: str, per_line: int) -> str:
-    """日本語は単語境界が無いので文字数で折り返す。句読点は行頭に送らない。"""
+    """日本語は単語境界が無いので文字数で折り返す。句読点は行頭に送らない。
+
+    必要な行数を先に決めてから均等に割る。上限まで貪欲に詰めると最終行に
+    1文字だけ残ることがあり（「また行けない飲み／会」）、テロップとして目立って悪い。
+    per_line は「1行がこれを超えたら画面外」という上限で、詰める目標値ではない。
+    """
     text = " ".join((text or "").split())
+    if not text:
+        return ""
+    rows = max(1, -(-len(text) // per_line))
+    width = -(-len(text) // rows)   # 均等に割ったときの1行の文字数
     lines, line = [], ""
     for ch in text:
-        if len(line) >= per_line and ch not in "、。」』ー":
+        # 句読点・閉じ括弧・長音は行頭に送らない。ただし上限は超えさせない
+        hang = ch in "、。」』ー" and len(line) < per_line
+        if len(line) >= width and not hang:
             lines.append(line)
             line = ""
         line += ch

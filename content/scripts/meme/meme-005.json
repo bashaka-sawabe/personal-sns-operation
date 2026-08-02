@@ -1,0 +1,113 @@
+{
+  "id": "meme-005",
+  "title": "登録者13人Vtuberのスレが自滅していく",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "ワイVtuberだけど質問ある？",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ボク、Vtuberなのだ！質問あるのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "急ね。ちなみに登録者は何人かしら"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "13人なのだ。同時視聴は3人なのだ"
+        }
+      ],
+      "image_prompt": "abstract dark blue stage with a single tiny spotlight, empty audience seats in silhouette, glowing particles, no text, no faces, cinematic"
+    },
+    {
+      "caption": "リンク貼れ→拒否で炎上",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "じゃあチャンネル貼ってみて。宣伝よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "やだ。そういう売名はしない信念なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "質問ある？って言い出したの、あなたよ"
+        }
+      ],
+      "image_prompt": "abstract glowing chain link breaking apart over a deep navy gradient, digital fragments, no text, no logos, moody lighting"
+    },
+    {
+      "caption": "ファンとか恥ずかしい発言",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "だいたい、君らがファンとか恥ずかしいのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "わたくし今、静かに傷ついたのだけど"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "でも本音はちやほやされたいのだ"
+        }
+      ],
+      "image_prompt": "abstract translucent mask floating in dark void, cracked surface, cool purple rim light, no faces, no text, symbolic"
+    },
+    {
+      "caption": "初期費用と借金の告白",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "ちなみに、絵とか機材はどうしたの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "モデルが12万、機材で25万なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "あら。それ、借金って言ってなかった？"
+        }
+      ],
+      "image_prompt": "abstract stack of glowing coins dissolving into digital dust, dark teal background, soft bokeh, no text, no logos"
+    },
+    {
+      "caption": "オチ：媚び売ってる",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "で、伸びるために何かしてるの？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "媚び売ってるのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "信念、3分ももたなかったわね"
+        }
+      ],
+      "image_prompt": "abstract collapsing house of cards made of light, dark background, glowing edges, dramatic shadow, no text, no faces"
+    }
+  ],
+  "caption": "登録者13人のVtuberが「質問ある？」→リンクは貼らない、ファンは恥ずかしい。それで最後の一言がこれ。擁護できる人いる？",
+  "hashtags": [
+    "#おーぷん2ちゃんねる",
+    "#Vtuber",
+    "#ずんだもん",
+    "#四国めたん",
+    "#ネットの闇"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "ワイはVtuberだけど質問ある？",
+  "source_thread": {
+    "id": "livejupiter-1785665604",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785665604/",
+    "title": "ワイはVtuberだけど質問ある？"
+  }
+}

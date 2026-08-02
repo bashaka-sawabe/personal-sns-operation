@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""trivia（実はそうだったんだ）のネタ収集と裏取り管理（docs/04 2-2章・docs/05 3章）。
+"""事実ベースのネタ収集と裏取り管理（trivia / heisei。docs/04 2-2章・docs/05 3章）。
 
-    # Reddit r/todayilearned から候補を集める（発見ルート）
+    # Reddit r/todayilearned から候補を集める（trivia の発見ルート）
     .venv/bin/python tools/fetch_facts.py --reddit
 
-    # 自分で見つけたネタを積む
+    # 自分で見つけたネタを積む（heisei は --channel heisei）
     .venv/bin/python tools/fetch_facts.py --add "ハチミツは腐らない" --from "https://..."
+    .venv/bin/python tools/fetch_facts.py --add "たまごっちの発売は1996年" --channel heisei
 
     # 裏取り（一次ソース）を付ける → 付いて初めて採用できる
     .venv/bin/python tools/fetch_facts.py --back til-abc123 --url "https://www.maff.go.jp/..." --note "農水省のQ&A"
@@ -94,9 +95,11 @@ def load_adopted(fact_id: str) -> dict:
     return data
 
 
-def _new_fact(fact_id: str, fact: str, discovered_from: str) -> dict:
+def _new_fact(fact_id: str, fact: str, discovered_from: str,
+              channel: str = "trivia") -> dict:
     return {
         "id": fact_id,
+        "channel": channel,                   # trivia / heisei。ネタの置き場を分ける
         "fact": fact,
         "discovered_from": discovered_from,   # 発見ルート（裏取りには使えない）
         "backing_url": "",                    # 一次ソース。空のままでは採用できない
@@ -126,9 +129,10 @@ def collect_reddit(limit: int) -> list:
     return saved
 
 
-def add_manual(fact: str, discovered_from: str) -> str:
-    fact_id = "fact-" + hashlib.sha1(fact.encode()).hexdigest()[:10]
-    return _save(_new_fact(fact_id, fact.strip(), discovered_from or ""))
+def add_manual(fact: str, discovered_from: str, channel: str = "trivia") -> str:
+    prefix = "heisei" if channel == "heisei" else "fact"
+    fact_id = f"{prefix}-" + hashlib.sha1(fact.encode()).hexdigest()[:10]
+    return _save(_new_fact(fact_id, fact.strip(), discovered_from or "", channel))
 
 
 def set_backing(fact_id: str, url: str, note: str) -> None:
@@ -152,15 +156,17 @@ def mark(fact_id: str, status: str) -> None:
     _save(data)
 
 
-def show_list() -> None:
-    rows = saved_facts()
+def show_list(channel: str = "") -> None:
+    rows = [f for f in saved_facts()
+            if not channel or f.get("channel", "trivia") == channel]
     if not rows:
         print("候補がありません。--reddit か --add で集めてください。")
         return
     icons = {"candidate": "・", "adopted": "✅", "rejected": "❌"}
     for f in rows:
         backed = "🔗" if f.get("backing_url") else "  "
-        print(f"{icons.get(f['status'], '?')}{backed} {f['id']}  {f['fact'][:60]}")
+        ch = f.get("channel", "trivia")
+        print(f"{icons.get(f['status'], '?')}{backed} [{ch}] {f['id']}  {f['fact'][:55]}")
     print("\n🔗=裏取り済み。裏取りが無いと --adopt できません")
 
 
@@ -170,6 +176,8 @@ def main() -> None:
     p.add_argument("--limit", type=int, default=15, help="収集する候補数（既定15）")
     p.add_argument("--add", metavar="FACT", help="ネタを手で積む")
     p.add_argument("--from", dest="discovered_from", metavar="URL", help="--add の発見元URL")
+    p.add_argument("--channel", default="trivia", choices=("trivia", "heisei"),
+                   help="--add の対象チャンネル（既定 trivia）／--list の絞り込み")
     p.add_argument("--back", metavar="ID", help="裏取りを付ける対象")
     p.add_argument("--url", help="--back で付ける一次ソースURL")
     p.add_argument("--note", help="--back の補足（何のソースか）")
@@ -180,7 +188,8 @@ def main() -> None:
 
     try:
         if args.list:
-            show_list()
+            # --list は既定で全件。--channel を明示したときだけ絞る
+            show_list(args.channel if "--channel" in sys.argv else "")
         elif args.back:
             set_backing(args.back, args.url or "", args.note or "")
             print(f"裏取りを記録: {args.back}")
@@ -191,7 +200,8 @@ def main() -> None:
             mark(args.reject, "rejected")
             print(f"不採用: {args.reject}")
         elif args.add:
-            print(f"追加: {os.path.relpath(add_manual(args.add, args.discovered_from or ''))}")
+            path = add_manual(args.add, args.discovered_from or "", args.channel)
+            print(f"追加: {os.path.relpath(path)}（{args.channel}）")
         elif args.reddit:
             saved = collect_reddit(args.limit)
             print(f"{len(saved)}本を保存しました → data/facts/")

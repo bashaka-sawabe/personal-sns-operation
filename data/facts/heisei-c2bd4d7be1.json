@@ -1,0 +1,10 @@
+{
+  "id": "heisei-c2bd4d7be1",
+  "channel": "heisei",
+  "fact": "iモードは1999年2月22日にNTTドコモが開始した。2006年1月時点で登録者数4568万人と世界最大の携帯ネット接続サービスだった。2026年3月31日にFOMA停波と同時に完全終了する",
+  "discovered_from": "https://ja.wikipedia.org/wiki/Iモード",
+  "backing_url": "https://ja.wikipedia.org/wiki/Iモード",
+  "backing_note": "Wikipedia。契約者数はギネス・ワールド・レコーズを出典として参照",
+  "fetched_at": "2026-08-02 23:37:47",
+  "status": "adopted"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "heisei-9bfa7fe9d3",
+  "channel": "heisei",
+  "fact": "ポケットモンスター赤・緑は1996年2月27日にゲームボーイ用ソフトとして任天堂から発売された。発売初日の出荷は約13万本、初週は約23万本",
+  "discovered_from": "https://ja.wikipedia.org/wiki/ポケットモンスター_赤・緑",
+  "backing_url": "https://ja.wikipedia.org/wiki/ポケットモンスター_赤・緑",
+  "backing_note": "Wikipedia。出荷本数のみ脚注あり",
+  "fetched_at": "2026-08-02 23:37:47",
+  "status": "adopted"
+}

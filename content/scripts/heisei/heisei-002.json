@@ -1,0 +1,176 @@
+{
+  "id": "heisei-002",
+  "title": "1985年生まれ位が懐かしい平成グッズ6選",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "平成生まれが懐かしい6選",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "あれ、覚えてるかしら？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "何の話なのだ！？"
+        },
+        {
+          "speaker": "metan",
+          "text": "1985年生まれ位が懐かしい6選よ"
+        }
+      ],
+      "image_prompt": "nostalgic 1990s Japanese living room shelf, abstract silhouettes of retro gadgets, warm dusty light, no text, no faces, soft film grain"
+    },
+    {
+      "caption": "ポケベル",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "ポケベル。2019年終了"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "最近なのだ"
+        }
+      ],
+      "image_prompt": "abstract small rectangular pager silhouette on dark table, single beam of light, retro 90s mood, no text, no logo, no faces"
+    },
+    {
+      "caption": "たまごっち",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "たまごっち1000万個"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "異常なのだ"
+        }
+      ],
+      "image_prompt": "abstract egg-shaped handheld toy silhouette, pastel background, soft shadows, 1990s toy shop mood, no text, no logo, no faces"
+    },
+    {
+      "caption": "MD",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "MD。33年で終了"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ"
+        }
+      ],
+      "image_prompt": "abstract square disc case silhouette, glossy plastic reflection, minimal dark background, retro audio mood, no text, no logo, no faces"
+    },
+    {
+      "caption": "プリクラ",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "プリクラは1995年7月"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "古いのだ"
+        }
+      ],
+      "image_prompt": "abstract arcade photo booth curtain silhouette, neon pink and blue glow, 1990s game center mood, no text, no logo, no faces"
+    },
+    {
+      "caption": "iモード",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "iモード4568万人"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "すごいのだ"
+        }
+      ],
+      "image_prompt": "abstract flip phone silhouette glowing screen, dark blue gradient background, early mobile internet mood, no text, no logo, no faces"
+    },
+    {
+      "caption": "ポケモン赤・緑",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "赤・緑。1996年2月"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "歴史なのだ"
+        }
+      ],
+      "image_prompt": "abstract handheld game console silhouette in red and green light, minimal background, 1990s mood, no text, no logo, no faces"
+    },
+    {
+      "caption": "締め",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "当時は全部、当たり前だったのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今は全部消えてるのだ…"
+        },
+        {
+          "speaker": "metan",
+          "text": "あなたはどれを持ってたかしら？"
+        }
+      ],
+      "image_prompt": "empty wooden drawer with soft dust and warm sunset light, nostalgic emptiness, no objects with text, no faces, film grain"
+    }
+  ],
+  "caption": "ポケベル、たまごっち、MD、プリクラ、iモード、ポケモン赤・緑。全部当たり前だった時代。あなたはどれを持ってた？",
+  "hashtags": [
+    "#平成",
+    "#懐かしい",
+    "#あるある",
+    "#昭和生まれ",
+    "#平成レトロ"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "6選",
+  "source_facts": [
+    {
+      "id": "heisei-be90c1e097",
+      "fact": "ポケベルは1996年に東京テレメッセージだけで契約数120万を超えたが、2019年9月30日のサービス終了時には契約者が1500人を下回っていた。端末の製造終了から20年が経過していた",
+      "backing_url": "https://www.watch.impress.co.jp/docs/news/1156347.html",
+      "backing_note": "Impress Watch（東京テレメッセージの発表を報じた一次報道）"
+    },
+    {
+      "id": "heisei-88bbb9250a",
+      "fact": "たまごっちは1996年11月23日にバンダイから発売され、発売から1年経たずに1000万個を売り上げた。玩具業界では100万個で大ヒットと言われる中での異常な数字で、供給が追いつかず問い合わせが1日1万件を超え、バンダイは謝罪広告を出した",
+      "backing_url": "https://www.bandai.co.jp/press/2025/251119.php",
+      "backing_note": "バンダイ公式プレスリリース（たまごっち30周年）"
+    },
+    {
+      "id": "heisei-8345428ecf",
+      "fact": "MD（ミニディスク）は1992年11月にソニーが録再機を発売した。2025年2月28日に全ての生産を終了し、33年の歴史に幕を閉じた",
+      "backing_url": "https://ja.wikipedia.org/wiki/ミニディスク",
+      "backing_note": "Wikipedia経由でソニーの生産終了発表（2025年1月）を確認"
+    },
+    {
+      "id": "heisei-02886c8fde",
+      "fact": "プリント倶楽部（プリクラ）は1995年7月にゲーム会社アトラスが発売した。第一次ブームのピークは1999年頃",
+      "backing_url": "https://ja.wikipedia.org/wiki/プリント倶楽部",
+      "backing_note": "Wikipedia（※記事の出典表示は不十分との警告あり。稼働年・企業名は本文記載）"
+    },
+    {
+      "id": "heisei-c2bd4d7be1",
+      "fact": "iモードは1999年2月22日にNTTドコモが開始した。2006年1月時点で登録者数4568万人と世界最大の携帯ネット接続サービスだった。2026年3月31日にFOMA停波と同時に完全終了する",
+      "backing_url": "https://ja.wikipedia.org/wiki/Iモード",
+      "backing_note": "Wikipedia。契約者数はギネス・ワールド・レコーズを出典として参照"
+    },
+    {
+      "id": "heisei-9bfa7fe9d3",
+      "fact": "ポケットモンスター赤・緑は1996年2月27日にゲームボーイ用ソフトとして任天堂から発売された。発売初日の出荷は約13万本、初週は約23万本",
+      "backing_url": "https://ja.wikipedia.org/wiki/ポケットモンスター_赤・緑",
+      "backing_note": "Wikipedia。出荷本数のみ脚注あり"
+    }
+  ]
+}

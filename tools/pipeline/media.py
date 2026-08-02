@@ -564,8 +564,16 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
 
     scenes, providers, used_speakers = [], [], []
     n_scenes = len(script["scenes"])
+    # 「◯◯選」リスト形式は20シーン超になる。1シーン1枚だと素材の取得と目視判定が
+    # 数十回走って現実的でないので、数枚を使い回す（bg_pool 枚でローテーション）
+    pool_size = style.get("bg_pool", 0) or n_scenes
+    bg_cache: dict[int, dict] = {}
     for i, scene in enumerate(script["scenes"]):
-        bg = background(i, scene.get("image_prompt", ""), asset_dir, api_key, offline)
+        slot = i % pool_size
+        if slot not in bg_cache:
+            bg_cache[slot] = background(slot, scene.get("image_prompt", ""),
+                                        asset_dir, api_key, offline)
+        bg = bg_cache[slot]
         providers.append(bg["provider"])
         phrases = []
         for line in scene["dialogue"]:

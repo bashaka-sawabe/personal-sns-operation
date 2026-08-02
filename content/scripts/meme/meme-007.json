@@ -1,0 +1,113 @@
+{
+  "id": "meme-007",
+  "title": "元警備員に質問ありゅ？スレが最後まで折れない",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "元警備員に質問ありゅ？",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "「元警備員に質問ありゅ？」噛んでるのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "スレタイの時点で信頼度ゼロよ、これ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "でも中身は意外とガチだったのだ！"
+        }
+      ],
+      "image_prompt": "empty night office lobby, dim security lighting, long shadows on polished floor, no people, no text, cinematic, moody"
+    },
+    {
+      "caption": "警備は派遣じゃない豆知識",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "まず「警備って派遣じゃないの？」の質問ね。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "えっ、派遣じゃないのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "警備は法律で人材派遣が禁止、請負契約なのよ。"
+        }
+      ],
+      "image_prompt": "abstract paper contract documents stacked on a desk, soft window light, shallow depth of field, no text, no faces"
+    },
+    {
+      "caption": "夜勤で見たもの",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "夜の巡回で怖いもの見たことあるのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "イッチ曰く「したいくらいしかない」ですって。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "シタイはデカいのだ…！"
+        }
+      ],
+      "image_prompt": "deserted corridor at midnight, flashlight beam on the wall, silent building interior, no people, no text, eerie calm"
+    },
+    {
+      "caption": "出世の話で絡まれ始める",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "警備から役員になる人もいるのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "「独立のハードルも低い」って言った途端よ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "絡み屋が「また大きく見せてるのだ」って！"
+        }
+      ],
+      "image_prompt": "empty meeting room chairs facing each other, tense atmosphere, cold daylight, no people, no text, minimal"
+    },
+    {
+      "caption": "最後まで言えない一言",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "何度詰められても、イッチは絶対に認めないの。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "最後のレスが「なぜ素直に言えないのか」なのだ…"
+        },
+        {
+          "speaker": "metan",
+          "text": "この空気、職場にも一人はいるわよね。"
+        }
+      ],
+      "image_prompt": "single empty chair under a spotlight in a dark room, symbolic standoff, no people, no text, quiet drama"
+    }
+  ],
+  "caption": "噛んだスレタイから始まる元警備員の質問スレ。派遣禁止の豆知識も出るのに、最後は絡み屋に詰められて終わる。あなたの職場にもいる？",
+  "hashtags": [
+    "#おーぷん2ちゃんねる",
+    "#ずんだもん",
+    "#四国めたん",
+    "#スレ民の日常",
+    "#警備員"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "元警備員に質問ありゅ？",
+  "source_thread": {
+    "id": "livejupiter-1785672652",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785672652/",
+    "title": "元警備員に質問ありゅ？"
+  }
+}

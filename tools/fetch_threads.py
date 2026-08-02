@@ -182,6 +182,17 @@ def adopted_threads() -> list:
     return [t for t in saved_threads() if t.get("status") == "adopted"]
 
 
+def load_adopted(thread_id: str) -> dict:
+    """採用済みスレを1本返す。未採用は拒否する（採用は人の目視で決める約束。docs/05 3章）。"""
+    data = _load(thread_id)
+    if data.get("status") != "adopted":
+        raise PipelineError(
+            f"{thread_id} は採用されていません（現在: {data.get('status')}）。\n"
+            "  tools/fetch_threads.py --list で中身を確認し、--adopt を付けてください。"
+        )
+    return data
+
+
 def collect(board: str, limit: int) -> list:
     """板から候補を集めて保存する。選定は機械で絞りすぎず、人の目視に委ねる。"""
     known = {t["id"] for t in saved_threads()}

@@ -93,6 +93,33 @@ def _schema(cfg: dict) -> dict:
     }
 
 
+def _thread_rules() -> str:
+    """引用スレから作るときの追加ルール（v5: オチ逆算。docs/05 2章）。"""
+    return f"""
+
+ネタ元のスレについて（v5・最重要）:
+ネタ元として実在のスレ（転載自由のおーぷん2ちゃんねる）が与えられます。
+**0からの創作はしません。面白さはスレが持っています。あなたの仕事は翻案とテンポです。**
+- まずスレ全体を読み、オチ（いちばん面白い展開・結末・ツッコミ）を一文で特定する。
+- シーン{SCENE_COUNT}はそのオチで締める。オチのあとに解説やまとめを足さない（蛇足で台無しになる）。
+- シーン1はスレタイの内容をフックにして、オチへの期待を作る。
+- 本編（シーン2〜4）はスレの展開を時系列で刈り込み、レスの応酬を2人の掛け合いに翻案する。
+  面白いレスの言い回しは活かしてよい（転載自由ソース）。ただしキャラの口調に直す。
+- スレに無い展開・オチを創作しない。盛ってよいのは表現だけで、事実の水増しをしない。
+- 実在の人物名・企業名・場所など特定につながる情報はぼかすか落とす。
+- 誹謗中傷・差別的なレスは拾わない。
+- シーン1の caption はスレタイを20字以内に整えたもの（スレタイとして全編表示される）。"""
+
+
+def _thread_context(thread: dict) -> str:
+    """採用スレをユーザーメッセージに展開する。レスは翻案に足りるぶんだけ渡す。"""
+    lines = [f"スレタイ: {thread['title']}", "", "レス:"]
+    for r in thread["res"][:80]:
+        text = r["text"].replace("\n", " ")[:120]
+        lines.append(f"{r['no']}: {text}")
+    return "\n".join(lines)
+
+
 def _system(cfg: dict) -> str:
     """チャンネル設定からシステムプロンプトを組み立てる。"""
     cast_lines = "\n".join(
@@ -239,8 +266,20 @@ def _fallback(cfg: dict, theme: str) -> dict:
     }
 
 
-def generate(cfg: dict, theme: str, offline: bool = False) -> dict:
-    """台本JSONを返す。offline=True かAPIキー未設定ならテンプレを返す。"""
+def generate(cfg: dict, theme: str, offline: bool = False,
+             thread: dict | None = None) -> dict:
+    """台本JSONを返す。offline=True かAPIキー未設定ならテンプレを返す。
+
+    thread は採用スレ（fetch_threads.adopted_threads の1件）。
+    thread_source のチャンネル（girls / meme）はスレなしで生成しない:
+    LLMの0からの創作は展開もオチも平均値になり、つまらない（docs/04 2-2章・v5）。
+    """
+    if cfg.get("thread_source") and thread is None and not offline:
+        raise PipelineError(
+            f"{cfg['name']} は引用スレが必要です（v5: 0からの創作はしない。docs/04 2-2章）。\n"
+            "  tools/fetch_threads.py --board ... で収集し、--adopt で採用してから\n"
+            "  make_video.py --channel ... --thread <スレID> で作ってください。"
+        )
     api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
     if offline or not api_key:
         if not offline:
@@ -255,17 +294,22 @@ def generate(cfg: dict, theme: str, offline: bool = False) -> dict:
             "--offline を付けてください。"
         ) from None
 
+    system = _system(cfg)
+    if thread:
+        system += _thread_rules()
+        user = (f"チャンネル: {cfg['name']}\n\n{_thread_context(thread)}\n\n"
+                "このスレを翻案して、オチから逆算した掛け合いショート動画の台本を作ってください。")
+    else:
+        user = (f"チャンネル: {cfg['name']}\nテーマ: {theme}\n\n"
+                "このテーマで掛け合いショート動画の台本を作ってください。")
+
     client = anthropic.Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-opus-5",
         max_tokens=4000,
-        system=_system(cfg),
+        system=system,
         output_config={"format": {"type": "json_schema", "schema": _schema(cfg)}},
-        messages=[{
-            "role": "user",
-            "content": f"チャンネル: {cfg['name']}\nテーマ: {theme}\n\n"
-                       "このテーマで掛け合いショート動画の台本を作ってください。",
-        }],
+        messages=[{"role": "user", "content": user}],
     )
     if response.stop_reason == "refusal":
         raise PipelineError(f"生成を拒否されました（テーマを見直してください）: {theme}")

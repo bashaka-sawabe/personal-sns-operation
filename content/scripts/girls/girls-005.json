@@ -1,0 +1,113 @@
+{
+  "id": "girls-005",
+  "title": "嫁がスカート履かない問題の意外な結論",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "嫁がスカート履かない問題",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "えっ、スカート履かないだけで悩まれるのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "あら、旦那さんからの相談スレね。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "『嫁がスカート全く着ない、普通？』なのだ。"
+        }
+      ],
+      "image_prompt": "soft pastel wardrobe corner, hanging plain trousers and long-sleeve tops, morning light, minimal, no people, no text"
+    },
+    {
+      "caption": "服の傾向が語られる",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "長袖で肌も出さない、胸も目立たない服なのだ。"
+        },
+        {
+          "speaker": "metan",
+          "text": "下はチノパンみたいなもの、かしら。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "『動きづらいんじゃ？』ってレスもあるのだ。"
+        }
+      ],
+      "image_prompt": "neatly folded chino pants and knit tops on a wooden shelf, soft neutral tones, quiet interior, no people, no text"
+    },
+    {
+      "caption": "スレ民が暴走する",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "『履かないなら離婚って脅せ』って言われてるのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "落ち着きなさいな。理由が飛躍しすぎよ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "『じゃあお前が履け』も出てて大混乱なのだ。"
+        }
+      ],
+      "image_prompt": "chaotic swirl of pastel fabric swatches floating in air, abstract, dreamy, no people, no text"
+    },
+    {
+      "caption": "実は昔は履いていた",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "結婚前からそうなら、今さらじゃないの？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "それが、昔はたまに履いてたらしいのだ。"
+        },
+        {
+          "speaker": "metan",
+          "text": "膝下のやわらかいのとか、ワンピースとかね。"
+        }
+      ],
+      "image_prompt": "a soft knee-length dress hanging alone in warm sunlight, gentle shadows, nostalgic mood, no people, no text"
+    },
+    {
+      "caption": "オチ：理由はそこだった",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "そこに一言『めくれたり、たぐれるのが嫌なのでは』"
+        },
+        {
+          "speaker": "metan",
+          "text": "旦那さん『多分そうだと思う』で終了よ。"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "答え、最初から本人の中にあったのだ…！"
+        }
+      ],
+      "image_prompt": "a light skirt hem lifted gently by wind against a plain pale background, symbolic, soft focus, no people, no text"
+    }
+  ],
+  "caption": "「嫁がスカート履かない」相談スレ、まさかの自己解決。履かない理由、あなたは何？",
+  "hashtags": [
+    "#スレ紹介",
+    "#あるある",
+    "#夫婦のリアル",
+    "#ファッションの本音",
+    "#ずんだもん"
+  ],
+  "channel": "girls",
+  "genre": "girls",
+  "theme": "嫁がスカート全く着ないんだが普通？",
+  "source_thread": {
+    "id": "livejupiter-1785667068",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785667068/",
+    "title": "嫁がスカート全く着ないんだが普通？"
+  }
+}

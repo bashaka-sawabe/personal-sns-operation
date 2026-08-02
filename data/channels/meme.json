@@ -6,7 +6,24 @@
   "thread_source": true,
   "nakanohito": false,
   "cast": [
-    {"speaker": "metan", "role": "ツッコミ兼解説。文脈と出典を補う"},
-    {"speaker": "zundamon", "role": "ノリのいいボケ。ミームを体現して騒ぐ"}
-  ]
+    {
+      "speaker": "metan",
+      "role": "ツッコミ兼解説。文脈と出典を補う"
+    },
+    {
+      "speaker": "zundamon",
+      "role": "ノリのいいボケ。ミームを体現して騒ぐ"
+    }
+  ],
+  "style": {
+    "speed": 1.3,
+    "phrase_gap": 0.02,
+    "scene_tail": 0.08,
+    "punch_zoom": 1.14,
+    "cut_interval": 0.45,
+    "se": {
+      "scene": "meme_switch",
+      "last": "meme_ochi"
+    }
+  }
 }

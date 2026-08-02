@@ -6,7 +6,25 @@
   "nakanohito": false,
   "fact_source": true,
   "cast": [
-    {"speaker": "zundamon", "role": "驚く役。視聴者の代弁者として「え、そうなの!?」を担当"},
-    {"speaker": "metan", "role": "種明かし役。根拠と出典を軽やかに補う"}
-  ]
+    {
+      "speaker": "zundamon",
+      "role": "驚く役。視聴者の代弁者として「え、そうなの!?」を担当"
+    },
+    {
+      "speaker": "metan",
+      "role": "種明かし役。根拠と出典を軽やかに補う"
+    }
+  ],
+  "style": {
+    "speed": 1.18,
+    "phrase_gap": 0.07,
+    "scene_tail": 0.2,
+    "punch_zoom": 1.06,
+    "cut_interval": 0,
+    "se": {
+      "scene": "trivia_tick",
+      "reveal": "trivia_hirameki",
+      "last": "trivia_reveal"
+    }
+  }
 }

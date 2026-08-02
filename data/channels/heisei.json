@@ -7,7 +7,24 @@
   "fact_source": true,
   "thread_source": true,
   "cast": [
-    {"speaker": "metan", "role": "平成を生きた先輩。懐かしがって語る"},
-    {"speaker": "zundamon", "role": "平成を知らない後輩。「何それなのだ!?」と現代目線でツッコむ"}
-  ]
+    {
+      "speaker": "metan",
+      "role": "平成を生きた先輩。懐かしがって語る"
+    },
+    {
+      "speaker": "zundamon",
+      "role": "平成を知らない後輩。「何それなのだ!?」と現代目線でツッコむ"
+    }
+  ],
+  "style": {
+    "speed": 1.15,
+    "phrase_gap": 0.09,
+    "scene_tail": 0.25,
+    "punch_zoom": 1.05,
+    "cut_interval": 0,
+    "se": {
+      "scene": "heisei_don",
+      "last": "heisei_shime"
+    }
+  }
 }

@@ -42,11 +42,19 @@ ACCENT = r"\1c&H00D7FF&"   # 数字の強調色（金）。ASSはBGR並び
 WHITE_BGR = "FFFFFF"
 POP = r"{\fscx132\fscy132\t(0,110,\fscx100\fscy100)}"  # フレーズのポップイン
 
-# シーン頭のパンチイン（#90）。効果音の「ドン」と同時に画面全体を一瞬寄せて戻す。
-# 大手2chショートの場面転換の型。深追いすると酔うので「軽い」揺れに留める
-PUNCH_ZOOM = 1.09      # 寄りの深さ
+# シーン頭のパンチイン（#90）。効果音と同時に画面全体を一瞬寄せて戻す。
+# 深さはチャンネルの style から引く（#121）。カットの刻みが速い meme は強め、
+# 図解を読ませる trivia は弱め、というようにジャンルで最適値が違う（docs/02 1章）
+PUNCH_ZOOM = 1.09      # style.punch_zoom が無いときのフォールバック
 PUNCH_FRAMES = 7       # 戻り切るまでのフレーム数（30fpsで約0.23秒）
 SE_VOLUME = 0.55       # ナレーションを塗り潰さない音量
+
+# 背景を一定間隔で切り替える演出（#121）。ロンロンの天秤（51.2万）は
+# 2chと無関係の高刺激映像を0.4秒ごとにカットしてテンポを作っている（docs/02 2章）。
+# 静止画1枚しか無いので、拡大率と位置を切り替えて「別カット」に見せる
+CUT_ZOOMS = [1.06, 1.22, 1.12, 1.30, 1.16, 1.24]
+CUT_POSITIONS = [(0.30, 0.42), (0.68, 0.55), (0.45, 0.30), (0.58, 0.70),
+                 (0.35, 0.62), (0.72, 0.38)]
 
 
 def _check_text_width() -> None:
@@ -118,6 +126,27 @@ def _font_family() -> str:
     except (OSError, subprocess.SubprocessError):
         _font_cache["family"] = FONT_FALLBACK
     return _font_cache["family"]
+
+
+def _hard_cuts(dur: float, interval: float) -> str:
+    """一定間隔で拡大率と位置が切り替わる zoompan（＝カット割りの代用）。
+
+    Ken Burns の連続的な動きと違い、**不連続に切り替わる**のがポイント。
+    1枚の静止画でも「別カットに切り替わった」と目が認識する（docs/02 2章）。
+    """
+    frames = max(1, int(round(interval * FPS)))
+    n = len(CUT_ZOOMS)
+    # フレーム番号 on から「今どのカットか」を出し、その値を階段状に取り出す
+    idx = f"mod(floor(on/{frames}),{n})"
+    z = "+".join(f"{v}*eq({idx},{i})" for i, v in enumerate(CUT_ZOOMS))
+    x = "+".join(f"{p[0]}*eq({idx},{i})" for i, p in enumerate(CUT_POSITIONS))
+    y = "+".join(f"{p[1]}*eq({idx},{i})" for i, p in enumerate(CUT_POSITIONS))
+    return (
+        f"zoompan=z='{z}'"
+        f":x='(iw-iw/zoom)*({x})'"
+        f":y='(ih-ih/zoom)*({y})'"
+        f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS}"
+    )
 
 
 def _ken_burns(index: int, dur: float) -> str:
@@ -254,14 +283,16 @@ def _enable_expr(windows: list) -> str:
 
 
 def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = None,
-                 hook: str | None = None) -> str:
+                 hook: str | None = None, style: dict | None = None) -> str:
     """1シーンを mp4 にする。背景が映像ならループで敷き、静止画ならKen Burnsで動かす。
 
     cast は [(話者キー, 立ち絵パス), ...]（cast の並び順に 左・右 へ置く）。
     立ち絵は常時2体を減光して置き、発話中のキャラだけ通常の明るさを重ねる。
     素材が無いキャラは黙って省く（劣化継続。素材の置き場は docs/09 4-8）。
     hook はスレタイ（全シーン共通の見出し）。省略時はこのシーンの caption を使う。
+    style はチャンネルの演出設定（パンチインの深さ・背景カットの間隔）。
     """
+    style = style or {}
     out = os.path.join(work_dir, f"scene{index:02d}.mp4")
     ass = _scene_ass(scene, index, os.path.join(work_dir, f"sub{index:02d}.ass"),
                      _font_family(), hook or scene["caption"])
@@ -279,7 +310,8 @@ def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = Non
         base_chain = (
             f"scale={WIDTH * 2}:{HEIGHT * 2}:force_original_aspect_ratio=increase,"
             f"crop={WIDTH * 2}:{HEIGHT * 2},"
-            + _ken_burns(index, scene["dur"]) + ","
+            + (_hard_cuts(scene["dur"], cut) if (cut := style.get("cut_interval", 0))
+               else _ken_burns(index, scene["dur"])) + ","
             "eq=contrast=1.04:saturation=1.08:brightness=-0.04"
         )
 
@@ -305,9 +337,10 @@ def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = Non
             last = f"b{n}"
     graph.append(f"[{last}]{subs}[vsub]")
     # シーン頭のパンチイン。字幕ごと寄せるのは意図（大手の型はテロップも一緒に揺れる）
+    punch = style.get("punch_zoom", PUNCH_ZOOM)
     graph.append(
         f"[vsub]zoompan=z='if(lte(on,{PUNCH_FRAMES}),"
-        f"{PUNCH_ZOOM}-{PUNCH_ZOOM - 1:.2f}*on/{PUNCH_FRAMES},1)'"
+        f"{punch}-{punch - 1:.2f}*on/{PUNCH_FRAMES},1)'"
         f":x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2'"
         f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS}[vout]"
     )
@@ -362,10 +395,10 @@ def concat(parts: list, out_path: str, work_dir: str,
 
 
 def build(scenes: list, out_path: str, work_dir: str, bgm: str | None = None,
-          cast: list | None = None) -> str:
+          cast: list | None = None, style: dict | None = None) -> str:
     # スレタイ＝シーン1の caption。全シーンの上部に出しつづける（#93）
     hook = scenes[0]["caption"]
-    parts = [render_scene(s, i, work_dir, cast=cast, hook=hook)
+    parts = [render_scene(s, i, work_dir, cast=cast, hook=hook, style=style)
              for i, s in enumerate(scenes)]
     total = sum(s["dur"] for s in scenes)
     return concat(parts, out_path, work_dir, bgm=bgm, total_dur=total)

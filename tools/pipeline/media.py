@@ -43,25 +43,18 @@ PALETTE = [
     ("0x2b1d1d", "0x40282a"),
 ]
 
-# ---- テンポ（#90: 本人フィードバック「会話の間をもっと詰めて」） ----
-# フレーズ末尾の無音。0.12秒は登録者10万超の2chショートのラリーより間延びして
-# 聞こえた。0にすると息継ぎが消えて機械的になるので、知覚できる最小限に留める
-PHRASE_GAP = 0.05
-# シーン末尾の余白。読み終わり即カットの「詰まり」を避けられる最小限（0.35 → 0.15）
-SCENE_TAIL = 0.15
+# ---- テンポ（#90 → #121でチャンネル別に） ----
+# ここはチャンネル設定に style が無いときのフォールバック。
+# 実際の値は data/channels/<ch>.json の style から引く。
+# ジャンルごとに最適値が違うことが実測で分かっている（docs/02 1章）:
+# meme 26.7秒・テロップ1.1秒/枚、trivia 55〜59秒・2.0秒/枚、heisei 2.5秒/ネタ
+PHRASE_GAP = 0.05      # フレーズ末尾の無音。0にすると息継ぎが消えて機械的になる
+SCENE_TAIL = 0.15      # シーン末尾の余白。読み終わり即カットの「詰まり」を避ける最小限
 
-# シーン頭の効果音。大手2chショートは場面転換の「ドン」とオチの音でリズムを作っている。
-# 既定音源はffmpegで合成した自作（規約リスクなし）。差し替えるときは同名ファイルを置き、
-# クレジットが要る素材なら同名 .txt（サイドカー）を対で置く（BGM・立ち絵と同じ約束）
+# 効果音。効果音ラボ（商用無料・クレジット表記不要・収益化明示OK）から取得したものを
+# content/assets/se/<名前>.mp3 に置く。**Content ID登録は規約で禁止**されている点に注意。
+# どの音をどこで鳴らすかは style.se でチャンネルごとに変える（docs/02 1章）
 SE_DIR = os.path.join(ASSETS_DIR, "se")
-_SE_SPECS = {
-    # 転換の「ドン」: 減衰する低音＋短いノイズの立ち上がり
-    "don": "aevalsrc='exp(-16*t)*0.9*sin(2*PI*68*t)"
-           "+exp(-46*t)*0.35*(random(0)-0.5)':d=0.4:s=44100",
-    # オチの「チャン・チャン」: 2音下がりの短いフレーズ
-    "ochi": "aevalsrc='exp(-13*t)*0.5*sin(2*PI*523*t)*lt(t\\,0.18)"
-            "+exp(-9*(t-0.22))*0.55*sin(2*PI*392*t)*gte(t\\,0.22)':d=0.7:s=44100",
-}
 
 STOCK_DIR = os.path.join(ASSETS_DIR, "stock")
 PEXELS_SEARCH = "https://api.pexels.com/videos/search"
@@ -149,10 +142,10 @@ def voicevox_used() -> bool:
     return _voicevox["up"]
 
 
-def _voicevox_wav(text: str, path: str, speaker: int) -> None:
+def _voicevox_wav(text: str, path: str, speaker: int, speed: float) -> None:
     q = urllib.parse.urlencode({"text": text, "speaker": speaker})
     query = json.loads(_http(f"{VOICEVOX_URL}/audio_query?{q}", method="POST"))
-    query["speedScale"] = VOICEVOX_SPEED
+    query["speedScale"] = speed
     wav = _http(
         f"{VOICEVOX_URL}/synthesis?speaker={speaker}",
         method="POST",
@@ -172,17 +165,19 @@ def _say_wav(text: str, path: str, voice: str = "Kyoko", rate: int = 180) -> Non
         run([require("say"), "-r", str(rate), "-o", path, text])
 
 
-def narration(text: str, path: str, speaker: int) -> str:
+def narration(text: str, path: str, speaker: int,
+              speed: float = VOICEVOX_SPEED, gap: float = PHRASE_GAP) -> str:
     """セリフ1フレーズ分の音声を作り、44.1kHzモノラルwavで返す。
 
     speaker はVOICEVOXのスタイルID（キャラごとに固定。channels.CHARACTERS）。
-    末尾に PHRASE_GAP の無音を足す（息継ぎの最小限。値の根拠は定数のコメント）。
-    「音声の長さ＝字幕の表示時間」なので、この無音は字幕の余韻でもある（docs/09 4-3）。
+    speed / gap はチャンネルの style から来る（ジャンルで最適値が違う。docs/02 1章）。
+    末尾の無音は息継ぎの最小限。「音声の長さ＝字幕の表示時間」なので、
+    この無音は字幕の余韻でもある（docs/09 4-3）。
     """
     raw = path + ".raw"
     if ensure_voicevox():
         try:
-            _voicevox_wav(text, raw + ".wav", speaker)
+            _voicevox_wav(text, raw + ".wav", speaker, speed)
             os.rename(raw + ".wav", raw)
         except (OSError, ValueError):
             _say_wav(text, raw + ".aiff")
@@ -190,30 +185,47 @@ def narration(text: str, path: str, speaker: int) -> str:
     else:
         _say_wav(text, raw + ".aiff")
         os.rename(raw + ".aiff", raw)
-    ffmpeg(["-i", raw, "-af", f"apad=pad_dur={PHRASE_GAP}", "-ar", "44100", "-ac", "1", path])
+    ffmpeg(["-i", raw, "-af", f"apad=pad_dur={gap}", "-ar", "44100", "-ac", "1", path])
     os.remove(raw)
     return path
 
 
 # ---------------------------------------------------------------- 効果音
 
-def se_track(kind: str) -> str:
-    """効果音のパス。無ければ合成して SE_DIR に作る（同じ動画は常に同じ音）。"""
-    os.makedirs(SE_DIR, exist_ok=True)
-    path = os.path.join(SE_DIR, f"{kind}.wav")
-    if not os.path.exists(path):
-        ffmpeg(["-f", "lavfi", "-i", _SE_SPECS[kind], "-ar", "44100", "-ac", "1", path])
-        sidecar = os.path.join(SE_DIR, f"{kind}.txt")
-        if not os.path.exists(sidecar):
-            # 自作音にクレジット義務は無いが、差し替え時の表記漏れを防ぐため
-            # サイドカーの仕組み自体は最初から通しておく
-            with open(sidecar, "w", encoding="utf-8") as f:
-                f.write("効果音: 自作（ffmpeg合成）\n")
-    return path
+def se_track(kind: str) -> str | None:
+    """効果音のパス。素材が無ければ None（効果音なしで劣化継続する）。
+
+    素材は立ち絵・BGMと同じく手動で置く（規約確認を飛ばさないため。docs/09 4-8）。
+    """
+    if not kind:
+        return None
+    for ext in ("mp3", "wav", "m4a"):
+        path = os.path.join(SE_DIR, f"{kind}.{ext}")
+        if os.path.exists(path):
+            return path
+    _warn_missing_se(kind)
+    return None
+
+
+# 素材が無い警告は毎シーン同じなので1回だけ出す
+_missing_se_warned = set()
+
+
+def _warn_missing_se(kind: str) -> None:
+    if kind in _missing_se_warned:
+        return
+    _missing_se_warned.add(kind)
+    print(f"  ⚠️ 効果音がありません: content/assets/se/{kind}.mp3"
+          "（効果音なしで続けます）", file=sys.stderr)
 
 
 def se_credit(kind: str) -> str:
-    """効果音のクレジット。同名 .txt（サイドカー）に書いてある。BGMと同じ約束。"""
+    """効果音のクレジット。同名 .txt（サイドカー）があればそれを使う。
+
+    効果音ラボはクレジット表記が不要（禁止ではなく任意）なので、
+    サイドカーが無ければ表記しない。表記が要る素材に差し替えたときのために
+    仕組みだけ通してある（BGM・立ち絵と同じ約束）。
+    """
     sidecar = os.path.join(SE_DIR, f"{kind}.txt")
     if os.path.exists(sidecar):
         return open(sidecar, encoding="utf-8").read().strip()
@@ -533,14 +545,22 @@ def background(index: int, image_prompt: str, asset_dir: str,
 
 # ---------------------------------------------------------------- 組み立て
 
-def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> list:
+def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
+                       style: dict | None = None) -> list:
     """台本の全シーン分の素材を作る（掛け合い形式）。
 
     返り値: [{bg, bg_kind, caption, phrases: [{text, audio, dur, speaker}], dur}]
     フレーズごとに音声を分けるのは、字幕を音声に同期させるため（docs/09 4-3）。
     話者はフレーズ単位で持ち、声・字幕色・立ち絵の強調をそこから引く。
+    style はチャンネルの演出設定（data/channels/<ch>.json）。
+    ジャンルごとに最適な尺・テンポが違うため、話速と間はここから引く（docs/02 1章）。
     """
     api_key = read_secret("PEXELS_API_KEY", "pexels_key.txt")
+    style = style or {}
+    speed = style.get("speed", VOICEVOX_SPEED)
+    gap = style.get("phrase_gap", PHRASE_GAP)
+    tail = style.get("scene_tail", SCENE_TAIL)
+    se_map = style.get("se", {})
 
     scenes, providers, used_speakers = [], [], []
     n_scenes = len(script["scenes"])
@@ -556,13 +576,14 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
             for text in split_phrases(line["text"]):
                 j = len(phrases)
                 audio = narration(text, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"),
-                                  speaker=style_id)
+                                  speaker=style_id, speed=speed, gap=gap)
                 phrases.append({"text": text, "audio": audio,
                                 "dur": probe_duration(audio), "speaker": key})
         # 読み終わりで即カットすると詰まって聞こえるのでシーン末尾に余白を足す
-        dur = round(sum(p["dur"] for p in phrases) + SCENE_TAIL, 2)
-        # シーン頭の効果音。最終シーン（オチ）だけ音を変え、それ以外は転換の「ドン」
-        se_kind = "ochi" if i == n_scenes - 1 else "don"
+        dur = round(sum(p["dur"] for p in phrases) + tail, 2)
+        # シーン頭の効果音。最終シーン（オチ）だけ音を変える。
+        # どの音を使うかはチャンネルごと（meme=軽い転換音、heisei=和太鼓 など）
+        se_kind = se_map.get("last" if i == n_scenes - 1 else "scene", "")
         scenes.append({
             "bg": bg["path"],
             "bg_kind": bg["kind"],
@@ -574,7 +595,7 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False) -> l
         })
 
     _write_credits(asset_dir, providers, used_speakers,
-                   sorted({s["se_kind"] for s in scenes}))
+                   sorted({s["se_kind"] for s in scenes if s["se_kind"]}))
     voice = ("VOICEVOX: " + "・".join(CHARACTERS[k]["name"] for k in used_speakers)
              if voicevox_used() else "macOS say（フォールバック）")
     stock = sum(p != "gradient" for p in providers)

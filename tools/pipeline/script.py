@@ -147,49 +147,6 @@ def _fact_rules(cfg: dict) -> str:
 - シーン{SCENE_COUNT}は、もう一段の意外か現代との接続で締める（まとめ・説教にしない）。"""
 
 
-def _news_rules() -> str:
-    """F1ニュースから作るときの追加ルール（docs/05 2章）。"""
-    return f"""
-
-ネタ元のニュースについて（最重要）:
-実際のF1ニュースの見出しと、Jolpica-F1 APIから取ったレースデータが与えられます。
-- **記事の表現をそのまま使いません。** 使ってよいのは「何が起きたか」という事実だけで、
-  言い回しは必ず自分の言葉に直します（著作権法10条2項の範囲。docs/04 2-2章）。
-- **与えられたデータに無い数字を書きません。** 順位・ポイント・タイムは
-  レースデータに載っているものだけを使い、記憶や推測で補いません。
-- 憶測（移籍の噂・チーム内の不和など）を断定しません。
-  「〜と言われている」で止め、確定した事実と混ぜません。
-- 42歳の普通のファン（DAZNは見るがテクニカルな話は追っていない）に分かる言葉で書きます。
-  専門用語（DRS・アンダーカット等）を使うときは一言で説明を添えます。
-- シーン{SCENE_COUNT}は「意外な一言」で締めます: 数字の意外さ・裁定の皮肉・次戦への引きのどれか。
-  まとめや「注目です」のような当たり障りのない締めにしません。
-- シーン1の caption は動画全体を言い切る見出し（スレタイ相当）にします。"""
-
-
-def _news_context(news: dict, data: dict | None) -> str:
-    """採用ニュース＋レースデータをユーザーメッセージに展開する。"""
-    lines = [f"ニュース見出し: {news['title']}", f"出典: {news['url']}"]
-    if news.get("summary"):
-        # 要約は記事の表現。事実の把握だけに使い、言い回しを流用しない旨を明示する
-        lines.append(f"（参考・表現は流用しないこと）概要: {news['summary']}")
-    last = (data or {}).get("last_race")
-    if last:
-        lines.append(f"\n直近レース: {last['season']} R{last['round']} {last['race']}"
-                     f"（{last['circuit']} / {last['date']}）")
-        for r in last["results"][:10]:
-            lines.append(f"  {r['position']}. {r['driver']}（{r['constructor']}）"
-                         f" {r['points']}pt {r['time'] or r['status']}")
-    st = (data or {}).get("standings")
-    if st:
-        lines.append(f"\n選手権（第{st['round']}戦終了時点）ドライバー:")
-        for s in st["drivers"][:5]:
-            lines.append(f"  {s['position']}. {s['driver']} {s['points']}pt（{s['wins']}勝）")
-        lines.append("コンストラクター:")
-        for s in st["constructors"][:5]:
-            lines.append(f"  {s['position']}. {s['name']} {s['points']}pt")
-    return "\n".join(lines)
-
-
 def _fact_context(fact: dict) -> str:
     """採用ネタ（fetch_facts.load_adopted の1件）をユーザーメッセージに展開する。"""
     lines = [f"事実: {fact['fact']}"]
@@ -365,9 +322,6 @@ _SOURCE_KINDS = (
     ("thread_source", "thread", "引用スレ",
      "tools/fetch_threads.py --board ... で収集し、--adopt で採用してから\n"
      "  make_video.py --channel <ch> --thread <スレID>"),
-    ("news_source", "news", "採用済みのニュース",
-     "tools/fetch_f1.py --news で収集し、--adopt で採用してから\n"
-     "  make_video.py --channel <ch> --news <ニュースID>"),
 )
 
 
@@ -385,17 +339,15 @@ def _require_source(cfg: dict, **given) -> None:
 
 
 def generate(cfg: dict, theme: str, offline: bool = False,
-             thread: dict | None = None, fact: dict | None = None,
-             news: dict | None = None, race_data: dict | None = None) -> dict:
+             thread: dict | None = None, fact: dict | None = None) -> dict:
     """台本JSONを返す。offline=True かAPIキー未設定ならテンプレを返す。
 
-    thread は採用スレ（fetch_threads）、fact は裏取り済みネタ（fetch_facts）、
-    news は採用ニュース＋race_data（fetch_f1）。
+    thread は採用スレ（fetch_threads）、fact は裏取り済みネタ（fetch_facts）。
     どのチャンネルもソース無しでは生成しない:
     LLMの0からの創作は展開もオチも平均値になり、つまらない（docs/04 2-2章・v5）。
     """
     if not offline:
-        _require_source(cfg, thread=thread, fact=fact, news=news)
+        _require_source(cfg, thread=thread, fact=fact)
     api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
     if offline or not api_key:
         if not offline:
@@ -421,10 +373,6 @@ def generate(cfg: dict, theme: str, offline: bool = False,
                  else "「実は◯◯」型の掛け合い")
         user = (f"チャンネル: {cfg['name']}\n\n{_fact_context(fact)}\n\n"
                 f"この事実で{shape}ショート動画の台本を作ってください。")
-    elif news:
-        system += _news_rules()
-        user = (f"チャンネル: {cfg['name']}\n\n{_news_context(news, race_data)}\n\n"
-                "このニュースを掛け合いで解説するショート動画の台本を作ってください。")
     else:
         user = (f"チャンネル: {cfg['name']}\nテーマ: {theme}\n\n"
                 "このテーマで掛け合いショート動画の台本を作ってください。")

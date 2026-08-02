@@ -17,6 +17,13 @@ from .common import ROOT, PipelineError
 
 CHANNELS_DIR = os.path.join(ROOT, "data", "channels")
 
+# 廃止済みチャンネル。設定ファイルが無いのは事故ではなく本人決定であることを
+# エラーメッセージで区別する（docs/00 変更履歴）
+RETIRED = {
+    "girls": "v6（2026-08-02）で廃止。恋愛・職場スレは転載自由ソースに少なかった",
+    "biz": "v6（2026-08-02）で廃止。一次情報の本人作業がボトルネックだった",
+}
+
 # 台本・音声・字幕・立ち絵で共通に使うキャラクター定義。
 # voicevox_speaker はVOICEVOXのスタイルID（ノーマル）。色はASSのBGR並び
 CHARACTERS = {
@@ -39,6 +46,11 @@ CHARACTERS = {
 
 def load(channel: str) -> dict:
     """チャンネル設定を読む。cast の speaker はキャラ定義に居ることを保証する。"""
+    if channel in RETIRED:
+        raise PipelineError(
+            f"チャンネル {channel} は廃止済みです（{RETIRED[channel]}）。\n"
+            f"  使えるチャンネル: {', '.join(available()) or '（未定義）'}"
+        )
     path = os.path.join(CHANNELS_DIR, f"{channel}.json")
     if not os.path.exists(path):
         raise PipelineError(

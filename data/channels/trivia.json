@@ -25,6 +25,7 @@
       "scene": "trivia_tick",
       "reveal": "trivia_hirameki",
       "last": "trivia_reveal"
-    }
+    },
+    "scenes": 3
   }
 }

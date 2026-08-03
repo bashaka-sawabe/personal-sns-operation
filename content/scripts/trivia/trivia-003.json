@@ -1,0 +1,116 @@
+{
+  "id": "trivia-003",
+  "title": "トラのオレンジは鹿には緑に見えている",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "トラは鹿には緑色に見える",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "トラのあの派手なオレンジ、鹿には緑色に見えているのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？ それ目の錯覚の話なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "錯覚じゃないわ。見える色の数がそもそも違うの"
+        }
+      ],
+      "image_prompt": "abstract dense green jungle foliage, dappled sunlight, orange color blending into green tones, no animals, no text, painterly"
+    },
+    {
+      "caption": "思い込み：森で目立つ色",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ。ボクずっと不思議だったのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "森で狩りするのに、なんであんな目立つ色なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "目立つと思っているのは、人間の目だけなのよ"
+        }
+      ],
+      "image_prompt": "symbolic forest canopy seen from below, layered leaves, warm and cool color contrast, no text, no characters"
+    },
+    {
+      "caption": "人は3色、鹿は2色",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "人間は赤・緑・青の三色を見分けるけれど、鹿や猪は二色なの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクなら二色でも困らない気がするのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "困るわよ。赤と緑の区別がつかなくなるんだから"
+        }
+      ],
+      "image_prompt": "two abstract color wheels, one with three primary segments and one with two, soft gradient background, minimal, no text"
+    },
+    {
+      "caption": "根拠：ブリストル大の研究",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "英国ブリストル大学の研究チームが調べた話よ。学術誌にも載っているわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "つまり緑色の毛にする必要がなかった、と"
+        },
+        {
+          "speaker": "metan",
+          "text": "哺乳類の毛は緑の色素を作れないの。オレンジで十分だったのよ"
+        }
+      ],
+      "image_prompt": "scientific illustration style abstract background, spectral light bands, subtle grid, muted lab tones, no text, no logos"
+    },
+    {
+      "caption": "締め：もう一段の意外",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "じゃあ狩りに行く人のオレンジの服、あれも――"
+        },
+        {
+          "speaker": "metan",
+          "text": "人間同士には目立って、獲物には気づかれにくい。よく出来ているわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは納得しないのだ。鹿にも一回見せてほしいのだ"
+        }
+      ],
+      "image_prompt": "abstract hunter orange fabric texture merging into forest green background, symbolic, soft light, no text, no faces"
+    }
+  ],
+  "caption": "トラのオレンジ、鹿の目には緑。ブリストル大学の研究から見えた意外な理由。",
+  "hashtags": [
+    "#雑学",
+    "#動物",
+    "#トラ",
+    "#色覚",
+    "#ずんだもん"
+  ],
+  "channel": "trivia",
+  "genre": "trivia",
+  "theme": "Tigers look orange to humans because we ",
+  "source_facts": [
+    {
+      "id": "til-6ee474dd9d",
+      "fact": "Tigers look orange to humans because we are trichromats, but they appear green to deer and wild boars because they are dichromats",
+      "backing_url": "https://www.bristol.ac.uk/news/2019/may/camouflage-study.html",
+      "backing_note": "ブリストル大学の研究（Journal of the Royal Society Interface 掲載）"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "id": "meme-010",
+  "title": "妻がスカートを履かない相談",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【珍相談】嫁がスカート履かない",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "嫁がスカートを履かないのだ!?"
+        },
+        {
+          "speaker": "metan",
+          "text": "32歳の妻。夫が本気で悩んでるの"
+        }
+      ],
+      "image_prompt": "abstract minimal illustration of a closet full of long-sleeve tops and trousers, muted beige tones, no text, no people"
+    },
+    {
+      "caption": "服の傾向を説明",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "長袖で肌も出さず胸も隠す服だけ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ただの好みなのだ"
+        }
+      ],
+      "image_prompt": "simple flat illustration of neatly folded chino pants and plain long sleeve shirts on a shelf, soft light, no text"
+    },
+    {
+      "caption": "助言が過激で意見が割れる",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "助言は『脅して履かせろ』よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは言ってみたいのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "あなた、それ確実に嫌われるわよ"
+        }
+      ],
+      "image_prompt": "abstract image of two paper speech bubbles colliding, muted red and blue, minimal background, no text"
+    },
+    {
+      "caption": "話が脱線する",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "途中で『ジーパンもいい』と脱線"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "完全に別の話なのだ"
+        }
+      ],
+      "image_prompt": "stylized illustration of denim fabric texture close up, indigo tones, minimal, no text, no people"
+    },
+    {
+      "caption": "オチ：お前が履け",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "で、結論なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "『じゃあお前が履け』が一番人気"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは履かないのだ"
+        }
+      ],
+      "image_prompt": "minimal illustration of a single skirt on a hanger in an empty room, warm evening light, no text, no people"
+    }
+  ],
+  "caption": "妻の服装相談、集まった助言が全部おかしい。あなたはどっち派？",
+  "hashtags": [
+    "#ずんだもん",
+    "#四国めたん",
+    "#ゆっくり解説",
+    "#ネット民の助言",
+    "#夫婦"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "嫁がスカート全く着ないんだが普通？",
+  "source_thread": {
+    "id": "livejupiter-1785667068",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785667068/",
+    "title": "嫁がスカート全く着ないんだが普通？"
+  }
+}

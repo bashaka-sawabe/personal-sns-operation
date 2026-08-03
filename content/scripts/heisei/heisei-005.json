@@ -1,0 +1,168 @@
+{
+  "id": "heisei-005",
+  "title": "1985年生まれ位が懐かしい平成の名品4選",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "1985年生まれ位が懐かしい4選",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "めたん、この卵型の機械は何なのだ!?"
+        },
+        {
+          "speaker": "metan",
+          "text": "たまごっちよ。1996年発売。今日は平成の名品を4つ挙げるわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "4つ？　その箱、まだ山積みなのだ"
+        }
+      ],
+      "image_prompt": "nostalgic 1990s japanese living room shelf, dusty plastic gadgets silhouettes, warm dim light, no text, no logos, no faces, soft film grain"
+    },
+    {
+      "caption": "ポケベル",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "ポケベル。1996年に120万契約もあったのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "120万人が数字だけ送り合い？"
+        },
+        {
+          "speaker": "metan",
+          "text": "そう。2019年の終了時は1500人未満よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "落差が怖いのだ。ボクなら無理"
+        }
+      ],
+      "image_prompt": "abstract green pixel numeric display glow in darkness, night city payphone booth silhouette in rain, no text, no logos, no faces"
+    },
+    {
+      "caption": "たまごっち",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "たまごっち。1996年発売、1年弱で1000万個"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "1000万人が世話係なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "問い合わせが1日1万件で、謝罪広告まで出たわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "おもちゃで謝罪広告。異常なのだ"
+        }
+      ],
+      "image_prompt": "egg shaped small plastic keychain toy abstract silhouette on pastel background, long queue shadow outside a shop, no text, no logos, no faces"
+    },
+    {
+      "caption": "MD",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "MD、1992年11月にソニーが発売したのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "円盤に音を入れる意味が無いのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "あるわ。曲順を組んで渡す、あれが恋文だったの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "それ、今のプレイリストなのだ"
+        }
+      ],
+      "image_prompt": "square translucent plastic disc cartridges stacked on a desk, blue night light reflection, retro audio deck abstract shapes, no text, no logos, no faces"
+    },
+    {
+      "caption": "プリント倶楽部",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "プリント倶楽部。1995年7月にアトラスが発売よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、ゲーム会社なのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "そう。1999年頃がピーク。手帳が写真で膨れたわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは交換とか嫌なのだ"
+        }
+      ],
+      "image_prompt": "game arcade corner with curtained photo booth silhouette, tiny sticker sheets scattered on a notebook, neon glow, no text, no logos, no faces"
+    },
+    {
+      "caption": "締め",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "そのMD、2025年2月に生産終了。33年で幕よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "去年!?　まだ4つじゃ足りない気がするのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "そうね。あなたが一番覚えてるのは、どれかしら"
+        }
+      ],
+      "image_prompt": "open cardboard box of old gadgets in an attic, dust in a sunbeam, empty space left in the box, no text, no logos, no faces"
+    }
+  ],
+  "caption": "ポケベル120万契約、たまごっち1000万個、MDは33年で生産終了。1985年生まれ位が通ってきた平成の名品を4つだけ。あなたが一番覚えてるのはどれ？",
+  "hashtags": [
+    "#平成",
+    "#懐かしい",
+    "#ポケベル",
+    "#たまごっち",
+    "#プリクラ"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "4選",
+  "source_facts": [
+    {
+      "id": "heisei-be90c1e097",
+      "fact": "ポケベルは1996年に東京テレメッセージだけで契約数120万を超えたが、2019年9月30日のサービス終了時には契約者が1500人を下回っていた。端末の製造終了から20年が経過していた",
+      "backing_url": "https://www.watch.impress.co.jp/docs/news/1156347.html",
+      "backing_note": "Impress Watch（東京テレメッセージの発表を報じた一次報道）"
+    },
+    {
+      "id": "heisei-88bbb9250a",
+      "fact": "たまごっちは1996年11月23日にバンダイから発売され、発売から1年経たずに1000万個を売り上げた。玩具業界では100万個で大ヒットと言われる中での異常な数字で、供給が追いつかず問い合わせが1日1万件を超え、バンダイは謝罪広告を出した",
+      "backing_url": "https://www.bandai.co.jp/press/2025/251119.php",
+      "backing_note": "バンダイ公式プレスリリース（たまごっち30周年）"
+    },
+    {
+      "id": "heisei-8345428ecf",
+      "fact": "MD（ミニディスク）は1992年11月にソニーが録再機を発売した。2025年2月28日に全ての生産を終了し、33年の歴史に幕を閉じた",
+      "backing_url": "https://ja.wikipedia.org/wiki/ミニディスク",
+      "backing_note": "Wikipedia経由でソニーの生産終了発表（2025年1月）を確認"
+    },
+    {
+      "id": "heisei-02886c8fde",
+      "fact": "プリント倶楽部（プリクラ）は1995年7月にゲーム会社アトラスが発売した。第一次ブームのピークは1999年頃",
+      "backing_url": "https://ja.wikipedia.org/wiki/プリント倶楽部",
+      "backing_note": "Wikipedia（※記事の出典表示は不十分との警告あり。稼働年・企業名は本文記載）"
+    }
+  ]
+}

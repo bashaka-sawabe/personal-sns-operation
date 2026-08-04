@@ -10,12 +10,20 @@
 
     # 候補を眺めて、採用・不採用を付ける（採用したものだけが台本生成の入力になる）
     .venv/bin/python tools/fetch_threads.py --list
-    .venv/bin/python tools/fetch_threads.py --adopt livejupiter-1785665449
+    .venv/bin/python tools/fetch_threads.py --adopt livejupiter-1785667068 \
+        --powerword "スカート履けばいい" --ochi "解決策として夫が履けと言われて話が終わる"
     .venv/bin/python tools/fetch_threads.py --reject livejupiter-1785665449
 
 引用元をおーぷん2ちゃんねるに限定する理由: 投稿がパブリックドメイン（転載自由）と
 規約に明記されている唯一の主要掲示板だから。5chは運営の許可制、ガールズちゃんねる等は
 許諾なき転載が不可（docs/04 2-2章の線引き表）。ここ以外のドメインはコードで拒否する。
+
+**採用には基準がいる**（docs/05 3章）。以前はここに除外パターンしか無く、
+採用は勘だった。結果、オチの無いスレから動画を作って本人評価「選定にセンスがない」。
+ロンロンの天秤（51.2万）は「**コメントで復唱できる語が1個取れるか**」でスレを選んでいる
+（docs/02 2章）。動画の26.7秒はその1語を届けるための助走でしかない。
+--adopt はその1語（--powerword）とオチの一文（--ochi）を要求し、
+**語がスレに実在すること**を検査する。造語を復唱させても滑るため。
 """
 import argparse
 import html
@@ -24,6 +32,7 @@ import os
 import re
 import sys
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -182,6 +191,59 @@ def fetch_thread(board: str, thread: str) -> dict:
     }
 
 
+# ---------------------------------------------------------------- 採用基準
+# 復唱できる語の長さ。ロンロンの実例「シャマルピー」は6字で、コメント欄が
+# 「シャマルピー草」で埋まった。長いとコメントに書き写してもらえない
+POWERWORD_MIN, POWERWORD_MAX = 2, 14
+# オチを一文で言えないスレは、動画にしても着地しない
+OCHI_MIN, OCHI_MAX = 10, 60
+
+# 掲示板の内輪語。ロンロン（51.2万）は www も【悲報】もレス番も画面に出さず、
+# 「2chまとめ」ではなく「短い笑い話」として売っている（docs/02 2章）。
+# 内輪語を復唱の起点にすると、板を知らない層に届かず裾野が板の住人で頭打ちになる
+_INSIDER = re.compile(r"(ワイ|イッチ|おん[JjＪ]|なん[JjＪ]|ｗｗ|ww|草生|>>\d|【悲報】|ニキ|ンゴ|クレメンス)")
+
+
+def _normalize(text: str) -> str:
+    """実在判定のための正規化。全半角と空白の違いでスレに無い扱いにしない。"""
+    return re.sub(r"\s+", "", unicodedata.normalize("NFKC", text))
+
+
+def check_criteria(data: dict, powerword: str, ochi: str) -> None:
+    """採用基準を満たすか。満たさないものは動画にしない（docs/05 3章）。
+
+    ここを通ることが「面白いスレ」の定義。基準が無かった頃は勘で採用しており、
+    オチの無いスレから動画を作っていた（#139）。
+    """
+    word = powerword.strip()
+    if not (POWERWORD_MIN <= len(word) <= POWERWORD_MAX):
+        raise PipelineError(
+            f"パワーワードは{POWERWORD_MIN}〜{POWERWORD_MAX}字にしてください"
+            f"（今: {len(word)}字「{word}」）。\n"
+            "  コメント欄に書き写せる長さでないと復唱されません（docs/02 2章）。"
+        )
+    if _INSIDER.search(word):
+        raise PipelineError(
+            f"パワーワード「{word}」に掲示板の内輪語が入っています。\n"
+            "  板を知らない層に届かず、復唱の裾野が住人で頭打ちになります（docs/02 2章）。\n"
+            "  スレの中から、板を知らなくても笑える語を選び直してください。"
+        )
+    # スレ本文に無い語は、こちらが作った造語。復唱の起点にならない
+    haystack = _normalize(data["title"] + "".join(r["text"] for r in data["res"]))
+    if _normalize(word) not in haystack:
+        raise PipelineError(
+            f"パワーワード「{word}」がスレ本文にありません。\n"
+            "  復唱される語はスレに元々あるものです。こちらで作った語では滑ります。\n"
+            "  スレを読み直し、実際に書かれている語をそのまま使ってください。"
+        )
+    line = ochi.strip()
+    if not (OCHI_MIN <= len(line) <= OCHI_MAX):
+        raise PipelineError(
+            f"オチは{OCHI_MIN}〜{OCHI_MAX}字の一文で書いてください（今: {len(line)}字）。\n"
+            "  一文で言えないスレは、動画にしても着地しません。"
+        )
+
+
 def _path(thread_id: str) -> str:
     return os.path.join(THREADS_DIR, f"{thread_id}.json")
 
@@ -225,6 +287,12 @@ def load_adopted(thread_id: str) -> dict:
             f"{thread_id} は採用されていません（現在: {data.get('status')}）。\n"
             "  tools/fetch_threads.py --list で中身を確認し、--adopt を付けてください。"
         )
+    # 基準ができる前に採用したスレを、そのまま台本に流さないための関門（#139）
+    if not data.get("powerword"):
+        raise PipelineError(
+            f"{thread_id} にパワーワードがありません（採用基準ができる前の採用です）。\n"
+            "  --adopt に --powerword / --ochi を付けて採用し直してください。"
+        )
     return data
 
 
@@ -267,8 +335,13 @@ def from_url(url: str) -> str:
     return _save(fetch_thread(board, thread))
 
 
-def mark(thread_id: str, status: str) -> None:
+def mark(thread_id: str, status: str, powerword: str = "", ochi: str = "") -> None:
+    """状態を書き換える。採用は基準を満たすときだけ通す（docs/05 3章）。"""
     data = _load(thread_id)
+    if status == "adopted":
+        check_criteria(data, powerword, ochi)
+        data["powerword"] = powerword.strip()
+        data["ochi"] = ochi.strip()
     data["status"] = status
     _save(data)
 
@@ -281,6 +354,9 @@ def show_list() -> None:
     icons = {"candidate": "・", "adopted": "✅", "rejected": "❌"}
     for t in rows:
         print(f"{icons.get(t['status'], '?')} {t['id']}  ({t['res_count']}res)  {t['title']}")
+        # 採用理由を一覧で見えるようにする。どの語を狙って作るかが動画の設計そのもの
+        if t.get("powerword"):
+            print(f"      💬「{t['powerword']}」／ オチ: {t.get('ochi', '')}")
     print(f"\n採用 {sum(t['status'] == 'adopted' for t in rows)} / "
           f"候補 {sum(t['status'] == 'candidate' for t in rows)} / "
           f"不採用 {sum(t['status'] == 'rejected' for t in rows)}")
@@ -292,7 +368,11 @@ def main() -> None:
     p.add_argument("--limit", type=int, default=10, help="収集する候補数（既定10）")
     p.add_argument("--url", help="スレのURLを1本だけ取り込む（open2ch限定）")
     p.add_argument("--list", action="store_true", help="保存済み候補の一覧")
-    p.add_argument("--adopt", metavar="ID", help="候補を採用にする")
+    p.add_argument("--adopt", metavar="ID", help="候補を採用にする（--powerword / --ochi が要る）")
+    p.add_argument("--powerword", default="",
+                   help=f"コメントで復唱される語。スレに実在するものを{POWERWORD_MIN}〜{POWERWORD_MAX}字で")
+    p.add_argument("--ochi", default="",
+                   help=f"オチを一文で（{OCHI_MIN}〜{OCHI_MAX}字）")
     p.add_argument("--reject", metavar="ID", help="候補を不採用にする")
     args = p.parse_args()
 
@@ -300,8 +380,8 @@ def main() -> None:
         if args.list:
             show_list()
         elif args.adopt:
-            mark(args.adopt, "adopted")
-            print(f"採用: {args.adopt}")
+            mark(args.adopt, "adopted", args.powerword, args.ochi)
+            print(f"採用: {args.adopt}  💬「{args.powerword.strip()}」")
         elif args.reject:
             mark(args.reject, "rejected")
             print(f"不採用: {args.reject}")

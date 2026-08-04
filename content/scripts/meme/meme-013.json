@@ -1,0 +1,106 @@
+{
+  "id": "meme-013",
+  "title": "元警備員に質問ある？ スレ主が盛りすぎて総ツッコミ",
+  "emotion": "笑い",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【総ツッコミ】元警備員に質問ある",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "元警備員だけど質問ありゅ？"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "あるわけねーよな"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "ずっと立ってんの辛くない？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "慣れるのだ。足を高くして寝るといい"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "解決策が雑すぎんだろ"
+        }
+      ],
+      "image_prompt": "empty office building lobby at night, glowing exit sign, polished floor reflections, quiet and still, no people, no text"
+    },
+    {
+      "caption": "楽な仕事だろ論争",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "警備って派遣じゃないの？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "派遣は禁止なのだ。意外だろ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "まあ突っ立ってるだけの楽な仕事"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、体調悪くても帰れないのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "でも成果物が何もないのは好きなのだ"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "そこ気に入るとこ？"
+        }
+      ],
+      "image_prompt": "road construction site at dusk, orange cones and flashing warning lights, long shadows, abstract, no people, no text"
+    },
+    {
+      "caption": "急に始まる出世自慢",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "警備って出世もできるのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "は？ 警備員で出世!?"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "役員も独立も普通にあるのだ"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "急に語り出したじゃん"
+        },
+        {
+          "speaker": "shishio",
+          "text": "キミ、すぐ自分の境遇を大きく見せるよね"
+        }
+      ],
+      "image_prompt": "night security desk with a single desk lamp, name plate blurred out, dark corridor behind, moody lighting, no people, no text"
+    }
+  ],
+  "caption": "質問スレのはずが、途中から自分語りに変わっていくイッチ。最後の一言で全部終わりました。あなたはどっち側？",
+  "hashtags": [
+    "#警備員",
+    "#おーぷん2ちゃんねる",
+    "#ずんだもん",
+    "#スレ",
+    "#あるあるネタ"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "元警備員に質問ありゅ？",
+  "source_thread": {
+    "id": "livejupiter-1785672652",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785672652/",
+    "title": "元警備員に質問ありゅ？"
+  }
+}

@@ -27,6 +27,7 @@ from .common import (
     require,
     wrap_japanese,
 )
+from .media import icon_image
 
 # 字幕の見た目。ショートは小さい画面で見られるので、太く・大きく・縁を厚く
 FONT_FALLBACK = "Hiragino Kaku Gothic StdN W8"
@@ -77,12 +78,19 @@ def _check_text_width() -> None:
 
 _check_text_width()
 
-# 立ち絵。左右の下端に置き、話しているキャラだけ明るくする（誰のセリフか一目で分かる）
-CHAR_HEIGHT = 560      # 画面の約3割。字幕（下寄せ・MarginV=560）とは重ならない高さ
-CHAR_MARGIN_X = 10
-CHAR_MARGIN_Y = 16
-# 非発話側の減光。輪郭は残しつつ「今は聞き役」と分かる暗さ（アルファは保つ）
-CHAR_DIM = "format=rgba,colorchannelmixer=rr=0.5:gg=0.5:bb=0.5"
+# 話者アイコン（#140）。立ち絵ではなく、**今喋っている1人**の丸アイコンを中央に出す。
+#
+# 立ち絵は左右2体で画面が埋まり、3人目以降を出す場所が無い。実際 meme-012 では
+# 5人が喋ったのに画面はずんだもん・めたんの2体固定で、玄野が喋っても虎太郎が喋っても
+# 画面が1ピクセルも変わらなかった。showa-001 では叫んでいる龍星の立ち絵が無く、
+# 主役が画面に存在しなかった。
+# ロンロンの天秤（51.2万）は立ち絵を置かず、**中央の丸アイコンを話者ごとに切り替える**
+# ことで1本に何人でも登場させている（docs/02 2章）。素材の調達もいらなくなる。
+ICON_SIZE = 300
+ICON_BOTTOM = 1180     # アイコン下端（画面上端から）。字幕（下から560px）の上に載る
+ICON_RING = 9          # 白い縁。背景に沈ませない
+ICON_WRAP = 5          # アイコン内に書く名前の折り返し幅
+ICON_FONT = 52         # 1行のとき。2行以上は自動で縮める
 
 # 静止画背景の Ken Burns。
 # 中央固定の微ズームは「動いていない」と見える（毎秒1.8%・1フレーム0.06%では目が拾えない上に、
@@ -183,8 +191,59 @@ def _ass_text(text: str, per_line: int, highlight: bool = True,
     return wrapped
 
 
+def _bgr_to_rgb(bgr: str) -> str:
+    """キャラ定義の色（ASS向けのBGR並び）を ffmpeg の RGB 表記に直す。"""
+    return bgr[4:6] + bgr[2:4] + bgr[0:2]
+
+
+def _speaker_icon(key: str, work_dir: str) -> str:
+    """話者アイコン（丸）を作る。既に作ってあれば使い回す。
+
+    素材の有無をブロッカーにしない（#140）。立ち絵は「規約を確認した本人が置く」
+    運用にした結果、置かれていないキャラは画面に出られず、
+    喋っているのに姿が無いという事故になった。
+    アイコンはキャラ色と名前から**その場で生成できる**ので、誰でも即座に出せる。
+    content/assets/icons/<key>.png があれば、そちらを丸く切り抜いて使う。
+    """
+    out = os.path.join(work_dir, f"icon_{key}.png")
+    if os.path.exists(out):
+        return out
+    char = CHARACTERS[key]
+    c = ICON_SIZE / 2
+    # 円の外は透過、縁は白。hypot はフレーム座標（X,Y）で測る
+    edge = f"hypot(X-{c},Y-{c})"
+    geq = (
+        "format=rgba,geq="
+        + ":".join(
+            f"{ch}='if(gt({edge},{c - ICON_RING}),255,{ch}(X,Y))'" for ch in ("r", "g", "b")
+        )
+        + f":a='if(lte({edge},{c}),255,0)'"
+    )
+    src = icon_image(key)   # 持ち込みアイコンがあれば丸く切り抜いて使う
+    if src:
+        inputs = ["-i", src]
+        chain = (f"scale={ICON_SIZE}:{ICON_SIZE}:force_original_aspect_ratio=increase,"
+                 f"crop={ICON_SIZE}:{ICON_SIZE}," + geq)
+    else:
+        # 名前を焼いた色パネル。drawtext は特殊文字の escape が面倒なので textfile で渡す
+        lines = wrap_japanese(char["name"], ICON_WRAP).split("\n")
+        namefile = os.path.join(work_dir, f"icon_{key}.txt")
+        with open(namefile, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+        size = ICON_FONT if len(lines) == 1 else int(ICON_FONT * 0.72)
+        inputs = ["-f", "lavfi", "-i",
+                  f"color=c=0x{_bgr_to_rgb(char['color_bgr'])}:s={ICON_SIZE}x{ICON_SIZE}"]
+        chain = (
+            f"drawtext=fontfile='{font_path()}':textfile='{namefile}'"
+            f":fontcolor=black@0.82:fontsize={size}:line_spacing=6"
+            f":x=(w-text_w)/2:y=(h-text_h)/2," + geq
+        )
+    ffmpeg([*inputs, "-frames:v", "1", "-vf", chain, out])
+    return out
+
+
 def _speaker_windows(scene: dict) -> dict:
-    """話者ごとの発話区間 [(start, end), ...]。立ち絵の明滅に使う。"""
+    """話者ごとの発話区間 [(start, end), ...]。アイコンの出し分けに使う。"""
     wins, t = {}, 0.0
     n = len(scene["phrases"])
     for i, p in enumerate(scene["phrases"]):
@@ -282,13 +341,12 @@ def _enable_expr(windows: list) -> str:
     return "+".join(f"between(t,{a:.3f},{b:.3f})" for a, b in windows)
 
 
-def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = None,
+def render_scene(scene: dict, index: int, work_dir: str,
                  hook: str | None = None, style: dict | None = None) -> str:
     """1シーンを mp4 にする。背景が映像ならループで敷き、静止画ならKen Burnsで動かす。
 
-    cast は [(話者キー, 立ち絵パス), ...]（cast の並び順に 左・右 へ置く）。
-    立ち絵は常時2体を減光して置き、発話中のキャラだけ通常の明るさを重ねる。
-    素材が無いキャラは黙って省く（劣化継続。素材の置き場は docs/09 4-8）。
+    話者アイコンは**このシーンで喋る人ぶん**だけ作り、発話区間だけ表示する（#140）。
+    配役から作らないので、cast に載っていない脇役が喋っても画面が切り替わる。
     hook はスレタイ（全シーン共通の見出し）。省略時はこのシーンの caption を使う。
     style はチャンネルの演出設定（パンチインの深さ・背景カットの間隔）。
     """
@@ -315,31 +373,19 @@ def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = Non
             "eq=contrast=1.04:saturation=1.08:brightness=-0.04"
         )
 
-    chars = [(key, img) for key, img in (cast or []) if img]
+    # 話者アイコンは配役ではなく**このシーンで実際に喋る人**から作る。
+    # そうしないと cast に載っていない脇役が喋ったときに画面が変わらない（#140）
     windows = _speaker_windows(scene)
     graph = [f"[0:v]{base_chain}[v0]"]
     last = "v0"
-    for n, (key, img) in enumerate(chars):
-        inputs += ["-i", img]
-        idx = 2 + n  # 0=背景, 1=音声 の後ろに立ち絵が並ぶ
-        # 左右の下端。cast の並び順で 0=左, 1=右（3体以上は想定しない=配役2人の前提）
-        x = f"{CHAR_MARGIN_X}" if n == 0 else f"main_w-overlay_w-{CHAR_MARGIN_X}"
-        y = f"main_h-overlay_h-{CHAR_MARGIN_Y}"
-        wins = windows.get(key)
-        graph.append(f"[{idx}:v]scale=-2:{CHAR_HEIGHT}[c{n}]")
-        if wins:
-            # 減光した立ち絵を常時敷き、発話区間だけ通常の明るさを重ねる
-            graph.append(f"[c{n}]split[c{n}on][c{n}pre]")
-            graph.append(f"[c{n}pre]{CHAR_DIM}[c{n}off]")
-            graph.append(f"[{last}][c{n}off]overlay=x={x}:y={y}[d{n}]")
-            graph.append(f"[d{n}][c{n}on]overlay=x={x}:y={y}:enable='{_enable_expr(wins)}'[b{n}]")
-            last = f"b{n}"
-        else:
-            # このシーンで喋らないキャラは減光したまま。split すると
-            # 明るい側の出力が未接続になって ffmpeg が落ちる（#133で露呈）
-            graph.append(f"[c{n}]{CHAR_DIM}[c{n}off]")
-            graph.append(f"[{last}][c{n}off]overlay=x={x}:y={y}[d{n}]")
-            last = f"d{n}"
+    for n, key in enumerate(sorted(windows)):
+        inputs += ["-i", _speaker_icon(key, work_dir)]
+        idx = 2 + n  # 0=背景, 1=音声 の後ろにアイコンが並ぶ
+        graph.append(
+            f"[{last}][{idx}:v]overlay=x=(main_w-overlay_w)/2:y={ICON_BOTTOM - ICON_SIZE}"
+            f":enable='{_enable_expr(windows[key])}'[b{n}]"
+        )
+        last = f"b{n}"
     graph.append(f"[{last}]{subs}[vsub]")
     # シーン頭のパンチイン。字幕ごと寄せるのは意図（大手の型はテロップも一緒に揺れる）
     punch = style.get("punch_zoom", PUNCH_ZOOM)
@@ -400,10 +446,10 @@ def concat(parts: list, out_path: str, work_dir: str,
 
 
 def build(scenes: list, out_path: str, work_dir: str, bgm: str | None = None,
-          cast: list | None = None, style: dict | None = None) -> str:
+          style: dict | None = None) -> str:
     # スレタイ＝シーン1の caption。全シーンの上部に出しつづける（#93）
     hook = scenes[0]["caption"]
-    parts = [render_scene(s, i, work_dir, cast=cast, hook=hook, style=style)
+    parts = [render_scene(s, i, work_dir, hook=hook, style=style)
              for i, s in enumerate(scenes)]
     total = sum(s["dur"] for s in scenes)
     return concat(parts, out_path, work_dir, bgm=bgm, total_dur=total)

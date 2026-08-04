@@ -12,7 +12,7 @@ import json
 import os
 import re
 
-from .channels import CHARACTERS, cast_keys
+from .channels import CHARACTERS, cast_keys, extra_speakers
 from .common import PipelineError, read_secret
 
 # 台本の型。style.scenes が無いときの既定値。
@@ -34,9 +34,21 @@ FIRST_HAND_SCENE = 4
 PLACEHOLDER = "【要実体験】"
 
 
+def _allowed_speakers(cfg: dict) -> list:
+    """この台本で使える話者。主役＋（寸劇を許すチャンネルなら）脇役。
+
+    寸劇では登場人物ごとに声を変える（#133）。2人固定だと
+    「スレを外から報告する」形にしかならず、説明文になってしまう（#134）。
+    """
+    keys = cast_keys(cfg)
+    if (cfg.get("style") or {}).get("skit"):
+        keys = keys + [k for k in extra_speakers() if k not in keys]
+    return keys
+
+
 def _schema(cfg: dict) -> dict:
-    """台本のJSONスキーマ。話者はチャンネルの配役に限定する。"""
-    speakers = cast_keys(cfg)
+    """台本のJSONスキーマ。話者はこのチャンネルで使える声に限定する。"""
+    speakers = _allowed_speakers(cfg)
     return {
         "type": "object",
         "properties": {

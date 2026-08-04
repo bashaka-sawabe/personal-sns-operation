@@ -325,16 +325,21 @@ def render_scene(scene: dict, index: int, work_dir: str, cast: list | None = Non
         # 左右の下端。cast の並び順で 0=左, 1=右（3体以上は想定しない=配役2人の前提）
         x = f"{CHAR_MARGIN_X}" if n == 0 else f"main_w-overlay_w-{CHAR_MARGIN_X}"
         y = f"main_h-overlay_h-{CHAR_MARGIN_Y}"
-        graph.append(f"[{idx}:v]scale=-2:{CHAR_HEIGHT}[c{n}]")
-        graph.append(f"[c{n}]split[c{n}on][c{n}pre]")
-        graph.append(f"[c{n}pre]{CHAR_DIM}[c{n}off]")
-        # 減光した2体を常時敷いてから、発話区間だけ通常の明るさを重ねる
-        graph.append(f"[{last}][c{n}off]overlay=x={x}:y={y}[d{n}]")
-        last = f"d{n}"
         wins = windows.get(key)
+        graph.append(f"[{idx}:v]scale=-2:{CHAR_HEIGHT}[c{n}]")
         if wins:
-            graph.append(f"[{last}][c{n}on]overlay=x={x}:y={y}:enable='{_enable_expr(wins)}'[b{n}]")
+            # 減光した立ち絵を常時敷き、発話区間だけ通常の明るさを重ねる
+            graph.append(f"[c{n}]split[c{n}on][c{n}pre]")
+            graph.append(f"[c{n}pre]{CHAR_DIM}[c{n}off]")
+            graph.append(f"[{last}][c{n}off]overlay=x={x}:y={y}[d{n}]")
+            graph.append(f"[d{n}][c{n}on]overlay=x={x}:y={y}:enable='{_enable_expr(wins)}'[b{n}]")
             last = f"b{n}"
+        else:
+            # このシーンで喋らないキャラは減光したまま。split すると
+            # 明るい側の出力が未接続になって ffmpeg が落ちる（#133で露呈）
+            graph.append(f"[c{n}]{CHAR_DIM}[c{n}off]")
+            graph.append(f"[{last}][c{n}off]overlay=x={x}:y={y}[d{n}]")
+            last = f"d{n}"
     graph.append(f"[{last}]{subs}[vsub]")
     # シーン頭のパンチイン。字幕ごと寄せるのは意図（大手の型はテロップも一緒に揺れる）
     punch = style.get("punch_zoom", PUNCH_ZOOM)

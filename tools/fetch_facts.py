@@ -130,7 +130,7 @@ def collect_reddit(limit: int) -> list:
 
 
 def add_manual(fact: str, discovered_from: str, channel: str = "trivia") -> str:
-    prefix = "heisei" if channel == "heisei" else "fact"
+    prefix = channel if channel in ("heisei", "showa") else "fact"
     fact_id = f"{prefix}-" + hashlib.sha1(fact.encode()).hexdigest()[:10]
     return _save(_new_fact(fact_id, fact.strip(), discovered_from or "", channel))
 
@@ -176,7 +176,7 @@ def main() -> None:
     p.add_argument("--limit", type=int, default=15, help="収集する候補数（既定15）")
     p.add_argument("--add", metavar="FACT", help="ネタを手で積む")
     p.add_argument("--from", dest="discovered_from", metavar="URL", help="--add の発見元URL")
-    p.add_argument("--channel", default="trivia", choices=("trivia", "heisei"),
+    p.add_argument("--channel", default="trivia", choices=("trivia", "heisei", "showa"),
                    help="--add の対象チャンネル（既定 trivia）／--list の絞り込み")
     p.add_argument("--back", metavar="ID", help="裏取りを付ける対象")
     p.add_argument("--url", help="--back で付ける一次ソースURL")

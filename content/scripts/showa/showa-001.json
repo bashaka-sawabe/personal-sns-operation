@@ -1,0 +1,117 @@
+{
+  "id": "showa-001",
+  "title": "本田宗一郎、灰皿で殴る　現場主義の暴走",
+  "emotion": "呆れ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "灰皿が飛ぶ現場主義",
+      "dialogue": [
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "貴様！　その数字、自分で走らせたか！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、なんで灰皿を握ってるのだ!?"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "実験室の紙を読むな！　現物を持ってこい！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "紙で怒られて灰皿。因果が飛びすぎてるのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "いいか、机の上の数字は嘘をつくんだ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "言いたいことは分かる。手段が地獄なのだ"
+        }
+      ],
+      "image_prompt": "1960s Japanese factory floor, oil-stained workbench, scattered wrenches and a metal ashtray, harsh overhead light, no people, no text"
+    },
+    {
+      "caption": "工具で殴る日常",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "で、灰皿は特別なのだ？　まさか常設なのだ？"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "手近にあるものだ。工具でも頭を叩いた！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？　スパナが飛ぶ職場、ボクは初日で辞めるのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "中途半端な仕事をした奴が悪い！　甘えるな！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "殴られた側が本気になる保証、どこにもないのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "……本気にさせる方法を、他に知らんかった"
+        }
+      ],
+      "image_prompt": "close-up of vintage steel spanner and hammer on a greasy metal table, dim workshop, dramatic shadows, no people, no text"
+    },
+    {
+      "caption": "締め・今なら一発アウト",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "令和なら一発アウト。会議室で即報告案件なのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "だが俺は、走らんバイクを客に売りたくなかった！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "そこは分かるのだ。ボクも紙の数字は信じないのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "現場に立て！　答えは全部そこにある！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "熱は要る。灰皿は要らない。分けて持ち帰るのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "あなたの職場、どっちが足りてないのだ？"
+        }
+      ],
+      "image_prompt": "empty modern office desk beside an old motorcycle engine part, split lighting warm and cool, symbolic contrast, no people, no text"
+    }
+  ],
+  "caption": "実験室の数字を読み上げたら灰皿が飛ぶ。工具で殴る現場主義。今なら一発アウトだけど、その熱がバイクを走らせた。",
+  "hashtags": [
+    "#昭和",
+    "#本田宗一郎",
+    "#昭和の働き方",
+    "#ずんだもん",
+    "#現場主義"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "本田宗一郎は作業中に中途半端な仕事をした社員を、怒声とともに容赦なく工具で頭を殴",
+  "source_facts": [
+    {
+      "id": "showa-1ff2b6a75f",
+      "fact": "本田宗一郎は作業中に中途半端な仕事をした社員を、怒声とともに容赦なく工具で頭を殴った。実験室のデータを読み上げる社員には「実際に走行させたデータを持ってこい」と激怒し、灰皿で殴ったこともある",
+      "backing_url": "https://ja.wikipedia.org/wiki/本田宗一郎",
+      "backing_note": "Wikipedia（該当記述に脚注[8]あり）"
+    }
+  ]
+}

@@ -13,7 +13,7 @@ import os
 import re
 
 from .channels import CHARACTERS, cast_keys, extra_speakers
-from .common import PipelineError, read_secret
+from .common import PipelineError, normalize_powerword, read_secret
 
 # 台本の型。style.scenes が無いときの既定値。
 # 5シーン×各2〜3行だと1話題1往復で終わり、掛け合いにならなかった（#131）。
@@ -59,6 +59,15 @@ def _schema(cfg: dict) -> dict:
                 "description": (
                     "この動画で視聴者に起こしたい感情を1つだけ選ぶ。"
                     "情報はこの感情を運ぶ乗り物であり、目的ではない"
+                ),
+            },
+            "powerword": {
+                "type": "string",
+                "description": (
+                    "視聴者がコメント欄で復唱する1語（2〜14字）。"
+                    "この語だけ画面いっぱいの特大字幕で出るので、**セリフのどれか1行に"
+                    "そのままの形で含める**こと。引用スレから作るときは、"
+                    "指定された語をそのまま使う（創作した造語は復唱されない）"
                 ),
             },
             "first_hand": {
@@ -117,7 +126,8 @@ def _schema(cfg: dict) -> dict:
                 "description": "先頭に#を含むタグ。5個",
             },
         },
-        "required": ["title", "emotion", "first_hand", "scenes", "caption", "hashtags"],
+        "required": ["title", "emotion", "powerword", "first_hand", "scenes",
+                     "caption", "hashtags"],
         "additionalProperties": False,
     }
 
@@ -191,9 +201,11 @@ def _thread_rules(cfg: dict) -> str:
 
 **オチは「パワーワード1個」に集約する:**
 このジャンルは**視聴者がコメント欄で復唱したくなる短い言葉**が1個あるかで決まります。
-- 最後のシーンに、スレの中で一番おかしい**短い固有の言い回し**を1つ置き、それで終わる。
-- 説明を足さない。**言葉だけを残して終わる**のが正解。
-- スレにそういう言葉が無ければ、一番おかしい一言をそのまま使う（創作はしない）。
+- パワーワードは**既にこちらで決めてあります**（ユーザーメッセージで指定されます）。
+  選び直さないでください。スレに実在する語であることを確認済みのものです。
+- その語を `powerword` に入れ、**最後のシーンのセリフにそのままの形で1回置く**。
+  画面ではその瞬間だけ**画面いっぱいの特大字幕**になります。
+- パワーワードの後ろに説明を足さない。**言葉だけを残して終わる**のが正解。
 
 **尺:**
 この動画は**26〜32秒**に収めます。セリフは全体で**15行前後・合計200字以内**。
@@ -316,8 +328,20 @@ def _fact_context(facts: list) -> str:
 
 
 def _thread_context(thread: dict) -> str:
-    """採用スレをユーザーメッセージに展開する。レスは翻案に足りるぶんだけ渡す。"""
-    lines = [f"スレタイ: {thread['title']}", "", "レス:"]
+    """採用スレをユーザーメッセージに展開する。レスは翻案に足りるぶんだけ渡す。
+
+    採用時に決めたパワーワードとオチを最初に渡す（#142）。ここを台本側で選び直させると、
+    「スレに実在する語か」の検査（fetch_threads の採用基準）が効かなくなる。
+    """
+    lines = [f"スレタイ: {thread['title']}"]
+    if thread.get("powerword"):
+        lines += [
+            "",
+            f"■ このスレのオチ: {thread.get('ochi', '')}",
+            f"■ 復唱させるパワーワード: 「{thread['powerword']}」",
+            "  powerword にはこの語をそのまま入れ、セリフのどれか1行にも同じ形で含めること。",
+        ]
+    lines += ["", "レス:"]
     for r in thread["res"][:80]:
         text = r["text"].replace("\n", " ")[:120]
         lines.append(f"{r['no']}: {text}")
@@ -541,6 +565,13 @@ def dialogue_issues(script: dict) -> list:
         return []
     issues = []
 
+    # パワーワードがセリフに無いと、特大字幕を出す場所が無い（#142）
+    word = (script.get("powerword") or "").strip()
+    if not word:
+        issues.append("powerword が空です（復唱される語を1つ決めてください）")
+    elif not any(normalize_powerword(word) in normalize_powerword(t) for _, t in lines):
+        issues.append(f"powerword「{word}」がどのセリフにも入っていません（特大字幕が出ません）")
+
     # 同じ語尾の連続。3行以上続くと読み上げが単調になる
     run, prev = 1, None
     for _, text in lines:
@@ -628,6 +659,7 @@ def _fallback(cfg: dict, theme: str) -> dict:
     b = keys[1] if len(keys) > 1 else keys[0]   # 1人配役でも疎通確認は通す
     return {
         "title": f"[offline] {theme}",
+        "powerword": "疎通確認",
         "first_hand": "",
         "scenes": [
             {

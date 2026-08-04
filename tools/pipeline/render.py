@@ -24,6 +24,7 @@ from .common import (
     PipelineError,
     ffmpeg,
     font_path,
+    normalize_powerword,
     require,
     wrap_japanese,
 )
@@ -39,9 +40,18 @@ TEXT_MARGIN_X = 60     # 字幕の左右マージン（ASSスタイルの Margin
 # 下の _check_text_width() が読み込み時に見張る
 WRAP_HOOK = 8
 WRAP_LINE = 12
+# オチのパワーワードだけ画面いっぱいに出す（#142）。
+# ロンロン（51.2万）は復唱させたい1語だけを特大の青/黄で画面幅いっぱいに出し、
+# コメント欄がその語の復唱で埋まる（docs/02 2章）。
+# これが無いと全セリフが同じ大きさで流れ、どこが山なのか画面から分からない。
+# 実際 showa-001 は熱血経営者の怒声「自分で走らせたか！」が他と同じ極小サイズだった
+SIZE_PUNCH = 148
+WRAP_PUNCH = 6
+PUNCH_BGR = "00D7FF"       # 金（ASSはBGR並び）。キャラ色とは別系統にして「特別な1語」を示す
 ACCENT = r"\1c&H00D7FF&"   # 数字の強調色（金）。ASSはBGR並び
 WHITE_BGR = "FFFFFF"
 POP = r"{\fscx132\fscy132\t(0,110,\fscx100\fscy100)}"  # フレーズのポップイン
+PUNCH_POP = r"{\fscx164\fscy164\t(0,160,\fscx100\fscy100)}"  # パワーワードはより大きく跳ねる
 
 # シーン頭のパンチイン（#90）。効果音と同時に画面全体を一瞬寄せて戻す。
 # 深さはチャンネルの style から引く（#121）。カットの刻みが速い meme は強め、
@@ -68,6 +78,7 @@ def _check_text_width() -> None:
     for name, size, wrap in (
         ("Hook", SIZE_HOOK, WRAP_HOOK),
         ("Line", SIZE_LINE, WRAP_LINE),
+        ("Punch", SIZE_PUNCH, WRAP_PUNCH),
     ):
         if size * wrap > usable:
             raise PipelineError(
@@ -242,19 +253,26 @@ def _speaker_icon(key: str, work_dir: str) -> str:
     return out
 
 
-def _speaker_windows(scene: dict) -> dict:
-    """話者ごとの発話区間 [(start, end), ...]。アイコンの出し分けに使う。"""
+def _speaker_windows(scene: dict, powerword: str = "") -> dict:
+    """話者ごとの発話区間 [(start, end), ...]。アイコンの出し分けに使う。
+
+    パワーワードの区間は**どの話者のアイコンも出さない**（#142）。
+    そこは画面いっぱいの1語だけを見せる瞬間で、アイコンが重なると読めなくなる。
+    """
+    key_word = normalize_powerword(powerword or "")
     wins, t = {}, 0.0
     n = len(scene["phrases"])
     for i, p in enumerate(scene["phrases"]):
         # 最後のフレーズはシーン末尾の余白まで（字幕の表示と揃える）
         end = scene["dur"] if i == n - 1 else t + p["dur"]
-        wins.setdefault(p["speaker"], []).append((t, end))
+        if not (key_word and key_word in normalize_powerword(p["text"])):
+            wins.setdefault(p["speaker"], []).append((t, end))
         t += p["dur"]
     return wins
 
 
-def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str) -> str:
+def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str,
+               powerword: str = "") -> str:
     """1シーン分の字幕（スレタイ＋セリフ同期）を書き出す。セリフは話者の色で塗る。
 
     シーンごとのセクション見出しは出さない（#93）。登録者10万超の同形式チャンネルは
@@ -269,17 +287,26 @@ def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str) -> str:
         + fade + _ass_text(hook, WRAP_HOOK),
     ]
     t = 0.0
+    key_word = normalize_powerword(powerword or "")
     for i, p in enumerate(scene["phrases"]):
         # 最後のフレーズはシーン末尾の余白まで出し続ける（先に消えると欠けて見える）
         end = dur if i == len(scene["phrases"]) - 1 else t + p["dur"]
-        events.append(
-            f"Dialogue: 0,{_ass_time(t)},{_ass_time(end)},Line_{p['speaker']},,0,0,0,,"
-            + POP + _ass_text(p["text"], WRAP_LINE,
-                              base_bgr=CHARACTERS[p["speaker"]]["color_bgr"])
-        )
+        if key_word and key_word in normalize_powerword(p["text"]):
+            # パワーワードを含むフレーズは、その語**だけ**を画面いっぱいに出す（#142）。
+            # 前後の言葉を残すと山が埋もれる。ロンロンは1語だけを残して終わる
+            events.append(
+                f"Dialogue: 0,{_ass_time(t)},{_ass_time(end)},Punch,,0,0,0,,"
+                + PUNCH_POP + _ass_text(powerword, WRAP_PUNCH, highlight=False)
+            )
+        else:
+            events.append(
+                f"Dialogue: 0,{_ass_time(t)},{_ass_time(end)},Line_{p['speaker']},,0,0,0,,"
+                + POP + _ass_text(p["text"], WRAP_LINE,
+                                  base_bgr=CHARACTERS[p["speaker"]]["color_bgr"])
+            )
         t += p["dur"]
 
-    # 話者ごとのセリフスタイル。色の違いは立ち絵の明滅と対で「誰の声か」を伝える
+    # 話者ごとのセリフスタイル。色の違いは話者アイコンと対で「誰の声か」を伝える
     speaker_styles = [
         (f"Line_{key}", SIZE_LINE, 10, 2, 560, CHARACTERS[key]["color_bgr"])
         for key in sorted({p["speaker"] for p in scene["phrases"]})
@@ -290,6 +317,7 @@ def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str) -> str:
         f"{TEXT_MARGIN_X},{TEXT_MARGIN_X},{margin_v},1"
         for name, size, outline, align, margin_v, color in (
             ("Hook", SIZE_HOOK, 13, 8, 210, WHITE_BGR),   # 画面上部（UIに隠れない位置）に常時
+            ("Punch", SIZE_PUNCH, 18, 5, 0, PUNCH_BGR),   # 画面中央（align=5）を占有する1語
             *speaker_styles,                              # 下寄せ（キャプション欄を避ける）
         )
     )
@@ -342,7 +370,8 @@ def _enable_expr(windows: list) -> str:
 
 
 def render_scene(scene: dict, index: int, work_dir: str,
-                 hook: str | None = None, style: dict | None = None) -> str:
+                 hook: str | None = None, style: dict | None = None,
+                 powerword: str = "") -> str:
     """1シーンを mp4 にする。背景が映像ならループで敷き、静止画ならKen Burnsで動かす。
 
     話者アイコンは**このシーンで喋る人ぶん**だけ作り、発話区間だけ表示する（#140）。
@@ -353,7 +382,7 @@ def render_scene(scene: dict, index: int, work_dir: str,
     style = style or {}
     out = os.path.join(work_dir, f"scene{index:02d}.mp4")
     ass = _scene_ass(scene, index, os.path.join(work_dir, f"sub{index:02d}.ass"),
-                     _font_family(), hook or scene["caption"])
+                     _font_family(), hook or scene["caption"], powerword)
     audio = _scene_audio(scene, index, work_dir)
     subs = f"ass='{ass}':fontsdir='{os.path.dirname(font_path())}'"
 
@@ -377,7 +406,7 @@ def render_scene(scene: dict, index: int, work_dir: str,
 
     # 話者アイコンは配役ではなく**このシーンで実際に喋る人**から作る。
     # そうしないと cast に載っていない脇役が喋ったときに画面が変わらない（#140）
-    windows = _speaker_windows(scene)
+    windows = _speaker_windows(scene, powerword)
     graph = [f"[0:v]{base_chain}[v0]"]
     last = "v0"
     for n, key in enumerate(sorted(windows)):
@@ -448,10 +477,10 @@ def concat(parts: list, out_path: str, work_dir: str,
 
 
 def build(scenes: list, out_path: str, work_dir: str, bgm: str | None = None,
-          style: dict | None = None) -> str:
+          style: dict | None = None, powerword: str = "") -> str:
     # スレタイ＝シーン1の caption。全シーンの上部に出しつづける（#93）
     hook = scenes[0]["caption"]
-    parts = [render_scene(s, i, work_dir, hook=hook, style=style)
+    parts = [render_scene(s, i, work_dir, hook=hook, style=style, powerword=powerword)
              for i, s in enumerate(scenes)]
     total = sum(s["dur"] for s in scenes)
     return concat(parts, out_path, work_dir, bgm=bgm, total_dur=total)

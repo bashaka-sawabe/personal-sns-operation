@@ -1,0 +1,110 @@
+{
+  "id": "meme-012",
+  "title": "嫁がスカート着ない相談、結論は本人の好み",
+  "emotion": "笑い",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【謎の助言】妻がスカート履かない",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "嫁がスカート全く着ないのだ！"
+        },
+        {
+          "speaker": "metan",
+          "text": "いきなり奥様の話をされても困るわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長袖で、胸も目立たないやつばかり"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "履かないなら離婚だ、って脅せよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、なんでそうなるのだ!?"
+        }
+      ],
+      "image_prompt": "a quiet living room with a closet full of plain trousers, soft evening light, no people, no text"
+    },
+    {
+      "caption": "レス民の総ツッコミ",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "それだけで離婚する人いないでしょ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "じゃあ君がスカート履けばいい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？　解決してないのだ"
+        },
+        {
+          "speaker": "himari",
+          "text": "ジーパン…それはそれで良くない？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ジーパンも見たことないのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "結婚前からそれなら、今更よ"
+        }
+      ],
+      "image_prompt": "folded chino pants stacked neatly on a wooden shelf, minimal room, warm light, no people, no text"
+    },
+    {
+      "caption": "オチ・本人の理由",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "どんなスカートを望んでるの？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "膝下の、柔らかい感じなのだ"
+        },
+        {
+          "speaker": "himari",
+          "text": "それ、奥さんの理由わかるかも"
+        },
+        {
+          "speaker": "himari",
+          "text": "めくれるのが嫌なんじゃない？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……多分そうだと思うのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "最初から本人に聞きなさいよ"
+        }
+      ],
+      "image_prompt": "a long soft skirt hanging alone by a window with curtain moving in the breeze, pastel tone, no people, no text"
+    }
+  ],
+  "caption": "妻がスカートを履かない理由を掲示板に聞いた男、最後に自分で答えに辿り着く。",
+  "hashtags": [
+    "#掲示板",
+    "#夫婦",
+    "#ずんだもん",
+    "#四国めたん",
+    "#スレまとめ"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "嫁がスカート全く着ないんだが普通？",
+  "source_thread": {
+    "id": "livejupiter-1785667068",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785667068/",
+    "title": "嫁がスカート全く着ないんだが普通？"
+  }
+}

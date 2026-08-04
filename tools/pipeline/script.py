@@ -623,7 +623,9 @@ def unfilled(script: dict) -> list:
 
 def _fallback(cfg: dict, theme: str) -> dict:
     """APIキーが無いときのテンプレ。パイプラインの疎通確認用で、投稿には使わない。"""
-    a, b = cast_keys(cfg)  # a=教える側/先輩, b=持ち込む側（cast の並び順）
+    keys = cast_keys(cfg)  # 先頭=教える側/先輩, 2番目=持ち込む側（cast の並び順）
+    a = keys[0]
+    b = keys[1] if len(keys) > 1 else keys[0]   # 1人配役でも疎通確認は通す
     return {
         "title": f"[offline] {theme}",
         "first_hand": "",

@@ -86,8 +86,9 @@ VOICEVOX_ENGINES = [
     "/Applications/VOICEVOX.app/Contents/Resources/vv-engine/run",
 ]
 
-# 立ち絵の置き場。素材は規約の都合で本人が手動で置く（docs/08・docs/09 4-8）
-CHARACTERS_DIR = os.path.join(ASSETS_DIR, "characters")
+# 話者アイコンの置き場。**置かなくてよい**（無ければキャラ色と名前から生成される。#140）。
+# 手描きアイコンなど規約のある素材を使うときだけ、ここに <key>.png と <key>.txt を対で置く
+ICONS_DIR = os.path.join(ASSETS_DIR, "icons")
 
 # エンジンの起動は1プロセスに1回で足りるのでモジュール内に持つ
 _voicevox = {"checked": False, "up": False}
@@ -232,24 +233,25 @@ def se_credit(kind: str) -> str:
     return ""
 
 
-# ---------------------------------------------------------------- 立ち絵
+# ---------------------------------------------------------------- 話者アイコン
 
-def character_image(key: str) -> str | None:
-    """立ち絵のパス。無ければ None（立ち絵なしで劣化継続する）。
+def icon_image(key: str) -> str | None:
+    """持ち込みアイコンのパス。無ければ None（render 側がキャラ色と名前で生成する）。
 
-    素材はファンメイド立ち絵など規約のあるものなので、自動ダウンロードせず
-    本人が content/assets/characters/<key>.png に置く（docs/09 4-8）。
+    立ち絵は「規約を確認した本人が置く」運用にした結果、置かれていないキャラは
+    画面に出られず、喋っているのに姿が無いという事故になった（#140）。
+    アイコンは素材が無くても生成できるので、ここは**任意の差し替え口**でしかない。
     """
-    path = os.path.join(CHARACTERS_DIR, f"{key}.png")
+    path = os.path.join(ICONS_DIR, f"{key}.png")
     return path if os.path.exists(path) else None
 
 
-def character_credit(key: str) -> str:
-    """立ち絵素材のクレジット。画像と同名の .txt（サイドカー）に書いてある。
+def icon_credit(key: str) -> str:
+    """持ち込みアイコンのクレジット。画像と同名の .txt（サイドカー）に書いてある。
 
     BGM（bgm_credit）と同じ約束。素材を置くときは必ず対で置く（docs/08）。
     """
-    sidecar = os.path.join(CHARACTERS_DIR, f"{key}.txt")
+    sidecar = os.path.join(ICONS_DIR, f"{key}.txt")
     if os.path.exists(sidecar):
         return open(sidecar, encoding="utf-8").read().strip()
     return ""
@@ -622,9 +624,9 @@ def _write_credits(asset_dir: str, providers: list, used_speakers: list,
     if voicevox_used():
         lines.extend(CHARACTERS[k]["credit"] for k in used_speakers)
     for key in used_speakers:
-        # 立ち絵素材のクレジット（サイドカー）。素材が無ければ何も出ない
-        if character_image(key) and character_credit(key):
-            lines.append(character_credit(key))
+        # 持ち込みアイコンのクレジット（サイドカー）。生成アイコンなら何も出ない
+        if icon_image(key) and icon_credit(key):
+            lines.append(icon_credit(key))
     for kind in se_kinds or []:
         # 効果音のクレジット（サイドカー）。同文は1行にまとめる
         line = se_credit(kind)

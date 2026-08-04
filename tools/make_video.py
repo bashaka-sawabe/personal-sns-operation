@@ -22,7 +22,8 @@
 
 前提: ffmpeg（必須）／台本生成に anthropic SDK と ANTHROPIC_API_KEY
       （どちらも無ければ --offline 相当で動く）
-      立ち絵は content/assets/characters/<キャラ>.png に手動で置く（docs/09 4-8）
+      話者アイコンは自動生成される（差し替えたいときだけ
+      content/assets/icons/<キャラ>.png に置く。docs/09 4-8）
 """
 import argparse
 import os
@@ -74,23 +75,6 @@ def warn_flat_dialogue(data: dict) -> None:
         print(f"  ⚠️ 会話が平坦です: {issue}", file=sys.stderr)
 
 
-def load_cast(cfg: dict) -> list:
-    """配役の立ち絵を集める。無いキャラは知らせた上で立ち絵なしで続ける。"""
-    cast, missing = [], []
-    for key in channels.cast_keys(cfg):
-        img = media.character_image(key)
-        cast.append((key, img))
-        if not img:
-            missing.append(key)
-    if missing:
-        print("  ⚠️ 立ち絵がありません（立ち絵なしで続けます・投稿品質ではありません）:",
-              file=sys.stderr)
-        for key in missing:
-            print(f"     content/assets/characters/{key}.png に配置してください"
-                  "（素材規約は docs/08）", file=sys.stderr)
-    return cast
-
-
 def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
     script_mod.validate(data)  # 旧形式（ナレーション形式）はここで明確に落とす
     channel = data.get("channel") or data.get("genre") or ""
@@ -102,18 +86,16 @@ def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
     warn_unfilled(data, script_id, channel)
 
     print(f"  素材を生成中（{len(data['scenes'])}シーン）...")
-    # 立ち絵のクレジット（サイドカー）は media 側が credits.txt に書く
     # 演出（尺・テンポ・効果音・カット）はチャンネルごとに違う（docs/02 1章）
     style = cfg.get("style", {})
     scenes = media.build_scene_assets(data, asset_dir, offline=offline, style=style)
-    cast = load_cast(cfg)
     total = sum(s["dur"] for s in scenes)
     bgm = media.bgm_track(script_id)
     if bgm:
         # CC BY 楽曲はクレジット表記が利用条件。投稿時の説明文に自動で入る
         media.append_credit(asset_dir, media.bgm_credit(bgm))
     print(f"  合成中（尺 {total:.1f}秒{'・BGMあり' if bgm else '・BGMなし'}）...")
-    render.build(scenes, out_path, asset_dir, bgm=bgm, cast=cast, style=style)
+    render.build(scenes, out_path, asset_dir, bgm=bgm, style=style)
     if status_mod.advance(script_id, "rendered"):
         print(f"  台帳: {script_id} を rendered に更新しました")
     return out_path

@@ -189,8 +189,10 @@ def load(channel: str) -> dict:
                 f"{channel} の配役に未定義のキャラがいます: {member.get('speaker')}"
                 f"（定義済み: {', '.join(CHARACTERS)}）"
             )
-    if len(cfg.get("cast", [])) != 2:
-        raise PipelineError(f"{channel} の cast は2人にしてください（掛け合いの前提）。")
+    # 2人固定を要求していたが、それが「ずんだもん・めたんの一問一答」の正体だった（#140）。
+    # ロンロンは1本に何人でも出す。人数の上限はこちらで決めない
+    if not cfg.get("cast"):
+        raise PipelineError(f"{channel} の cast が空です（最低1人は要ります）。")
     return cfg
 
 
@@ -204,5 +206,5 @@ def available() -> list:
 
 
 def cast_keys(cfg: dict) -> list:
-    """配役のキャラキーを cast の並び順で返す（立ち絵の左右配置にも使う）。"""
+    """配役のキャラキーを cast の並び順で返す。"""
     return [m["speaker"] for m in cfg["cast"]]

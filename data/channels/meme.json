@@ -7,12 +7,20 @@
   "nakanohito": false,
   "cast": [
     {
-      "speaker": "metan",
-      "role": "ツッコミ兼解説。文脈と出典を補う"
+      "speaker": "zundamon",
+      "role": "スレ主。相談を持ち込み、レス民に振り回される。話の中心にいるが主導権は無い"
     },
     {
-      "speaker": "zundamon",
-      "role": "ノリのいいボケ。ミームを体現して騒ぐ"
+      "speaker": "takehiro",
+      "role": "最初に食いつくレス民。無責任で雑な助言を即座に投げる"
+    },
+    {
+      "speaker": "tsumugi",
+      "role": "茶化すレス民。話を脇道へ逸らし、下世話な方向へ引っ張る"
+    },
+    {
+      "speaker": "shishio",
+      "role": "終盤に出てくるレス民。淡々とした正論か斜め上の一言で場を終わらせる"
     }
   ],
   "style": {

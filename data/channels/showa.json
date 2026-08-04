@@ -6,17 +6,34 @@
   "nakanohito": false,
   "fact_source": true,
   "cast": [
-    {"speaker": "ryusei_nekketsu", "role": "昭和の熱血経営者。理屈より現場、根性で押し切る。怒鳴るが憎めない"},
-    {"speaker": "zundamon", "role": "令和の視点で総ツッコミを入れる。「今なら一発アウト」を担当する視聴者の代弁者"}
+    {
+      "speaker": "ryusei_nekketsu",
+      "role": "昭和の熱血経営者。理屈より現場、根性で押し切る。怒鳴るが憎めない"
+    },
+    {
+      "speaker": "zundamon",
+      "role": "令和の視点で総ツッコミを入れる。「今なら一発アウト」を担当する視聴者の代弁者"
+    }
   ],
   "style": {
     "speed": 1.2,
     "phrase_gap": 0.05,
     "scene_tail": 0.15,
     "punch_zoom": 1.12,
-    "cut_interval": 0,
+    "cut_interval": 0.7,
     "scenes": 3,
     "skit": true,
-    "se": {"scene": "heisei_don", "last": "trivia_reveal"}
+    "se": {
+      "scene": "heisei_don",
+      "last": "trivia_reveal"
+    },
+    "bg_queries": [
+      "vintage factory machinery",
+      "welding sparks workshop",
+      "old motorcycle engine",
+      "retro japanese street night",
+      "vintage typewriter desk",
+      "industrial metal lathe"
+    ]
   }
 }

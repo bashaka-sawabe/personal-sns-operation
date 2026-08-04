@@ -1,0 +1,103 @@
+{
+  "id": "meme-016",
+  "title": "父になるとゲーム時間が消える話",
+  "emotion": "笑い",
+  "powerword": "マリカーを用意しろ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【父の嘆き】ゲーム時間がゼロ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ゲームする時間がゼロなのだ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "子供が大きくなった頃、また熱中できるか心配で──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "知ってた。作る前に分かるだろ"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "その長文書く時間はあるじゃん"
+        }
+      ],
+      "image_prompt": "abstract dim living room at night, glowing game controller left on a sofa, soft blue light, no people, no text"
+    },
+    {
+      "caption": "実はスマホでやってる疑惑",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "赤ちゃんを膝に乗せて打ってるのだ"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "はいはい、幸せ見せつけないで"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "で、スマホゲームはやってんだろ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……カードを積むやつは、やってる"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "ゲームしとるやん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "やりたいゲームと違うのだ"
+        }
+      ],
+      "image_prompt": "abstract close view of a smartphone screen glow in a dark room, scattered toy blocks on the floor, warm night light, no people, no text"
+    },
+    {
+      "caption": "オチ：子供と一緒にやれ",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "娘とやればいいじゃん、格闘ゲームとか"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "1歳にスト6は無理なのだ。嫁が29で──"
+        },
+        {
+          "speaker": "shishio",
+          "text": "聞いてない。10年後、娘が対戦相手だぞ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……スイッチ買うのだ？"
+        },
+        {
+          "speaker": "shishio",
+          "text": "マリカーを用意しろ"
+        }
+      ],
+      "image_prompt": "abstract image of two game controllers side by side on a bright living room rug, one large one small, sunlight, no people, no text"
+    }
+  ],
+  "caption": "ゲームできないと嘆く新米パパ、レス民に一言で丸め込まれる。10年後の対戦相手はもう家にいる。",
+  "hashtags": [
+    "#ずんだもん",
+    "#ゲーム",
+    "#育児",
+    "#マリカー",
+    "#スレ民"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "結婚して赤ちゃん産まれたらほんまにゲームやる時間なくなった",
+  "source_thread": {
+    "id": "livejupiter-1785662021",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785662021/",
+    "title": "結婚して赤ちゃん産まれたらほんまにゲームやる時間なくなった"
+  }
+}

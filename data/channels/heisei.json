@@ -27,6 +27,7 @@
       "last": "heisei_shime"
     },
     "bg_pool": 5,
-    "skit": false
+    "skit": false,
+    "max_chars": 520
   }
 }

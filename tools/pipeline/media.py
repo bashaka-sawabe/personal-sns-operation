@@ -29,6 +29,7 @@ import urllib.parse
 import urllib.request
 
 from .channels import CHARACTERS
+from .script import INTERRUPT_MARK
 from .common import (
     ASSETS_DIR, HEIGHT, WIDTH, PipelineError, ffmpeg, probe_duration,
     read_secret, require, run, split_phrases,
@@ -604,8 +605,12 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
             style_id = CHARACTERS[key]["voicevox_speaker"]
             for text in split_phrases(line["text"]):
                 j = len(phrases)
-                audio = narration(text, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"),
-                                  speaker=style_id, speed=speed, gap=gap)
+                # 割り込み記号は字幕にだけ残す。読み上げには渡さず、末尾の無音も落として
+                # 「言い切る前に奪われた」を音で作る（#143）
+                cut = text.rstrip().endswith(INTERRUPT_MARK)
+                spoken = text.rstrip()[:-len(INTERRUPT_MARK)] if cut else text
+                audio = narration(spoken, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"),
+                                  speaker=style_id, speed=speed, gap=0.0 if cut else gap)
                 phrases.append({"text": text, "audio": audio,
                                 "dur": probe_duration(audio), "speaker": key})
         # 読み終わりで即カットすると詰まって聞こえるのでシーン末尾に余白を足す

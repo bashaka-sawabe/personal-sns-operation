@@ -1,0 +1,141 @@
+{
+  "id": "heisei-006",
+  "title": "平成生まれ位が懐かしい消えたモノ3選",
+  "emotion": "共感",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "平成生まれが懐かしい3選",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "今日は平成に消えていったモノ、3つ挙げるわよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "消えた? 壊れたわけじゃないのだ?"
+        },
+        {
+          "speaker": "metan",
+          "text": "壊れる前に、世界が置いていったのよ"
+        }
+      ],
+      "image_prompt": "nostalgic 1990s Japanese desk drawer half open, abstract soft light, dust particles, no text, no faces, muted retro color palette"
+    },
+    {
+      "caption": "ポケベル",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "ポケベル。1996年に東京テレメッセージだけで契約120万超よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "120万? で、今は何人なのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "2019年9月30日の終了時、1500人を下回っていたわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "減りすぎ。学校の全校生徒より少ないのだ"
+        }
+      ],
+      "image_prompt": "abstract close-up of a small vintage pager-like plastic device silhouette on dark background, dramatic rim light, no text, no logos, no faces"
+    },
+    {
+      "caption": "MD",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "MD。1992年11月にソニーが録再機を出したの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、それ去年まで生きてたのだ?"
+        },
+        {
+          "speaker": "metan",
+          "text": "2025年2月28日に生産終了。33年続いたのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "33年は立派なのだ。ボクは応援したかったのだ"
+        }
+      ],
+      "image_prompt": "abstract stack of small square plastic media cases with translucent shells, soft studio light, blurred background, no text, no logos, no faces"
+    },
+    {
+      "caption": "プリント倶楽部",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "プリント倶楽部。1995年7月にアトラスが出したの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクはあれ苦手なのだ。顔が別人になるのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "第一次ブームのピークは1999年頃。あれは楽しかったわよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "楽しいの押し売り。ボクは端で待つ係なのだ"
+        }
+      ],
+      "image_prompt": "abstract retro photo booth curtain and bright pink neon glow in an empty arcade corridor, no text, no logos, no faces"
+    },
+    {
+      "caption": "締め",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "どれも当時は、当たり前に手元にあったのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "3つじゃ足りない顔をしてるのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "ええ。あなたの引き出しにも、まだ何か残ってるでしょ"
+        }
+      ],
+      "image_prompt": "abstract empty wooden drawer with faint dust outlines where objects used to sit, warm nostalgic light, no text, no faces"
+    }
+  ],
+  "caption": "ポケベル120万契約、MD33年、プリクラ1995年。当時は当たり前だった3つ。あなたの引き出しには何が残ってる?",
+  "hashtags": [
+    "#平成",
+    "#懐かしい",
+    "#ポケベル",
+    "#MD",
+    "#プリクラ"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "3選",
+  "source_facts": [
+    {
+      "id": "heisei-be90c1e097",
+      "fact": "ポケベルは1996年に東京テレメッセージだけで契約数120万を超えたが、2019年9月30日のサービス終了時には契約者が1500人を下回っていた。端末の製造終了から20年が経過していた",
+      "backing_url": "https://www.watch.impress.co.jp/docs/news/1156347.html",
+      "backing_note": "Impress Watch（東京テレメッセージの発表を報じた一次報道）"
+    },
+    {
+      "id": "heisei-8345428ecf",
+      "fact": "MD（ミニディスク）は1992年11月にソニーが録再機を発売した。2025年2月28日に全ての生産を終了し、33年の歴史に幕を閉じた",
+      "backing_url": "https://ja.wikipedia.org/wiki/ミニディスク",
+      "backing_note": "Wikipedia経由でソニーの生産終了発表（2025年1月）を確認"
+    },
+    {
+      "id": "heisei-02886c8fde",
+      "fact": "プリント倶楽部（プリクラ）は1995年7月にゲーム会社アトラスが発売した。第一次ブームのピークは1999年頃",
+      "backing_url": "https://ja.wikipedia.org/wiki/プリント倶楽部",
+      "backing_note": "Wikipedia（※記事の出典表示は不十分との警告あり。稼働年・企業名は本文記載）"
+    }
+  ]
+}

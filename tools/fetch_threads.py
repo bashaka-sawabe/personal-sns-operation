@@ -32,14 +32,13 @@ import os
 import re
 import sys
 import time
-import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline.common import PipelineError
+from tools.pipeline.common import PipelineError, normalize_powerword
 
 THREADS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                            "data", "threads")
@@ -204,11 +203,6 @@ OCHI_MIN, OCHI_MAX = 10, 60
 _INSIDER = re.compile(r"(ワイ|イッチ|おん[JjＪ]|なん[JjＪ]|ｗｗ|ww|草生|>>\d|【悲報】|ニキ|ンゴ|クレメンス)")
 
 
-def _normalize(text: str) -> str:
-    """実在判定のための正規化。全半角と空白の違いでスレに無い扱いにしない。"""
-    return re.sub(r"\s+", "", unicodedata.normalize("NFKC", text))
-
-
 def check_criteria(data: dict, powerword: str, ochi: str) -> None:
     """採用基準を満たすか。満たさないものは動画にしない（docs/05 3章）。
 
@@ -229,8 +223,8 @@ def check_criteria(data: dict, powerword: str, ochi: str) -> None:
             "  スレの中から、板を知らなくても笑える語を選び直してください。"
         )
     # スレ本文に無い語は、こちらが作った造語。復唱の起点にならない
-    haystack = _normalize(data["title"] + "".join(r["text"] for r in data["res"]))
-    if _normalize(word) not in haystack:
+    haystack = normalize_powerword(data["title"] + "".join(r["text"] for r in data["res"]))
+    if normalize_powerword(word) not in haystack:
         raise PipelineError(
             f"パワーワード「{word}」がスレ本文にありません。\n"
             "  復唱される語はスレに元々あるものです。こちらで作った語では滑ります。\n"

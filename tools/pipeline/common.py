@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CONTENT_DIR = os.path.join(ROOT, "content")
@@ -109,6 +110,16 @@ def probe_duration(path: str) -> float:
 def ensure_dirs(*paths: str) -> None:
     for p in paths:
         os.makedirs(p, exist_ok=True)
+
+
+def normalize_powerword(text: str) -> str:
+    """パワーワードの照合用の正規化（#142）。
+
+    「スレに実在するか」「セリフに入っているか」「どのフレーズで特大にするか」を
+    同じ物差しで判定する必要がある。全半角・空白の違いで別物と見なすと、
+    採用時は通ったのに画面では特大にならない、という食い違いが起きる。
+    """
+    return re.sub(r"\s+", "", unicodedata.normalize("NFKC", text))
 
 
 def split_phrases(text: str, min_len: int = 6) -> list:

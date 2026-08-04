@@ -1,0 +1,103 @@
+{
+  "id": "meme-014",
+  "title": "嫁がスカート履かない相談→お前が履け",
+  "emotion": "笑い",
+  "powerword": "Gパン…エｯｯ！",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【夫の願望】嫁がスカート履かない",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "嫁がスカート一切履かないのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "動きづらいんだろ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長袖で肌も出さない。胸も隠す"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "足が太いの気にしてんじゃん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは太い足、好きなのだ"
+        }
+      ],
+      "image_prompt": "abstract flat illustration of an empty wardrobe with only trousers hanging, soft pastel colors, no text, no people"
+    },
+    {
+      "caption": "雑すぎる助言ラッシュ",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "履かないなら離婚だと脅せ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、なんでそうなる!?"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "結婚前からそうだったんでしょ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "たまにワンピはあったのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "めくれるのが嫌なんじゃね"
+        }
+      ],
+      "image_prompt": "abstract illustration of scattered speech bubbles overlapping, muted blue and orange tones, minimal, no text, no faces"
+    },
+    {
+      "caption": "オチ：じゃあお前が履け",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "解決策がある。イッチが履け"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？　なんでボクなのだ!?"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "それ絶対、嫁ウケるって"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボク、Gパンしか持ってないのだ"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "Gパン…エｯｯ！"
+        }
+      ],
+      "image_prompt": "abstract illustration of folded denim jeans on a simple bench, warm evening light, minimal flat style, no text, no people"
+    }
+  ],
+  "caption": "嫁がスカートを履かない、と相談したら全方位から殴られる回。最後の一言だけで全部持っていかれました。",
+  "hashtags": [
+    "#ずんだもん",
+    "#スレ民",
+    "#夫婦あるある",
+    "#ゆっくり解説",
+    "#雑談"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "嫁がスカート全く着ないんだが普通？",
+  "source_thread": {
+    "id": "livejupiter-1785667068",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785667068/",
+    "title": "嫁がスカート全く着ないんだが普通？"
+  }
+}

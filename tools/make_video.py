@@ -95,7 +95,8 @@ def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
         # CC BY 楽曲はクレジット表記が利用条件。投稿時の説明文に自動で入る
         media.append_credit(asset_dir, media.bgm_credit(bgm))
     print(f"  合成中（尺 {total:.1f}秒{'・BGMあり' if bgm else '・BGMなし'}）...")
-    render.build(scenes, out_path, asset_dir, bgm=bgm, style=style)
+    render.build(scenes, out_path, asset_dir, bgm=bgm, style=style,
+                 powerword=data.get("powerword", ""))
     if status_mod.advance(script_id, "rendered"):
         print(f"  台帳: {script_id} を rendered に更新しました")
     return out_path

@@ -1,0 +1,110 @@
+{
+  "id": "showa-003",
+  "title": "本田宗一郎「じゃあ、俺も弁当にする」松阪視察の食事事件",
+  "emotion": "共感",
+  "powerword": "俺も弁当にする",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "50人全員が入る部屋はあるか",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "社長は奥の座敷にご用意しました。幹部の皆様も料理店で、あとは──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、それ本人の前で!?"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "おい。50人全員が一緒に飯を食える部屋はあるのか"
+        }
+      ],
+      "image_prompt": "vintage 1960s Japanese ryokan corridor at dusk, sliding paper doors, tatami, low warm lamp light, no people, no text, cinematic film grain"
+    },
+    {
+      "caption": "即答で弁当を選ぶ",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "人数が多すぎて、そんな部屋は──"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "じゃあ、俺も弁当にする"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "即答なのだ!? 弁当なのだ?"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "いいか、俺だけ奥で膳を並べてだな、"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "そのあと現場でやってみせろと言えるか。俺は──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "言えるのだ。飯と仕事は別なのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "甘えるな! 飯を分けたら、心が分かれる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……認めたくないのだ"
+        }
+      ],
+      "image_prompt": "simple wooden bento box on a bare tatami floor beside a stack of identical boxes, soft window light, showa era atmosphere, no people, no text"
+    },
+    {
+      "caption": "今なら考えられない、でも",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "今なら『演出なのだ?』で終わるのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "演出で弁当が食えるか。油の匂いのする所で食う方がうまい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクの会社、社長の顔も知らないのだ"
+        },
+        {
+          "speaker": "ryusei_nekketsu",
+          "text": "顔も名前も覚えられん会社が、いい物を作れるか"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……上司に見せていいのだ?"
+        }
+      ],
+      "image_prompt": "old factory floor at evening, oil stains on concrete, hanging work lamps, machinery silhouettes, warm dusty light, no people, no text"
+    }
+  ],
+  "caption": "視察先の松阪で「幹部は料理店、他は弁当」と言われた本田宗一郎。全員が入る部屋がないと知って即答した一言が、いまだに刺さる。あなたの会社の社長なら、どっちを選びますか。",
+  "hashtags": [
+    "#昭和",
+    "#本田宗一郎",
+    "#働き方",
+    "#昭和の経営者",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "本田宗一郎は視察先の松阪で、幹部だけ高級料理店・他は弁当という食事の提案を受け「",
+  "source_facts": [
+    {
+      "id": "showa-25c890744f",
+      "fact": "本田宗一郎は視察先の松阪で、幹部だけ高級料理店・他は弁当という食事の提案を受け「50人全員が一緒に食事できる部屋があるのか」と質問。無いと知ると「じゃあ、俺も弁当にする」と即答した",
+      "backing_url": "https://ja.wikipedia.org/wiki/本田宗一郎",
+      "backing_note": "Wikipedia（脚注[11][12][13]あり）"
+    }
+  ]
+}

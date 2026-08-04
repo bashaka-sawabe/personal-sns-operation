@@ -25,6 +25,7 @@
       "scene": "meme_switch",
       "last": "meme_ochi"
     },
-    "scenes": 3
+    "scenes": 3,
+    "skit": true
   }
 }

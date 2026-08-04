@@ -26,6 +26,7 @@
       "scene": "heisei_don",
       "last": "heisei_shime"
     },
-    "bg_pool": 5
+    "bg_pool": 5,
+    "skit": false
   }
 }

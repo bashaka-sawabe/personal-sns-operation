@@ -34,6 +34,14 @@
       "last": "meme_ochi"
     },
     "scenes": 3,
-    "skit": true
+    "skit": true,
+    "bg_queries": [
+      "melting cheese close up",
+      "chocolate pouring slow motion",
+      "kinetic sand cutting",
+      "ramen noodles steam",
+      "paint mixing swirl",
+      "espresso pouring macro"
+    ]
   }
 }

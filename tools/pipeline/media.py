@@ -527,20 +527,37 @@ def gradient_background(index: int, path: str) -> str:
     return path
 
 
+def _fetch_background(prompt: str, api_key: str) -> dict | None:
+    """検索語1本ぶんの取得。Pexels（映像）→ Openverse（写真）の順に試す。"""
+    if api_key:
+        path = stock_background(prompt, api_key)
+        if path:
+            return {"path": path, "kind": "video", "provider": "pexels"}
+    path = openverse_background(prompt)
+    if path:
+        return {"path": path, "kind": "image", "provider": "openverse"}
+    return None
+
+
 def background(index: int, image_prompt: str, asset_dir: str,
-               api_key: str, offline: bool) -> dict:
+               api_key: str, offline: bool, queries: list | None = None) -> dict:
     """背景素材を返す。{"path", "kind": "video" | "image", "provider"}
 
-    Pexels（キーがあれば映像）→ Openverse（キーレス・CC0写真）→ グラデ、の順で落ちる。
+    queries（チャンネルの style.bg_queries）があれば**そちらを使い、台本の
+    image_prompt は見ない**（#141）。背景をシーンの内容から引くと、画面が台本を
+    復唱するだけの挿絵になり、視覚的な報酬がゼロになる。ロンロンは2chと無関係の
+    高刺激映像を流している（docs/02 2章）。
+
+    **1本落ちてもグラデに落とさず、次の検索語で引き直す。** showa-001 は
+    「昭和の工場」で何も取れず、真っ黒のグラデのまま完成してしまった。
     """
     if not offline:
-        if api_key:
-            path = stock_background(image_prompt, api_key)
-            if path:
-                return {"path": path, "kind": "video", "provider": "pexels"}
-        path = openverse_background(image_prompt)
-        if path:
-            return {"path": path, "kind": "image", "provider": "openverse"}
+        # 先頭を index でずらすのは、同じ動画の全シーンが同じ画にならないようにするため
+        pool = queries or [image_prompt]
+        for n in range(len(pool)):
+            got = _fetch_background(pool[(index + n) % len(pool)], api_key)
+            if got:
+                return got
     return {"path": gradient_background(index, os.path.join(asset_dir, f"bg{index:02d}.png")),
             "kind": "image", "provider": "gradient"}
 
@@ -569,12 +586,14 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
     # 「◯◯選」リスト形式は20シーン超になる。1シーン1枚だと素材の取得と目視判定が
     # 数十回走って現実的でないので、数枚を使い回す（bg_pool 枚でローテーション）
     pool_size = style.get("bg_pool", 0) or n_scenes
+    # 背景の検索語をチャンネル側に持たせているなら、台本の内容からは引かない（#141）
+    bg_queries = style.get("bg_queries") or None
     bg_cache: dict[int, dict] = {}
     for i, scene in enumerate(script["scenes"]):
         slot = i % pool_size
         if slot not in bg_cache:
             bg_cache[slot] = background(slot, scene.get("image_prompt", ""),
-                                        asset_dir, api_key, offline)
+                                        asset_dir, api_key, offline, queries=bg_queries)
         bg = bg_cache[slot]
         providers.append(bg["provider"])
         phrases = []

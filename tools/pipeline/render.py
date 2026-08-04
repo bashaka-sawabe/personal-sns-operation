@@ -357,9 +357,12 @@ def render_scene(scene: dict, index: int, work_dir: str,
     audio = _scene_audio(scene, index, work_dir)
     subs = f"ass='{ass}':fontsdir='{os.path.dirname(font_path())}'"
 
+    cut = style.get("cut_interval", 0)
     if scene["bg_kind"] == "video":
         inputs = ["-stream_loop", "-1", "-i", scene["bg"], "-i", audio]
-        base_chain = _VIDEO_PREP
+        # 映像にもカット割りを効かせる（#141）。以前は静止画にしか掛かっておらず、
+        # Pexels映像が取れたシーンでは cut_interval が何もしていなかった
+        base_chain = _VIDEO_PREP + (f",{_hard_cuts(scene['dur'], cut)}" if cut else "")
     else:
         inputs = ["-loop", "1", "-framerate", str(FPS), "-t", str(scene["dur"]),
                   "-i", scene["bg"], "-i", audio]
@@ -368,8 +371,7 @@ def render_scene(scene: dict, index: int, work_dir: str,
         base_chain = (
             f"scale={WIDTH * 2}:{HEIGHT * 2}:force_original_aspect_ratio=increase,"
             f"crop={WIDTH * 2}:{HEIGHT * 2},"
-            + (_hard_cuts(scene["dur"], cut) if (cut := style.get("cut_interval", 0))
-               else _ken_burns(index, scene["dur"])) + ","
+            + (_hard_cuts(scene["dur"], cut) if cut else _ken_burns(index, scene["dur"])) + ","
             "eq=contrast=1.04:saturation=1.08:brightness=-0.04"
         )
 

@@ -46,6 +46,8 @@ PAGES = {
     "youngwoman": "https://www.irasutoya.com/2013/10/blog-post_6907.html",  # 女性の顔のアイコン
     "man": "https://www.irasutoya.com/2013/10/blog-post_872.html",          # おじさんの顔のアイコン
     "medical": "https://www.irasutoya.com/2015/10/blog-post_135.html",      # 白衣を着た女性のアイコン
+    "gal": "https://www.irasutoya.com/2014/06/blog-post_1039.html",         # ギャルのイラスト
+    "okoru": "https://www.irasutoya.com/2016/08/blog-post_967.html",        # 凄い怒る人のイラスト（男性）
 }
 
 # キャラキー → 素材ファイル名。役柄（channels.py の speech / cast の role）に合わせて選定。
@@ -53,13 +55,13 @@ PAGES = {
 PICKS = {
     "zundamon": "boy_01.png",                    # 元気な男の子。ツッコミ役
     "metan": "youngwoman_39.png",                # 花飾りの上品な女性
-    "tsumugi": "youngwoman_47.png",              # サイドポニーの明るい女子
+    "tsumugi": "gal.png",                        # ピースするギャル
     "ritsu": "girl_18.png",                      # 姫カットの無表情
     "hau": "youngwoman_37.png",                  # 柔らかい微笑み
     "takehiro": "youngman_29.png",               # 普通の若い男
     "kotaro": "boy_11.png",                      # 帽子で大笑いの少年
     "ryusei": "man_50.png",                      # 渋いオールバック
-    "ryusei_nekketsu": "man_54.png",             # 太眉の強面。昭和の熱血
+    "ryusei_nekketsu": "pose_sugoi_okoru_man.png",  # 炎に包まれて激怒。昭和の熱血
     "himari": "youngwoman_43.png",               # 落ち着いたウェーブ
     "sora": "youngwoman_42.png",                 # お団子の年上女性
     "mochiko": "youngwoman_44.png",              # 大らかな笑顔
@@ -70,6 +72,12 @@ PICKS = {
 
 SIZE = 300   # render.ICON_SIZE と同じ。丸抜きは render 側がやる
 FACE = 272   # 顔の描画サイズ。縁の白リングに頭がかからない余白を残す
+
+# 全身素材は顔まわりだけを使う。crop=幅:高さ:x:y（s800で取得した画像の座標）
+CROPS = {
+    "tsumugi": "crop=480:480:110:40,",
+    "ryusei_nekketsu": "crop=520:520:140:80,",
+}
 
 
 def _bgr_to_rgb(bgr: str) -> str:
@@ -88,7 +96,8 @@ def _image_urls() -> dict:
         for full, name in re.findall(
             r'(https://blogger\.googleusercontent\.com/img/[^"]+?/s\d+/([a-z_0-9]+\.png))', html
         ):
-            urls.setdefault(name, re.sub(r"/s\d+/", "/s400/", full))
+            # s800指定でも原寸までしか返らないので、大きめに頼んでおけばよい
+            urls.setdefault(name, re.sub(r"/s\d+/", "/s800/", full))
     return urls
 
 
@@ -112,7 +121,7 @@ def main() -> None:
         urllib.request.urlretrieve(urls[src], raw)
         out = os.path.join(ICONS_DIR, f"{key}.png")
         rgb = _bgr_to_rgb(CHARACTERS[key]["color_bgr"])
-        fc = (f"[1:v]scale={FACE}:{FACE}:force_original_aspect_ratio=decrease[i];"
+        fc = (f"[1:v]{CROPS.get(key, '')}scale={FACE}:{FACE}:force_original_aspect_ratio=decrease[i];"
               "[0:v][i]overlay=(W-w)/2:(H-h)/2:format=auto")
         subprocess.run(
             ["ffmpeg", "-y", "-v", "error",

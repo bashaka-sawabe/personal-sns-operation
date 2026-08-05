@@ -9,7 +9,7 @@
       "caption": "50人全員が入る部屋はあるか",
       "dialogue": [
         {
-          "speaker": "takehiro",
+          "speaker": "shishio",
           "text": "社長は奥の座敷にご用意しました。幹部の皆様も料理店で、あとは──"
         },
         {
@@ -17,7 +17,7 @@
           "text": "待つのだ、それ本人の前で!?"
         },
         {
-          "speaker": "ryusei_nekketsu",
+          "speaker": "takehiro_nekketsu",
           "text": "おい。50人全員が一緒に飯を食える部屋はあるのか"
         }
       ],
@@ -27,11 +27,11 @@
       "caption": "即答で弁当を選ぶ",
       "dialogue": [
         {
-          "speaker": "takehiro",
+          "speaker": "shishio",
           "text": "人数が多すぎて、そんな部屋は──"
         },
         {
-          "speaker": "ryusei_nekketsu",
+          "speaker": "takehiro_nekketsu",
           "text": "じゃあ、俺も弁当にする"
         },
         {
@@ -39,11 +39,11 @@
           "text": "即答なのだ!? 弁当なのだ?"
         },
         {
-          "speaker": "ryusei_nekketsu",
+          "speaker": "takehiro_nekketsu",
           "text": "いいか、俺だけ奥で膳を並べてだな、"
         },
         {
-          "speaker": "ryusei_nekketsu",
+          "speaker": "takehiro_nekketsu",
           "text": "そのあと現場でやってみせろと言えるか。俺は──"
         },
         {
@@ -51,7 +51,7 @@
           "text": "言えるのだ。飯と仕事は別なのだ"
         },
         {
-          "speaker": "ryusei_nekketsu",
+          "speaker": "takehiro_nekketsu",
           "text": "甘えるな! 飯を分けたら、心が分かれる"
         },
         {
@@ -69,7 +69,7 @@
           "text": "今なら『演出なのだ?』で終わるのだ"
         },
         {
-          "speaker": "ryusei_nekketsu",
+          "speaker": "takehiro_nekketsu",
           "text": "演出で弁当が食えるか。油の匂いのする所で食う方がうまい"
         },
         {
@@ -77,7 +77,7 @@
           "text": "ボクの会社、社長の顔も知らないのだ"
         },
         {
-          "speaker": "ryusei_nekketsu",
+          "speaker": "takehiro_nekketsu",
           "text": "顔も名前も覚えられん会社が、いい物を作れるか"
         },
         {

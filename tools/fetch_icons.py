@@ -60,8 +60,7 @@ PICKS = {
     "hau": "youngwoman_37.png",                  # 柔らかい微笑み
     "takehiro": "youngman_29.png",               # 普通の若い男
     "kotaro": "boy_11.png",                      # 帽子で大笑いの少年
-    "ryusei": "man_50.png",                      # 渋いオールバック
-    "ryusei_nekketsu": "pose_sugoi_okoru_man.png",  # 炎に包まれて激怒。昭和の熱血
+    "takehiro_nekketsu": "pose_sugoi_okoru_man.png",  # 炎に包まれて激怒。昭和の熱血
     "himari": "youngwoman_43.png",               # 落ち着いたウェーブ
     "sora": "youngwoman_42.png",                 # お団子の年上女性
     "mochiko": "youngwoman_44.png",              # 大らかな笑顔
@@ -76,7 +75,7 @@ FACE = 272   # 顔の描画サイズ。縁の白リングに頭がかからな�
 # 全身素材は顔まわりだけを使う。crop=幅:高さ:x:y（s800で取得した画像の座標）
 CROPS = {
     "tsumugi": "crop=480:480:110:40,",
-    "ryusei_nekketsu": "crop=520:520:140:80,",
+    "takehiro_nekketsu": "crop=520:520:140:80,",
 }
 
 

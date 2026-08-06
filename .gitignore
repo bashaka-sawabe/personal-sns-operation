@@ -8,3 +8,4 @@ content/out/
 
 # Python仮想環境
 .venv/
+logs/

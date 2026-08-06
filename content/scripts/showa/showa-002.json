@@ -1,0 +1,118 @@
+{
+  "id": "showa-002",
+  "title": "本田宗一郎、褒章式に白ツナギで行こうとした",
+  "emotion": "笑い",
+  "powerword": "これが技術者の礼服だ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "褒章式に白いツナギで来た男",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、その服で式に行くつもりなのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "おう。真っ白に洗ってきたぞ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "社長、褒章の授与式ですよ！ 燕尾服です！"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "ばかやろう、油一滴ついてねえ最高の一着だ"
+        }
+      ],
+      "image_prompt": "pure white factory coveralls on a wooden hanger in a dim 1950s Japanese machine shop, oil cans and lathes blurred in background, no people, no text"
+    },
+    {
+      "caption": "社長vs部下、規則との衝突",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "1952年の国の授与式なのだ。ボクなら遠慮して休むのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "だからこそだ。俺は工場から呼ばれたんだぞ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "机で判子ついてる連中と同じ格好で行けるか"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "お気持ちは分かります。ですが規則が──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "規則が機械を作ったのか？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "屁理屈なのだ。……でも、ちょっと格好いい"
+        }
+      ],
+      "image_prompt": "empty formal ceremony hall in 1950s Japan, rows of vacant chairs, heavy curtains, warm dusty light, no people, no text"
+    },
+    {
+      "caption": "啖呵、そして周囲に止められる",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、お願いします。ここだけは折れてください"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "……いいか。これが技術者の礼服だ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "言い切ったのだ。で、着ていったのだ？"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "全員で止めました。私も袖を掴んで必死でした"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "まあな。あいつらが泣くもんでよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "折れるの早いのだ! 今なら一発アウト、でもな──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "なんだ、はっきり言え"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクの会社にも一人ほしいのだ、こういう人"
+        }
+      ],
+      "image_prompt": "factory gate at dusk in postwar Japan, long shadows on gravel, single work lamp glowing, no people, no text, no logos"
+    }
+  ],
+  "caption": "1952年、本田宗一郎は褒章授与式に真っ白なツナギで出席しようとして周囲に止められたそうです。今なら完全アウト。でも、この熱で会社は前に進んだ。",
+  "hashtags": [
+    "#昭和",
+    "#本田宗一郎",
+    "#働き方",
+    "#昭和の常識",
+    "#寸劇"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "本田宗一郎は1952年の褒章授与式に、技術者の正装は真っ白なツナギ（作業着）だと",
+  "source_facts": [
+    {
+      "id": "showa-06a0092b15",
+      "fact": "本田宗一郎は1952年の褒章授与式に、技術者の正装は真っ白なツナギ（作業着）だと言い張り、その服装で出席しようとして周囲に止められた",
+      "backing_url": "https://ja.wikipedia.org/wiki/本田宗一郎",
+      "backing_note": "Wikipedia（脚注[9]あり）"
+    }
+  ]
+}

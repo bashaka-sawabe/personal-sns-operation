@@ -1,0 +1,110 @@
+{
+  "id": "trivia-006",
+  "title": "虎のオレンジ、鹿には緑に見えている",
+  "emotion": "笑い",
+  "powerword": "人間だけ見えすぎ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "虎のオレンジ、鹿には緑",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "は？　あのオレンジで隠れてるつもりなん？"
+        },
+        {
+          "speaker": "hau",
+          "text": "草むらで完全に浮いて──"
+        },
+        {
+          "speaker": "shishio",
+          "text": "浮いて見えるのは、君たちの目だけだ"
+        }
+      ],
+      "image_prompt": "abstract close-up of tall dry grass and reeds, warm orange light filtering through, shallow depth of field, no animals, no text"
+    },
+    {
+      "caption": "種明かし：鹿は色センサーが二種類",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "誰の目なら浮かないわけ？"
+        },
+        {
+          "speaker": "shishio",
+          "text": "鹿とイノシシ。あの毛皮、あいつらには草と同じ緑に見えているらしい"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "まじで!?"
+        },
+        {
+          "speaker": "hau",
+          "text": "じゃあ鹿からしたら、緑の草から緑の虎が──"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "出てくるとか事故じゃん!!"
+        },
+        {
+          "speaker": "shishio",
+          "text": "ブリストル大学の研究だ。人間は色のセンサーが三種類、鹿は二種類"
+        },
+        {
+          "speaker": "shishio",
+          "text": "赤と緑の区別が、そもそもつかない"
+        },
+        {
+          "speaker": "hau",
+          "text": "虎さん、ちゃんと隠れられてたんですね…よかった"
+        }
+      ],
+      "image_prompt": "same grassland scene rendered in a shifted color palette where warm tones blend into green foliage, painterly abstract, no animals, no text"
+    },
+    {
+      "caption": "締め：見えすぎているのは人間の方",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "でも人間にはバレバレじゃん。虎、損してない？"
+        },
+        {
+          "speaker": "shishio",
+          "text": "虎が食べたいのは君じゃない。鹿だ"
+        },
+        {
+          "speaker": "hau",
+          "text": "わたし、緑の虎ちょっと見てみたいです"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "ぜったい無理。夢に出るって"
+        },
+        {
+          "speaker": "shishio",
+          "text": "派手なのは虎じゃない。人間だけ見えすぎなんだ"
+        }
+      ],
+      "image_prompt": "symbolic split image of a forest, one half warm orange tones and one half muted green tones, soft gradient boundary, minimal, no animals, no text"
+    }
+  ],
+  "caption": "虎のオレンジは人間にだけ派手。鹿やイノシシの目には草と同じ緑に見えるという、ブリストル大学の研究のお話です。",
+  "hashtags": [
+    "#雑学",
+    "#虎",
+    "#動物",
+    "#トリビア",
+    "#知って得する"
+  ],
+  "channel": "trivia",
+  "genre": "trivia",
+  "theme": "Tigers look orange to humans because we ",
+  "source_facts": [
+    {
+      "id": "til-6ee474dd9d",
+      "fact": "Tigers look orange to humans because we are trichromats, but they appear green to deer and wild boars because they are dichromats",
+      "backing_url": "https://www.bristol.ac.uk/news/2019/may/camouflage-study.html",
+      "backing_note": "ブリストル大学の研究（Journal of the Royal Society Interface 掲載）"
+    }
+  ]
+}

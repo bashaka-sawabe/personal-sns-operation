@@ -1,0 +1,118 @@
+{
+  "id": "showa-004",
+  "title": "本田宗一郎の工具と灰皿・昭和の指導",
+  "emotion": "呆れ",
+  "powerword": "走らせたデータを持ってこい",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "殴られながら世界一になった会社",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "痛っ！社長、いま工具で殴りましたよね!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "中途半端な仕事をするからだ！やり直せ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、本田宗一郎、部下の頭を工具で殴ってるのだ!?"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "令和なら朝には全国ニュースなのだ"
+        }
+      ],
+      "image_prompt": "dim 1960s Japanese motorcycle factory floor, oil-stained workbench, scattered wrenches, harsh overhead light, no people, no text"
+    },
+    {
+      "caption": "実験室のデータを持ってきた社員",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、実験室のデータではこの数値で──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "机の上の紙を読むな！"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "走らせたデータを持ってこい！"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ひっ、灰皿は、灰皿はやめてください！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "灰皿!? 工具の次は灰皿なのだ。手当たり次第じゃないか"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、机の数字で人は死なん。走る機械の数字は人を殺す"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……そこは筋が通ってるのだ。でも殴る必要はゼロなのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "殴られた奴が一番覚えるんだ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "覚えるのは痛みなのだ。ボクはそんな職場、嫌なのだ"
+        }
+      ],
+      "image_prompt": "vintage engineering desk with stacked test data papers, heavy glass ashtray, slide rule, warm dusty light, symbolic, no people, no text"
+    },
+    {
+      "caption": "締め・今なら一発アウトだが",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "俺はな、殴った奴の名前を全員覚えてる"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "そいつらが、うちを世界一にしてくれたんだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ずるいのだ、最後に泣かせにくるのは──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "泣くな！走れ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら一発アウトなのだ。……でもボク、この人の下で働いてみたかったのだ"
+        }
+      ],
+      "image_prompt": "empty factory gate at dawn, long shadows on asphalt, distant test course, nostalgic film grain, no people, no text"
+    }
+  ],
+  "caption": "工具で殴り、灰皿を投げ、「走らせたデータを持ってこい」と叫んだ昭和の創業者。今なら一発アウト。でも、その現場主義が世界一を作った。あなたは付いていけますか？",
+  "hashtags": [
+    "#昭和",
+    "#本田宗一郎",
+    "#昭和の働き方",
+    "#ずんだもん",
+    "#今なら一発アウト"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "本田宗一郎は作業中に中途半端な仕事をした社員を、怒声とともに容赦なく工具で頭を殴",
+  "source_facts": [
+    {
+      "id": "showa-1ff2b6a75f",
+      "fact": "本田宗一郎は作業中に中途半端な仕事をした社員を、怒声とともに容赦なく工具で頭を殴った。実験室のデータを読み上げる社員には「実際に走行させたデータを持ってこい」と激怒し、灰皿で殴ったこともある",
+      "backing_url": "https://ja.wikipedia.org/wiki/本田宗一郎",
+      "backing_note": "Wikipedia（該当記述に脚注[8]あり）"
+    }
+  ]
+}

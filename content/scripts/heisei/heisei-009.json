@@ -1,0 +1,136 @@
+{
+  "id": "heisei-009",
+  "title": "たまごっち、1年で1000万個売れた話",
+  "emotion": "呆れ",
+  "powerword": "謝罪広告",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "卵型の玩具でメーカーが謝った年",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "は？　おもちゃ売れすぎて会社が謝ったのだ？"
+        },
+        {
+          "speaker": "sora",
+          "text": "謝ったのよ。1996年11月23日発売のたまごっち。1年経たずに1000万個売れてね"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "売れたなら万々歳じゃないか。なんで頭下げるのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "作っても作っても店に無いの。問い合わせが1日1万件超えて、バンダイさんが謝罪広告を出したのよ"
+        }
+      ],
+      "image_prompt": "abstract retro 1990s Japanese toy shop shelf, empty display racks, warm nostalgic lighting, no text, no logos, no people"
+    },
+    {
+      "caption": "1000万という数字の異常さ",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "1日1万件って、電話鳴りっぱなしなのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "玩具業界って100万個で大ヒットって言われるの。その10倍よ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "待つのだ、じゃあ大ヒットを10回同時にやったってことなのだ？"
+        },
+        {
+          "speaker": "sora",
+          "text": "そういう計算になるわね"
+        },
+        {
+          "speaker": "mochiko",
+          "text": "わたしのは……三日で死にましたねえ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "1000万個の話してるのに急に訃報を挟むのやめてほしいのだ"
+        }
+      ],
+      "image_prompt": "abstract stack of identical small egg-shaped objects, endless repetition, soft pastel background, symbolic, no text, no faces"
+    },
+    {
+      "caption": "当時の人は全員本気だった",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "わたくしね、あれは悪くない文化だったと思うの。授業中も鳴るから、必死に机の中で世話してね"
+        },
+        {
+          "speaker": "sora",
+          "text": "友達に預けて体育行くの。命を預ける感じで──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "重いのだ。ただの電池入りの卵なのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "あなたね、そこを軽く言う人が一番向いてないのよ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ボクは無理なのだ。24時間つきまとう責任とか、絶対3日で投げ出す自信があるのだ"
+        },
+        {
+          "speaker": "mochiko",
+          "text": "だから三日なんですねえ"
+        }
+      ],
+      "image_prompt": "abstract 1990s japanese classroom desk drawer, soft afternoon light, symbolic still life, no text, no people, nostalgic tone"
+    },
+    {
+      "caption": "今なら考えられない光景",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "で、なんでそんな行列になったのだ。ゲーム機でもないのに"
+        },
+        {
+          "speaker": "sora",
+          "text": "それが当たり前だったの。買えないのが普通で、持ってる子が学校で一番偉かったのよ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "つまり卵の所持で階級ができてたのだ。おかしいのだ、その時代"
+        },
+        {
+          "speaker": "sora",
+          "text": "今は言えるけどね。あの頃はみんな真顔だったのよ"
+        },
+        {
+          "speaker": "mochiko",
+          "text": "うちのは、たしか机の奥から10年後に出てきましたねえ"
+        }
+      ],
+      "image_prompt": "abstract nostalgic drawer interior with dust and faint light, forgotten small object silhouette, warm melancholy tone, no text, no faces"
+    }
+  ],
+  "caption": "1996年、おもちゃが売れすぎて会社が謝った年。あなたのたまごっちは何日生きましたか。",
+  "hashtags": [
+    "#平成",
+    "#たまごっち",
+    "#90年代",
+    "#あったあった",
+    "#懐かしい"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "たまごっちは1996年11月23日にバンダイから発売され、発売から1年経たずに1",
+  "source_facts": [
+    {
+      "id": "heisei-88bbb9250a",
+      "fact": "たまごっちは1996年11月23日にバンダイから発売され、発売から1年経たずに1000万個を売り上げた。玩具業界では100万個で大ヒットと言われる中での異常な数字で、供給が追いつかず問い合わせが1日1万件を超え、バンダイは謝罪広告を出した",
+      "backing_url": "https://www.bandai.co.jp/press/2025/251119.php",
+      "backing_note": "バンダイ公式プレスリリース（たまごっち30周年）"
+    }
+  ]
+}

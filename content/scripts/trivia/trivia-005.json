@@ -1,0 +1,106 @@
+{
+  "id": "trivia-005",
+  "title": "トラのオレンジは鹿には緑",
+  "emotion": "呆れ",
+  "powerword": "見えてないのは人間の方",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "トラのオレンジ、鹿には緑",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "は？　トラって隠れてるつもりなのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "つもりじゃないわ。鹿からは本当に見えてないのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、あのオレンジで？　草むらでめちゃくちゃ目立つのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "目立つのは、わたくしたちの目にはね"
+        }
+      ],
+      "image_prompt": "tall dry grass field at dusk, orange and green light mixing, abstract, no animals, no text"
+    },
+    {
+      "caption": "色の見え方が違う",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "人間は色を三種類の光で見分けるの。鹿やイノシシは二種類しかないのよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "つまり赤とか緑がごっちゃなのだ？"
+        },
+        {
+          "speaker": "metan",
+          "text": "そう。だからあのオレンジが、草と同じ緑に沈むの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクが鹿なら気づいた時にはもう──"
+        },
+        {
+          "speaker": "metan",
+          "text": "ええ。気づく前に終わってるわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ひどいのだ。地面が突然しゃべってくるようなものなのだ"
+        }
+      ],
+      "image_prompt": "same grass field rendered twice in split composition, one warm orange tone one flat green tone, abstract textures, no animals, no text"
+    },
+    {
+      "caption": "締め・出典と反転",
+      "dialogue": [
+        {
+          "speaker": "metan",
+          "text": "ブリストル大学の研究で、王立協会の学術誌に載った話よ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "じゃあトラは緑に進化すればよかったのだ"
+        },
+        {
+          "speaker": "metan",
+          "text": "哺乳類の毛は緑色を作れないのよ。だからオレンジのままなの"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "手抜きじゃなくて限界だったのだ……"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "というか、派手だ派手だと騒いでたけど、見えてないのは人間の方だったのだ"
+        }
+      ],
+      "image_prompt": "close-up abstract texture of striped fur pattern dissolving into grass, soft focus, natural light, no eyes, no text"
+    }
+  ],
+  "caption": "人間にはオレンジ、鹿には緑。トラの縞が消える理由が想像より切実だった話。ブリストル大学の研究より。",
+  "hashtags": [
+    "#雑学",
+    "#トラ",
+    "#動物のふしぎ",
+    "#色覚",
+    "#ずんだもん"
+  ],
+  "channel": "trivia",
+  "genre": "trivia",
+  "theme": "Tigers look orange to humans because we ",
+  "source_facts": [
+    {
+      "id": "til-6ee474dd9d",
+      "fact": "Tigers look orange to humans because we are trichromats, but they appear green to deer and wild boars because they are dichromats",
+      "backing_url": "https://www.bristol.ac.uk/news/2019/may/camouflage-study.html",
+      "backing_note": "ブリストル大学の研究（Journal of the Royal Society Interface 掲載）"
+    }
+  ]
+}

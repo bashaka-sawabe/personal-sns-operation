@@ -1,0 +1,111 @@
+{
+  "id": "meme-015",
+  "title": "育児でゲーム時間が消えた父、マリカーに丸め込まれる",
+  "emotion": "笑い",
+  "powerword": "マリカーを用意しろ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【親の宿命】ゲーム時間が消えた",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "時間がないのだ！　娘が産まれてから一本もゲームできてないのだ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "子供とやれ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "1歳児とスト6やれるかって話なのだ"
+        }
+      ],
+      "image_prompt": "dim living room at night, game controller left on a low table beside baby toys, soft lamp light, no people, cinematic"
+    },
+    {
+      "caption": "やってるゲームがバレる",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "ていうかさ、掲示板に書き込む時間はあるんじゃん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "これは膝に娘乗せて幼児番組見ながら片手で──"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "幸せ見せつけんなし"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "で、スマホゲーはやれてんだろ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……カード積むローグライクは、まあ、やってるのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "ゲームしとるやん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "違うのだ、やりたいゲームと違うのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "娘が寝てから起きてやればいいって言うけど、ボクは8時間寝ないと翌日の仕事が死ぬのだ"
+        }
+      ],
+      "image_prompt": "smartphone glowing on a sofa arm, blanket and baby socks nearby, late night warm light, no people"
+    },
+    {
+      "caption": "レス民の結論",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "えー、それ子供作る前からわかってたっしょ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "うるさいのだ！　ボクだって想定外という言葉が──"
+        },
+        {
+          "speaker": "shishio",
+          "text": "マリカーを用意しろ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？　スイッチ買えってことなのだ？"
+        },
+        {
+          "speaker": "shishio",
+          "text": "三年後、君は娘に負けて泣くよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……それ、ちょっと楽しみなのだ"
+        }
+      ],
+      "image_prompt": "two game controllers on a rug, one large one small, evening sunlight through curtains, no people, warm nostalgic tone"
+    }
+  ],
+  "caption": "独身の頃は帰宅後ずっと自由時間だったのに。育児でゲーム時間が消えた父に、掲示板の民が出した結論が完璧すぎた。あなたなら何を用意する？",
+  "hashtags": [
+    "#育児あるある",
+    "#ゲーム",
+    "#マリカー",
+    "#掲示板",
+    "#ずんだもん"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "結婚して赤ちゃん産まれたらほんまにゲームやる時間なくなった",
+  "source_thread": {
+    "id": "livejupiter-1785662021",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785662021/",
+    "title": "結婚して赤ちゃん産まれたらほんまにゲームやる時間なくなった"
+  }
+}

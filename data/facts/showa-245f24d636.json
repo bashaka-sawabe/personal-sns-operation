@@ -1,0 +1,10 @@
+{
+  "id": "showa-245f24d636",
+  "channel": "showa",
+  "fact": "松下幸之助は1929年の昭和恐慌で、解雇予定者60名の名簿を前に「一人も解雇しない。生産を半減し工場は半日勤務、給料は全額支給。全員で在庫を売る」と宣言し、2ヶ月で在庫を売り切ってフル生産に戻した",
+  "discovered_from": "https://konosuke-matsushita.com/column/quiz/no51.php",
+  "backing_url": "https://konosuke-matsushita.com/column/quiz/no51.php",
+  "backing_note": "PHP研究所運営の松下幸之助公式サイト。解雇ゼロ・生産半減・半日勤務・給料全額・2ヶ月で在庫完売の顛末",
+  "fetched_at": "2026-08-07 01:09:37",
+  "status": "adopted"
+}

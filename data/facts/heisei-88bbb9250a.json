@@ -6,5 +6,7 @@
   "backing_url": "https://www.bandai.co.jp/press/2025/251119.php",
   "backing_note": "バンダイ公式プレスリリース（たまごっち30周年）",
   "fetched_at": "2026-08-02 21:56:32",
-  "status": "adopted"
+  "status": "used",
+  "used_at": "2026-08-06",
+  "used_by": "heisei-007/008"
 }

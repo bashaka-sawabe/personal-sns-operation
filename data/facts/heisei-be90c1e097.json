@@ -6,5 +6,7 @@
   "backing_url": "https://www.watch.impress.co.jp/docs/news/1156347.html",
   "backing_note": "Impress Watch（東京テレメッセージの発表を報じた一次報道）",
   "fetched_at": "2026-08-02 21:56:32",
-  "status": "adopted"
+  "status": "used",
+  "used_at": "2026-08-06",
+  "used_by": "heisei-007/008"
 }

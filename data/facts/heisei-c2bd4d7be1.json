@@ -6,5 +6,7 @@
   "backing_url": "https://ja.wikipedia.org/wiki/Iモード",
   "backing_note": "Wikipedia。契約者数はギネス・ワールド・レコーズを出典として参照",
   "fetched_at": "2026-08-02 23:37:47",
-  "status": "adopted"
+  "status": "used",
+  "used_at": "2026-08-06",
+  "used_by": "heisei-007/008"
 }

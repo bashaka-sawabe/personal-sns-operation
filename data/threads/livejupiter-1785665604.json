@@ -456,7 +456,9 @@
     }
   ],
   "fetched_at": "2026-08-02 19:42:48",
-  "status": "adopted",
+  "status": "used",
   "powerword": "登録者13人",
-  "ochi": "売名はしない信念を語るVtuberの登録者が13人しかいない"
+  "ochi": "売名はしない信念を語るVtuberの登録者が13人しかいない",
+  "used_at": "2026-08-06",
+  "used_by": "meme-005/006"
 }

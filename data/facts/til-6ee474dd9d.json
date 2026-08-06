@@ -5,5 +5,7 @@
   "backing_url": "https://www.bristol.ac.uk/news/2019/may/camouflage-study.html",
   "backing_note": "ブリストル大学の研究（Journal of the Royal Society Interface 掲載）",
   "fetched_at": "2026-08-02 21:33:46",
-  "status": "adopted"
+  "status": "used",
+  "used_at": "2026-08-06",
+  "used_by": "trivia-004/005"
 }

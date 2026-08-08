@@ -220,6 +220,16 @@ def main() -> None:
         adopted = stock_for(ch)
         # 採用済みを先に消費し、不足分だけ候補から自動採用する（人・委任の選別を無駄にしない）
         extra = auto_candidates(ch)[:max(0, args.per_channel - len(adopted))]
+        need = args.per_channel - len(adopted) - len(extra)
+        if need > 0 and ch != "meme" and not args.dry_run:
+            # 事実ネタは発見→裏取りまで自動補充できる（#196）。dry-run では外部を叩かない
+            print(f"[{ch}] 在庫不足のためネタを自動補充中（{need}本）...")
+            try:
+                added = fetch_facts.discover(ch, need)
+                print(f"  {len(added)}本を裏取り付き候補として登録")
+                extra = auto_candidates(ch)[:max(0, args.per_channel - len(adopted))]
+            except PipelineError as e:
+                print(f"  補充失敗: {str(e).splitlines()[0]}")
         for item in extra:
             item["_auto"] = True
         stocks[ch] = adopted + extra
@@ -248,8 +258,11 @@ def main() -> None:
         print(f"クォータ都合で翌日回し: {deferred}本"
               f"（プロジェクト分割かクォータ引き上げで解消できます。docs/09 2-5章）")
     if short_stock:
-        print("⚠️ 自動採用を含めても在庫が目標に足りません。"
-              "fetch_threads / fetch_facts で候補（fact系は裏取り付き）を増やしてください:")
+        if args.dry_run:
+            print("⚠️ 在庫が目標に足りません。本実行では fact系（heisei / showa）を"
+                  "fetch_facts --discover で自動補充します。meme は fetch_threads で候補を増やしてください:")
+        else:
+            print("⚠️ 自動補充・自動採用を含めても在庫が目標に足りません:")
         for line in short_stock:
             print(f"  {line}")
     if args.dry_run or not plan:

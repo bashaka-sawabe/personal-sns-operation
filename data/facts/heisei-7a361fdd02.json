@@ -1,0 +1,10 @@
+{
+  "id": "heisei-7a361fdd02",
+  "channel": "heisei",
+  "fact": "二千円札（二千円日本銀行券）は平成12年（2000年）4月26日に日本銀行法第47条第2項に基づき告示され、同年7月19日から発行が開始された、寸法76×154mmのお札である。",
+  "discovered_from": "https://media.rakuten-sec.net/articles/-/52958",
+  "backing_url": "https://www.mof.go.jp/policy/currency/bill/issued/so009.htm",
+  "backing_note": "財務省「二千円日本銀行券の発行について」（告示日・発行日を記載した政府公式ページ）／補強：日本銀行「二千円券の偽造防止技術について」https://www.boj.or.jp/note_tfjgs/note/security/cur0004a.htm （発行開始日「平成12（2000）年7月19日」、寸法76×154mmを明記）",
+  "fetched_at": "2026-08-08 20:48:06",
+  "status": "candidate"
+}

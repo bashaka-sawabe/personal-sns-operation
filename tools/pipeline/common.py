@@ -143,6 +143,7 @@ def split_phrases(text: str, min_len: int = 6) -> list:
 _HIRAGANA = re.compile(r"[ぁ-ん]")
 _KATAKANA = re.compile(r"[ァ-ヶー]")
 _WORDCHAR = re.compile(r"[0-9A-Za-z０-９Ａ-Ｚａ-ｚ%％]")
+_KANJI = re.compile(r"[一-鿿々]")
 # 直後で改行してよい助詞・接続の1〜2文字（「〜は/が/を…」の直後は文節境界になりやすい）
 _PARTICLES = ("は", "が", "を", "に", "へ", "で", "と", "も", "や", "の",
               "から", "まで", "より", "って", "けど", "ので", "たら", "なら")
@@ -158,23 +159,29 @@ def _break_score(text: str, i: int) -> int:
     """
     prev, nxt = text[i - 1], text[i]
     # 行頭に来てはいけない文字（句読点・閉じ・小書き・長音）の前では切らない
-    if nxt in "、。！？!?」』）)ーぁぃぅぇぉっゃゅょァィゥェォッャュョん…":
+    if nxt in "、。！？!?」』）)】ーぁぃぅぇぉっゃゅょァィゥェォッャュョん…":
         return -100
     # 開き括弧の直後・単語（カタカナ語/英数字）の内部も切らない
     if prev in "「『（(":
         return -100
+    if prev in "ぁぃぅぇぉっゃゅょァィゥェォッャュョー":
+        return -60                    # 促音・拗音・長音の直後は活用の内部（「悔しかっ/た」）
     if _KATAKANA.match(prev) and _KATAKANA.match(nxt):
         return -60
     if _WORDCHAR.match(prev) and _WORDCHAR.match(nxt):
         return -60
     if prev in "、。！？!?":
         return 50                     # 句読点の直後が最良
-    if nxt in "「『（(":
+    if prev in "」』）)】":
+        return 45                     # 閉じ括弧の直後も切れ目（「【〜】一重」を「】一/重」で割らない）
+    if nxt in "「『（(【":
         return 40                     # 開き括弧の前も切れ目
     if any(text[max(0, i - len(p)):i] == p for p in _PARTICLES) and not _HIRAGANA.match(nxt):
         return 30                     # 助詞の後ろ＋次がかな以外＝文節の頭
     if _HIRAGANA.match(prev) and not _HIRAGANA.match(nxt):
         return 20                     # かな→漢字/カタカナの変わり目
+    if _KANJI.match(prev) and _KANJI.match(nxt):
+        return -30                    # 漢字の連続は熟語の内部（「一/重」）になりやすい
     return 0
 
 
@@ -196,9 +203,10 @@ def wrap_japanese(text: str, per_line: int) -> str:
             lines.append(rest)
             break
         width = -(-len(rest) // rows)   # 均等割りしたときの目標幅
-        # 目標幅の±2文字（上限は超えない）から一番切れ目らしい位置を選ぶ
-        lo = max(1, width - 2)
-        hi = min(len(rest) - 1, width + 2, per_line)
+        # 目標幅の±3文字（上限は超えない）から一番切れ目らしい位置を選ぶ。
+        # ±2だと「昭和4年、解雇名簿…」の読点が窓の外に落ち、熟語の内部で切られた
+        lo = max(1, width - 3)
+        hi = min(len(rest) - 1, width + 3, per_line)
         best = max(range(lo, hi + 1),
                    key=lambda i: (_break_score(rest, i), -abs(i - width)))
         lines.append(rest[:best])

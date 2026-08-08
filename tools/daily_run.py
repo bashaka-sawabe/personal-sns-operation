@@ -31,11 +31,17 @@ import os
 import re
 import subprocess
 import sys
+import time
+import urllib.error
 from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from tools import fetch_facts, fetch_threads
+
+# meme スレ候補の補充閾値（目標本数に対する倍率）。自動採用（#191）は目視選別より
+# 消費が速いため、候補が目標の3倍を下回ったら収集して先回りする（#197）
+THREAD_STOCK_FACTOR = 3
 from tools.pipeline.common import OUT_DIR, PipelineError, read_secret, secret_path
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -68,6 +74,31 @@ def stock_for(channel: str) -> list[dict]:
     prefix = {"heisei": "heisei-", "showa": "showa-"}[channel]
     return [f for f in _load_all(FACTS_DIR)
             if f["status"] == "adopted" and os.path.basename(f["_path"]).startswith(prefix)]
+
+
+def replenish_threads(per_channel: int) -> None:
+    """meme のスレ候補が薄くなったら open2ch から収集する（#197）。
+
+    重複排除（used / rejected 含む既存台帳との突き合わせ）と取得間隔
+    （FETCH_INTERVAL・429対策 #99）は fetch_threads.collect が持つ。
+    閾値以上あるときは外部を一切叩かない。
+    """
+    candidates = [t for t in _load_all(THREADS_DIR) if t["status"] == "candidate"]
+    threshold = per_channel * THREAD_STOCK_FACTOR
+    if len(candidates) >= threshold:
+        return
+    need = threshold - len(candidates)
+    print(f"[meme] スレ候補{len(candidates)}本（閾値{threshold}本）のため収集中...")
+    per_board = max(1, -(-need // len(fetch_threads.BOARDS)))
+    for i, board in enumerate(fetch_threads.BOARDS):
+        if i:
+            # 板は違ってもサーバーは同じ（hayabusa）なので、板間でも間隔を空ける
+            time.sleep(fetch_threads.FETCH_INTERVAL)
+        try:
+            saved = fetch_threads.collect(board, per_board)
+            print(f"  {board}: {len(saved)}本を候補登録")
+        except (PipelineError, urllib.error.URLError, OSError) as e:
+            print(f"  {board}: 収集失敗（{e}）")
 
 
 def auto_candidates(channel: str) -> list[dict]:
@@ -214,6 +245,9 @@ def main() -> None:
     quota_left: dict[str, int] = {}
     short_stock: list[str] = []
     deferred = 0
+
+    if not args.dry_run:
+        replenish_threads(args.per_channel)
 
     stocks: dict[str, list[dict]] = {}
     for ch in CHANNELS:

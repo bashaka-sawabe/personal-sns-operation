@@ -84,8 +84,10 @@ def repo() -> str:
     return _cache["repo"]
 
 
+# items はページネーション必須。first:100 だけだと101件目以降（＝新しく載せたIssue）が
+# 見えなくなり、「登録したのに Priority が - に戻る」ように観測される（#174 の正体）
 BOARD_QUERY = """
-query($owner:String!, $number:Int!) {
+query($owner:String!, $number:Int!, $after:String) {
   user(login:$owner) {
     projectV2(number:$number) {
       id
@@ -96,7 +98,8 @@ query($owner:String!, $number:Int!) {
           }
         }
       }
-      items(first:100) {
+      items(first:100, after:$after) {
+        pageInfo { hasNextPage endCursor }
         nodes {
           id
           content { ... on Issue { number } }
@@ -117,34 +120,43 @@ query($owner:String!, $number:Int!) {
 
 
 def _fetch_board() -> dict:
-    """盤の状態を1回のGraphQLで取る（フィールド定義＋載っているIssue）。"""
-    raw = gh("api", "graphql", "-f", f"query={BOARD_QUERY}",
-             "-F", f"owner={PROJECT_OWNER}", "-F", f"number={PROJECT_NUMBER}",
-             parse=True)
-    pv = (raw.get("data") or {}).get("user", {}).get("projectV2")
-    if not pv:
-        raise BoardError(f"Project #{PROJECT_NUMBER}（{PROJECT_OWNER}）が見つかりません")
+    """盤の状態をGraphQLで取る（フィールド定義＋載っているIssue全件）。"""
+    fields, items = {}, {}
+    project_id, cursor = None, None
+    while True:
+        args = ["api", "graphql", "-f", f"query={BOARD_QUERY}",
+                "-F", f"owner={PROJECT_OWNER}", "-F", f"number={PROJECT_NUMBER}"]
+        if cursor:
+            args += ["-F", f"after={cursor}"]
+        raw = gh(*args, parse=True)
+        pv = (raw.get("data") or {}).get("user", {}).get("projectV2")
+        if not pv:
+            raise BoardError(f"Project #{PROJECT_NUMBER}（{PROJECT_OWNER}）が見つかりません")
+        project_id = pv["id"]
 
-    fields = {}
-    for f in pv["fields"]["nodes"]:
-        if f and f.get("options"):
-            fields[f["name"]] = {
-                "id": f["id"],
-                "options": {o["name"]: o["id"] for o in f["options"]},
-            }
+        for f in pv["fields"]["nodes"]:
+            if f and f.get("options"):
+                fields[f["name"]] = {
+                    "id": f["id"],
+                    "options": {o["name"]: o["id"] for o in f["options"]},
+                }
 
-    items = {}
-    for it in pv["items"]["nodes"]:
-        num = (it.get("content") or {}).get("number")
-        if num is None:
-            continue
-        values = {}
-        for v in it["fieldValues"]["nodes"]:
-            if v and v.get("field"):
-                values[v["field"]["name"]] = v.get("name")
-        items[num] = {"id": it["id"], "values": values}
+        for it in pv["items"]["nodes"]:
+            num = (it.get("content") or {}).get("number")
+            if num is None:
+                continue
+            values = {}
+            for v in it["fieldValues"]["nodes"]:
+                if v and v.get("field"):
+                    values[v["field"]["name"]] = v.get("name")
+            items[num] = {"id": it["id"], "values": values}
 
-    return {"id": pv["id"], "fields": fields, "items": items}
+        page = pv["items"]["pageInfo"]
+        if not page["hasNextPage"]:
+            break
+        cursor = page["endCursor"]
+
+    return {"id": project_id, "fields": fields, "items": items}
 
 
 def board(force: bool = False) -> dict:

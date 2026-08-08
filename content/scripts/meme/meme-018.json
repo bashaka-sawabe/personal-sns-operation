@@ -1,0 +1,107 @@
+{
+  "id": "meme-018",
+  "title": "22で結婚して後悔スレ、嫁スペック晒して惚気とバレる",
+  "emotion": "笑い",
+  "powerword": "自虐風自慢",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【惚気認定】22歳結婚の後悔",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "悔しいのだ！ボク22で結婚したのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "で、何が悔しいんだよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "友達はマチアプで入れ食い。ボクは奥さんだけ"
+        }
+      ],
+      "image_prompt": "abstract night city window with warm apartment light, empty smartphone glow on a table, no people, no text, moody"
+    },
+    {
+      "caption": "雑な助言と長い自分語り",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "隠れて行けばいいだろ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ガールズバーも駄目、合コンも駄目──"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "え、行く気だったんじゃん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "同じ体、同じ流れ、あとは老いるだけ。はーつら"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクの青春返してほしいのだ──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "離婚しろ。今が一番若いぞ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "それは無理なのだ。気が合うのだ"
+        }
+      ],
+      "image_prompt": "symbolic image of two worn slippers side by side on old flooring, dim hallway light, no people, no text"
+    },
+    {
+      "caption": "晒した瞬間に全員が気づく",
+      "dialogue": [
+        {
+          "speaker": "tsumugi",
+          "text": "奥さんのスペック晒しなよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "26歳165のEカップ、年収300万なのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "最高やんけ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "でも乳首が干し葡萄みたいにデカいし──"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "それ惚気じゃん"
+        },
+        {
+          "speaker": "shishio",
+          "text": "結論。自虐風自慢"
+        }
+      ],
+      "image_prompt": "abstract close-up of dried grapes on a plain plate, soft shadow, minimal background, no people, no text"
+    }
+  ],
+  "caption": "後悔してるって言うから聞いてたのに、スペック出した瞬間に全員気づいた。結局これ何のスレだったのだ？",
+  "hashtags": [
+    "#ずんだもん",
+    "#2ch",
+    "#スレ",
+    "#惚気",
+    "#自虐風自慢"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "22で結婚したけど後悔してる",
+  "source_thread": {
+    "id": "livejupiter-1785670528",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785670528/",
+    "title": "22で結婚したけど後悔してる"
+  }
+}

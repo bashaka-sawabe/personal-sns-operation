@@ -6,5 +6,6 @@
   "backing_url": "https://ja.wikipedia.org/wiki/ノストラダムスの大予言",
   "backing_note": "日本語版Wikipedia。1973年刊・1998年時点209万部450版。予言自体は外れた前提で扱う",
   "fetched_at": "2026-08-07 01:09:37",
-  "status": "adopted"
+  "status": "used",
+  "used_at": "2026-08-08"
 }

@@ -25,11 +25,6 @@
     "phrase_gap": 0.03,
     "scene_tail": 0.1,
     "punch_zoom": 1.05,
-    "cut_interval": 0,
-    "se": {
-      "scene": "heisei_don",
-      "last": "heisei_shime"
-    },
     "bg_pool": 5,
     "skit": false,
     "max_chars": 776

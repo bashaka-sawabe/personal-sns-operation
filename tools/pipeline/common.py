@@ -139,26 +139,68 @@ def split_phrases(text: str, min_len: int = 6) -> list:
     return [p.strip() for p in phrases if p.strip()]
 
 
-def wrap_japanese(text: str, per_line: int) -> str:
-    """日本語は単語境界が無いので文字数で折り返す。句読点は行頭に送らない。
+# 折り返し位置の判定に使う文字クラス（wrap_japanese）
+_HIRAGANA = re.compile(r"[ぁ-ん]")
+_KATAKANA = re.compile(r"[ァ-ヶー]")
+_WORDCHAR = re.compile(r"[0-9A-Za-z０-９Ａ-Ｚａ-ｚ%％]")
+# 直後で改行してよい助詞・接続の1〜2文字（「〜は/が/を…」の直後は文節境界になりやすい）
+_PARTICLES = ("は", "が", "を", "に", "へ", "で", "と", "も", "や", "の",
+              "から", "まで", "より", "って", "けど", "ので", "たら", "なら")
 
-    必要な行数を先に決めてから均等に割る。上限まで貪欲に詰めると最終行に
-    1文字だけ残ることがあり（「また行けない飲み／会」）、テロップとして目立って悪い。
-    per_line は「1行がこれを超えたら画面外」という上限で、詰める目標値ではない。
+
+def _break_score(text: str, i: int) -> int:
+    """text[:i] | text[i:] で改行したときの自然さ（大きいほど良い）。
+
+    文字数だけで切ると「また行けない飲み／会」のような分節無視の改行になり
+    読みにくい（本人指摘 2026-08-08・#203）。形態素解析を入れずに、
+    文節境界に多い並び（句読点の後・助詞の後・かな→漢字の変わり目）を優先し、
+    単語の内部（カタカナ語・英数字・拗促音の前）を強く避ける。
+    """
+    prev, nxt = text[i - 1], text[i]
+    # 行頭に来てはいけない文字（句読点・閉じ・小書き・長音）の前では切らない
+    if nxt in "、。！？!?」』）)ーぁぃぅぇぉっゃゅょァィゥェォッャュョん…":
+        return -100
+    # 開き括弧の直後・単語（カタカナ語/英数字）の内部も切らない
+    if prev in "「『（(":
+        return -100
+    if _KATAKANA.match(prev) and _KATAKANA.match(nxt):
+        return -60
+    if _WORDCHAR.match(prev) and _WORDCHAR.match(nxt):
+        return -60
+    if prev in "、。！？!?":
+        return 50                     # 句読点の直後が最良
+    if nxt in "「『（(":
+        return 40                     # 開き括弧の前も切れ目
+    if any(text[max(0, i - len(p)):i] == p for p in _PARTICLES) and not _HIRAGANA.match(nxt):
+        return 30                     # 助詞の後ろ＋次がかな以外＝文節の頭
+    if _HIRAGANA.match(prev) and not _HIRAGANA.match(nxt):
+        return 20                     # かな→漢字/カタカナの変わり目
+    return 0
+
+
+def wrap_japanese(text: str, per_line: int) -> str:
+    """日本語を文節を考慮した位置で折り返す。
+
+    必要な行数を先に決めて（貪欲に詰めると最終行に1文字だけ残る）、
+    各行は目標幅の近傍で最も自然な切れ目を選ぶ。per_line は
+    「1行がこれを超えたら画面外」という上限で、詰める目標値ではない。
     """
     text = " ".join((text or "").split())
     if not text:
         return ""
-    rows = max(1, -(-len(text) // per_line))
-    width = -(-len(text) // rows)   # 均等に割ったときの1行の文字数
-    lines, line = [], ""
-    for ch in text:
-        # 句読点・閉じ括弧・長音は行頭に送らない。ただし上限は超えさせない
-        hang = ch in "、。」』ー" and len(line) < per_line
-        if len(line) >= width and not hang:
-            lines.append(line)
-            line = ""
-        line += ch
-    if line:
-        lines.append(line)
+    lines = []
+    rest = text
+    while rest:
+        rows = max(1, -(-len(rest) // per_line))
+        if rows == 1:
+            lines.append(rest)
+            break
+        width = -(-len(rest) // rows)   # 均等割りしたときの目標幅
+        # 目標幅の±2文字（上限は超えない）から一番切れ目らしい位置を選ぶ
+        lo = max(1, width - 2)
+        hi = min(len(rest) - 1, width + 2, per_line)
+        best = max(range(lo, hi + 1),
+                   key=lambda i: (_break_score(rest, i), -abs(i - width)))
+        lines.append(rest[:best])
+        rest = rest[best:]
     return "\n".join(lines)

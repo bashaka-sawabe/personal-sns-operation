@@ -1,0 +1,103 @@
+{
+  "id": "meme-019",
+  "title": "後輩に舐められる舗装職人、なぜか工法で解決される",
+  "emotion": "笑い",
+  "powerword": "塗装しちまえ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【職人の悩み】後輩に舐められる",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "限界なのだ。後輩に舐められすぎてるのだ"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "チンチンを？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "それ以外何があるのだ……じゃなくて態度！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "優しくしすぎだろ"
+        }
+      ],
+      "image_prompt": "freshly paved asphalt road at dusk, steam rising, road roller silhouette in distance, orange safety cones, no people, cinematic"
+    },
+    {
+      "caption": "相談が下ネタで潰される",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "怒らないのがボクの主義なのだ。現場で一人だけ優しく──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "そこが原因だろ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "無理なのだ、あいつ年上でめちゃデカい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "同期はおるけど、同じ現場にならないのだ──"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "後輩のデカさの相談じゃん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "デカさの話はしてないのだ！"
+        }
+      ],
+      "image_prompt": "night road construction site, floodlights on wet asphalt, steel plates and barriers, empty street, no people, moody atmosphere"
+    },
+    {
+      "caption": "工法の話として解決される",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "郷に入っては郷に従え。舐め合う世界やねん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクはその世界観が嫌なのだ──"
+        },
+        {
+          "speaker": "shishio",
+          "text": "仮舗装のままだと数年ボコボコだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "なんで道路の話なのだ？"
+        },
+        {
+          "speaker": "shishio",
+          "text": "同じだ。その後輩を塗装しちまえ"
+        }
+      ],
+      "image_prompt": "close up of asphalt surface being smoothed flat, glossy black finish, faint steam, industrial texture, no people, no text"
+    }
+  ],
+  "caption": "優しさの相談をしたら、なぜか工法で解決された舗装職人の話。最後の一言が現場すぎる。あなたならどう黙らせる？",
+  "hashtags": [
+    "#ずんだもん",
+    "#現場猫",
+    "#職人あるある",
+    "#おーぷん2ちゃんねる",
+    "#道路工事"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "道路舗装の職人してるんだけど後輩に舐められすぎるんだけどどうしたらいい？",
+  "source_thread": {
+    "id": "livejupiter-1785673487",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785673487/",
+    "title": "道路舗装の職人してるんだけど後輩に舐められすぎるんだけどどうしたらいい？"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "id": "meme-020",
+  "title": "一重論争に覇王が乱入して論点消滅",
+  "emotion": "笑い",
+  "powerword": "ジャスコ帝国",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【論点消滅】一重論争に覇王",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "一重は人生ハードモード確定なのだ。整形する金もないのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "日本語おかしくなってんぞ"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "一重でも顔いい人いるじゃん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、それでも二重で顔がいい奴には負けるのだ"
+        }
+      ],
+      "image_prompt": "abstract dark blue gradient background, faint anonymous forum thread texture, soft glow, no text, no faces"
+    },
+    {
+      "caption": "助言が全部追い打ちになる",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "男は鼻が高ければどうにか見えるぞ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "追い打ちかけてくるなのだ!? 鼻は高いのだ。ただ口元が不自然で──"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "目細いのに涙袋でかいってまじ？ キモすぎて草"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクはアイプチも無理なのだ。朝いきなり二重は違和感やで"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "一生ハードモードより一瞬キモいの取るでしょ普通"
+        }
+      ],
+      "image_prompt": "symbolic close-up of a crumpled application form and a cheap plastic mirror on a desk, dim lamp light, no faces, no text"
+    },
+    {
+      "caption": "覇王乱入でオチ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ボクは三重なのだ"
+        },
+        {
+          "speaker": "shishio",
+          "text": "ジャスコ帝国、な？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？ 県の話はしてないのだ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "目などくだらぬもので勝負するでない！ 漢は肉体で勝負であるぞ！"
+        },
+        {
+          "speaker": "tsumugi",
+          "text": "誰よこの人"
+        },
+        {
+          "speaker": "shishio",
+          "text": "ええ身体やな"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "論点が消えたのだ"
+        }
+      ],
+      "image_prompt": "symbolic silhouette of a heroic muscular statue lit from below in a dark hall, dramatic rim light, no faces, no text"
+    }
+  ],
+  "caption": "一重の悩みを真剣に語っていたはずが、突然の乱入で全てが吹き飛ぶ。あなたはどっち派？",
+  "hashtags": [
+    "#ずんだもん",
+    "#掛け合い",
+    "#ネットの話",
+    "#一重",
+    "#覇王"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "一重とかいう人生ハードモード確定？",
+  "source_thread": {
+    "id": "livejupiter-1786028846",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1786028846/",
+    "title": "一重とかいう人生ハードモード確定？"
+  }
+}

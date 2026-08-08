@@ -1,46 +1,60 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""話者アイコンが全話者ぶん揃っているかを検品する（content/assets/icons/）。
+"""話者アイコンを原本（assets/icons/）から復元し、全話者ぶん揃っているか検品する。
 
     .venv/bin/python tools/fetch_icons.py
 
-## なぜ「取得」ではなく「検品」なのか（#189・2026-08-07 本人決定）
+## アイコンの正体（#204・2026-08-08 本人決定）
 
-アイコンは**90年代セル画風のAI生成人物顔で全話者統一**になった（経緯: いらすとや #154 →
-雑多なAI生成 #179 → 絵柄バラバラの反省で一括統一 #189。docs/09 4-8）。
-生成はCanvaのAI画像生成を対話的に使うため、BGM・SEのようにスクリプトで
-再取得できない。このスクリプトの役目は「欠けたまま気づかずレンダリングする」のを
-防ぐことだけにする。欠けていたら docs/09 4-8 のプロンプトテンプレで再生成する。
+アイコンは**本人支給のAI生成人物顔10枚**（ChatGPT生成）で、キャラ盤面の10人と
+1対1で対応する（経緯: いらすとや #154 → 雑多なAI生成 #179 → Canva一括統一 #189 →
+本人支給の10枚に差し替え #204。docs/09 4-8）。
 
-自動でいらすとやから取り直す旧実装は消した。残しておくと環境再構築のときに
-これが走って、統一したはずの絵柄が silently いらすとやに巻き戻るため。
+画像はネットから再取得できない（支給元のChatGPT共有リンクは失効しうる）ため、
+**原本を git 管理下の assets/icons/ に置き、ここから復元する**。
+レンダが読むのは content/assets/icons/（git外）で、欠けていれば原本からコピーする。
+新しいアイコンに差し替えるときは assets/icons/ の原本を置き換えること。
 """
 import os
+import shutil
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from tools.pipeline.channels import CHARACTERS
-from tools.pipeline.common import ASSETS_DIR, PipelineError
+from tools.pipeline.common import ASSETS_DIR, ROOT, PipelineError
 
 ICONS_DIR = os.path.join(ASSETS_DIR, "icons")
+# 原本。git管理下なので clone すれば必ずある
+SOURCE_DIR = os.path.join(ROOT, "assets", "icons")
+CREDIT_NOTE = "アイコン: AI生成（ChatGPT・本人支給 2026-08-08・#204）"
 
 
 def main() -> None:
-    missing_png = [k for k in CHARACTERS
-                   if not os.path.exists(os.path.join(ICONS_DIR, f"{k}.png"))]
-    # クレジットは credits.txt に出す素材規約情報なので、対の .txt が無いのも欠けと扱う
-    missing_txt = [k for k in CHARACTERS
-                   if not os.path.exists(os.path.join(ICONS_DIR, f"{k}.txt"))]
-    if missing_png or missing_txt:
-        lines = []
-        if missing_png:
-            lines.append(f"アイコンが欠けています: {', '.join(missing_png)}")
-        if missing_txt:
-            lines.append(f"クレジット(.txt)が欠けています: {', '.join(missing_txt)}")
-        lines.append("docs/09 4-8 のプロンプトテンプレでCanvaから再生成してください"
-                     "（90年代セル画風・800x800・背景はキャラ色）。")
-        raise PipelineError("\n".join(lines))
+    os.makedirs(ICONS_DIR, exist_ok=True)
+    restored = []
+    for key in CHARACTERS:
+        png = os.path.join(ICONS_DIR, f"{key}.png")
+        txt = os.path.join(ICONS_DIR, f"{key}.txt")
+        source = os.path.join(SOURCE_DIR, f"{key}.png")
+        if not os.path.exists(png) and os.path.exists(source):
+            shutil.copyfile(source, png)
+            restored.append(key)
+        # クレジットは credits.txt に出す素材規約情報なので、対の .txt も揃える
+        if not os.path.exists(txt) and os.path.exists(png):
+            with open(txt, "w", encoding="utf-8") as f:
+                f.write(CREDIT_NOTE + "\n")
+    if restored:
+        print(f"原本から復元: {', '.join(restored)}")
+
+    missing = [k for k in CHARACTERS
+               if not os.path.exists(os.path.join(ICONS_DIR, f"{k}.png"))]
+    if missing:
+        raise PipelineError(
+            f"アイコンが欠けています: {', '.join(missing)}\n"
+            "  原本（assets/icons/<キャラ>.png）にも無い話者です。"
+            "本人に画像を用意してもらい、assets/icons/ に置いてください。"
+        )
     print(f"全{len(CHARACTERS)}話者のアイコンとクレジットが揃っています")
 
 

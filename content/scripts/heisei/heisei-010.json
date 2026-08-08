@@ -1,0 +1,124 @@
+{
+  "id": "heisei-010",
+  "title": "1999年に世界が終わると信じていた平成の教室",
+  "emotion": "笑い",
+  "powerword": "恐怖の大王",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "1999年に世界は終わる予定だった",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "わたし小学生のころ、お小遣いを貯金する意味ないと思ってたの。だって1999年に──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "待って待って。1999年に何が起きるって言うのさ、そんな堂々と"
+        },
+        {
+          "speaker": "sora",
+          "text": "世界が終わるのよ。クラスの全員が本気で信じてたの。わたしだけおかしいわけじゃないわ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "うおおお、学級ごと終わってるじゃん! そんな怖い話、小学生に流したやつがいるのか"
+        }
+      ],
+      "image_prompt": "Empty 1990s Japanese elementary school classroom at dusk, wooden desks in rows, blank chalkboard, dust floating in warm orange light, nostalgic film grain, no people, no text"
+    },
+    {
+      "caption": "本の正体と、部数の異常さ",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "本よ。五島勉さんの『ノストラダムスの大予言』。1973年に出て、平成の子どもまで届いたの"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ボクの親より年上の本じゃん。昭和の本が平成の小学校で流行るとか、意味わからん"
+        },
+        {
+          "speaker": "sora",
+          "text": "刷られ方が異常だったのよ。1998年の時点で209万部、版を重ねて450版まで行ってるの"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "450……世界が終わる本を450回も刷り直す神経、やば! むしろ売れとるやん、草"
+        },
+        {
+          "speaker": "mochiko",
+          "text": "わたしはね、図書室でその本の表紙だけ見てたの。中は怖くて、一回も開けられなくて"
+        }
+      ],
+      "image_prompt": "Stack of old worn paperback books in a dim school library, thick faded spines, sunbeam through window blinds, retro Showa atmosphere, no readable text, no people"
+    },
+    {
+      "caption": "7の月の曖昧さと、脱線する二人",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "1999年の7の月に、空からとんでもないものが降りてくる。そう書いてあったのよ、本気で"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "7の月って言い方がずるいって。7月なのか7番目の月なのか、どっちでも当たるじゃん"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ボクは信じないよ。だって世界が終わるなら、その前に夏休みの宿題を──"
+        },
+        {
+          "speaker": "mochiko",
+          "text": "わたし、1999年の7月に食べたいもの全部書いた紙、まだ実家の引き出しに入ってると思う"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "予言より計画性あるじゃん、その紙。ボクはその人を尊敬するよ"
+        }
+      ],
+      "image_prompt": "Towering summer thunderclouds over a quiet Japanese residential neighborhood, heat haze, utility poles, ominous yet nostalgic afternoon light, no people, no text"
+    },
+    {
+      "caption": "来なかった元旦と、言い訳の正体",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "で、結局何も来なかったの。2000年の元旦、普通に目が覚めて、普通に鏡餅が出てきてね"
+        },
+        {
+          "speaker": "sora",
+          "text": "ちょっと悔しかったのよね。でもね、わたしはあの本、そんなに悪くなかったと思ってるの"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "いや、ボクは嫌だよ。世界の終わる日を子どもに先に教えるの、反則じゃん"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "じゃあ結局、恐怖の大王って、宿題やらなかった全国の子どもの言い訳だったんじゃん"
+        }
+      ],
+      "image_prompt": "New Year's morning inside a Japanese home, kagami-mochi rice cake on a low table, soft winter sunlight through shoji paper doors, calm ordinary stillness, no people, no text"
+    }
+  ],
+  "caption": "1999年7の月に恐怖の大王が来る──1973年刊『ノストラダムスの大予言』は1998年時点で209万部・450版。あの夏、教室のみんな本気だったよね。",
+  "hashtags": [
+    "#平成",
+    "#懐かしい",
+    "#ノストラダムスの大予言",
+    "#1999年",
+    "#平成あるある"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "五島勉『ノストラダムスの大予言』（1973年刊）は「1999年7の月に恐怖の大王",
+  "source_facts": [
+    {
+      "id": "heisei-326055f6ce",
+      "fact": "五島勉『ノストラダムスの大予言』（1973年刊）は「1999年7の月に恐怖の大王が来る」と紹介し、1998年時点で209万部・450版に達した。平成の子どもたちの間で「1999年に世界が終わる」が本気で信じられる社会現象になった",
+      "backing_url": "https://ja.wikipedia.org/wiki/ノストラダムスの大予言",
+      "backing_note": "日本語版Wikipedia。1973年刊・1998年時点209万部450版。予言自体は外れた前提で扱う"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "showa-005",
+  "title": "土光敏夫のメザシ晩飯｜1982年NHK放送の衝撃",
+  "emotion": "呆れ",
+  "powerword": "メザシで足りる",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "経団連会長の晩飯、メザシ一皿",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "は？　会長の夕飯がメザシ一皿なのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "1982年7月23日、NHKが俺の家の食卓を撮りに来た"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "撮る側は何を撮ってるのだ"
+        }
+      ],
+      "image_prompt": "a small wooden dining table in a modest Showa-era Japanese house at dusk, grilled small dried sardines, boiled greens, miso soup, brown rice, single bare bulb, old TV camera tripod silhouette in the corner, no people, no text, film grain"
+    },
+    {
+      "caption": "撮影当日、部下が止めに入る",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、これ全国に流れます。菜っ葉と味噌汁と玄米だけなんて──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "それが俺の晩飯だ。隠すものが何かあるのか"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、俺は世間に無駄を削れと言った男だ。その俺が肉なんぞ──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "せめて卵を付けるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "メザシで足りる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "足りてない！　三日で倒れるのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "奥様も、同じ膳を並べておられます"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "奥さんの意見は聞いたのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "うちのはこれが好きなんだ。文句は言わせん"
+        }
+      ],
+      "image_prompt": "vintage 1980s Japanese television studio lighting shining into a plain tatami room, low table with simple meal, cables on the floor, warm dusty air, no people, no text, documentary atmosphere"
+    },
+    {
+      "caption": "一皿で一生の呼び名がついた",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "一回の放送で、一生メザシの人なのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "結構だ。呼び名だけで世間の財布が締まるなら安いもんだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクはそこが嫌なのだ。上が我慢すると、下も我慢させられるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "強制はせん。俺が先にやって見せるだけだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……ずるいのだ。呆れてるのに羨ましいのだ"
+        }
+      ],
+      "image_prompt": "empty plate with two tiny sardine tails under a single hanging lamp, dark background, quiet and solemn still life, retro Japanese texture, no people, no text"
+    }
+  ],
+  "caption": "1982年7月23日、NHKが映した経団連会長の夕食はメザシに菜っ葉、味噌汁と玄米。今の会社に、これができる偉い人はいますか。",
+  "hashtags": [
+    "#昭和",
+    "#土光敏夫",
+    "#メザシ",
+    "#昭和の働き方",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "「メザシの土光さん」こと土光敏夫は、経団連会長・行政改革の顔でありながら、198",
+  "source_facts": [
+    {
+      "id": "showa-11b73d7bf6",
+      "fact": "「メザシの土光さん」こと土光敏夫は、経団連会長・行政改革の顔でありながら、1982年のNHK特集で妻と二人の夕食「メザシに菜っ葉・味噌汁・玄米」が放映され、質素リーダーの象徴として定着した",
+      "backing_url": "https://ja.wikipedia.org/wiki/土光敏夫",
+      "backing_note": "日本語版Wikipedia。1982年7月23日NHK特集で夕食が放映され定着。メザシは演出説・イワシ発言起源説もあるため『放映されて定着した』の範囲で台本化する"
+    }
+  ]
+}

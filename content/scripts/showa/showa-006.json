@@ -1,0 +1,118 @@
+{
+  "id": "showa-006",
+  "title": "松下幸之助 解雇名簿60人「一人も解雇せん」",
+  "emotion": "共感",
+  "powerword": "一人も解雇せん",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "昭和4年、解雇名簿60人の前で",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "机の上、六十人の解雇名簿なのだ!?"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "社長、これが解雇する六十名の──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "一人も解雇せん"
+        }
+      ],
+      "image_prompt": "1920s Japanese factory office, dim desk lamp, stack of old paper documents tied with string, dusty window light, no people, no text, cinematic sepia"
+    },
+    {
+      "caption": "半日勤務・給料全額・全員で在庫を売る",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "生産は半分に落とす。工場は半日勤務だ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "ただし給料は全額出す。一銭も削らん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "半分しか働かないのに満額!?　それ会社が先に潰れるのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "社長、しかし在庫の山が──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "その山を、店員も工員も全員で売れ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "え、工場の人が営業に出るのだ？　ボクなら初日で逃げるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "工員が売ったら客の声が直に入る。売れんもんが分かるやろ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "うっ、それは正しいのだ。でも嫌なのだ"
+        }
+      ],
+      "image_prompt": "prewar Japanese warehouse packed with stacked wooden crates and boxes, half-lit machinery silent in background, dust in air, no people, no text"
+    },
+    {
+      "caption": "2ヶ月で在庫完売、フル生産へ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "で、結局どうなったのだ？"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "……二ヶ月で、在庫が空になりました"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "二ヶ月!?　誰も切らずに売り切ったのだ?!"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "見たか！　明日からフル生産や！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今の会社なら一発アウト。半分働いて満額とか、絶対通らないのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "甘いわ。人を切って残るのは、空っぽの工場だけや"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……ボクはこんな社長の下、無理なのだ。でも羨ましいと思った人、正直に言うのだ"
+        }
+      ],
+      "image_prompt": "empty swept warehouse floor at dawn, morning light through high windows, belts and machines starting to move, no people, no text, warm nostalgic tone"
+    }
+  ],
+  "caption": "昭和4年の恐慌下、解雇予定60名の名簿を前にした松下幸之助の返答。生産半減・半日勤務・給料全額支給で、在庫は2ヶ月で完売。今なら通らない、でもこの判断が残った話。",
+  "hashtags": [
+    "#昭和",
+    "#松下幸之助",
+    "#昭和の働き方",
+    "#経営者",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "松下幸之助は1929年の昭和恐慌で、解雇予定者60名の名簿を前に「一人も解雇しな",
+  "source_facts": [
+    {
+      "id": "showa-245f24d636",
+      "fact": "松下幸之助は1929年の昭和恐慌で、解雇予定者60名の名簿を前に「一人も解雇しない。生産を半減し工場は半日勤務、給料は全額支給。全員で在庫を売る」と宣言し、2ヶ月で在庫を売り切ってフル生産に戻した",
+      "backing_url": "https://konosuke-matsushita.com/column/quiz/no51.php",
+      "backing_note": "PHP研究所運営の松下幸之助公式サイト。解雇ゼロ・生産半減・半日勤務・給料全額・2ヶ月で在庫完売の顛末"
+    }
+  ]
+}

@@ -20,13 +20,8 @@
     "phrase_gap": 0.05,
     "scene_tail": 0.15,
     "punch_zoom": 1.12,
-    "cut_interval": 0.7,
     "scenes": 3,
     "skit": true,
-    "se": {
-      "scene": "heisei_don",
-      "last": "showa_reveal"
-    },
     "bg_queries": [
       "vintage factory machinery",
       "welding sparks workshop",

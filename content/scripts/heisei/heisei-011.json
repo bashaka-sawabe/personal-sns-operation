@@ -1,0 +1,124 @@
+{
+  "id": "heisei-011",
+  "title": "だんご3兄弟が1999年の年間1位という事件",
+  "emotion": "笑い",
+  "powerword": "串刺しで年間1位",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "1999年、日本一売れた曲は団子",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "は？　1999年に日本で一番売れた曲が、団子の歌なのだ？　冗談じゃないのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "そうよ。『だんご3兄弟』。1999年3月3日の発売で、オリコンの年間シングル1位を取ったの"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "串に刺された団子の話が、その年に出た全部の曲に勝った。ボクは信じないのだ"
+        }
+      ],
+      "image_prompt": "minimalist still life of three plain rice dumplings on a bamboo skewer on a wooden table, soft late-90s living room light, nostalgic warm tone, no text, no logos, no people"
+    },
+    {
+      "caption": "串刺しなのに兄弟仲がいい問題",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "ボクは納得しないのだ。歌詞なんて、団子が3つ串に刺さってるだけの話なのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "そこがいいのよ。長男・次男・三男が一本の串に並んでて、その順番にもちゃんと意味があるの"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "意味なんて要らないのだ。串に刺されてる時点で全員おかしい。誰も逃げないのがおかしい──"
+        },
+        {
+          "speaker": "mochiko",
+          "text": "わたしは次男がいちばん好きでしたねえ。真ん中って、押されても落ちないでしょう"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "今は串の話なのだ。好みは聞いてないのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "あなたね、あの春に生きてたら絶対口ずさんでたわ。逃げようがない曲だったのよ"
+        }
+      ],
+      "image_prompt": "close-up of three round dumplings lined up on a single skewer, shallow depth of field, pale spring background, quiet and slightly absurd composition, no text, no people"
+    },
+    {
+      "caption": "国ごと団子に飲まれた春",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "わたしね、あの春は朝も夕方も団子だったの。テレビをつければ、いつも団子の歌"
+        },
+        {
+          "speaker": "sora",
+          "text": "保育園の発表会でも団子、運動会でも団子、親戚の集まりでは従兄弟が勝手に踊り出して──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "長いのだ。要するに1999年の日本は、国ごと団子に飲まれてたってことなのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "飲まれてたわ。オリコン集計で約291.8万枚。1999年の年間シングル1位が、あの団子なのよ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "約291万枚って、291万人が団子のCDをレジに持っていったってことなのだ。こわいのだ"
+        }
+      ],
+      "image_prompt": "empty 1990s Japanese school gymnasium with folding chairs and paper decorations, dusty afternoon sunbeams, nostalgic film grain, no text, no people"
+    },
+    {
+      "caption": "落ち着いて考えると事件",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "で、結局なんで売れたのだ？　大人が裏で仕掛けたに決まってるのだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "発売してたった3日で250万枚の出荷。子どもが勝手に覚えて、親がレコード屋に走ったの"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "1999年の日本一が、串刺しで年間1位。落ち着いて考えると、これは事件なのだ"
+        },
+        {
+          "speaker": "mochiko",
+          "text": "うちの実家、まだあの串が残ってると思うんですよねえ。たしか長男のところに"
+        }
+      ],
+      "image_prompt": "vintage record shop shelf with blank white CD single sleeves, warm fluorescent light, empty aisle, nostalgic 1990s Japanese retail atmosphere, no text, no logos, no people"
+    }
+  ],
+  "caption": "1999年3月3日発売、オリコン約291.8万枚で年間シングル1位。日本で一番売れた曲が、串に刺された団子の歌だった春。あなたは長男派？次男派？",
+  "hashtags": [
+    "#平成",
+    "#だんご3兄弟",
+    "#1999年",
+    "#あの頃",
+    "#懐かしい"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "「だんご3兄弟」は1999年3月3日発売。発売3日で出荷250万枚、オリコン集計",
+  "source_facts": [
+    {
+      "id": "heisei-96a11fbb35",
+      "fact": "「だんご3兄弟」は1999年3月3日発売。発売3日で出荷250万枚、オリコン集計で約291.8万枚を売り上げ、1999年のオリコン年間シングル1位になった",
+      "backing_url": "https://ja.wikipedia.org/wiki/だんご3兄弟",
+      "backing_note": "日本語版Wikipedia。1999年3月3日発売・オリコン約291.8万枚・1999年年間1位"
+    }
+  ]
+}

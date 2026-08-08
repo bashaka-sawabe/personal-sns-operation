@@ -61,13 +61,10 @@ PUNCH_FRAMES = 7       # 戻り切るまでのフレーム数（30fpsで約0.23�
 SE_VOLUME = 0.55       # ナレーションを塗り潰さない音量
 
 # 背景を一定間隔で切り替える演出（#121）。ロンロンの天秤（51.2万）は
-# 2chと無関係の高刺激映像を0.4秒ごとにカットしてテンポを作っている（docs/02 2章）。
-# 静止画1枚しか無いので、位置を切り替えて「別カット」に見せる。
-# 倍率は1種類に固定する。倍率まで振ると画面全体が拡大縮小を繰り返して
-# チカチカする（本人指摘 2026-08-06、#177）。カット感は位置の跳びだけで足りる
-CUT_ZOOM = 1.20
-CUT_POSITIONS = [(0.30, 0.42), (0.68, 0.55), (0.45, 0.30), (0.58, 0.70),
-                 (0.35, 0.62), (0.72, 0.38)]
+# 背景のハードカット（一定間隔で位置が跳ぶ疑似カット割り）は**復活させないこと**。
+# ロンロンの実測（docs/02 2章）を根拠に入れたが、本人が2度拒否している
+# （2026-08-06 #177「チカチカする」→位置ジャンプ残しで再発→2026-08-08 #203 で全廃）。
+# 背景の動きは Ken Burns の連続的なパンだけにする
 
 
 def _check_text_width() -> None:
@@ -150,27 +147,6 @@ def _font_family() -> str:
     except (OSError, subprocess.SubprocessError):
         _font_cache["family"] = FONT_FALLBACK
     return _font_cache["family"]
-
-
-def _hard_cuts(dur: float, interval: float) -> str:
-    """一定間隔で拡大率と位置が切り替わる zoompan（＝カット割りの代用）。
-
-    Ken Burns の連続的な動きと違い、**不連続に切り替わる**のがポイント。
-    1枚の静止画でも「別カットに切り替わった」と目が認識する（docs/02 2章）。
-    """
-    frames = max(1, int(round(interval * FPS)))
-    n = len(CUT_POSITIONS)
-    # フレーム番号 on から「今どのカットか」を出し、その値を階段状に取り出す
-    idx = f"mod(floor(on/{frames}),{n})"
-    z = f"{CUT_ZOOM}"
-    x = "+".join(f"{p[0]}*eq({idx},{i})" for i, p in enumerate(CUT_POSITIONS))
-    y = "+".join(f"{p[1]}*eq({idx},{i})" for i, p in enumerate(CUT_POSITIONS))
-    return (
-        f"zoompan=z='{z}'"
-        f":x='(iw-iw/zoom)*({x})'"
-        f":y='(ih-ih/zoom)*({y})'"
-        f":d=1:s={WIDTH}x{HEIGHT}:fps={FPS}"
-    )
 
 
 def _ken_burns(index: int, dur: float) -> str:
@@ -390,12 +366,10 @@ def render_scene(scene: dict, index: int, work_dir: str,
     audio = _scene_audio(scene, index, work_dir)
     subs = f"ass='{ass}':fontsdir='{os.path.dirname(font_path())}'"
 
-    cut = style.get("cut_interval", 0)
     if scene["bg_kind"] == "video":
+        # 実写映像は素材自体に動きがあるので、そのまま流す
         inputs = ["-stream_loop", "-1", "-i", scene["bg"], "-i", audio]
-        # 映像にもカット割りを効かせる（#141）。以前は静止画にしか掛かっておらず、
-        # Pexels映像が取れたシーンでは cut_interval が何もしていなかった
-        base_chain = _VIDEO_PREP + (f",{_hard_cuts(scene['dur'], cut)}" if cut else "")
+        base_chain = _VIDEO_PREP
     else:
         inputs = ["-loop", "1", "-framerate", str(FPS), "-t", str(scene["dur"]),
                   "-i", scene["bg"], "-i", audio]
@@ -404,7 +378,7 @@ def render_scene(scene: dict, index: int, work_dir: str,
         base_chain = (
             f"scale={WIDTH * 2}:{HEIGHT * 2}:force_original_aspect_ratio=increase,"
             f"crop={WIDTH * 2}:{HEIGHT * 2},"
-            + (_hard_cuts(scene["dur"], cut) if cut else _ken_burns(index, scene["dur"])) + ","
+            + _ken_burns(index, scene["dur"]) + ","
             "eq=contrast=1.04:saturation=1.08:brightness=-0.04"
         )
 

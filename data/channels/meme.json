@@ -28,11 +28,6 @@
     "phrase_gap": 0.02,
     "scene_tail": 0.08,
     "punch_zoom": 1.14,
-    "cut_interval": 0.45,
-    "se": {
-      "scene": "meme_switch",
-      "last": "meme_ochi"
-    },
     "scenes": 3,
     "skit": true,
     "bg_queries": [

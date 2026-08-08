@@ -609,8 +609,11 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
                 # 「言い切る前に奪われた」を音で作る（#143）
                 cut = text.rstrip().endswith(INTERRUPT_MARK)
                 spoken = text.rstrip()[:-len(INTERRUPT_MARK)] if cut else text
+                # 話者ごとの素のテンポ差を speed_scale で打ち消してから
+                # チャンネルの話速を掛ける（遅い話者を出さない。#203）
+                char_speed = speed * CHARACTERS[key].get("speed_scale", 1.0)
                 audio = narration(spoken, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"),
-                                  speaker=style_id, speed=speed, gap=0.0 if cut else gap)
+                                  speaker=style_id, speed=char_speed, gap=0.0 if cut else gap)
                 phrases.append({"text": text, "audio": audio,
                                 "dur": probe_duration(audio), "speaker": key})
         # 読み終わりで即カットすると詰まって聞こえるのでシーン末尾に余白を足す

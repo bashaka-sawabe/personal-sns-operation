@@ -31,6 +31,12 @@ RETIRED = {
 # 台本・音声・字幕・立ち絵で共通に使うキャラクター定義。
 # voicevox_speaker はVOICEVOXのスタイルID。色はASSのBGR並び。
 #
+# speed_scale は話者ごとの素の話速のばらつきを打ち消す補正（#203）。
+# VOICEVOXのスタイルは素のテンポが最大1.4倍違い、そのまま使うと
+# 「めっちゃゆっくり喋るやつ」が出る（本人指摘 2026-08-08。最遅は九州そら）。
+# 同一テスト文の合成時間を実測し、全話者の中央値に揃う係数を入れた
+# （±3%以内は省略＝1.0）。チャンネルの style.speed はこの上に掛かる。
+#
 # 構成はロンロンの天秤（51.2万・このジャンルの最大手）に合わせている（#133）。
 # 同チャンネルは**レス主ごとに声を変える**ことで、1本の中に複数の人物を登場させている。
 # 2人固定だと寸劇にしたときに登場人物を演じ分けられない（docs/02 2章）。
@@ -40,6 +46,7 @@ RETIRED = {
 CHARACTERS = {
     # ---- 主役2人（全チャンネル共通の軸） ----
     "zundamon": {
+        "speed_scale": 1.11,
         "name": "ずんだもん",
         "voicevox_speaker": 3,
         "credit": "VOICEVOX:ずんだもん",
@@ -55,6 +62,7 @@ CHARACTERS = {
         ),
     },
     "metan": {
+        "speed_scale": 0.97,
         "name": "四国めたん",
         "voicevox_speaker": 2,
         "credit": "VOICEVOX:四国めたん",
@@ -69,6 +77,7 @@ CHARACTERS = {
     # ---- 脇役（レス民・通行人・別の登場人物を演じ分けるための声） ----
     # 立ち絵は無くてよい（字幕の色で誰の発言かを示す。docs/09 4-8）
     "tsumugi": {
+        "speed_scale": 0.95,
         "name": "春日部つむぎ",
         "voicevox_speaker": 8,
         "credit": "VOICEVOX:春日部つむぎ",
@@ -90,6 +99,7 @@ CHARACTERS = {
         "speech": "素直で優しい。心配する側に回る。「大丈夫ですか？」",
     },
     "takehiro": {
+        "speed_scale": 0.89,
         "name": "玄野武宏",
         "voicevox_speaker": 11,
         "credit": "VOICEVOX:玄野武宏",
@@ -107,6 +117,7 @@ CHARACTERS = {
     # 音声規約に「企業・個人事業主は収益の有無にかかわらず事前申請」の特別条項があり、
     # 名義を変えた瞬間に申請漏れになる。熱血役は玄野武宏のツンギレで代替する
     "takehiro_nekketsu": {
+        "speed_scale": 0.86,
         "name": "玄野武宏",           # 同一キャラの別スタイル（クレジットは1つ）
         "voicevox_speaker": 40,      # ツンギレ
         "credit": "VOICEVOX:玄野武宏",
@@ -121,6 +132,7 @@ CHARACTERS = {
         "speech": "落ち着いた女性。冷静に事実を置く。ナレーション向き",
     },
     "sora": {
+        "speed_scale": 1.43,
         "name": "九州そら",
         "voicevox_speaker": 16,
         "credit": "VOICEVOX:九州そら",
@@ -135,6 +147,7 @@ CHARACTERS = {
         "speech": "のんびりした女性。ずれた返しをする。場の空気を変える",
     },
     "shishio": {
+        "speed_scale": 0.96,
         "name": "剣崎雌雄",
         "voicevox_speaker": 21,
         "credit": "VOICEVOX:剣崎雌雄",
@@ -142,6 +155,7 @@ CHARACTERS = {
         "speech": "理知的な男性。淡々と正論を置く。ツッコミの最終兵器",
     },
     "whitecul": {
+        "speed_scale": 1.07,
         "name": "WhiteCUL",
         "voicevox_speaker": 23,
         "credit": "VOICEVOX:WhiteCUL",
@@ -149,6 +163,7 @@ CHARACTERS = {
         "speech": "抑揚が控えめ。ナレーション・状況説明に向く",
     },
     "nurserobo": {
+        "speed_scale": 1.04,
         "name": "ナースロボ＿タイプＴ",
         "voicevox_speaker": 47,
         "credit": "VOICEVOX:ナースロボ＿タイプＴ",

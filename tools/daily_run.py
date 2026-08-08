@@ -12,8 +12,11 @@
     #   0 17 * * * cd /Users/bashaka/repo/personal/personal-sns-operation && .venv/bin/python tools/daily_run.py >> logs/daily_run.log 2>&1
 
 設計（docs/08 の線引きに従う）:
-- **ネタは人が採用（目視選別）したものだけを使う。** 在庫が足りない日は本数を落として
-  その旨を報告する。自動で候補を採用しない（人間の視点がAI量産対策の本体）。
+- 採用済み（人・委任）の在庫を先に消費し、不足分は候補から**自動採用**する
+  （2026-08-08 本人決定・#191。docs/08 1章）。fact系は裏取り（backing_url）付きの
+  候補だけが対象で、**裏取りの無いネタは自動でも台本にしない**。
+  自動採用は計画出力（←自動採用）と台帳（adopted_by: auto）で識別でき、
+  本人はいつでも --reject で覆せる。
 - 投稿は**限定公開まで**。公開切り替え（publish_youtube.py --release）は本人がやる。
 - YouTubeのクォータは動画1本1,600ユニット・1プロジェクト1日10,000ユニット＝**6本**。
   チャンネル別の youtube_client_secret_<ch>.json を置いてプロジェクトを分けると
@@ -32,7 +35,8 @@ from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline.common import OUT_DIR, PipelineError, secret_path
+from tools import fetch_facts, fetch_threads
+from tools.pipeline.common import OUT_DIR, PipelineError, read_secret, secret_path
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PYTHON = os.path.join(REPO, ".venv", "bin", "python")
@@ -58,12 +62,96 @@ def _load_all(directory: str) -> list[dict]:
 
 
 def stock_for(channel: str) -> list[dict]:
-    """チャンネルの未消費ネタ（人が採用済みのもの）を返す。"""
+    """チャンネルの未消費ネタ（人・委任で採用済みのもの）を返す。"""
     if channel == "meme":
         return [t for t in _load_all(THREADS_DIR) if t["status"] == "adopted"]
     prefix = {"heisei": "heisei-", "showa": "showa-"}[channel]
     return [f for f in _load_all(FACTS_DIR)
             if f["status"] == "adopted" and os.path.basename(f["_path"]).startswith(prefix)]
+
+
+def auto_candidates(channel: str) -> list[dict]:
+    """採用済み在庫が足りないとき自動採用してよい候補（2026-08-08 本人決定・#191）。
+
+    fact系は裏取り（backing_url）が付いた候補だけを対象にする。裏取り必須の線は
+    採用の自動化とは別の品質保証なので、自動化しても緩めない（docs/08 1章）。
+    """
+    if channel == "meme":
+        rows = [t for t in _load_all(THREADS_DIR) if t["status"] == "candidate"]
+        # 目視の目利きの代替として、伸びたスレ（レス数）から順に取る
+        return sorted(rows, key=lambda t: -int(t.get("res_count") or 0))
+    prefix = {"heisei": "heisei-", "showa": "showa-"}[channel]
+    return [f for f in _load_all(FACTS_DIR)
+            if f["status"] == "candidate" and (f.get("backing_url") or "").strip()
+            and os.path.basename(f["_path"]).startswith(prefix)]
+
+
+def _pick_powerword(thread: dict, feedback: str = "") -> dict:
+    """スレからパワーワードとオチをLLMに選ばせる（人の目利きの代替。#191）。
+
+    採用基準そのもの（本文に実在・内輪語なし・字数）は check_criteria が握っており、
+    ここで選んだ結果も同じ検問を通る。基準を二重に実装しない。
+    """
+    api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
+    if not api_key:
+        raise PipelineError("ANTHROPIC_API_KEY が無いため自動採用できません")
+    try:
+        import anthropic
+    except ImportError:
+        raise PipelineError("anthropic SDK がありません（.venv/bin/pip install anthropic）") from None
+    body = "\n".join(r["text"] for r in thread.get("res", []))[:6000]
+    system = (
+        "あなたは掲示板スレをショート動画にする編集者。スレから次の2つを選ぶ:\n"
+        f"- powerword: 視聴者がコメント欄に書き写したくなる一番面白い語句。"
+        f"**スレ本文にそのまま書かれている表現だけ**を使う（造語禁止）。"
+        f"{fetch_threads.POWERWORD_MIN}〜{fetch_threads.POWERWORD_MAX}字。"
+        "なんJ語・板の内輪語（ニキ・ワイ・草など）は選ばない\n"
+        f"- ochi: このスレのオチを{fetch_threads.OCHI_MIN}〜{fetch_threads.OCHI_MAX}字の一文で"
+    )
+    if feedback:
+        system += f"\n\n前回の選定は却下された。同じ間違いをしないこと:\n{feedback}"
+    client = anthropic.Anthropic(api_key=api_key)
+    response = client.messages.create(
+        model="claude-opus-5",
+        max_tokens=500,
+        system=system,
+        output_config={"format": {"type": "json_schema", "schema": {
+            "type": "object",
+            "properties": {"powerword": {"type": "string"}, "ochi": {"type": "string"}},
+            "required": ["powerword", "ochi"],
+            "additionalProperties": False,
+        }}},
+        messages=[{"role": "user", "content": f"タイトル: {thread['title']}\n\n{body}"}],
+    )
+    return json.loads(response.content[0].text)
+
+
+def auto_adopt(channel: str, item: dict) -> bool:
+    """候補を台帳上で採用に進める。基準を満たせなければ見送って False を返す。"""
+    try:
+        if channel == "meme":
+            # 検問（check_criteria）に落ちたら、却下理由を渡して1回だけ選び直す
+            feedback = ""
+            for attempt in (1, 2):
+                picked = _pick_powerword(item, feedback)
+                try:
+                    fetch_threads.mark(item["id"], "adopted",
+                                       picked["powerword"], picked["ochi"])
+                    break
+                except PipelineError as e:
+                    if attempt == 2:
+                        raise
+                    feedback = str(e)
+            item["powerword"] = picked["powerword"].strip()
+            item["ochi"] = picked["ochi"].strip()
+        else:
+            # fact系は裏取り済み候補だけが対象（auto_candidates）なので mark が通る
+            fetch_facts.mark(item["id"], "adopted")
+        item["status"] = "adopted"
+        return True
+    except PipelineError as e:
+        print(f"  自動採用を見送り（{channel} / {item['id']}）: {str(e).splitlines()[0]}")
+        return False
 
 
 def mark_used(item: dict) -> None:
@@ -127,10 +215,16 @@ def main() -> None:
     short_stock: list[str] = []
     deferred = 0
 
-    stocks = {ch: stock_for(ch) for ch in CHANNELS}
-    for ch, stock in stocks.items():
-        if len(stock) < args.per_channel:
-            short_stock.append(f"{ch}: 在庫{len(stock)}本（目標{args.per_channel}本）")
+    stocks: dict[str, list[dict]] = {}
+    for ch in CHANNELS:
+        adopted = stock_for(ch)
+        # 採用済みを先に消費し、不足分だけ候補から自動採用する（人・委任の選別を無駄にしない）
+        extra = auto_candidates(ch)[:max(0, args.per_channel - len(adopted))]
+        for item in extra:
+            item["_auto"] = True
+        stocks[ch] = adopted + extra
+        if len(stocks[ch]) < args.per_channel:
+            short_stock.append(f"{ch}: 在庫{len(stocks[ch])}本（目標{args.per_channel}本）")
         quota_left.setdefault(project_of(ch), UPLOADS_PER_PROJECT)
 
     # クォータが足りない日でも特定チャンネルが0本にならないよう、1本ずつ順に取る
@@ -148,12 +242,14 @@ def main() -> None:
     print(f"本日の計画: {len(plan)}本")
     for ch, item in plan:
         label = item.get("title") or item.get("fact", "")[:40]
-        print(f"  {ch}: {item['id']}  {label}")
+        mark = "　←自動採用" if item.get("_auto") else ""
+        print(f"  {ch}: {item['id']}  {label}{mark}")
     if deferred:
         print(f"クォータ都合で翌日回し: {deferred}本"
               f"（プロジェクト分割かクォータ引き上げで解消できます。docs/09 2-5章）")
     if short_stock:
-        print("⚠️ ネタ在庫が目標に足りません。fetch_threads / fetch_facts で採用を増やしてください:")
+        print("⚠️ 自動採用を含めても在庫が目標に足りません。"
+              "fetch_threads / fetch_facts で候補（fact系は裏取り付き）を増やしてください:")
         for line in short_stock:
             print(f"  {line}")
     if args.dry_run or not plan:
@@ -161,10 +257,16 @@ def main() -> None:
 
     posted: list[str] = []
     for ch, item in plan:
+        if item.get("_auto") and not auto_adopt(ch, item):
+            continue
         print(f"[{ch}] {item['id']} を生成中...")
         video = generate(ch, item)
         if not video:
             continue
+        if item.pop("_auto", False):
+            # 人の採用を経ていないことを台帳に残す（後から --reject で覆す判断材料になる）
+            item["adopted_by"] = "auto"
+            item["adopted_at"] = date.today().isoformat()
         mark_used(item)
         url = upload(video)
         if url:

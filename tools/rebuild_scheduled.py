@@ -26,6 +26,7 @@ import argparse
 import json
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -128,21 +129,31 @@ def neutralize(service, HttpError, entry: dict) -> bool:
     videos.update は part に含めた可変フィールドを**省略すると消す**仕様なので、
     status だけを private で送れば publishAt も消える。消えたことは読み直して確かめる
     （旧演出の動画が予約時刻に公開されるのが、この作業で一番起きてはいけないこと）。
+
+    直後の read が更新前の値を返すことがある（実測 2026-08-09）ため、
+    先に現状を読んで解除済みなら成功扱いにし、update 後の検証は間を置いて2回見る。
     """
     try:
+        got = service.videos().list(part="status", id=entry["old_id"]).execute()
+        st = (got.get("items") or [{}])[0].get("status", {})
+        if st.get("privacyStatus") == "private" and not st.get("publishAt"):
+            return True  # すでに解除済み（前回実行の反映が読めなかっただけ）
         service.videos().update(part="status", body={
             "id": entry["old_id"],
             "status": {"privacyStatus": "private", "selfDeclaredMadeForKids": False},
         }).execute()
-        got = service.videos().list(part="status", id=entry["old_id"]).execute()
-        st = (got.get("items") or [{}])[0].get("status", {})
-        if st.get("publishAt"):
-            print(f"  {entry['stem']}: 予約が残っています（{st.get('publishAt')}）。中断します")
-            return False
+        for attempt in (1, 2):
+            got = service.videos().list(part="status", id=entry["old_id"]).execute()
+            st = (got.get("items") or [{}])[0].get("status", {})
+            if not st.get("publishAt"):
+                return True
+            if attempt == 1:
+                time.sleep(10)  # 反映待ち
+        print(f"  {entry['stem']}: 予約が残っています（{st.get('publishAt')}）。中断します")
+        return False
     except HttpError as e:
         print(f"  {entry['stem']}: 旧動画の予約解除に失敗: {getattr(e, 'reason', '') or e}")
         return False
-    return True
 
 
 def upload_replacement(entry: dict) -> str | None:

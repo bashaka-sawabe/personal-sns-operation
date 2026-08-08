@@ -175,7 +175,7 @@ def _ronron_rules() -> str:
 
     「キチガイっぽいのに知性を感じる」の正体は、前提を1個だけ壊して
     全員がその上で論理的に振る舞う分裂にある（8本の書き起こしで全て共通）。
-    meme / trivia / heisei に共通で注入する。showa は別路線（#167）なので使わない。
+    meme / heisei に共通で注入する。showa は別路線（#167）なので使わない。
     """
     return """
 
@@ -334,10 +334,10 @@ def _list_rules(cfg: dict, count: int) -> str:
 
 
 def _fact_rules(cfg: dict) -> str:
-    """裏取り済みの事実から作るときの追加ルール（trivia / heisei。docs/05 2章）。
+    """裏取り済みの事実から作るときの追加ルール（heisei / showa。docs/05 2章）。
 
-    同じ「事実＋裏取り」でも、triviaは知らない話の種明かし、heiseiは
-    知っている話の掘り起こしで、フックの作り方が正反対になる（#113）。
+    同じ「事実＋裏取り」でも、知らない話の種明かし（旧trivia）と、
+    知っている話の掘り起こし（heisei）ではフックの作り方が正反対になる（#113）。
     """
     if (cfg.get("style") or {}).get("skit"):
         common = _skit_rules() + """

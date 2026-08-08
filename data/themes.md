@@ -9,7 +9,8 @@
 | ch | ルート |
 |---|---|
 | `meme` / `heisei` | `tools/fetch_threads.py`（おーぷん2ちゃんねる収集→目視選別） |
-| `trivia` | [#103](https://github.com/bashaka-sawabe/personal-sns-operation/issues/103)（発見→一次ソース裏取り） |
-| `f1` | [#104](https://github.com/bashaka-sawabe/personal-sns-operation/issues/104)（公式RSS検知＋Jolpica-F1） |
+| `heisei` / `showa`（事実系） | `tools/fetch_facts.py --add`（発見→一次ソース裏取り→採用。[#103](https://github.com/bashaka-sawabe/personal-sns-operation/issues/103)） |
+
+（`trivia` は 2026-08-08 [#192](https://github.com/bashaka-sawabe/personal-sns-operation/issues/192)、`f1` は 2026-08-02 [#119](https://github.com/bashaka-sawabe/personal-sns-operation/issues/119) で廃止）
 
 書式の記録: `## チャンネル` の見出しと `- テーマ` の箇条書き。行頭が `-` の行だけを拾う。

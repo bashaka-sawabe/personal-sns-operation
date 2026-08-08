@@ -41,7 +41,7 @@ FACTS_DIR = os.path.join(REPO, "data", "facts")
 
 # 各チャンネル毎日3本が目標（本人指示 2026-08-06）
 TARGET_PER_CHANNEL = 3
-CHANNELS = ["meme", "trivia", "heisei", "showa"]
+CHANNELS = ["meme", "heisei", "showa"]
 # 1プロジェクト1日のアップロード上限（10,000ユニット ÷ 1,600ユニット/本）
 UPLOADS_PER_PROJECT = 6
 SHARED_CLIENT_SECRET = "youtube_client_secret.json"
@@ -61,7 +61,7 @@ def stock_for(channel: str) -> list[dict]:
     """チャンネルの未消費ネタ（人が採用済みのもの）を返す。"""
     if channel == "meme":
         return [t for t in _load_all(THREADS_DIR) if t["status"] == "adopted"]
-    prefix = {"trivia": "til-", "heisei": "heisei-", "showa": "showa-"}[channel]
+    prefix = {"heisei": "heisei-", "showa": "showa-"}[channel]
     return [f for f in _load_all(FACTS_DIR)
             if f["status"] == "adopted" and os.path.basename(f["_path"]).startswith(prefix)]
 

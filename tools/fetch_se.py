@@ -37,10 +37,8 @@ SOUNDS = [
     ("anime", "sceneswitch1", "meme_switch"),        # 場面転換
     ("anime", "chan-chan1", "meme_ochi"),            # オチのズッコケ
     ("anime", "pico-pico-hammer1", "meme_tsukkomi"), # ツッコミ
-    # trivia: 「気づき」と「種明かし」。落ち着いた音で解説を邪魔しない
-    ("button", "decision3", "trivia_tick"),          # 話題の区切り
-    ("anime", "levelup1", "trivia_hirameki"),        # ひらめき
-    ("anime", "jajean1", "trivia_reveal"),           # 種明かし
+    # showa: 種明かしのジャジャーン（旧triviaから引き継ぎ。showa.json の style.se が参照）
+    ("anime", "jajean1", "showa_reveal"),
     # heisei: 和の転換音。懐古の空気に合わせる
     ("anime", "drum-japanese1", "heisei_don"),       # 和太鼓の転換
     ("anime", "roll-finish1", "heisei_shime"),       # 締め

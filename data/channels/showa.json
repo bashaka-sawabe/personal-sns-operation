@@ -25,7 +25,7 @@
     "skit": true,
     "se": {
       "scene": "heisei_don",
-      "last": "trivia_reveal"
+      "last": "showa_reveal"
     },
     "bg_queries": [
       "vintage factory machinery",

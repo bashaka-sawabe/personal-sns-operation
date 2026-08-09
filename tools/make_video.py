@@ -143,6 +143,14 @@ def make_one(channel: str, theme: str, offline: bool, script_only: bool,
              "backing_note": f.get("backing_note", "")})
     path = script_mod.save(data, script_id, scripts_dir)
     print(f"  台本: {os.path.relpath(path)}")
+    # 消費した印は**台本が保存できてから**付ける。先に付けると生成が落ちたときに
+    # ネタだけ失う。ここで付けないと単発生成のぶんが adopted のまま残り、
+    # 次回の daily_run が同じネタでもう1本作る（#230）
+    used = [i for i in ([thread["id"]] if thread else []) if fetch_threads.mark_used(i)]
+    used += [f["id"] for f in ([fact] if fact else []) + (facts or [])
+             if fetch_facts.mark_used(f["id"])]
+    if used:
+        print(f"  ネタ台帳: {'、'.join(used)} を used にしました")
     warn_flat_dialogue(data, cfg)
     if script_only:
         warn_unfilled(data, script_id, channel)

@@ -18,7 +18,7 @@
     # 投稿せずに、何が上がって何が止まるかだけ見る
     .venv/bin/python tools/publish_youtube.py --all --dry-run
 
-    # 次の空き枠（毎日23時・1ch2本）で公開予約まで済ませる
+    # 次の空き枠（毎日22時・23時）で公開予約まで済ませる
     .venv/bin/python tools/publish_youtube.py --all --schedule
 
     # 予約カレンダーを見る
@@ -517,7 +517,7 @@ def sync_measuring(rows: list[dict]) -> list[str]:
     """予約時刻が過ぎて公開された動画を、台帳で `measuring` に進める（#237）。
 
     公開切り替えを人がやっていた頃は `--release` が台帳を進めていた（docs/06 5章）。
-    予約公開は23時に誰も居ないところで起きるので、次に走ったツールが追いつかせる。
+    予約公開は夜に誰も居ないところで起きるので、次に走ったツールが追いつかせる。
     これが無いと台帳が永久に `posted` のままになり、公開済みかどうかを読めなくなる。
     """
     # すでに measuring の行を書き直さない。advance は同じ状態への更新を通すため、
@@ -569,11 +569,11 @@ class SlotBook:
 def show_slots(days: int = 7) -> None:
     """チャンネル別の予約カレンダーと次の空き枠を表示する。
 
-    ついでに台帳を実状態へ追いつかせる。予約公開は23時に誰も居ないところで起きるので、
+    ついでに台帳を実状態へ追いつかせる。予約公開は夜に誰も居ないところで起きるので、
     実状態を読むコマンドが同期を担わないと台帳が永久に `posted` のまま取り残される。
     """
-    print(f"公開枠: 毎日{schedule_mod.PUBLISH_HOUR_JST}:00 JST / "
-          f"1チャンネル1日{schedule_mod.PER_DAY_PER_CHANNEL}本")
+    hours = "・".join(f"{h}:00" for h in schedule_mod.PUBLISH_HOURS_JST)
+    print(f"公開枠: 毎日 {hours} JST / 1チャンネル1日{schedule_mod.PER_DAY_PER_CHANNEL}本")
     synced: list[str] = []
     for ch in channels_mod.available():
         try:
@@ -583,17 +583,28 @@ def show_slots(days: int = 7) -> None:
             continue
         synced += sync_measuring(rows)
         by_day: dict = {}
+        reserved = set()
         for r in rows:
             if r["privacy"] != "private" or not r["publish_at"]:
                 continue
-            day = schedule_mod.parse(r["publish_at"]).astimezone(schedule_mod.JST).date()
-            by_day.setdefault(day, []).append(os.path.splitext(r["name"])[0])
+            at = schedule_mod.parse(r["publish_at"]).astimezone(schedule_mod.JST)
+            reserved.add(at)
+            by_day.setdefault(at.date(), []).append(
+                (f"{at:%H:%M}", os.path.splitext(r["name"])[0]))
         taken = reserved_slots(rows)
+        cutoff = schedule_mod.now_jst() + schedule_mod.MIN_LEAD
         print(f"\n[{ch}] 予約中 {len(taken)}本")
         for day, count in schedule_mod.calendar(taken, days):
             mark = "●" * count + "○" * max(0, schedule_mod.PER_DAY_PER_CHANNEL - count)
-            names = "、".join(sorted(by_day.get(day, [])))
-            print(f"  {day:%m/%d} {mark}  {names}")
+            booked = "、".join(f"{t} {n}" for t, n in sorted(by_day.get(day, [])))
+            free = [f"{s:%H:%M}" for s in schedule_mod.slots_of(day)
+                    if s not in reserved and s >= cutoff]
+            # 空きが残っていても1日の上限に達していれば取れない（手動で入れた日）
+            parts = [p for p in (booked,
+                                 "空き " + "・".join(free)
+                                 if free and count < schedule_mod.PER_DAY_PER_CHANNEL else "")
+                     if p]
+            print(f"  {day:%m/%d} {mark}  {'　'.join(parts)}")
         print(f"  次の空き枠: {schedule_mod.to_jst_label(schedule_mod.next_slots(taken, 1)[0])}")
     if synced:
         print(f"\n台帳: 公開済みだった{len(synced)}本を measuring に更新しました"
@@ -698,7 +709,7 @@ def reserve(video_ids: list[str], dry_run: bool = False) -> None:
 def unreserve(video_ids: list[str], dry_run: bool = False) -> None:
     """公開予約を外して限定公開に戻す（#237）。
 
-    自動予約を止める唯一の手段。予約は23時に勝手に公開されるので、
+    自動予約を止める唯一の手段。予約は時刻が来ると勝手に公開されるので、
     「出したくない」と気づいたときにここで抜ける。
     """
     _, rows = status_mod.load()
@@ -709,7 +720,7 @@ def unreserve(video_ids: list[str], dry_run: bool = False) -> None:
         yt_id = row["url"].rstrip("/").rsplit("/", 1)[-1]
         current = _youtube_status(row.get("channel", ""), yt_id)
         if current.get("privacyStatus") == "public":
-            # 台帳がまだ posted でも、23時を過ぎていれば公開済み。ここを素通しすると
+            # 台帳がまだ posted でも、予約時刻を過ぎていれば公開済み。ここを素通しすると
             # 「予約解除」の顔をして公開済み動画の取り下げをやってしまう
             status_mod.advance(vid, "measuring")
             raise PipelineError(
@@ -758,8 +769,9 @@ def main() -> None:
     p.add_argument("--release", nargs="+", metavar="video_id",
                    help="レビューを通ったものを限定公開から公開に切り替える（例: --release girls-001）")
     p.add_argument("--schedule", action="store_true",
-                   help=f"次の空き枠（毎日{schedule_mod.PUBLISH_HOUR_JST}時・"
-                        f"1ch{schedule_mod.PER_DAY_PER_CHANNEL}本）で公開予約して投稿する")
+                   help="次の空き枠（毎日 "
+                        + "・".join(f"{h}:00" for h in schedule_mod.PUBLISH_HOURS_JST)
+                        + " JST）で公開予約して投稿する")
     p.add_argument("--slots", action="store_true", help="公開予約のカレンダーを表示する")
     p.add_argument("--reserve", nargs="+", metavar="video_id",
                    help="投稿済みの動画を次の空き枠で公開予約に切り替える")

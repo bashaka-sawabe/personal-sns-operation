@@ -21,7 +21,6 @@ Analytics のスコープは既存トークンに含まれていないため、�
 無くても Data API の分だけ取れるようにしてある（判定のうち保存率・コメント率は成立する）。
 """
 import argparse
-import json
 import os
 import sys
 from datetime import datetime, timedelta, timezone
@@ -95,64 +94,73 @@ def fetch(days: int = 14) -> list:
         print("YouTube: 投稿台帳が空です（まだ投稿していない）")
         return []
 
-    # video_id -> ジャンル。台帳のキーは "<script_id>.mp4"
-    genre_of = {}
+    # チャンネルごとに束ねる。分割後（#29）は**チャンネルごとに別のトークン**で、
+    # 他チャンネルのトークンでは自分の動画として statistics も Analytics も引けない
+    by_channel: dict[str, dict] = {}
     for filename, rec in ledger.items():
         video_id = (rec or {}).get("video_id")
         if not video_id:
             continue
-        script_id = os.path.splitext(filename)[0]
-        path = os.path.join(yt.SCRIPTS_DIR, f"{script_id}.json")
-        if os.path.exists(path):
-            with open(path, encoding="utf-8") as f:
-                genre_of[video_id] = json.load(f).get("genre", "")
-
-    service = yt.get_service()
-    # Analytics は別クライアントが要る。認可情報は同じトークンファイルから読む
-    from google.oauth2.credentials import Credentials
-    creds = Credentials.from_authorized_user_file(yt.secret_path(yt.TOKEN_FILE))
-    analytics = _analytics_service(creds)
-    if analytics is None:
-        print("YouTube Analytics: スコープが足りないため完走率は取れません。\n"
-              "  取りたい場合は `.venv/bin/python tools/publish_youtube.py --auth` で再認可してください"
-              f"（{ANALYTICS_SCOPE}）。", file=sys.stderr)
+        script = yt.script_for(os.path.join(yt.OUT_DIR, filename))
+        # 台本はチャンネル別ディレクトリに移った。直下だけを見ると必ず空になり、
+        # ジャンル別集計（2週間テストの判定そのもの）が全部「未設定」になる
+        channel = yt.script_channel(script) or filename.split("-")[0]
+        by_channel.setdefault(channel, {})[video_id] = (script or {}).get("genre", "") or channel
 
     now = datetime.now(JST)
     since_dt = now - timedelta(days=days)
-    ids = list(genre_of)
     posts = []
-    for i in range(0, len(ids), 50):                        # videos.list は50件ずつ
-        chunk = ids[i:i + 50]
-        res = service.videos().list(
-            part="snippet,statistics", id=",".join(chunk), maxResults=50,
-        ).execute()
-        for item in res.get("items", []):
-            published = datetime.strptime(
-                item["snippet"]["publishedAt"], "%Y-%m-%dT%H:%M:%SZ",
-            ).replace(tzinfo=timezone.utc).astimezone(JST)
-            if published < since_dt:
-                continue
-            stats = item.get("statistics", {})
-            posts.append({
-                "_dt": published,
-                "_video_id": item["id"],
-                "platform": "youtube_shorts",
-                "genre": genre_of.get(item["id"], ""),
-                "post_date": published.date().isoformat(),
-                "title": item["snippet"]["title"][:40],
-                "url": f"https://www.youtube.com/shorts/{item['id']}",
-                "views_total": int(stats["viewCount"]) if "viewCount" in stats else None,
-                "likes": int(stats["likeCount"]) if "likeCount" in stats else None,
-                "comments": int(stats["commentCount"]) if "commentCount" in stats else None,
-            })
+    for channel, genre_of in sorted(by_channel.items()):
+        try:
+            service = yt.get_service(channel=channel)
+        except PipelineError as e:
+            print(f"YouTube[{channel}]: 認可が無いため飛ばします（{str(e).splitlines()[0]}）",
+                  file=sys.stderr)
+            continue
+        # Analytics は別クライアントが要る。認可情報は同じチャンネルのトークンから読む
+        from google.oauth2.credentials import Credentials
+        creds = Credentials.from_authorized_user_file(yt.token_path_for(channel))
+        analytics = _analytics_service(creds)
+        if analytics is None:
+            print(f"YouTube Analytics[{channel}]: スコープが足りないため完走率は取れません。\n"
+                  "  取りたい場合は `.venv/bin/python tools/publish_youtube.py --auth "
+                  f"--as {channel}` で再認可してください（{ANALYTICS_SCOPE}）。", file=sys.stderr)
 
-    stats = _analytics_rows(
-        analytics, [p["_video_id"] for p in posts],
-        since_dt.date().isoformat(), now.date().isoformat(),
-    )
-    for p in posts:
-        p.update(stats.get(p["_video_id"], {}))
-    return posts
+        ids = list(genre_of)
+        found = []
+        for i in range(0, len(ids), 50):                    # videos.list は50件ずつ
+            chunk = ids[i:i + 50]
+            res = service.videos().list(
+                part="snippet,statistics", id=",".join(chunk), maxResults=50,
+            ).execute()
+            for item in res.get("items", []):
+                published = datetime.strptime(
+                    item["snippet"]["publishedAt"], "%Y-%m-%dT%H:%M:%SZ",
+                ).replace(tzinfo=timezone.utc).astimezone(JST)
+                if published < since_dt:
+                    continue
+                stats = item.get("statistics", {})
+                found.append({
+                    "_dt": published,
+                    "_video_id": item["id"],
+                    "platform": "youtube_shorts",
+                    "genre": genre_of.get(item["id"], ""),
+                    "post_date": published.date().isoformat(),
+                    "title": item["snippet"]["title"][:40],
+                    "url": f"https://www.youtube.com/shorts/{item['id']}",
+                    "views_total": int(stats["viewCount"]) if "viewCount" in stats else None,
+                    "likes": int(stats["likeCount"]) if "likeCount" in stats else None,
+                    "comments": int(stats["commentCount"]) if "commentCount" in stats else None,
+                })
+
+        rows = _analytics_rows(
+            analytics, [p["_video_id"] for p in found],
+            since_dt.date().isoformat(), now.date().isoformat(),
+        )
+        for p in found:
+            p.update(rows.get(p["_video_id"], {}))
+        posts.extend(found)
+    return sorted(posts, key=lambda p: p["_dt"])
 
 
 def main() -> None:

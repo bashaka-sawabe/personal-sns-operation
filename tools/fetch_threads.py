@@ -349,7 +349,9 @@ def score_candidates(threads: list) -> int:
     client = anthropic.Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-opus-5",
-        max_tokens=4000,
+        # 候補1本あたり4項目 × 最大30本に、adaptive thinking の思考ぶんが上乗せされる。
+        # 足りないと本文が途中で切れて壊れたJSONが返る（#241）
+        max_tokens=12000,
         system=_SCORE_SYSTEM,
         output_config={"format": {"type": "json_schema", "schema": {
             "type": "object",
@@ -370,13 +372,23 @@ def score_candidates(threads: list) -> int:
         }}},
         messages=[{"role": "user", "content": "\n\n".join(blocks)}],
     )
+    if response.stop_reason == "refusal":
+        raise PipelineError("適性の採点を拒否されました（候補の内容が扱えません）。")
     # content[0] を決め打ちしない（adaptive thinking で先頭が思考になる。#215）
     text = next((b.text for b in response.content if b.type == "text"), "")
     if not text:
         raise PipelineError("適性の採点が空で返りました。")
+    if response.stop_reason == "max_tokens":
+        raise PipelineError("適性の採点が途中で切れました（max_tokens）。候補を減らしてください。")
+    try:
+        rows = json.loads(text)["scores"]
+    except (json.JSONDecodeError, KeyError) as e:
+        # 呼び出し側（daily_run）は PipelineError だけを捕まえて「採点済みのぶんで進む」。
+        # 素の例外を上げるとその日の生成ごと止まる（#241）
+        raise PipelineError(f"適性の採点が壊れたJSONで返りました（{e}）。") from None
 
     scored = 0
-    for row in json.loads(text)["scores"]:
+    for row in rows:
         if not 0 <= row["index"] < len(todo):
             continue
         data = _load(todo[row["index"]]["id"])

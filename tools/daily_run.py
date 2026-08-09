@@ -171,7 +171,9 @@ def _pick_powerword(thread: dict, feedback: str = "") -> dict:
     client = anthropic.Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-opus-5",
-        max_tokens=500,
+        # 出力自体は100字ほどで足りるが、adaptive thinking の思考が**同じ予算を食う**。
+        # 500では思考が出た回に本文が途中で切れ、壊れたJSONが返った（#241）
+        max_tokens=2000,
         system=system,
         output_config={"format": {"type": "json_schema", "schema": {
             "type": "object",
@@ -181,13 +183,22 @@ def _pick_powerword(thread: dict, feedback: str = "") -> dict:
         }}},
         messages=[{"role": "user", "content": f"タイトル: {thread['title']}\n\n{body}"}],
     )
+    if response.stop_reason == "refusal":
+        raise PipelineError("パワーワードの選定を拒否されました（スレの内容が扱えません）。")
     # content[0] を決め打ちで読まないこと。claude-opus-5 は adaptive thinking が既定で、
     # 思考が出た回だけ先頭が ThinkingBlock になり AttributeError で落ちる（#215）。
     # adaptive なので毎回は起きず、落ちた日は自動採用が静かに止まる
     text = next((b.text for b in response.content if b.type == "text"), "")
     if not text:
         raise PipelineError("パワーワードの選定が空で返りました。")
-    return json.loads(text)
+    if response.stop_reason == "max_tokens":
+        raise PipelineError("パワーワードの選定が途中で切れました（max_tokens）。")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as e:
+        # 素の JSONDecodeError を上げないこと。auto_adopt は PipelineError だけを
+        # 捕まえて「その1本を見送る」ため、素通りさせるとその日の生成が全部止まる（#241）
+        raise PipelineError(f"パワーワードの選定が壊れたJSONで返りました（{e}）。") from None
 
 
 def auto_adopt(channel: str, item: dict) -> bool:

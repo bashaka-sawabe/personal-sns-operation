@@ -23,6 +23,13 @@ SCENE_COUNT = 4
 # 「各シーン4〜6行」と均等に割ると、どのシーンも同じ密度になって山が作れず、
 # 全員が一言コメント係になる。行数はシーンごとに偏らせてよい
 LINES_TOTAL = "14〜18"
+# 「長回し」の下限字数。ロンロンの見どころは当事者が誰にも聞かれていないのに
+# 喋り続ける行で、実測でも60〜100字級（「野良猫を撫でた後ついて帰られる時みたいな
+# 申し訳なさがあった」）。これが1本も無いと全員が一言コメント係になる（#212）
+MONOLOGUE_MIN = 60
+# 型が崩れたときに作り直させる回数。3回目以降は同じ壊れ方を繰り返すだけで
+# 費用が増えるだけだった（#212）
+FORM_RETRY = 2
 # 割り込みの記法。行末をこれで終えると「言い切る前に次の話者に奪われた」を表す。
 # 音声合成には渡さない（media 側で落とす）が、字幕には残る
 INTERRUPT_MARK = "──"
@@ -31,6 +38,24 @@ INTERRUPT_MARK = "──"
 def _scene_count(cfg: dict) -> int:
     """このチャンネルのシーン数。話題の数そのもの（少ないほど深く掘れる）。"""
     return (cfg.get("style") or {}).get("scenes", SCENE_COUNT)
+
+
+def _lines_total(cfg: dict) -> str:
+    """このチャンネルのセリフ総数。
+
+    行数と字数上限（style.max_chars）は掛け算で1行の平均長を決めてしまう。
+    meme は 14〜18行 × 上限230字 ＝ 平均14字が強制され、**長回しが物理的に
+    入らなかった**（#212）。行数はチャンネルごとに持たせる。
+    """
+    return (cfg.get("style") or {}).get("lines_total", LINES_TOTAL)
+
+
+def _ronron_form(cfg: dict) -> bool:
+    """ロンロン型（docs/02 2-2）を課すチャンネルか。
+
+    showa は金太郎/半沢型の別路線なので対象外（#167）。
+    """
+    return cfg.get("name") in ("meme", "heisei")
 
 # シーン4は一次情報の置き場（docs/05 2章）。ここが空だと類型D（AI量産）と
 # 区別がつかず、2026年のプラットフォーム規制の直撃を受ける（docs/01 4章）。
@@ -55,7 +80,7 @@ def _allowed_speakers(cfg: dict) -> list:
 def _schema(cfg: dict) -> dict:
     """台本のJSONスキーマ。話者はこのチャンネルで使える声に限定する。"""
     speakers = _allowed_speakers(cfg)
-    return {
+    schema = {
         "type": "object",
         "properties": {
             "title": {"type": "string", "description": "社内管理用のタイトル。40字以内"},
@@ -109,8 +134,11 @@ def _schema(cfg: dict) -> dict:
                                     "text": {
                                         "type": "string",
                                         "description": (
-                                            "セリフ。話し言葉。長さは揃えない。"
-                                            "差し込みは5〜15字、語る場面は45字まで伸ばしてよい。"
+                                            "セリフ。話し言葉。**長さを絶対に揃えない**。"
+                                            "差し込み・ツッコミは5〜15字。"
+                                            f"当事者が言い訳・自分語り・状況説明をする行は"
+                                            f"{MONOLOGUE_MIN}〜100字まで伸ばす"
+                                            "（1本に必ず1回。ここが一番の見どころ）。"
                                             f"言い切る前に奪われる行は末尾を「{INTERRUPT_MARK}」"
                                             "で終える（割り込みの記法）"
                                         ),
@@ -119,7 +147,7 @@ def _schema(cfg: dict) -> dict:
                                 "required": ["speaker", "text"],
                                 "additionalProperties": False,
                             },
-                            "description": "1シーン1〜3行の掛け合い",
+                            "description": "1シーンの掛け合い。行数はシーンごとに偏らせる",
                         },
                         "image_prompt": {
                             "type": "string",
@@ -141,6 +169,31 @@ def _schema(cfg: dict) -> dict:
                      "caption", "hashtags"],
         "additionalProperties": False,
     }
+    if _ronron_form(cfg):
+        # 「壊した前提」を1個だけ書かせるのは、**構造で1個に縛るため**。
+        # 前提を2個以上壊すと知性が消えてただの出鱈目になる（docs/02 2-2）が、
+        # 文章で「1個だけ」と指示しても実際には3個壊れていた（#212で実測）
+        schema["properties"]["broken_premise"] = {
+            "type": "string",
+            "description": (
+                "この台本で壊した前提を**1個だけ**、30字以内で書く。"
+                "壊すのは感情ではなく言葉かロジック"
+                "（例:「座右の銘を『左右の目』と聞き違えたまま押し通す」）。"
+                "ここに2個書きたくなったら、台本の方を削って1個にすること"
+            ),
+        }
+        schema["properties"]["ochi_type"] = {
+            "type": "string",
+            "enum": ["naming", "generalization"],
+            "description": (
+                "オチの型。naming＝感情や状況への異常に精密な名づけ・例え"
+                "（「野良猫を撫でた後ついて帰られる時みたいな申し訳なさ」）。"
+                "generalization＝冷静な一般化で被害者ぶる（「日本語も難しいよな」）。"
+                "この2択以外のオチ（会話の実況・要約・「カオス」等）は禁止"
+            ),
+        }
+        schema["required"] += ["broken_premise", "ochi_type"]
+    return schema
 
 
 def _skit_rules() -> str:
@@ -203,7 +256,15 @@ def _ronron_rules() -> str:
    素人劇の作法が人間味になります。
 8. **ネットスラングは台詞の中で使う**（ワイ・ンゴ・〜やで・草・ほな 等。
    キャラの口調に混ぜて自然に出す）。**caption・タイトルには入れない**
-   （www 0%・【悲報】0%はタイトルの実測です。台詞は別）。"""
+   （www 0%・【悲報】0%はタイトルの実測です。台詞は別）。
+9. **長回しを1本に必ず1回入れる。** 当事者が、聞かれてもいないのに言い訳・自分語り・
+   状況の説明を延々と続ける行です（実測では「なんか俺いないのに30分間ずっと
+   話しかけてたっぽくて、野良猫を撫でた後ついて帰られる時みたいな申し訳なさがあった」）。
+   短い掛け合いだけで埋めると、全員が一言コメント係になって型が死にます。
+10. **気持ち悪さは「精度」で出す。** 汚い言葉や下ネタの量ではありません。
+   本人だけが本気で、**どうでもいいことを異常な解像度で語る**から気持ち悪くなります
+   （「右が1.5、左が0.7です」「登録者16人しかいない」「保留BGMのサビ直前にガチャ」）。
+   感情も状況も、雑な形容詞ではなく**具体的な比喩か数字**で言わせること。"""
 
 
 def _thread_rules(cfg: dict) -> str:
@@ -266,14 +327,17 @@ def _thread_rules(cfg: dict) -> str:
 このジャンルは**視聴者がコメント欄で復唱したくなる短い言葉**が1個あるかで決まります。
 - パワーワードは**既にこちらで決めてあります**（ユーザーメッセージで指定されます）。
   選び直さないでください。スレに実在する語であることを確認済みのものです。
-- その語を `powerword` に入れ、**最後のシーンのセリフにそのままの形で1回置く**。
+- その語を `powerword` に入れ、**台本のいちばん最後の行**にそのままの形で置く。
   画面ではその瞬間だけ**画面いっぱいの特大字幕**になります。
-- パワーワードの後ろに説明を足さない。**言葉だけを残して終わる**のが正解。
+- **パワーワードの行より後ろに、行を1つも置かないこと。**
+  ここに「論点が消えたのだ」のようなまとめ・ツッコミを足すと、
+  特大字幕が出た直後に画面が続いてオチが流れます。**言葉だけを残して終わる**のが正解。
 
 **尺:**
 この動画は**26〜32秒**に収めます（合計字数の上限は別途指定されます）。
-その中で、**行の長さは揃えないでください**。
-差し込みは5〜15字、スレ主が言い訳や自分語りをする場面は40字まで伸ばしてよい。
+その中で、**行の長さは揃えないでください**。差し込み・ツッコミは5〜15字。
+そして**スレ主が言い訳・自分語り・状況説明をする長回しを、1本に必ず1回**入れます
+（{MONOLOGUE_MIN}〜100字。字数上限のうち3割をこの1行に使ってよい）。
 **全員が同じ長さの行を交互に出すと、一言コメント係の集まりになります。**
 説明的な行を入れない。質問で終わる行は3行以下に抑える。"""
 
@@ -472,11 +536,14 @@ def _system(cfg: dict) -> str:
 制約:
 - シーンはちょうど{n_scenes}個。**シーン＝話題**なので、これ以上に話題を広げない。
 - シーン1はフック。3秒で指を止めさせる。最初のセリフは悲鳴・疑問・意外な断定のどれか。
-- **セリフは1本で合計{LINES_TOTAL}行**。
+- **セリフは1本で合計{_lines_total(cfg)}行**。
   **シーンごとの行数は揃えないでください。** 山になるシーンに行を寄せ、
   流すシーンは2〜3行で通り過ぎます。全シーンを同じ密度にすると、
   誰も長く喋れず、全員が一言コメント係になります。
-- **1行の長さも揃えない。** 差し込みは5〜15字、語る場面は45字まで伸ばしてよい。
+- **1行の長さも揃えない。差し込み・ツッコミは5〜15字。**
+  そして**1本に必ず1回、{MONOLOGUE_MIN}〜100字の長回し**を入れます。
+  当事者が、聞かれてもいないのに言い訳・自分語り・状況の説明を延々と続ける行です。
+  **ここが一番の見どころ**なので、短い行を並べて字数を使い切らないこと。
 - キャラの口調を守る。2人の声の違いだけで誰のセリフか分かる書き方にする。
 - 42歳の普通の会社員が見ても分かる言葉で書く。専門用語を裸で使わない（docs/05 1章の下限）。
 - caption は20字以内。シーン1の caption はスレタイとして全編画面上部に出しつづけるので、
@@ -712,6 +779,79 @@ _OPINION = re.compile(
 )
 
 
+# オチとして禁止する言い回し。会話そのものを実況・要約する行（#212）。
+# ロンロンのオチは (a) 感情への精密な名づけ (b) 冷静な一般化 の2択しかなく、
+# 「論点が消えたのだ」のようなメタ要約は、面白い場面を作者が説明して終わる形になる
+_META_OCHI = re.compile(
+    r"(論点|話題|オチ|結論|カオス|収拾|グダグダ|台無し)|"
+    r"(なんの話|どういう話|話が(逸れ|飛ん|変わ|進ま))|"
+    r"(意味が分から|訳が分から|分からんくなっ|もう無茶苦茶|滅茶苦茶)"
+)
+
+
+def form_issues(script: dict, cfg: dict | None = None) -> list:
+    """型が壊れていて**作り直すべき**箇所を返す（#212）。
+
+    dialogue_issues の警告は「人が読んで判断する」ためのものだが、ここに入るのは
+    生成時に差し戻す条件だけ。docs/02 2-2 の実測の型のうち、機械で判定できるものを写す。
+
+    プロンプトに型を書いても守られないことが実際に起きた（meme-020 は前提破壊3個・
+    長回し0行・パワーワード埋没）。**検査結果をLLMに返さないと、型は効かない。**
+    """
+    cfg = cfg or {}
+    lines = [l["text"] for s in script.get("scenes", []) for l in s.get("dialogue", [])]
+    if not lines:
+        return []
+    issues = []
+
+    budget = (cfg.get("style") or {}).get("max_chars", 0)
+    total = sum(len(t) for t in lines)
+    if budget and total > budget:
+        issues.append(
+            f"セリフが合計{total}字あります（上限{budget}字）。"
+            f"{total - budget}字ぶん削ってください。"
+            "削るのは短い相槌・説明行で、長回しは残すこと"
+        )
+
+    if not _ronron_form(cfg):
+        return issues
+
+    longest = max(len(t) for t in lines)
+    if longest < MONOLOGUE_MIN:
+        issues.append(
+            f"長回しがありません（最長{longest}字）。"
+            f"当事者が聞かれてもいないのに言い訳・自分語り・状況説明を続ける行を"
+            f"{MONOLOGUE_MIN}〜100字で1行入れてください。ここが一番の見どころです"
+        )
+
+    word = (script.get("powerword") or "").strip()
+    if word:
+        norm = normalize_powerword(word)
+        hit = [i for i, t in enumerate(lines) if norm in normalize_powerword(t)]
+        if hit and hit[-1] != len(lines) - 1:
+            issues.append(
+                f"パワーワード「{word}」の後ろに{len(lines) - 1 - hit[-1]}行続いています。"
+                "パワーワードは**いちばん最後の行**に置き、その後ろには何も足さないでください"
+                "（特大字幕が出た直後に画面が続くとオチが流れます）"
+            )
+
+    m = _META_OCHI.search(lines[-1])
+    if m:
+        issues.append(
+            f"最後の行「{lines[-1]}」が会話の実況・要約になっています（「{m.group(0)}」）。"
+            "オチは (a) 感情や状況への異常に精密な名づけ・例え、"
+            "(b) 冷静な一般化で被害者ぶる、の2択だけです"
+        )
+
+    premise = (script.get("broken_premise") or "").strip()
+    if premise and re.search(r"[、。]|かつ|そして|さらに|また、", premise):
+        issues.append(
+            f"broken_premise が複数に見えます（「{premise}」）。"
+            "壊す前提は1個だけです。2個以上壊すと知性が消えてただの出鱈目になります"
+        )
+    return issues
+
+
 def dialogue_issues(script: dict, cfg: dict | None = None) -> list:
     """会話が平坦になっていないかを調べる（#127）。
 
@@ -722,17 +862,9 @@ def dialogue_issues(script: dict, cfg: dict | None = None) -> list:
              for l in s.get("dialogue", [])]
     if not lines:
         return []
-    issues = []
-
-    # 尺は字数でしか縛れない（行数を決めても1行が伸びれば尺は伸びる。#143）。
-    # 行長の上限を緩めた結果、実際に26〜32秒のベンチに対して43.5秒が出た
-    budget = ((cfg or {}).get("style") or {}).get("max_chars", 0)
-    total = sum(len(t) for _, t in lines)
-    if budget and total > budget:
-        issues.append(
-            f"セリフが合計{total}字あります（上限{budget}字）。"
-            f"このままだと尺がベンチマークを超えます"
-        )
+    # 尺（字数）・長回し・オチ・パワーワード位置は「作り直すべき」側の検査なので
+    # form_issues が持つ。ここでは人が読んで判断する警告を足していく
+    issues = form_issues(script, cfg)
 
     # パワーワードがセリフに無いと、特大字幕を出す場所が無い（#142）
     word = (script.get("powerword") or "").strip()
@@ -968,35 +1100,59 @@ def generate(cfg: dict, theme: str, offline: bool = False,
                 "このテーマで掛け合いショート動画の台本を作ってください。")
 
     client = anthropic.Anthropic(api_key=api_key)
-    # max_tokens が大きいと SDK が非ストリーミングを拒否する（10分制限）ため stream で受ける
-    with client.messages.stream(
-        model="claude-opus-5",
-        # 「◯◯選」リストは20シーン超になることがあり、4000では途中で切れて
-        # JSONが壊れる（実際に起きた。#127）。ロンロン型ルール追加後は
-        # 16000でも6選が切れた（#166）ため32000にした
-        max_tokens=32000,
-        system=system,
-        output_config={"format": {"type": "json_schema", "schema": _schema(cfg)}},
-        messages=[{"role": "user", "content": user}],
-    ) as stream:
-        response = stream.get_final_message()
-    if response.stop_reason == "refusal":
-        raise PipelineError(f"生成を拒否されました（テーマを見直してください）: {theme}")
+    messages = [{"role": "user", "content": user}]
+    data = None
+    # 型が壊れていたら、壊れ方を伝えて作り直させる。プロンプトに型を書くだけでは
+    # 守られたかどうかが誰にも効かず、実際に守られていなかった（#212）
+    for attempt in range(1 + FORM_RETRY):
+        # max_tokens が大きいと SDK が非ストリーミングを拒否する（10分制限）ため stream で受ける
+        with client.messages.stream(
+            model="claude-opus-5",
+            # 「◯◯選」リストは20シーン超になることがあり、4000では途中で切れて
+            # JSONが壊れる（実際に起きた。#127）。ロンロン型ルール追加後は
+            # 16000でも6選が切れた（#166）ため32000にした
+            max_tokens=32000,
+            system=system,
+            output_config={"format": {"type": "json_schema", "schema": _schema(cfg)}},
+            messages=messages,
+        ) as stream:
+            response = stream.get_final_message()
+        if response.stop_reason == "refusal":
+            raise PipelineError(f"生成を拒否されました（テーマを見直してください）: {theme}")
 
-    text = next((b.text for b in response.content if b.type == "text"), "")
-    if not text:
-        raise PipelineError("台本が空で返りました。テーマを変えて再実行してください。")
-    if response.stop_reason == "max_tokens":
-        raise PipelineError(
-            "台本が長すぎて途中で切れました。ネタの数を減らすか、"
-            "script.py の max_tokens を上げてください。"
-        )
-    try:
-        data = json.loads(text)
-    except json.JSONDecodeError as e:
-        # 生の JSONDecodeError はスタックトレースだけで原因が分からない
-        raise PipelineError(f"台本のJSONが壊れています（{e}）。再実行してください。") from None
-    validate(data)
+        text = next((b.text for b in response.content if b.type == "text"), "")
+        if not text:
+            raise PipelineError("台本が空で返りました。テーマを変えて再実行してください。")
+        if response.stop_reason == "max_tokens":
+            raise PipelineError(
+                "台本が長すぎて途中で切れました。ネタの数を減らすか、"
+                "script.py の max_tokens を上げてください。"
+            )
+        try:
+            data = json.loads(text)
+        except json.JSONDecodeError as e:
+            # 生の JSONDecodeError はスタックトレースだけで原因が分からない
+            raise PipelineError(f"台本のJSONが壊れています（{e}）。再実行してください。") from None
+        validate(data)
+
+        broken = form_issues(data, cfg)
+        if not broken:
+            return data
+        if attempt == FORM_RETRY:
+            # 直らなかったものは警告として残す。ここで落とすと在庫が止まるだけで、
+            # 直るわけではない（善し悪しの最終判断は人がする。docs/06 5章）
+            print(f"  型の警告（{FORM_RETRY}回作り直しても残りました）:")
+            for issue in broken:
+                print(f"    - {issue}")
+            return data
+        print(f"  型が崩れているため作り直します（{attempt + 1}/{FORM_RETRY}）: {broken[0]}")
+        messages = messages + [
+            {"role": "assistant", "content": text},
+            {"role": "user", "content":
+                "この台本は型が守られていません。次の点を直して、台本全体を作り直してください。\n"
+                + "\n".join(f"- {i}" for i in broken)
+                + "\n\n直す過程で他の制約（字数上限・話者・シーン数）を壊さないこと。"},
+        ]
     return data
 
 

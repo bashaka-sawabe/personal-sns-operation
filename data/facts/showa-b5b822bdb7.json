@@ -6,5 +6,6 @@
   "backing_url": "https://ja.wikipedia.org/wiki/松下幸之助",
   "backing_note": "Wikipedia（熱海会談。脚注あり）",
   "fetched_at": "2026-08-05 01:30:45",
-  "status": "adopted"
+  "status": "used",
+  "used_at": "2026-08-09"
 }

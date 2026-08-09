@@ -18,6 +18,12 @@
     # 投稿せずに、何が上がって何が止まるかだけ見る
     .venv/bin/python tools/publish_youtube.py --all --dry-run
 
+    # 次の空き枠（毎日23時・1ch2本）で公開予約まで済ませる
+    .venv/bin/python tools/publish_youtube.py --all --schedule
+
+    # 予約カレンダーを見る
+    .venv/bin/python tools/publish_youtube.py --slots
+
 なぜYouTubeを入れるか（docs/09 6章）:
 - Shortsのエンゲージメント率はTikTokの約2倍と報告されている
 - YouTubeは検索エンジンでもあるため、IG/TikTokと違い**投稿の寿命が長い**。
@@ -41,7 +47,12 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline import script as script_mod, status as status_mod
+from tools.pipeline import (
+    channels as channels_mod,
+    schedule as schedule_mod,
+    script as script_mod,
+    status as status_mod,
+)
 from tools.pipeline.common import ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, secret_path
 
 # upload だけでは channels.list / channels.update ができないため youtube も要求する。
@@ -224,7 +235,8 @@ def channel_title(service) -> str:
     return items[0]["snippet"].get("title", "") if items else "(チャンネルなし)"
 
 
-def upload(video_path: str, script: dict | None, privacy: str, interactive: bool = False) -> str:
+def upload(video_path: str, script: dict | None, privacy: str, interactive: bool = False,
+           publish_at: str | None = None) -> str:
     _, _, _, _, HttpError, MediaFileUpload = _imports()
     if not os.path.exists(video_path):
         raise PipelineError(f"動画が見つかりません: {video_path}")
@@ -235,6 +247,13 @@ def upload(video_path: str, script: dict | None, privacy: str, interactive: bool
 
     meta = build_metadata(video_path, script)
     service = get_service(channel=script_channel(script), interactive=interactive)
+    # 「子ども向けではない」は毎回明示しないとYouTube側で保留になることがある
+    status = {"privacyStatus": privacy, "selfDeclaredMadeForKids": False}
+    if publish_at:
+        # publishAt は privacyStatus=private のときだけ効く。unlisted のまま渡すと
+        # APIは通るのに予約されず、時刻が来ても限定公開のまま残る
+        status["privacyStatus"] = "private"
+        status["publishAt"] = publish_at
     body = {
         "snippet": {
             "title": meta["title"],
@@ -242,8 +261,7 @@ def upload(video_path: str, script: dict | None, privacy: str, interactive: bool
             "tags": meta["tags"],
             "categoryId": CATEGORY_PEOPLE_AND_BLOGS,
         },
-        # 「子ども向けではない」は毎回明示しないとYouTube側で保留になることがある
-        "status": {"privacyStatus": privacy, "selfDeclaredMadeForKids": False},
+        "status": status,
     }
     request = service.videos().insert(
         part="snippet,status",
@@ -449,6 +467,279 @@ def script_for(video_path: str) -> dict | None:
     return None
 
 
+def ledger_entries(channel: str) -> list[tuple[str, str]]:
+    """台帳にある指定チャンネルの (ファイル名, YouTube動画ID)。"""
+    return [(name, rec["video_id"]) for name, rec in load_ledger().items()
+            if name.split("-")[0] == channel and rec.get("video_id")]
+
+
+def scan_reservations(channel: str) -> list[dict]:
+    """このチャンネルの投稿済み動画について、YouTube側の公開状態を読む（#237）。
+
+    ローカル台帳の `publish_at` を信じない。本人が Studio で予約を動かしたり
+    外したりしていても、空き枠は**実状態**から決めないと二重予約になる。
+    videos.list は1ユニットなので、アップロード（1,600ユニット）に比べれば無視できる。
+
+    削除された動画はレスポンスに現れない＝枠を占有しない、で自然に正しくなる。
+    """
+    _, _, _, _, HttpError, _ = _imports()
+    entries = ledger_entries(channel)
+    if not entries:
+        return []
+    service = get_service(channel=channel)
+    rows: list[dict] = []
+    for i in range(0, len(entries), 50):  # videos.list の id は1回50件まで
+        chunk = entries[i:i + 50]
+        try:
+            res = service.videos().list(
+                part="status", id=",".join(v for _, v in chunk)).execute()
+        except HttpError as e:
+            raise PipelineError(
+                f"{channel} の公開状態を取得できませんでした: {getattr(e, 'reason', '') or e}"
+            ) from None
+        for item in res.get("items", []):
+            st = item["status"]
+            rows.append({
+                "name": next(n for n, v in chunk if v == item["id"]),
+                "video_id": item["id"],
+                "privacy": st.get("privacyStatus", ""),
+                "publish_at": st.get("publishAt"),
+            })
+    return rows
+
+
+def reserved_slots(rows: list[dict]) -> list[str]:
+    """予約中（非公開＋公開予定時刻あり）の時刻だけを取り出す。"""
+    return [r["publish_at"] for r in rows if r["privacy"] == "private" and r["publish_at"]]
+
+
+def sync_measuring(rows: list[dict]) -> list[str]:
+    """予約時刻が過ぎて公開された動画を、台帳で `measuring` に進める（#237）。
+
+    公開切り替えを人がやっていた頃は `--release` が台帳を進めていた（docs/06 5章）。
+    予約公開は23時に誰も居ないところで起きるので、次に走ったツールが追いつかせる。
+    これが無いと台帳が永久に `posted` のままになり、公開済みかどうかを読めなくなる。
+    """
+    # すでに measuring の行を書き直さない。advance は同じ状態への更新を通すため、
+    # 見ずに呼ぶと毎回 updated 日付が動いて台帳の差分がノイズだらけになる
+    _, ledger = status_mod.load()
+    current = {r.get("video_id"): r.get("status") for r in ledger}
+    advanced = []
+    for r in rows:
+        if r["privacy"] != "public":
+            continue
+        stem = os.path.splitext(r["name"])[0]
+        if current.get(stem) == "measuring":
+            continue
+        if status_mod.advance(stem, "measuring"):
+            advanced.append(stem)
+    return advanced
+
+
+class SlotBook:
+    """チャンネル別に空き公開枠を配る。YouTubeの実状態は1チャンネル1回だけ読む。
+
+    同じ実行で2本上げるときに同じ枠を2度配らないよう、配った枠もその場で
+    予約済みとして数える。
+
+    `sync=False` は台帳を書かずに枠だけ見たいとき（dry-run）に使う。
+    """
+
+    def __init__(self, sync: bool = True) -> None:
+        self._taken: dict[str, list[str]] = {}
+        self._sync = sync
+        self.synced: list[str] = []
+
+    def take(self, channel: str | None) -> str:
+        if not channel:
+            raise PipelineError(
+                "台本にチャンネルが書かれていないため公開枠を決められません。"
+                "--schedule を外して投稿するか、台本の channel を直してください。"
+            )
+        if channel not in self._taken:
+            rows = scan_reservations(channel)
+            if self._sync:
+                self.synced += sync_measuring(rows)
+            self._taken[channel] = reserved_slots(rows)
+        slot = schedule_mod.next_slots(self._taken[channel], 1)[0]
+        self._taken[channel].append(slot)
+        return slot
+
+
+def show_slots(days: int = 7) -> None:
+    """チャンネル別の予約カレンダーと次の空き枠を表示する。
+
+    ついでに台帳を実状態へ追いつかせる。予約公開は23時に誰も居ないところで起きるので、
+    実状態を読むコマンドが同期を担わないと台帳が永久に `posted` のまま取り残される。
+    """
+    print(f"公開枠: 毎日{schedule_mod.PUBLISH_HOUR_JST}:00 JST / "
+          f"1チャンネル1日{schedule_mod.PER_DAY_PER_CHANNEL}本")
+    synced: list[str] = []
+    for ch in channels_mod.available():
+        try:
+            rows = scan_reservations(ch)
+        except PipelineError as e:
+            print(f"\n[{ch}] 読めません: {str(e).splitlines()[0]}")
+            continue
+        synced += sync_measuring(rows)
+        by_day: dict = {}
+        for r in rows:
+            if r["privacy"] != "private" or not r["publish_at"]:
+                continue
+            day = schedule_mod.parse(r["publish_at"]).astimezone(schedule_mod.JST).date()
+            by_day.setdefault(day, []).append(os.path.splitext(r["name"])[0])
+        taken = reserved_slots(rows)
+        print(f"\n[{ch}] 予約中 {len(taken)}本")
+        for day, count in schedule_mod.calendar(taken, days):
+            mark = "●" * count + "○" * max(0, schedule_mod.PER_DAY_PER_CHANNEL - count)
+            names = "、".join(sorted(by_day.get(day, [])))
+            print(f"  {day:%m/%d} {mark}  {names}")
+        print(f"  次の空き枠: {schedule_mod.to_jst_label(schedule_mod.next_slots(taken, 1)[0])}")
+    if synced:
+        print(f"\n台帳: 公開済みだった{len(synced)}本を measuring に更新しました"
+              f"（{'、'.join(synced)}）")
+
+
+def _ledger_name_for(video_id: str) -> str | None:
+    """台帳（.published_youtube.json）で、この台帳IDに対応するファイル名。"""
+    return next((n for n in load_ledger() if os.path.splitext(n)[0] == video_id), None)
+
+
+def _status_row(video_id: str, rows: list[dict]) -> dict:
+    """台帳（status.csv）から投稿済みの行を取る。取り違えはここで止める。"""
+    row = next((r for r in rows if r.get("video_id") == video_id), None)
+    if row is None:
+        raise PipelineError(f"台帳に {video_id} がありません。video_id を確認してください。")
+    if row.get("status") != "posted":
+        raise PipelineError(
+            f"{video_id} は今 `{row.get('status')}` です。予約を操作できるのは "
+            "`posted`（投稿済みでまだ公開されていない）ものだけです。"
+        )
+    if not row.get("url"):
+        raise PipelineError(f"{video_id} に投稿URLが記録されていません。台帳を確認してください。")
+    return row
+
+
+def _youtube_status(channel: str, yt_id: str) -> dict:
+    """1本ぶんの現在の公開状態を YouTube から読む。
+
+    台帳は「予約したつもり」を持っているだけで、公開されたかどうかは知らない。
+    予約を触る前に実状態を見ないと、**公開済みの動画を限定公開に落とす**（=取り下げ）
+    操作が「予約解除」の顔をして通ってしまう。
+    """
+    _, _, _, _, HttpError, _ = _imports()
+    service = get_service(channel=channel or None)
+    try:
+        items = service.videos().list(part="status", id=yt_id).execute().get("items", [])
+    except HttpError as e:
+        raise PipelineError(
+            f"{yt_id} の公開状態を取得できませんでした: {getattr(e, 'reason', '') or e}"
+        ) from None
+    if not items:
+        raise PipelineError(f"動画が見つかりません（{yt_id}）。削除されていないか確認してください。")
+    return items[0]["status"]
+
+
+def _set_status(channel: str, yt_id: str, status: dict, what: str) -> None:
+    _, _, _, _, HttpError, _ = _imports()
+    service = get_service(channel=channel or None)
+    try:
+        service.videos().update(part="status", body={"id": yt_id, "status": status}).execute()
+    except HttpError as e:
+        raise PipelineError(f"{what}に失敗しました: {getattr(e, 'reason', '') or e}") from None
+
+
+def reserve(video_ids: list[str], dry_run: bool = False) -> None:
+    """投稿済みの動画を、次の空き枠で公開予約に切り替える（#237）。
+
+    毎朝の自動実行が取るのと同じ枠を使うので、手で入れた分も1日2本の中に収まる。
+    """
+    _, rows = status_mod.load()
+    if not rows:
+        raise PipelineError(f"台帳がありません: {status_mod.STATUS_CSV}")
+    book = SlotBook(sync=not dry_run)
+    for vid in video_ids:
+        row = _status_row(vid, rows)
+        channel = row.get("channel") or ""
+        yt_id = row["url"].rstrip("/").rsplit("/", 1)[-1]
+        current = _youtube_status(channel, yt_id)
+        # 公開済みの動画も publishAt を持ったまま返ってくる。先に公開かどうかを見ないと、
+        # 出てしまったものを「予約済み」と誤って報告する
+        if current.get("privacyStatus") == "public":
+            status_mod.advance(vid, "measuring")
+            raise PipelineError(
+                f"{vid} はすでに公開済みです。予約はできません（公開は取り消せない）。"
+            )
+        if current.get("publishAt"):
+            # 取り直すと枠が1つ後ろにずれるだけで得が無い。動かしたいなら一度外させる
+            print(f"予約済みのため飛ばします: {vid} → "
+                  f"{schedule_mod.to_jst_label(current['publishAt'])}"
+                  f"（変えるなら先に --unreserve {vid}）")
+            continue
+        slot = book.take(channel)
+        label = schedule_mod.to_jst_label(slot)
+        if dry_run:
+            print(f"予約予定: {vid} ({channel}) → {label}")
+            continue
+        _set_status(channel, yt_id, {
+            "privacyStatus": "private",
+            "publishAt": slot,
+            "selfDeclaredMadeForKids": False,
+        }, f"{vid} の公開予約")
+        ledger = load_ledger()
+        name = _ledger_name_for(vid)
+        if name:
+            ledger[name] = {**ledger[name], "privacy": "private", "publish_at": slot}
+            save_ledger(ledger)
+        status_mod.advance(vid, "posted", note=f"{label} 公開予約（#237）")
+        print(f"予約: {vid} → {label}  {row['url']}")
+
+
+def unreserve(video_ids: list[str], dry_run: bool = False) -> None:
+    """公開予約を外して限定公開に戻す（#237）。
+
+    自動予約を止める唯一の手段。予約は23時に勝手に公開されるので、
+    「出したくない」と気づいたときにここで抜ける。
+    """
+    _, rows = status_mod.load()
+    if not rows:
+        raise PipelineError(f"台帳がありません: {status_mod.STATUS_CSV}")
+    for vid in video_ids:
+        row = _status_row(vid, rows)
+        yt_id = row["url"].rstrip("/").rsplit("/", 1)[-1]
+        current = _youtube_status(row.get("channel", ""), yt_id)
+        if current.get("privacyStatus") == "public":
+            # 台帳がまだ posted でも、23時を過ぎていれば公開済み。ここを素通しすると
+            # 「予約解除」の顔をして公開済み動画の取り下げをやってしまう
+            status_mod.advance(vid, "measuring")
+            raise PipelineError(
+                f"{vid} はすでに公開済みです（予約時刻を過ぎています）。予約解除ではもう戻せません。\n"
+                "本当に取り下げるなら YouTube Studio で限定公開に落としてください"
+                "（公開された事実は消えません）。"
+            )
+        if not current.get("publishAt"):
+            print(f"予約がありません（すでに解除済み）: {vid}")
+            continue
+        if dry_run:
+            print(f"予約解除予定: {vid} ({row.get('channel', '?')}) → "
+                  f"{schedule_mod.to_jst_label(current['publishAt'])} の予約を外して限定公開に戻す")
+            continue
+        # publishAt は part に含めて送らなければ消える。unlisted にすれば予約も消える
+        _set_status(row.get("channel", ""), yt_id, {
+            "privacyStatus": "unlisted",
+            "selfDeclaredMadeForKids": False,
+        }, f"{vid} の予約解除")
+        ledger = load_ledger()
+        name = _ledger_name_for(vid)
+        if name:
+            entry = {**ledger[name], "privacy": "unlisted"}
+            entry.pop("publish_at", None)
+            ledger[name] = entry
+            save_ledger(ledger)
+        status_mod.advance(vid, "posted", note="公開予約を解除・限定公開のまま（#237）")
+        print(f"予約解除: {vid}  {row['url']}")
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description="縦動画を YouTube Shorts に投稿する")
     p.add_argument("video", nargs="?", help="投稿する動画ファイル")
@@ -466,6 +757,14 @@ def main() -> None:
                    help="投稿せず、対象と検査結果だけ表示する")
     p.add_argument("--release", nargs="+", metavar="video_id",
                    help="レビューを通ったものを限定公開から公開に切り替える（例: --release girls-001）")
+    p.add_argument("--schedule", action="store_true",
+                   help=f"次の空き枠（毎日{schedule_mod.PUBLISH_HOUR_JST}時・"
+                        f"1ch{schedule_mod.PER_DAY_PER_CHANNEL}本）で公開予約して投稿する")
+    p.add_argument("--slots", action="store_true", help="公開予約のカレンダーを表示する")
+    p.add_argument("--reserve", nargs="+", metavar="video_id",
+                   help="投稿済みの動画を次の空き枠で公開予約に切り替える")
+    p.add_argument("--unreserve", nargs="+", metavar="video_id",
+                   help="公開予約を外して限定公開に戻す")
     p.add_argument("--as", dest="as_channel", metavar="ch",
                    help="どのチャンネルとして扱うか（girls / biz / meme）。"
                         "投稿時は台本から自動で決まるので、--auth などで使う")
@@ -487,8 +786,20 @@ def main() -> None:
             show_channel(args.as_channel, interactive=True)
             return
 
+        if args.slots:
+            show_slots()
+            return
+
         if args.release:
             release(args.release, dry_run=args.dry_run)
+            return
+
+        if args.reserve:
+            reserve(args.reserve, dry_run=args.dry_run)
+            return
+
+        if args.unreserve:
+            unreserve(args.unreserve, dry_run=args.dry_run)
             return
 
         description = args.description
@@ -515,6 +826,7 @@ def main() -> None:
             p.error("動画ファイルか --all を指定してください")
 
         ledger = load_ledger()
+        book = SlotBook(sync=not args.dry_run)  # dry-run は台帳を書かない
         skipped, seen_channels = [], {}
         for path in targets:
             script = None
@@ -537,9 +849,15 @@ def main() -> None:
                 raise PipelineError(f"{name}: {reason}")
 
             ch = script_channel(script)
+            # 枠は「上げる直前」に取る。先に全部取ると、途中で落ちた回のぶんが
+            # 埋まったまま残り、翌日以降の枠が1本ずつずれていく
+            slot = book.take(ch) if args.schedule else None
             if args.dry_run:
+                # --schedule のときだけ videos.list（1ユニット）を読む。枠は実状態から
+                # 決めないと意味が無いので、ここは「APIを呼ばない」より正確さを取る
+                where = schedule_mod.to_jst_label(slot) + " 公開予約" if slot else args.privacy
                 print(f"投稿予定: {name} → 「{build_metadata(path, script)['title']}」"
-                      f" ({args.privacy} / {ch or 'チャンネル不明'})")
+                      f" ({where} / {ch or 'チャンネル不明'})")
                 continue
 
             # 投稿先の取り違えは取り消せない。1チャンネルにつき1回だけ確認して出す
@@ -547,14 +865,23 @@ def main() -> None:
                 seen_channels[ch] = channel_title(get_service(channel=ch))
                 print(f"[{ch or '既定'}] 投稿先: {seen_channels[ch]}")
             print(f"投稿中: {name} ...")
-            video_id = upload(path, script, args.privacy)
-            ledger[name] = {"video_id": video_id, "privacy": args.privacy}
+            video_id = upload(path, script, args.privacy, publish_at=slot)
+            ledger[name] = {"video_id": video_id,
+                            "privacy": "private" if slot else args.privacy}
+            if slot:
+                ledger[name]["publish_at"] = slot
             save_ledger(ledger)
             url = f"https://youtube.com/shorts/{video_id}"
-            print(f"  完了: {url}  ({args.privacy})")
+            print(f"  完了: {url}  "
+                  f"({schedule_mod.to_jst_label(slot) + ' 公開予約' if slot else args.privacy})")
             # 台帳にURLを残す。限定公開のURLは、レビューのときにここから開く
-            if status_mod.advance(os.path.splitext(name)[0], "posted", url=url):
+            note = f"{schedule_mod.to_jst_label(slot)} 公開予約（#237）" if slot else None
+            if status_mod.advance(os.path.splitext(name)[0], "posted", url=url, note=note):
                 print(f"  台帳: {os.path.splitext(name)[0]} を posted に更新しました")
+
+        if book.synced:
+            print(f"台帳: 公開済みになった{len(book.synced)}本を measuring に更新しました"
+                  f"（{'、'.join(book.synced)}）")
 
         if skipped:
             # パイプに繋ぐとstdoutがまとめて後から出るため、明示的に吐き切ってから

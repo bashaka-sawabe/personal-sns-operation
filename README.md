@@ -23,8 +23,8 @@
 # 2週間テストの本体。3ジャンル12本をまとめて生成する（約14分）
 .venv/bin/python tools/make_video.py --batch data/themes.md
 
-# YouTube Shortsへ投稿（既定は限定公開）
-.venv/bin/python tools/publish_youtube.py --all
+# YouTube Shortsへ投稿し、次の空き枠（毎日23時・1ch2本）で公開予約する
+.venv/bin/python tools/publish_youtube.py --all --schedule
 ```
 
 企画1行 → 台本 → 素材 → 縦動画（1080×1920 / 30fps）まで**1本あたり約68秒**。

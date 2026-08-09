@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""1日ぶんの動画を生成して限定公開まで投稿する（#168）。
+"""1日ぶんの動画を生成し、公開予約まで済ませる（#168 / #237）。
 
-    # 今日の在庫と投稿計画だけ見る
+    # 今日の在庫と投稿計画（公開予定時刻つき）だけ見る
     .venv/bin/python tools/daily_run.py --dry-run
 
-    # 生成→限定公開投稿まで自動で回す（公開への切り替えは本人がやる）
+    # 生成→アップロード→公開予約まで自動で回す
     .venv/bin/python tools/daily_run.py
 
     # 毎日回すなら crontab に1行（17時に生成、18時に本人がレビューして公開）:
@@ -17,7 +17,10 @@
   候補だけが対象で、**裏取りの無いネタは自動でも台本にしない**。
   自動採用は計画出力（←自動採用）と台帳（adopted_by: auto）で識別でき、
   本人はいつでも --reject で覆せる。
-- 投稿は**限定公開まで**。公開切り替え（publish_youtube.py --release）は本人がやる。
+- 投稿は**公開予約まで**（2026-08-09 本人指示・#237）。毎日23:00 JST・1チャンネル
+  1日2本の空き枠を取ってアップロードし、時刻が来たらYouTubeが勝手に公開する。
+  朝10時の実行なら**13時間の取り消し猶予**があり、出したくない本は
+  `publish_youtube.py --unreserve <video_id>` で予約を外せる。
 - YouTubeのクォータは動画1本1,600ユニット・1プロジェクト1日10,000ユニット＝**6本**。
   チャンネル別の youtube_client_secret_<ch>.json を置いてプロジェクトを分けると
   その分だけ上限が増える。無い間は6本で止まり、残りは翌日に回る（黙って超えない）。
@@ -36,7 +39,8 @@ import urllib.error
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools import fetch_facts, fetch_threads
+from tools import fetch_facts, fetch_threads, publish_youtube as yt
+from tools.pipeline import schedule as schedule_mod
 
 # meme スレ候補の補充閾値（目標本数に対する倍率）。自動採用（#191）は目視選別より
 # 消費が速いため、候補が目標を下回る前に収集して先回りする（#197）。
@@ -248,15 +252,36 @@ def generate(channel: str, item: dict) -> str | None:
     return os.path.join(REPO, m.group(1))
 
 
-def upload(video: str) -> str | None:
-    """限定公開で投稿してURLを返す。"""
-    code, out = _run([PYTHON, "tools/publish_youtube.py", video])
-    m = re.search(r"完了: (https://\S+)", out)
+def upload(video: str) -> tuple[str, str] | None:
+    """次の空き枠で公開予約して (URL, 公開予定時刻) を返す（#237）。
+
+    枠は publish_youtube 側が**上げる直前**に取る。ここで先に全部押さえると、
+    生成に失敗した本のぶんの枠が埋まったまま残る。
+    """
+    code, out = _run([PYTHON, "tools/publish_youtube.py", video, "--schedule"])
+    m = re.search(r"完了: (https://\S+)\s+\((.+?)\)", out)
     if code != 0 or not m:
         print(f"  投稿失敗（{os.path.basename(video)}）:")
         print("    " + (out.strip().splitlines()[-1] if out.strip() else "(出力なし)"))
         return None
-    return m.group(1)
+    return m.group(1), m.group(2)
+
+
+def slot_preview(plan: list[tuple[str, dict]]) -> list[str]:
+    """計画の各本が取る公開枠を先読みする（--dry-run の表示用）。
+
+    予約は一切しない（台帳も書かない）。認可が無い・APIが読めない環境では
+    空を返して、時刻の無い計画だけを出す。
+    """
+    book = yt.SlotBook(sync=False)
+    labels = []
+    for ch, _ in plan:
+        try:
+            labels.append(schedule_mod.to_jst_label(book.take(ch)))
+        except PipelineError as e:
+            print(f"公開枠を読めませんでした（{str(e).splitlines()[0]}）")
+            return []
+    return labels
 
 
 def main() -> None:
@@ -310,10 +335,14 @@ def main() -> None:
             plan.append((ch, stocks[ch][round_i]))
 
     print(f"本日の計画: {len(plan)}本")
-    for ch, item in plan:
+    # 本実行では枠取りを publish_youtube に任せる（失敗した本の枠を空けたままにするため）。
+    # dry-run のときだけ、何時に出るのかを先に見せる
+    slots = slot_preview(plan) if args.dry_run and plan else []
+    for i, (ch, item) in enumerate(plan):
         label = item.get("title") or item.get("fact", "")[:40]
         mark = "　←自動採用" if item.get("_auto") else ""
-        print(f"  {ch}: {item['id']}  {label}{mark}")
+        when = f"  [{slots[i]} 公開予定]" if i < len(slots) else ""
+        print(f"  {ch}: {item['id']}  {label}{mark}{when}")
     if deferred:
         print(f"クォータ都合で翌日回し: {deferred}本"
               f"（プロジェクト分割かクォータ引き上げで解消できます。docs/09 2-5章）")
@@ -338,16 +367,18 @@ def main() -> None:
         video = generate(ch, item)
         if not video:
             continue
-        url = upload(video)
-        if url:
-            posted.append(f"{ch}: {url}")
+        result = upload(video)
+        if result:
+            url, when = result
+            posted.append(f"{ch}: {url}  {when}")
 
-    print(f"\n投稿完了（限定公開）: {len(posted)}本")
+    print(f"\n公開予約まで完了: {len(posted)}本")
     for line in posted:
         print(f"  {line}")
     if posted:
-        print("\nレビュー後の公開切り替え:")
-        print("  .venv/bin/python tools/publish_youtube.py --release <video_id> ...")
+        print("\n出したくない本は、公開時刻までに予約を外してください:")
+        print("  .venv/bin/python tools/publish_youtube.py --slots        # 予約カレンダー")
+        print("  .venv/bin/python tools/publish_youtube.py --unreserve <video_id> ...")
 
 
 if __name__ == "__main__":

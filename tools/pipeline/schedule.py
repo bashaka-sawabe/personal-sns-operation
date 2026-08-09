@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""公開予約の枠割り（#237）。
+
+本人指示（2026-08-09）: **毎日23時に公開・1チャンネルあたり1日2本**。
+
+公開そのものは YouTube の `publishAt` が時刻に行うので、公開のための常駐プロセスは
+要らない。朝10時の `daily_run.py` がアップロード時に枠を取るだけで、
+13時間後に勝手に公開される（その間は本人が予約を外せる＝取り消しの余地が残る）。
+
+ここは**日付の計算だけ**を持つ。「いま何が予約済みか」を YouTube から読むのは
+`publish_youtube.py` の仕事（`pipeline/` を外部APIに依存させない）。
+"""
+import datetime
+
+JST = datetime.timezone(datetime.timedelta(hours=9))
+
+PUBLISH_HOUR_JST = 23
+# 1チャンネル1日2本。2本とも同じ23時に出す（時刻をずらす指示は無い）
+PER_DAY_PER_CHANNEL = 2
+
+# これより近い枠は取らない。アップロードした瞬間の時刻を取ると、本人が中身を見て
+# 予約を外す余地が無くなる。朝10時の自動実行なら当日23時が普通に取れる幅
+MIN_LEAD = datetime.timedelta(hours=1)
+
+
+def now_jst() -> datetime.datetime:
+    return datetime.datetime.now(JST)
+
+
+def parse(value: str) -> datetime.datetime:
+    """YouTubeが返す publishAt（RFC3339）を読む。"""
+    # fromisoformat は末尾の 'Z' を受け付けないので明示的なオフセットに直す
+    return datetime.datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def to_rfc3339(dt: datetime.datetime) -> str:
+    """publishAt に渡す形（UTCのZ表記）にする。"""
+    return dt.astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def to_jst_label(value: str) -> str:
+    """予約時刻を人が読む形にする。ログとdry-runの表示用。"""
+    return parse(value).astimezone(JST).strftime("%Y-%m-%d %H:%M JST")
+
+
+def slot_of(day: datetime.date) -> datetime.datetime:
+    return datetime.datetime.combine(day, datetime.time(PUBLISH_HOUR_JST), tzinfo=JST)
+
+
+def next_slots(taken: list[str], count: int,
+               now: datetime.datetime | None = None,
+               per_day: int = PER_DAY_PER_CHANNEL) -> list[str]:
+    """予約済み `taken` を避けて、空いている公開枠を古い順に `count` 個返す。
+
+    `taken` は**同じチャンネルの**予約時刻（RFC3339）。チャンネルをまたいで
+    数えると「1チャンネル1日2本」ではなく「全体で2本」になる。
+
+    枠が埋まっている日は飛ばして翌日以降に伸ばす。生成が公開ペースを上回る日が
+    続けば予約は先へ延びるが、それは**待ち行列として正しい**（本数を増やして
+    帳尻を合わせると、1日2本という指示のほうが壊れる）。
+    """
+    if per_day < 1:
+        raise ValueError("per_day は1以上でなければ枠が永久に空かない")
+    if count < 1:
+        return []
+
+    now = now or now_jst()
+    used: dict[datetime.date, int] = {}
+    for value in taken:
+        day = parse(value).astimezone(JST).date()
+        used[day] = used.get(day, 0) + 1
+
+    slots: list[str] = []
+    day = now.date()
+    while len(slots) < count:
+        slot = slot_of(day)
+        if slot >= now + MIN_LEAD:
+            free = min(per_day - used.get(day, 0), count - len(slots))
+            for _ in range(max(0, free)):
+                slots.append(to_rfc3339(slot))
+                used[day] = used.get(day, 0) + 1
+        day += datetime.timedelta(days=1)
+    return slots
+
+
+def calendar(taken: list[str], days: int = 7,
+             now: datetime.datetime | None = None,
+             per_day: int = PER_DAY_PER_CHANNEL) -> list[tuple[datetime.date, int]]:
+    """今日から `days` 日ぶんの (日付, 予約本数) を返す。空き枠の確認用。"""
+    now = now or now_jst()
+    used: dict[datetime.date, int] = {}
+    for value in taken:
+        day = parse(value).astimezone(JST).date()
+        used[day] = used.get(day, 0) + 1
+    start = now.date()
+    return [(start + datetime.timedelta(days=i), used.get(start + datetime.timedelta(days=i), 0))
+            for i in range(days)]

@@ -38,7 +38,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools.pipeline.common import PipelineError, normalize_powerword
+from tools.pipeline.common import PipelineError, normalize_powerword, read_secret
 
 THREADS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                            "data", "threads")
@@ -238,6 +238,36 @@ def check_criteria(data: dict, powerword: str, ochi: str) -> None:
         )
 
 
+# ロンロン適性の合格点（#214）。これ未満のスレでは作らない。
+# レス数で選ぶと「荒れたスレ」「長い雑談」が上位に来る。実際、候補29本のうち
+# 上位はほぼ画像投稿スレ・順位表・実況で、型に乗るスレは数本しか無かった
+RONRON_MIN = 60
+# 1回のAPI呼び出しで採点する候補数。まとめて渡して相対評価させる
+SCORE_BATCH = 12
+# 採点に渡す本文の長さ。全文だと候補12本で数万字になる
+_SCORE_BODY = 900
+
+_SCORE_SYSTEM = """あなたは「ロンロンの天秤」型のショート動画にするスレを選ぶ編集者。
+このチャンネルの面白さは**前提を1個だけ壊し、当事者が最後まで大真面目**という分裂にある。
+知性は、感情ではなく**言葉かロジックのレベルで裏切りが起きる**ことから生まれる。
+
+向くスレ（実測の型）:
+- 同音異義・多義語の取り違えを本人が全力で押し通す
+- ルールの穴を突く制度ハック（「き」から始まる食べ物→自分で作って命名すればよい）
+- 語彙の接合ミス（壊れた敬語を完璧なつもりで喋る）
+- 悪意ゼロの当事者が、異常に精密な言葉で自分の状況を語る
+
+向かないスレ:
+- 画像・写真の投稿スレ、絵の依頼スレ（会話が無い）
+- 実況・順位表・競馬予想（断片の羅列でオチが無い）
+- 常連の雑談・内輪の会話（前提知識が要る）
+- ただ荒れているだけ、罵倒だけ（壊れているのが前提ではなく態度）
+- 前提が2個以上壊れている（出鱈目になって知性が消える）
+
+各スレに0〜100点を付ける。**60点以上を付けるのは、上の型に本当に乗るスレだけ**。
+迷ったら低く付けること。弱いネタで作るより作らない方がよい。"""
+
+
 def _path(thread_id: str) -> str:
     return os.path.join(THREADS_DIR, f"{thread_id}.json")
 
@@ -288,6 +318,73 @@ def load_adopted(thread_id: str) -> dict:
             "  --adopt に --powerword / --ochi を付けて採用し直してください。"
         )
     return data
+
+
+def score_candidates(threads: list) -> int:
+    """未採点のスレにロンロン適性を付けて保存する。採点した本数を返す（#214）。
+
+    レス数順に取ると「荒れたスレ」「長い雑談」が上位に来て、型に乗らないネタで
+    動画を作ってしまう（本人指摘「ロンロンのスレ選定を真似して欲しい」）。
+
+    1本ずつ聞くと候補の数だけAPIを叩くので、まとめて渡して**相対評価**させる。
+    採点結果は台帳に残すので、同じスレを二度採点しない。
+    """
+    todo = [t for t in threads if t.get("ronron_score") is None][:SCORE_BATCH]
+    if not todo:
+        return 0
+    api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
+    if not api_key:
+        raise PipelineError("ANTHROPIC_API_KEY が無いため適性を採点できません")
+    try:
+        import anthropic
+    except ImportError:
+        raise PipelineError("anthropic SDK がありません（.venv/bin/pip install anthropic）") from None
+
+    blocks = []
+    for i, t in enumerate(todo):
+        body = "\n".join(r["text"] for r in t.get("res", []))[:_SCORE_BODY]
+        blocks.append(f"### {i}\nタイトル: {t['title']}\n{body}")
+
+    client = anthropic.Anthropic(api_key=api_key)
+    response = client.messages.create(
+        model="claude-opus-5",
+        max_tokens=4000,
+        system=_SCORE_SYSTEM,
+        output_config={"format": {"type": "json_schema", "schema": {
+            "type": "object",
+            "properties": {"scores": {"type": "array", "items": {
+                "type": "object",
+                "properties": {
+                    "index": {"type": "integer"},
+                    "score": {"type": "integer"},
+                    "premise": {"type": "string",
+                                "description": "このスレで壊れている前提を1個だけ30字以内。無ければ空"},
+                    "reason": {"type": "string", "description": "点の理由を40字以内で"},
+                },
+                "required": ["index", "score", "premise", "reason"],
+                "additionalProperties": False,
+            }}},
+            "required": ["scores"],
+            "additionalProperties": False,
+        }}},
+        messages=[{"role": "user", "content": "\n\n".join(blocks)}],
+    )
+    # content[0] を決め打ちしない（adaptive thinking で先頭が思考になる。#215）
+    text = next((b.text for b in response.content if b.type == "text"), "")
+    if not text:
+        raise PipelineError("適性の採点が空で返りました。")
+
+    scored = 0
+    for row in json.loads(text)["scores"]:
+        if not 0 <= row["index"] < len(todo):
+            continue
+        data = _load(todo[row["index"]]["id"])
+        data["ronron_score"] = max(0, min(100, int(row["score"])))
+        data["ronron_premise"] = row["premise"].strip()
+        data["ronron_reason"] = row["reason"].strip()
+        _save(data)
+        scored += 1
+    return scored
 
 
 def collect(board: str, limit: int) -> list:

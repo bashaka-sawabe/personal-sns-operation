@@ -488,5 +488,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:02:53",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 15,
+  "ronron_premise": "",
+  "ronron_reason": "内輪キャラ前提の雑談。AI要約混在で散漫"
 }

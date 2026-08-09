@@ -488,5 +488,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:02:28",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 5,
+  "ronron_premise": "",
+  "ronron_reason": "順位表・戦績羅列でオチ無し"
 }

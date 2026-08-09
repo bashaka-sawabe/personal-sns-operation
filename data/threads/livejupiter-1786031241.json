@@ -120,5 +120,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:02:59",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 25,
+  "ronron_premise": "",
+  "ronron_reason": "炭酸増大の珍説はあるが言語的裏切りは無し"
 }

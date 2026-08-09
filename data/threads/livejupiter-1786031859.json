@@ -56,5 +56,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:02:02",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 5,
+  "ronron_premise": "",
+  "ronron_reason": "画像頼りの内輪ネタ、前提知識必須"
 }

@@ -60,5 +60,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:02:15",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 10,
+  "ronron_premise": "",
+  "ronron_reason": "雑な感想の羅列、言葉の裏切り無し"
 }

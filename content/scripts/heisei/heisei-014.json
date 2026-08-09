@@ -1,0 +1,126 @@
+{
+  "id": "heisei-014",
+  "title": "平成14年度、学校の土曜日が消えた話",
+  "emotion": "共感",
+  "powerword": "消えた土曜日",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "平成14年、土曜が消えた日",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　アタシは土曜も学校あったって言っただけでしょうが！"
+        },
+        {
+          "speaker": "himari",
+          "text": "え、待ってください。土曜って、生まれた時から休みですよね？"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、知らないの。完全に週5日制になったのは平成14年度からよ。それまでは土曜の午前だけ学校があって、お昼前に帰るの"
+        },
+        {
+          "speaker": "himari",
+          "text": "週6じゃないですか。いや、普通に考えておかしいですよ。日曜しか休みがない"
+        }
+      ],
+      "image_prompt": "empty japanese school corridor on a quiet saturday morning, soft light through tall windows, no people, nostalgic film grain"
+    },
+    {
+      "caption": "半ドンの帰り道を語りだす",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "半日だけ学校って、いちばん中途半端じゃないですか。行く意味あります？"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "半ドンって言うのよ、半ドン。四時間目で終わって、はい解散"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "アンタ何も分かってないわね。あの帰り道が良かったのよ。まだ昼前で腹が減ってて、コンビニで肉まん買って、家に着いたら昼の番組がまだやってて、今日はまだ一日あるぞって──"
+        },
+        {
+          "speaker": "himari",
+          "text": "長い。話が長いです"
+        },
+        {
+          "speaker": "sora",
+          "text": "その帰り道の話、今月3回目よ。肉まんのくだりまで同じ"
+        }
+      ],
+      "image_prompt": "suburban japanese residential street at midday, long shadows on asphalt, old vending machine, warm nostalgic tone, no people"
+    },
+    {
+      "caption": "70単位時間と74単位で揉める",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "授業の時間も減ったのよ。小中学校で年間70単位時間、週にすると2コマ分ね"
+        },
+        {
+          "speaker": "himari",
+          "text": "2コマは大きいですよ。週に一教科ぶん、丸ごと消えてる計算です"
+        },
+        {
+          "speaker": "sora",
+          "text": "高校で卒業に必要な単位も、80以上から74以上に下がったの。わたくしはあれで良かったと思うわ。子どもに休む日が一日増えたんだもの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　じゃあアタシが通ったあの土曜は、丸ごと無駄だったって──"
+        },
+        {
+          "speaker": "sora",
+          "text": "言ってないわ。……ほら、そういう顔。もっと困った顔が見たいわ"
+        }
+      ],
+      "image_prompt": "old classroom blackboard with faint chalk dust, empty wooden desks, afternoon light, nostalgic japanese school interior, no text"
+    },
+    {
+      "caption": "惜しんでるのは授業じゃない",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "わたし、土曜に学校へ行くって感覚が、そもそも一度も無いんですよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "知らんわよ、そんなの。……いいわね、最初から無いってのは。惜しみようもないんだから"
+        },
+        {
+          "speaker": "sora",
+          "text": "そうね。わたくしたちが惜しんでるのは授業じゃないのよ。友達と半分だけ学校して、半分だけ自由になった、あの昼前の空気の方。もう戻らないと分かってるから、余計にね"
+        },
+        {
+          "speaker": "himari",
+          "text": "[間]みんな心に一枚、消えた土曜日があるんですね"
+        }
+      ],
+      "image_prompt": "living room with afternoon sunlight across tatami, silhouette of an old boxy television, dust floating in the air, quiet nostalgic mood, no people, no text"
+    }
+  ],
+  "caption": "平成14年度から完全学校週5日制。小中学校の授業は年間70単位時間減り、高校の卒業単位も74以上に。土曜の午前だけ学校、覚えてますか。",
+  "hashtags": [
+    "#平成",
+    "#あるある",
+    "#半ドン",
+    "#学校週5日制",
+    "#懐かしい"
+  ],
+  "broken_premise": "土曜が休みなのは当たり前という前提",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "平成14年度（2002年度）から実施された学習指導要領では、完全学校週5日制のも",
+  "source_facts": [
+    {
+      "id": "heisei-8a00f42402",
+      "fact": "平成14年度（2002年度）から実施された学習指導要領では、完全学校週5日制のもとで小中学校の年間授業時数が年間70単位時間（週あたり2単位時間）縮減され、高校卒業に必要な修得総単位数も80単位以上から74単位以上に引き下げられた。",
+      "backing_url": "https://www.mext.go.jp/a_menu/shotou/cs/1320944.htm",
+      "backing_note": "文部科学省「新しい学習指導要領の主なポイント（平成14年度から実施）」（完全学校週5日制・年間70単位時間縮減・高校74単位以上を明記した省の公式ページ）"
+    }
+  ]
+}

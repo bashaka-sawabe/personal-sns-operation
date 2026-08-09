@@ -1,0 +1,114 @@
+{
+  "id": "showa-010",
+  "title": "1976年、個人宅の荷物に賭けた社長と現場の一日",
+  "emotion": "共感",
+  "powerword": "やってみせろ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "個人の荷物は運ばない、と言われた時代",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、個人の荷物なんて誰も出しません！"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]出さんのなら、こっちから取りに行く！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、それ1976年の会話なのだ!?"
+        }
+      ],
+      "image_prompt": "1970s Japanese small transport company garage at dawn, empty cardboard boxes stacked, old delivery truck silhouette, warm dusty light, no people, no text"
+    },
+    {
+      "caption": "現場vs社長。採算の話は通じない",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか小太郎、荷物は企業が出すもんだと誰が決めた。うちのトラックは大口の荷を待って半分空で走ってる。俺は主婦が持てん段ボール一個を、玄関まで取りに行きたい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ。要するに赤字覚悟なのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "一個運んで何十円ですよ、計算が──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]計算する前にやってみせろ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "出た、昭和の必殺技なのだ"
+        }
+      ],
+      "image_prompt": "interior of a 1970s Japanese freight office, blackboard with route lines, cardboard boxes and hand truck, half-empty truck bed through window, no people, no text"
+    },
+    {
+      "caption": "3年目の数字と、静かな締め",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "1976年1月20日、始めました"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "で、3年目だ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "1978年度、年間1,000万個です"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？ 1000万個？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクの家に来るあの人、この人が呼んだのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[小]……お前んとこまで、ちゃんと行ってるか"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら一発アウトなのだ。でも──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "言え"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[小]ボクの荷物、今日も届くのだ"
+        }
+      ],
+      "image_prompt": "night residential street in Japan, warm porch light, single cardboard parcel at a doorstep, soft rain sheen, nostalgic tone, no people, no text"
+    }
+  ],
+  "caption": "1976年1月20日、個人向け宅配「宅急便」開始。3年目の1978年度に年間1,000万個。無茶と言われた号令の行き先が、今日の玄関先です。",
+  "hashtags": [
+    "#昭和",
+    "#宅急便",
+    "#1976年",
+    "#働き方",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "ヤマト運輸は1976年（昭和51年）1月20日に個人向け宅配サービス「宅急便」を",
+  "source_facts": [
+    {
+      "id": "showa-894a964726",
+      "fact": "ヤマト運輸は1976年（昭和51年）1月20日に個人向け宅配サービス「宅急便」を開始し、開始から3年目の1978年度には年間取扱個数1,000万個を達成した。",
+      "backing_url": "https://www.yamato-hd.co.jp/100th-anniversary/history/",
+      "backing_note": "ヤマトホールディングス公式・創業100周年サイトの年表（企業公式社史）。開始日は日本経済新聞記事（https://www.nikkei.com/article/DGKDZO21724370V10C11A1KB2000/）で補強。"
+    }
+  ]
+}

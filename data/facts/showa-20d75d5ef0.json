@@ -1,0 +1,13 @@
+{
+  "id": "showa-20d75d5ef0",
+  "channel": "showa",
+  "fact": "安藤百福は1958年（昭和33年）8月25日、世界初のインスタントラーメン「チキンラーメン」を発売した。",
+  "discovered_from": "https://news.nissyoku.co.jp/today/584072",
+  "backing_url": "https://www.nissin.com/jp/company/chronicle/",
+  "backing_note": "日清食品グループ公式「安藤百福クロニクル」（企業公式の創業者年譜）。発売日は日本食糧新聞・電子版記事（https://news.nissyoku.co.jp/today/584072）で二重確認。",
+  "fetched_at": "2026-08-10 02:14:58",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-10",
+  "used_at": "2026-08-10"
+}

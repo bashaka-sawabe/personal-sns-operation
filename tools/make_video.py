@@ -97,7 +97,9 @@ def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
     print(f"  合成中（尺 {total:.1f}秒{'・BGMあり' if bgm else '・BGMなし'}）...")
     render.build(scenes, out_path, asset_dir, bgm=bgm, style=style,
                  powerword=data.get("powerword", ""))
-    if status_mod.advance(script_id, "rendered"):
+    # 行が無ければここで作る。作らないと、自動生成した動画が台帳に載らないまま
+    # 投稿・公開予約まで進み、公開を止める --unreserve が効かなくなる（#243）
+    if status_mod.ensure(script_id, channel, "rendered"):
         print(f"  台帳: {script_id} を rendered に更新しました")
     return out_path
 

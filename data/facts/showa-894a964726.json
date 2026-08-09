@@ -1,0 +1,13 @@
+{
+  "id": "showa-894a964726",
+  "channel": "showa",
+  "fact": "ヤマト運輸は1976年（昭和51年）1月20日に個人向け宅配サービス「宅急便」を開始し、開始から3年目の1978年度には年間取扱個数1,000万個を達成した。",
+  "discovered_from": "https://www.yamato-hd.co.jp/100th-anniversary/column/detail07.html",
+  "backing_url": "https://www.yamato-hd.co.jp/100th-anniversary/history/",
+  "backing_note": "ヤマトホールディングス公式・創業100周年サイトの年表（企業公式社史）。開始日は日本経済新聞記事（https://www.nikkei.com/article/DGKDZO21724370V10C11A1KB2000/）で補強。",
+  "fetched_at": "2026-08-10 02:14:58",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-10",
+  "used_at": "2026-08-10"
+}

@@ -6,5 +6,8 @@
   "backing_url": "https://www.mext.go.jp/a_menu/shotou/cs/1320944.htm",
   "backing_note": "文部科学省「新しい学習指導要領の主なポイント（平成14年度から実施）」（完全学校週5日制・年間70単位時間縮減・高校74単位以上を明記した省の公式ページ）",
   "fetched_at": "2026-08-08 20:48:06",
-  "status": "candidate"
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-10",
+  "used_at": "2026-08-10"
 }

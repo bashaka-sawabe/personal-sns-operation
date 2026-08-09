@@ -26,6 +26,7 @@
 **語がスレに実在すること**を検査する。造語を復唱させても滑るため。
 """
 import argparse
+import datetime
 import html
 import json
 import os
@@ -426,15 +427,41 @@ def from_url(url: str) -> str:
     return _save(fetch_thread(board, thread))
 
 
-def mark(thread_id: str, status: str, powerword: str = "", ochi: str = "") -> None:
-    """状態を書き換える。採用は基準を満たすときだけ通す（docs/05 3章）。"""
+def mark(thread_id: str, status: str, powerword: str = "", ochi: str = "",
+         adopted_by: str = "") -> None:
+    """状態を書き換える。採用は基準を満たすときだけ通す（docs/05 3章）。
+
+    adopted_by は「人の目視を経ていない採用」を台帳に残すためのもの（#191）。
+    後から --reject で覆すときの判断材料になる。
+    """
     data = _load(thread_id)
     if status == "adopted":
         check_criteria(data, powerword, ochi)
         data["powerword"] = powerword.strip()
         data["ochi"] = ochi.strip()
+        if adopted_by:
+            data["adopted_by"] = adopted_by
+            data["adopted_at"] = datetime.date.today().isoformat()
     data["status"] = status
     _save(data)
+
+
+def mark_used(thread_id: str) -> bool:
+    """消費したスレに印を付ける。既に used なら何もしない（False を返す）。
+
+    同じネタで2本作らないための印。**台本が保存できてからだけ**呼ぶこと
+    （先に付けると、生成が落ちたときにネタだけ失う）。
+
+    used化を daily_run だけが持っていたため、make_video での単発生成では
+    adopted のまま残り、次回の daily_run が同じスレでもう1本作っていた（#230）。
+    """
+    data = _load(thread_id)
+    if data.get("status") == "used":
+        return False
+    data["status"] = "used"
+    data["used_at"] = datetime.date.today().isoformat()
+    _save(data)
+    return True
 
 
 def show_list() -> None:

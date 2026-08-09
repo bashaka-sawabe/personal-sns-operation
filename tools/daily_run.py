@@ -33,7 +33,6 @@ import subprocess
 import sys
 import time
 import urllib.error
-from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -188,7 +187,11 @@ def _pick_powerword(thread: dict, feedback: str = "") -> dict:
 
 
 def auto_adopt(channel: str, item: dict) -> bool:
-    """候補を台帳上で採用に進める。基準を満たせなければ見送って False を返す。"""
+    """候補を台帳上で採用に進める。基準を満たせなければ見送って False を返す。
+
+    `adopted_by: auto` はここで台帳に書く。人の目視を経ていない採用であることは
+    **採用時点の事実**なので、消費時ではなくここで残す（後から --reject で覆す材料）。
+    """
     try:
         if channel == "meme":
             # 検問（check_criteria）に落ちたら、却下理由を渡して1回だけ選び直す
@@ -197,7 +200,8 @@ def auto_adopt(channel: str, item: dict) -> bool:
                 picked = _pick_powerword(item, feedback)
                 try:
                     fetch_threads.mark(item["id"], "adopted",
-                                       picked["powerword"], picked["ochi"])
+                                       picked["powerword"], picked["ochi"],
+                                       adopted_by="auto")
                     break
                 except PipelineError as e:
                     if attempt == 2:
@@ -207,21 +211,12 @@ def auto_adopt(channel: str, item: dict) -> bool:
             item["ochi"] = picked["ochi"].strip()
         else:
             # fact系は裏取り済み候補だけが対象（auto_candidates）なので mark が通る
-            fetch_facts.mark(item["id"], "adopted")
+            fetch_facts.mark(item["id"], "adopted", adopted_by="auto")
         item["status"] = "adopted"
         return True
     except PipelineError as e:
         print(f"  自動採用を見送り（{channel} / {item['id']}）: {str(e).splitlines()[0]}")
         return False
-
-
-def mark_used(item: dict) -> None:
-    """消費したネタに印を付ける（同じネタで2本作らないため）。"""
-    path = item.pop("_path")
-    item["status"] = "used"
-    item["used_at"] = date.today().isoformat()
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(item, f, ensure_ascii=False, indent=2)
 
 
 def project_of(channel: str) -> str:
@@ -338,14 +333,11 @@ def main() -> None:
         if item.get("_auto") and not auto_adopt(ch, item):
             continue
         print(f"[{ch}] {item['id']} を生成中...")
+        # 消費したネタの used化は make_video が持つ（#230）。ここで二重に持つと、
+        # 単発生成のときだけ印が付かないという穴が空く
         video = generate(ch, item)
         if not video:
             continue
-        if item.pop("_auto", False):
-            # 人の採用を経ていないことを台帳に残す（後から --reject で覆す判断材料になる）
-            item["adopted_by"] = "auto"
-            item["adopted_at"] = date.today().isoformat()
-        mark_used(item)
         url = upload(video)
         if url:
             posted.append(f"{ch}: {url}")

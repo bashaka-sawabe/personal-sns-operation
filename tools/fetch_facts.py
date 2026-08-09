@@ -23,6 +23,7 @@
 確認できたものだけが台本になる。
 """
 import argparse
+import datetime
 import hashlib
 import json
 import os
@@ -268,16 +269,36 @@ def set_backing(fact_id: str, url: str, note: str) -> None:
     _save(data)
 
 
-def mark(fact_id: str, status: str) -> None:
+def mark(fact_id: str, status: str, adopted_by: str = "") -> None:
+    """状態を書き換える。adopted_by は人の目視を経ていない採用の記録（#191）。"""
     data = _load(fact_id)
-    if status == "adopted" and not (data.get("backing_url") or "").strip():
-        # ここが本丸。裏取りの無い雑学を台本に流さない（docs/05 3章）
-        raise PipelineError(
-            f"{fact_id} は裏取り（一次ソース）が無いため採用できません。\n"
-            "  --back <id> --url <一次ソースURL> で付けてから --adopt してください。"
-        )
+    if status == "adopted":
+        if not (data.get("backing_url") or "").strip():
+            # ここが本丸。裏取りの無い雑学を台本に流さない（docs/05 3章）
+            raise PipelineError(
+                f"{fact_id} は裏取り（一次ソース）が無いため採用できません。\n"
+                "  --back <id> --url <一次ソースURL> で付けてから --adopt してください。"
+            )
+        if adopted_by:
+            data["adopted_by"] = adopted_by
+            data["adopted_at"] = datetime.date.today().isoformat()
     data["status"] = status
     _save(data)
+
+
+def mark_used(fact_id: str) -> bool:
+    """消費した事実に印を付ける。既に used なら何もしない（False を返す）。
+
+    同じネタで2本作らないための印。**台本が保存できてからだけ**呼ぶこと
+    （先に付けると、生成が落ちたときにネタだけ失う。#230）。
+    """
+    data = _load(fact_id)
+    if data.get("status") == "used":
+        return False
+    data["status"] = "used"
+    data["used_at"] = datetime.date.today().isoformat()
+    _save(data)
+    return True
 
 
 def show_list(channel: str = "") -> None:

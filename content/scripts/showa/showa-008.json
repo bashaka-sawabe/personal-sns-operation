@@ -1,104 +1,111 @@
 {
-  "id": "showa-008",
-  "title": "日章丸事件｜船1隻でイランへ向かった昭和の会社",
+  "title": "日章丸事件・1953年イラン石油積取り寸劇",
   "emotion": "呆れ",
-  "powerword": "積んで帰ってこい",
+  "powerword": "船を出せ",
   "first_hand": "",
   "scenes": [
     {
-      "caption": "タンカー1隻でイランへ行った会社",
+      "caption": "タンカー1隻で世界を沸かせた男",
       "dialogue": [
         {
           "speaker": "takehiro_nekketsu",
-          "text": "船を出す。行き先はイランだ。異論は聞かん！"
+          "text": "[叫]船を出せ！　イランへ行くぞ！"
         },
         {
           "speaker": "zundamon",
-          "text": "は？　うちタンカー1隻の会社なのだ"
-        },
-        {
-          "speaker": "kotaro",
-          "text": "社長、第二世日章丸は1万8千トン。去年できた新造船で──"
+          "text": "は？　今なんて言ったのだ"
         },
         {
           "speaker": "takehiro_nekketsu",
-          "text": "だから行けるんだ。1951年に造った船を、飾って見てるつもりか！"
+          "text": "1951年建造の第二世日章丸だ。1万8千トン"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "自慢の船を一番危ない海に突っ込むのだ？"
         }
       ],
-      "image_prompt": "A large 1950s oil tanker silhouette moored at a misty Japanese harbor at dawn, steel hull, ropes and bollards, no people, no text, cinematic muted tones"
+      "image_prompt": "vast dark ocean at dawn, silhouette of a large 1950s oil tanker hull, heavy swell, moody cinematic lighting, no text, no faces"
     },
     {
-      "caption": "社長と船長の啖呵",
+      "caption": "社内が止めに入る",
       "dialogue": [
         {
-          "speaker": "zundamon",
-          "text": "ボクは反対なのだ。1953年に民間の船とか無茶なのだ"
+          "speaker": "kotaro",
+          "text": "社長、あの海域は今──"
         },
         {
           "speaker": "takehiro_nekketsu",
-          "text": "無茶か。いいか、油が無ければこの国は一歩も動かんぞ"
-        },
-        {
-          "speaker": "takehiro_nekketsu",
-          "text": "俺が現場にいた頃はな、油の一滴に頭を下げて歩いて──"
-        },
-        {
-          "speaker": "zundamon",
-          "text": "長いのだ、自分語りが始まったのだ"
+          "text": "無理かどうかは行ってから言え"
         },
         {
           "speaker": "kotaro",
-          "text": "社長、乗るのは私と船員です。帰れる保証は──"
+          "text": "乗組員が戻らないかもしれません！"
         },
         {
           "speaker": "takehiro_nekketsu",
-          "text": "保証だと？　いいか、積んで帰ってこい"
+          "text": "[低]戻らんかったら、俺が家族まで面倒を見る"
         },
         {
           "speaker": "zundamon",
-          "text": "今の、令和なら一発アウトなのだ"
+          "text": "待つのだ、解決してないのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、油が無ければこの国は何も動かん。工場も船も止まる。誰も動かんなら、うちが動く。それだけだ。理屈は帰ってから聞く"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "理屈が後回しの会社、ボクは嫌なのだ"
         }
       ],
-      "image_prompt": "Dim shipping company office in 1950s Japan, wooden desk, nautical chart of the Persian Gulf, brass lamp, cigarette smoke, no people, no readable text"
+      "image_prompt": "1950s japanese office interior, wooden desks, blinds, dim lamp light, nautical chart spread on table, no people, no text"
     },
     {
-      "caption": "世界が沸いた1953年",
+      "caption": "1953年、世界が沸く",
       "dialogue": [
         {
+          "speaker": "zundamon",
+          "text": "で、結局どうなったのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "1953年、イランから石油を積んで帰った。世界が沸いたわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "褒められたのか怒られたのか──"
+        },
+        {
           "speaker": "kotaro",
-          "text": "……行きます。油を積んで、日本に戻ります"
+          "text": "両方でした"
         },
         {
           "speaker": "zundamon",
-          "text": "行くのだ!?　止める人いないのだ、この会社"
-        },
-        {
-          "speaker": "takehiro_nekketsu",
-          "text": "1953年、うちの船がイランから油を積んで帰ってきた。世界中が沸いたぞ"
+          "text": "今の会社なら、稟議で三か月止まるのだ"
         },
         {
           "speaker": "zundamon",
-          "text": "ボクなら乗らないのだ。……でも、少し羨ましいのだ"
+          "text": "……でも、この船が無い日本、ボクは想像できん"
         },
         {
           "speaker": "takehiro_nekketsu",
-          "text": "よし、次はお前が乗れ。船長だ"
+          "text": "[低]なら、次はお前が乗れ"
         }
       ],
-      "image_prompt": "Wide ocean horizon at sunset seen from a tanker deck, heavy steel pipes and rusted railings, wake trailing behind, no people, no text, warm dramatic light"
+      "image_prompt": "harbor at sunset, mooring ropes and bollards, distant tanker returning, glowing water, documentary mood, no text, no faces"
     }
   ],
-  "caption": "1951年建造の第二世日章丸、1万8千トン。1953年、この船がイランから石油を積み取り世界を沸かせました。今なら考えられない。あなたなら乗りますか？",
+  "caption": "1951年建造の第二世日章丸が、1953年イランから石油を積み取り世界を沸かせた実話。今なら稟議が三か月止まる案件です。",
   "hashtags": [
     "#昭和",
     "#日章丸",
-    "#出光",
+    "#出光興産",
     "#昭和の働き方",
     "#ずんだもん"
   ],
+  "id": "showa-008",
   "channel": "showa",
   "genre": "showa",
-  "theme": "出光興産のタンカー「第二世日章丸」（1万8千トン、1951年建造）は、1953年",
   "source_facts": [
     {
       "id": "showa-906221a916",

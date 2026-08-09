@@ -139,6 +139,52 @@ def split_phrases(text: str, min_len: int = 6) -> list:
     return [p.strip() for p in phrases if p.strip()]
 
 
+# 声の演出マーカー（#213）。行頭に `[低]` のように置くと、その行の読み上げが変わる。
+# 効果音（音源）は使わない方針（#203）なので、**音の演出は声そのものを変えて作る**。
+# 値は VOICEVOX の audio_query に掛ける係数・加算値:
+#   speed=speedScale倍率 / pitch=pitchScale加算 / intonation=intonationScale倍率
+#   volume=volumeScale倍率 / pre=prePhonemeLength加算（その行の前の間）
+VOICE_MARKS = {
+    "間": {"pre": 0.5},                                        # 一拍おいてから言う
+    "小": {"volume": 0.6, "pitch": -0.02, "speed": 0.93},      # 声を落とす・本音
+    "叫": {"volume": 1.35, "intonation": 1.5, "pitch": 0.04, "speed": 1.08},
+    "低": {"pitch": -0.06, "intonation": 0.65, "speed": 0.9},  # 真顔・気持ち悪さ
+    "早": {"speed": 1.25, "intonation": 1.15},                 # まくしたてる
+    "伸": {"speed": 0.6, "intonation": 1.3},                   # 「ンニィィィィィ」
+}
+# VOICEVOXが受け付ける範囲。外すとエンジンが400を返す
+_PITCH_RANGE = (-0.15, 0.15)
+
+
+def split_voice_marks(text: str) -> tuple:
+    """行頭の演出マーカーを剥がして (マーカー名のリスト, 本文) を返す。
+
+    マーカーは**読み上げにも字幕にも出さない**。字数の勘定からも外れるよう、
+    台本の検査（script.form_issues）と素材生成（media）の両方がこれを通す。
+    """
+    marks, rest = [], (text or "").lstrip()
+    while True:
+        m = re.match(r"\[([^\[\]]{1,2})\]", rest)
+        if not m or m.group(1) not in VOICE_MARKS:
+            break
+        marks.append(m.group(1))
+        rest = rest[m.end():].lstrip()
+    return marks, rest
+
+
+def voice_effects(marks: list) -> dict:
+    """マーカー列を audio_query への効果にまとめる。同時指定は掛け合わせる。"""
+    eff = {"speed": 1.0, "pitch": 0.0, "intonation": 1.0, "volume": 1.0, "pre": 0.0}
+    for name in marks:
+        for k, v in VOICE_MARKS.get(name, {}).items():
+            if k in ("pitch", "pre"):
+                eff[k] += v
+            else:
+                eff[k] *= v
+    eff["pitch"] = max(_PITCH_RANGE[0], min(_PITCH_RANGE[1], eff["pitch"]))
+    return eff
+
+
 # 折り返し位置の判定に使う文字クラス（wrap_japanese）
 _HIRAGANA = re.compile(r"[ぁ-ん]")
 _KATAKANA = re.compile(r"[ァ-ヶー]")

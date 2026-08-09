@@ -32,7 +32,7 @@ from .channels import CHARACTERS
 from .script import INTERRUPT_MARK
 from .common import (
     ASSETS_DIR, HEIGHT, WIDTH, PipelineError, ffmpeg, probe_duration,
-    read_secret, require, run, split_phrases,
+    read_secret, require, run, split_phrases, split_voice_marks, voice_effects,
 )
 
 # フォールバック時のグラデ配色。白の極太字幕とのコントラストを最優先に選んである
@@ -144,10 +144,18 @@ def voicevox_used() -> bool:
     return _voicevox["up"]
 
 
-def _voicevox_wav(text: str, path: str, speaker: int, speed: float) -> None:
+def _voicevox_wav(text: str, path: str, speaker: int, speed: float,
+                  effects: dict | None = None) -> None:
     q = urllib.parse.urlencode({"text": text, "speaker": speaker})
     query = json.loads(_http(f"{VOICEVOX_URL}/audio_query?{q}", method="POST"))
-    query["speedScale"] = speed
+    eff = effects or {}
+    query["speedScale"] = speed * eff.get("speed", 1.0)
+    # 声の演出（#213）。エンジンが返した既定値を土台にして動かす。
+    # 全行を同じ声・同じ間で読むと、何を書いても平坦に聞こえる
+    query["pitchScale"] = query.get("pitchScale", 0.0) + eff.get("pitch", 0.0)
+    query["intonationScale"] = query.get("intonationScale", 1.0) * eff.get("intonation", 1.0)
+    query["volumeScale"] = query.get("volumeScale", 1.0) * eff.get("volume", 1.0)
+    query["prePhonemeLength"] = query.get("prePhonemeLength", 0.1) + eff.get("pre", 0.0)
     wav = _http(
         f"{VOICEVOX_URL}/synthesis?speaker={speaker}",
         method="POST",
@@ -168,7 +176,8 @@ def _say_wav(text: str, path: str, voice: str = "Kyoko", rate: int = 180) -> Non
 
 
 def narration(text: str, path: str, speaker: int,
-              speed: float = VOICEVOX_SPEED, gap: float = PHRASE_GAP) -> str:
+              speed: float = VOICEVOX_SPEED, gap: float = PHRASE_GAP,
+              effects: dict | None = None) -> str:
     """セリフ1フレーズ分の音声を作り、44.1kHzモノラルwavで返す。
 
     speaker はVOICEVOXのスタイルID（キャラごとに固定。channels.CHARACTERS）。
@@ -179,7 +188,7 @@ def narration(text: str, path: str, speaker: int,
     raw = path + ".raw"
     if ensure_voicevox():
         try:
-            _voicevox_wav(text, raw + ".wav", speaker, speed)
+            _voicevox_wav(text, raw + ".wav", speaker, speed, effects)
             os.rename(raw + ".wav", raw)
         except (OSError, ValueError):
             _say_wav(text, raw + ".aiff")
@@ -603,7 +612,10 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
             if key not in used_speakers:
                 used_speakers.append(key)
             style_id = CHARACTERS[key]["voicevox_speaker"]
-            for text in split_phrases(line["text"]):
+            # 声の演出マーカーは行頭に付く。読み上げにも字幕にも出さない（#213）
+            marks, spoken_line = split_voice_marks(line["text"])
+            effects = voice_effects(marks) if marks else None
+            for k, text in enumerate(split_phrases(spoken_line)):
                 j = len(phrases)
                 # 割り込み記号は字幕にだけ残す。読み上げには渡さず、末尾の無音も落として
                 # 「言い切る前に奪われた」を音で作る（#143）
@@ -612,8 +624,14 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
                 # 話者ごとの素のテンポ差を speed_scale で打ち消してから
                 # チャンネルの話速を掛ける（遅い話者を出さない。#203）
                 char_speed = speed * CHARACTERS[key].get("speed_scale", 1.0)
+                # 「間」はその行の前に置く一拍なので、行の1フレーズ目にだけ効かせる。
+                # 全フレーズに掛けると読点のたびに止まって間延びする
+                eff = effects
+                if eff and k and eff.get("pre"):
+                    eff = {**eff, "pre": 0.0}
                 audio = narration(spoken, os.path.join(asset_dir, f"na{i:02d}_{j:02d}.wav"),
-                                  speaker=style_id, speed=char_speed, gap=0.0 if cut else gap)
+                                  speaker=style_id, speed=char_speed,
+                                  gap=0.0 if cut else gap, effects=eff)
                 phrases.append({"text": text, "audio": audio,
                                 "dur": probe_duration(audio), "speaker": key})
         # 読み終わりで即カットすると詰まって聞こえるのでシーン末尾に余白を足す

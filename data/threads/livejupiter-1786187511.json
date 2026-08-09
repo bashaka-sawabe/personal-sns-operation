@@ -488,5 +488,8 @@
     }
   ],
   "fetched_at": "2026-08-08 20:51:06",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 10,
+  "ronron_premise": "",
+  "ronron_reason": "画像クイズで会話の妙が無い"
 }

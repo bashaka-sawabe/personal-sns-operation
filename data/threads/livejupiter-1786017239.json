@@ -280,5 +280,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:02:21",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 20,
+  "ronron_premise": "くぱぁを口裂けと解釈",
+  "ronron_reason": "最後の誤解は面白いが絵の依頼スレで会話が無い"
 }

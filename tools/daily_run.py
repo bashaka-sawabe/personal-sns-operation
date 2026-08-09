@@ -40,8 +40,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tools import fetch_facts, fetch_threads
 
 # meme スレ候補の補充閾値（目標本数に対する倍率）。自動採用（#191）は目視選別より
-# 消費が速いため、候補が目標の3倍を下回ったら収集して先回りする（#197）
-THREAD_STOCK_FACTOR = 3
+# 消費が速いため、候補が目標を下回る前に収集して先回りする（#197）。
+# ロンロン適性で絞るようにしたら合格率が実測12本中1本（8%）だったため、
+# 3倍では1本も作れない日が出る。目標3本に対して30本の候補を持つ（#214）
+THREAD_STOCK_FACTOR = 10
 from tools.pipeline.common import OUT_DIR, PipelineError, read_secret, secret_path
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -83,12 +85,19 @@ def replenish_threads(per_channel: int) -> None:
     （FETCH_INTERVAL・429対策 #99）は fetch_threads.collect が持つ。
     閾値以上あるときは外部を一切叩かない。
     """
-    candidates = [t for t in _load_all(THREADS_DIR) if t["status"] == "candidate"]
+    # 適性で落ちると分かっているスレは在庫として数えない（数えると補充が止まり、
+    # 「候補は30本あるのに作れるものが0本」で詰まる。#214）
+    candidates = [
+        t for t in _load_all(THREADS_DIR)
+        if t["status"] == "candidate"
+        and (t.get("ronron_score") is None
+             or t["ronron_score"] >= fetch_threads.RONRON_MIN)
+    ]
     threshold = per_channel * THREAD_STOCK_FACTOR
     if len(candidates) >= threshold:
         return
     need = threshold - len(candidates)
-    print(f"[meme] スレ候補{len(candidates)}本（閾値{threshold}本）のため収集中...")
+    print(f"[meme] 使える候補{len(candidates)}本（閾値{threshold}本）のため収集中...")
     per_board = max(1, -(-need // len(fetch_threads.BOARDS)))
     for i, board in enumerate(fetch_threads.BOARDS):
         if i:
@@ -101,16 +110,31 @@ def replenish_threads(per_channel: int) -> None:
             print(f"  {board}: 収集失敗（{e}）")
 
 
-def auto_candidates(channel: str) -> list[dict]:
+def auto_candidates(channel: str, scoring: bool = True) -> list[dict]:
     """採用済み在庫が足りないとき自動採用してよい候補（2026-08-08 本人決定・#191）。
+
+    meme はロンロン適性（fetch_threads.score_candidates）で絞り、点の高い順に返す。
+    合格が1本も無ければ**空を返す**。弱いネタで本数を埋めるより作らない方がよい（#214）。
 
     fact系は裏取り（backing_url）が付いた候補だけを対象にする。裏取り必須の線は
     採用の自動化とは別の品質保証なので、自動化しても緩めない（docs/08 1章）。
     """
     if channel == "meme":
         rows = [t for t in _load_all(THREADS_DIR) if t["status"] == "candidate"]
-        # 目視の目利きの代替として、伸びたスレ（レス数）から順に取る
-        return sorted(rows, key=lambda t: -int(t.get("res_count") or 0))
+        # 目利きの代替は**レス数ではなくロンロン適性**（#214）。レス数順だと
+        # 画像投稿スレ・順位表・実況が上位に来て、型に乗らないネタで作ってしまう
+        if scoring:  # dry-run では外部を叩かない（採点済みのぶんだけ見る）
+            try:
+                scored = fetch_threads.score_candidates(rows)
+                if scored:
+                    print(f"[meme] スレ候補{scored}本の適性を採点しました")
+                    rows = [t for t in _load_all(THREADS_DIR) if t["status"] == "candidate"]
+            except PipelineError as e:
+                print(f"[meme] 適性の採点に失敗（採点済みのぶんだけ使います）: "
+                      f"{str(e).splitlines()[0]}")
+        fit = [t for t in rows if (t.get("ronron_score") or 0) >= fetch_threads.RONRON_MIN]
+        # 合格が無い日は**作らない**。弱いネタで1本埋めるより在庫不足として報告する
+        return sorted(fit, key=lambda t: -(t.get("ronron_score") or 0))
     prefix = {"heisei": "heisei-", "showa": "showa-"}[channel]
     return [f for f in _load_all(FACTS_DIR)
             if f["status"] == "candidate" and (f.get("backing_url") or "").strip()
@@ -259,7 +283,8 @@ def main() -> None:
     for ch in CHANNELS:
         adopted = stock_for(ch)
         # 採用済みを先に消費し、不足分だけ候補から自動採用する（人・委任の選別を無駄にしない）
-        extra = auto_candidates(ch)[:max(0, args.per_channel - len(adopted))]
+        extra = auto_candidates(ch, scoring=not args.dry_run)[
+            :max(0, args.per_channel - len(adopted))]
         need = args.per_channel - len(adopted) - len(extra)
         if need > 0 and ch != "meme" and not args.dry_run:
             # 事実ネタは発見→裏取りまで自動補充できる（#196）。dry-run では外部を叩かない

@@ -488,5 +488,8 @@
     }
   ],
   "fetched_at": "2026-08-02 21:41:25",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 10,
+  "ronron_premise": "",
+  "ronron_reason": "写真投稿スレで会話が成立していない"
 }

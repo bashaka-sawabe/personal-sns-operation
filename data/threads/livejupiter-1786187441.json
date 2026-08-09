@@ -488,5 +488,8 @@
     }
   ],
   "fetched_at": "2026-08-08 20:51:24",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 15,
+  "ronron_premise": "",
+  "ronron_reason": "味覚論争の平凡な言い合い、型に乗らない"
 }

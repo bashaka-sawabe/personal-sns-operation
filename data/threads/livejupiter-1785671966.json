@@ -280,5 +280,8 @@
     }
   ],
   "fetched_at": "2026-08-02 21:40:48",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 20,
+  "ronron_premise": "",
+  "ronron_reason": "感情の吐露で終わり、ロジックの分裂がない"
 }

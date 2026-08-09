@@ -488,5 +488,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:02:47",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 0,
+  "ronron_premise": "",
+  "ronron_reason": "画像羅列のみで会話もオチも無い"
 }

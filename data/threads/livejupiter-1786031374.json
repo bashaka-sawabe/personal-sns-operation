@@ -144,5 +144,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:01:43",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 72,
+  "ronron_premise": "「店員」を「定員」と書き通す",
+  "ronron_reason": "同音誤変換を本人が押し通し、周囲が真面目に指摘。壊れは1個で純度高い"
 }

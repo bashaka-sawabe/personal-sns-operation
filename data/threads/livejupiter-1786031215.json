@@ -76,5 +76,8 @@
     }
   ],
   "fetched_at": "2026-08-07 01:01:49",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 0,
+  "ronron_premise": "",
+  "ronron_reason": "絵投稿スレで会話が無い"
 }

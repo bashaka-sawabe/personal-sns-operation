@@ -1,0 +1,124 @@
+{
+  "id": "heisei-012",
+  "title": "J-SH04と写メール　11万画素で沸いた平成",
+  "emotion": "共感",
+  "powerword": "写メール",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "11万画素で、日本中が沸いた",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "え、ちょっと待ってください。たった11万画素の写真で、日本中が大騒ぎしたって本当ですか？"
+        },
+        {
+          "speaker": "sora",
+          "text": "本当よ。2000年11月1日ね。J-SH04っていうカメラ内蔵の携帯が、世に出た日なの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ちょっとアンタ！　あの日の衝撃をね、そんな軽い言い方でまとめて片付けられちゃ困るんだよ！"
+        }
+      ],
+      "image_prompt": "abstract macro close-up of a coarse pixelated grid glowing faintly, early 2000s technology mood, dark blue and warm amber gradient, soft grain, no people, no text, no logos"
+    },
+    {
+      "caption": "粗い塊が撮れただけで事件だった",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "11万画素って、今のスマホの何百分の一ですよね。正直、何が写ってるのかも怪しいレベルです"
+        },
+        {
+          "speaker": "sora",
+          "text": "顔なんて肌色の四角い塊よ。でもね、電話で写真が撮れること自体が、当時はもう事件だったの"
+        },
+        {
+          "speaker": "himari",
+          "text": "事件って、そんな大げさ──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　大げさじゃないよ！　電話機で写真が撮れる、そんなの有り得ない時代だったんだよ"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら。写真は写真でしょ、なんて当たり前に言える普通が、あの頃の世の中にはまだ無かったのよ"
+        }
+      ],
+      "image_prompt": "extremely low-resolution blurred blob of warm skin-tone and beige squares on a small glowing screen, abstract, shallow depth of field, no faces, no text, no logos"
+    },
+    {
+      "caption": "2001年夏のキャンペーンとラーメン",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "そして2001年の夏にね、あるキャンペーンが始まって、そこから爆発的に広がっていったのよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "あたしはね、あの夏、1枚送るためだけに毎日必死だったんだよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "駅のホームで20分も電波を探して、やっと送れたのが湯気も写ってないラーメンの写真で──"
+        },
+        {
+          "speaker": "himari",
+          "text": "20分粘って、送れたのは肌色の塊……"
+        },
+        {
+          "speaker": "sora",
+          "text": "わたくしはね、あの粗さ嫌いじゃないの。何が写ってるか分からないから、みんなで覗き込むのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、写真としては困りますって。わたしなら、たぶん三回くらい撮り直して送り直してます"
+        }
+      ],
+      "image_prompt": "empty summer train platform at dusk, warm haze, distant station lights, faint steam rising from a paper cup, nostalgic film grain, no people, no text, no logos"
+    },
+    {
+      "caption": "締め：博物館入りした青春",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "しかもこのJ-SH04ね、2014年に国立科学博物館の未来技術遺産として登録されているのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "ちょっと待ってください、博物館入り!?　わたしのスマホのご先祖が、ガラスケースの中に……"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "認めないからね。あたしの青春が博物館の展示物とか、そんなの絶対に認めないよ"
+        },
+        {
+          "speaker": "sora",
+          "text": "いいえ、認めなさい。あの粗い1枚を誰かへ必死に送ってた時間、あれが全部『写メール』なの"
+        }
+      ],
+      "image_prompt": "museum glass display case softly lit in a quiet dark hall, empty velvet stand inside, dust motes in the light beam, reverent atmosphere, no people, no text, no logos"
+    }
+  ],
+  "caption": "2000年11月1日発売のJ-SH04。約11万画素のカメラが、2001年夏の『写メール』キャンペーンで一気に広がった。2014年には未来技術遺産に。あの粗い1枚、誰に送ってた？",
+  "hashtags": [
+    "#平成",
+    "#写メール",
+    "#ガラケー",
+    "#懐かしい",
+    "#あったあった"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "J-SH04（J-PHONE）は2000年11月1日に発売されたカメラ内蔵携帯電",
+  "source_facts": [
+    {
+      "id": "heisei-b71a928459",
+      "fact": "J-SH04（J-PHONE）は2000年11月1日に発売されたカメラ内蔵携帯電話。約11万画素で、2001年夏の「写メール」キャンペーンで爆発的に普及し、後のカメラ付き携帯の原型となった。2014年に国立科学博物館の未来技術遺産に登録された",
+      "backing_url": "https://ja.wikipedia.org/wiki/J-SH04",
+      "backing_note": "日本語版Wikipedia。発売2000年11月1日・約11万画素・写メールは2001年夏のキャンペーン名・2014年未来技術遺産。「世界初」とは書かれていないため台本で世界初と言わない"
+    }
+  ]
+}

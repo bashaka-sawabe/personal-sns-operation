@@ -1,0 +1,124 @@
+{
+  "id": "heisei-013",
+  "title": "二千円札、みんな使わずに取っておいた",
+  "emotion": "共感",
+  "powerword": "使わないのが礼儀",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "使わないのが正しかったお札",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "え、待ってください。お財布に入れたら怒られるって、どういう理屈ですか"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　当たり前でしょ。あんなの財布に入れて、しかもレジで出すとか正気じゃないでしょ"
+        },
+        {
+          "speaker": "sora",
+          "text": "二千円札の話よ。2000年、平成12年の7月19日に発行が始まった、あの横にすっと長いお札ね"
+        },
+        {
+          "speaker": "himari",
+          "text": "あれ、普通にコンビニで使えるお札のはずですけど"
+        }
+      ],
+      "image_prompt": "abstract still life of a slightly open old wooden drawer in warm afternoon light, dust motes, empty interior, no text, no logos, no people"
+    },
+    {
+      "caption": "制度としてちゃんと生まれた一枚",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "ええ、れっきとしたお札。その年の4月26日に告示されて、7月19日から発行が始まったのよ"
+        },
+        {
+          "speaker": "sora",
+          "text": "根拠は日本銀行法の第47条第2項。誰かの思いつきじゃなく、制度としてきちんと生まれた一枚なのよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "あたしは並んだわよ。朝から銀行の前に立って、両替の紙に二千円札って書いて、窓口で──"
+        },
+        {
+          "speaker": "himari",
+          "text": "え、並んでまで手に入れたんですか、お札を"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "並ぶでしょ普通！　新しいお札が出るのよ!?　人生に何回あると思ってんのよ、そんなこと"
+        }
+      ],
+      "image_prompt": "early morning street outside a bank entrance, long shadows, closed shutters, quiet empty pavement, muted retro color grading, no text, no people"
+    },
+    {
+      "caption": "76×154mm、財布の中で顔を出す",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "大きさは76ミリ×154ミリ。千円札より横に長くて、お財布の中で少しだけ顔を出してたのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "そのミリ数まで覚えてる方が怖いんですけど"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "あたしは折るのが嫌でね、真っ直ぐ入る長財布に替えたの。折り目つけたら終わりでしょ、あれは"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、お札って折って使うものですよ。使わないなら、ただの横長の紙じゃないですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "わたくしはあれ、悪くないと思うわ。特別な一枚を持ってる気分がして、平成の子はみんな少し得意だったの"
+        }
+      ],
+      "image_prompt": "macro shot of an open leather long wallet on a desk, soft shadow, empty card slots, warm nostalgic tone, no text, no logos, no people"
+    },
+    {
+      "caption": "締め：引き出しの奥で正座している",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えておかしいですよね。使えるお札を、誰も使わないって──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "おかしくない！　二千円札は使うお札じゃなくて置いとくお札なの。使わないのが礼儀でしょ"
+        },
+        {
+          "speaker": "sora",
+          "text": "ふふ。今ね、家の引き出しに一枚あるかもって思った人、もう立ち上がってるでしょう。ええ、分かるのよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "……あたしのは、ポチ袋に入ったまま二十年以上、あの引き出しで正座してる"
+        }
+      ],
+      "image_prompt": "small paper envelope resting alone at the back of a dim wooden drawer, single beam of warm light, dust, quiet nostalgic mood, no text, no logos, no people"
+    }
+  ],
+  "caption": "2000年7月19日発行の二千円札。使えるのに、なぜか誰も使わなかったあの一枚。あなたの家の引き出し、まだ入ってませんか。",
+  "hashtags": [
+    "#平成",
+    "#二千円札",
+    "#あったあった",
+    "#懐かしい",
+    "#平成レトロ"
+  ],
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "二千円札（二千円日本銀行券）は平成12年（2000年）4月26日に日本銀行法第4",
+  "source_facts": [
+    {
+      "id": "heisei-7a361fdd02",
+      "fact": "二千円札（二千円日本銀行券）は平成12年（2000年）4月26日に日本銀行法第47条第2項に基づき告示され、同年7月19日から発行が開始された、寸法76×154mmのお札である。",
+      "backing_url": "https://www.mof.go.jp/policy/currency/bill/issued/so009.htm",
+      "backing_note": "財務省「二千円日本銀行券の発行について」（告示日・発行日を記載した政府公式ページ）／補強：日本銀行「二千円券の偽造防止技術について」https://www.boj.or.jp/note_tfjgs/note/security/cur0004a.htm （発行開始日「平成12（2000）年7月19日」、寸法76×154mmを明記）"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "showa-007",
+  "title": "熱海会談 社長が三日間吊し上げられた日（1964年）",
+  "emotion": "共感",
+  "powerword": "ホテルごと借り切れ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "社長が三日間吊し上げられた",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、三日間吊し上げって何なのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "文句があるなら全員来い！　いいか、ホテルごと借り切れ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "借り切る!?　全国の店を全部呼んで──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "一社残らずだ。1964年、熱海のホテルに全国から集める"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "経費でボクの胃が痛むのだ"
+        }
+      ],
+      "image_prompt": "1960s Japanese seaside hot spring hotel exterior at dusk, retro architecture, quiet ocean, nostalgic film grain, no people, no text"
+    },
+    {
+      "caption": "直談判のはずが、逆に詰められる",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長！　売れんのはうちの努力が足りんとおっしゃるんですか！"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "……ええから、最後まで言うてくれ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "え、社長が言い返さないのだ？"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "うちは家族総出で守ってきた。倉庫も棚もあんたの品で埋めて──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "分かっとる。分かっとるから、俺がここに座っとる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "朝から晩までの説教返しなのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "三日だ。三日とも、俺は壇上に座って聞いた"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクなら初日の昼で裏口から帰るのだ"
+        }
+      ],
+      "image_prompt": "large empty 1960s Japanese banquet hall, rows of folding chairs, single microphone stand on stage, dim warm light, no people, no text"
+    },
+    {
+      "caption": "今ならアウト、でも残ったもの",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "令和なら初日の夜に動画が回って会社ごと終わるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "終わらん。逃げんかったから、あの会社は今も残っとる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは無茶だと思うのだ。三日で人格が壊れる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……でも、ボクの上司は会議室に来たこともないのだ"
+        }
+      ],
+      "image_prompt": "early morning sea horizon seen through an old inn window, worn tatami edge, soft light, nostalgic quiet mood, no people, no text"
+    }
+  ],
+  "caption": "1964年、熱海のホテルを借り切った直談判。集まった全国の販売店に、社長が丸三日間詰められ続けた会談です。あなたの会社の上司、会議室まで来ますか？",
+  "hashtags": [
+    "#昭和",
+    "#熱海会談",
+    "#松下幸之助",
+    "#昭和の働き方",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "松下幸之助は1964年、販売店との対立を解決するため熱海のホテルを借り切って全国",
+  "source_facts": [
+    {
+      "id": "showa-b5b822bdb7",
+      "fact": "松下幸之助は1964年、販売店との対立を解決するため熱海のホテルを借り切って全国の販社・代理店と直談判した。だが丸3日間、逆に吊し上げられた（熱海会談）",
+      "backing_url": "https://ja.wikipedia.org/wiki/松下幸之助",
+      "backing_note": "Wikipedia（熱海会談。脚注あり）"
+    }
+  ]
+}

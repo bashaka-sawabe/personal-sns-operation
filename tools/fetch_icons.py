@@ -27,7 +27,6 @@ from tools.pipeline.common import ASSETS_DIR, ROOT, PipelineError
 ICONS_DIR = os.path.join(ASSETS_DIR, "icons")
 # 原本。git管理下なので clone すれば必ずある
 SOURCE_DIR = os.path.join(ROOT, "assets", "icons")
-CREDIT_NOTE = "アイコン: AI生成（ChatGPT・本人支給 2026-08-08・#204）"
 
 
 def main() -> None:
@@ -35,15 +34,16 @@ def main() -> None:
     restored = []
     for key in CHARACTERS:
         png = os.path.join(ICONS_DIR, f"{key}.png")
-        txt = os.path.join(ICONS_DIR, f"{key}.txt")
         source = os.path.join(SOURCE_DIR, f"{key}.png")
         if not os.path.exists(png) and os.path.exists(source):
             shutil.copyfile(source, png)
             restored.append(key)
-        # クレジットは credits.txt に出す素材規約情報なので、対の .txt も揃える
-        if not os.path.exists(txt) and os.path.exists(png):
-            with open(txt, "w", encoding="utf-8") as f:
-                f.write(CREDIT_NOTE + "\n")
+        # アイコンにクレジットの .txt は置かない（#222）。ChatGPT生成画像は
+        # OpenAI利用規約上ユーザーの所有物で、表記義務が無い。BGM・効果音のように
+        # 規約が表記を求める素材だけがサイドカーを持つ
+        stale = os.path.join(ICONS_DIR, f"{key}.txt")
+        if os.path.exists(stale):
+            os.remove(stale)
     if restored:
         print(f"原本から復元: {', '.join(restored)}")
 
@@ -55,7 +55,7 @@ def main() -> None:
             "  原本（assets/icons/<キャラ>.png）にも無い話者です。"
             "本人に画像を用意してもらい、assets/icons/ に置いてください。"
         )
-    print(f"全{len(CHARACTERS)}話者のアイコンとクレジットが揃っています")
+    print(f"全{len(CHARACTERS)}話者のアイコンが揃っています")
 
 
 if __name__ == "__main__":

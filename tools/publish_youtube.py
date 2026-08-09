@@ -180,11 +180,14 @@ def build_metadata(video_path: str, script: dict | None) -> dict:
     # Shortsとして認識させるため #Shorts を必ず入れる。タイトルは100字上限
     title = f"{script.get('title', stem)} #Shorts"[:100]
     tags = [t.lstrip("#") for t in script.get("hashtags", [])][:15]
+    # 合成音声の開示文は入れない（#222・2026-08-09 に一次ソースで確認）。
+    # YouTubeが求めるのは Studio の「AIの使用」チェックボックスであって説明欄の文言ではなく、
+    # かつ開示義務は「写真のようにリアルなコンテンツ」に限られる。アニメ調のキャラ音声は
+    # 免除側（開示不要例に「クローニングした自分の声でナレーション」が明記されている）。
+    # VOICEVOXのクレジット（read_credits）は利用条件そのものなので**必ず残す**
     description = "\n\n".join(filter(None, [
         script.get("caption", ""),
         " ".join(script.get("hashtags", [])),
-        # 合成音声を使っている間は明示する。YouTubeは改変コンテンツの開示を求めている
-        "※ナレーションに音声合成を使用しています。",
         read_credits(stem),
     ]))[:5000]
     return {"title": title, "description": description, "tags": tags}

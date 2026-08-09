@@ -154,7 +154,13 @@ def _pick_powerword(thread: dict, feedback: str = "") -> dict:
         }}},
         messages=[{"role": "user", "content": f"タイトル: {thread['title']}\n\n{body}"}],
     )
-    return json.loads(response.content[0].text)
+    # content[0] を決め打ちで読まないこと。claude-opus-5 は adaptive thinking が既定で、
+    # 思考が出た回だけ先頭が ThinkingBlock になり AttributeError で落ちる（#215）。
+    # adaptive なので毎回は起きず、落ちた日は自動採用が静かに止まる
+    text = next((b.text for b in response.content if b.type == "text"), "")
+    if not text:
+        raise PipelineError("パワーワードの選定が空で返りました。")
+    return json.loads(text)
 
 
 def auto_adopt(channel: str, item: dict) -> bool:

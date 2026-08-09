@@ -1,0 +1,103 @@
+{
+  "id": "meme-022",
+  "title": "初心者のケーキ作り、謎のホットケーキマンに乗っ取られる",
+  "emotion": "笑い",
+  "powerword": "謎のホットケーキマン",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【完全乗っ取り】ケーキ作り実況",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "バターが無いのだ!?"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "材料の写真、バターありませんね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "あるのはクリームチーズだけ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ミックス粉があるから平気なのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ボウルとヘラ舐めさせろ！"
+        }
+      ],
+      "image_prompt": "kitchen counter with cocoa powder, cream cheese tub, chocolate bars, mixing bowl, warm afternoon light, no people, no text"
+    },
+    {
+      "caption": "粉をふるう概念を知らないイッチ",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "粉、振るいましたか"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "それなんなのだ？今から炊飯器に──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "ザルでふるうとダマにならない。まあイマサラですが"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "知らんのだ。ほな焼くでー"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ワイもう1枚焼くでー！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "そいつボクちゃうのだ"
+        }
+      ],
+      "image_prompt": "metal sieve with flour dust falling, rice cooker inner pot with dark batter, frying pan on stove, moody kitchen, no people, no text"
+    },
+    {
+      "caption": "主役、ホットケーキ側へ移動",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "ここでケーキ作ってるやつ、2人いますね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクのチョコが主役なのだ！炊飯器で──"
+        },
+        {
+          "speaker": "shishio",
+          "text": "謎のホットケーキマンに乗っ取られてますな。実にいい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "良くないのだ"
+        }
+      ],
+      "image_prompt": "split composition, lumpy dark chocolate cake in rice cooker on one side, tall glossy pancake stack under spotlight on other side, dramatic contrast lighting, no people, no text"
+    }
+  ],
+  "caption": "バターが家に無いところから始まる初心者のケーキ作り。粉をふるう概念も知らないまま炊飯器へ。そこへ勝手にホットケーキを焼き始める男が乱入し、主役が完全に移動しました。",
+  "hashtags": [
+    "#謎のホットケーキマン",
+    "#ケーキ作り",
+    "#ずんだもん",
+    "#実況スレ",
+    "#炊飯器ケーキ"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "初心者ワイのケーキ制作",
+  "source_thread": {
+    "id": "livejupiter-1785642270",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785642270/",
+    "title": "初心者ワイのケーキ制作"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "id": "meme-021",
+  "title": "光速が遅すぎると宇宙に苦情を入れる会",
+  "emotion": "笑い",
+  "powerword": "設定ミス",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【宇宙に苦情】光速が遅すぎる件",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "光速、遅すぎるのだ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "何と比べて？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "光で走っても銀河の端まで5万年！ボク、待てないのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "それ、仕様です"
+        }
+      ],
+      "image_prompt": "abstract deep space, streaks of light stretching into darkness, spiral galaxy far away, cool blue and violet tones, no text, no people"
+    },
+    {
+      "caption": "解決策が全部だめ",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "光をトレーニングすればいけるやろ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "物理法則が乱れます"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、ボクの精子はとっくに光速超えて──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ワイも負けてへんで"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "黙ってください"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "じゃあワープなのだ。3次元に穴開けて──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "開ける道具がないですね"
+        }
+      ],
+      "image_prompt": "abstract warped grid of spacetime bending into a funnel, glowing lattice lines, dark cosmic background, no text, no people"
+    },
+    {
+      "caption": "運営に責任転嫁",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "諸君、光速が遅いせいで南米との通信は1/15秒ラグる"
+        },
+        {
+          "speaker": "shishio",
+          "text": "FPSがギリできるか否か。許せませんな"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "急にゲームの話なのだ!?"
+        },
+        {
+          "speaker": "shishio",
+          "text": "この宇宙、移動速度の限界を小さくしすぎ。設定ミスですな"
+        }
+      ],
+      "image_prompt": "abstract cosmic scale ruler and glowing constellation lines over a dark starfield, faint signal waves crossing the void, no text, no people"
+    }
+  ],
+  "caption": "銀河の端まで5万年は待てない。光を鍛える案もワープ案も全部却下されて、最後に出た結論が宇宙の設定ミス。あなたはどこに苦情入れる？",
+  "hashtags": [
+    "#ずんだもん",
+    "#宇宙",
+    "#光速",
+    "#スレ民",
+    "#大喜利"
+  ],
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "光速、遅すぎる",
+  "source_thread": {
+    "id": "livejupiter-1786030182",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1786030182/",
+    "title": "光速、遅すぎる"
+  }
+}

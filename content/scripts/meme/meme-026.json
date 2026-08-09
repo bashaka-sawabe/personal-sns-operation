@@ -1,0 +1,97 @@
+{
+  "id": "meme-026",
+  "title": "かんじとかたかなきんしスレ、罰ゲームで全員男の娘化",
+  "emotion": "笑い",
+  "powerword": "まぢてんしおとこのこ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【完全崩壊】かんじきんしのへや",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "[叫]ぎゃあ！　かんじつかったにゃああ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "おちつけ。かんじきんしのへやだぞ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "あるふぁべっともだめ？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "だめ。すうじはおーけー"
+        }
+      ],
+      "image_prompt": "abstract background of scattered hiragana-like soft glowing shapes on dark screen, retro bulletin board texture, no text, no faces, minimal, moody"
+    },
+    {
+      "caption": "罰ゲームの解像度が高すぎる",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "ωもだめにゃ？　くさはやせないにゃ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "くさがしらににちじゅうでくさになるのだ。ばつげーむもきめた。かんじつかったら1かげつおとこのこ、めいどふくとぬこみみをつけるのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "ぬこみみは、しようですか"
+        }
+      ],
+      "image_prompt": "symbolic image of a cat ear headband and a frilled apron hanging on a hook, dim room, soft light, no people, no text"
+    },
+    {
+      "caption": "違和感が仕事をした瞬間",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "めいどふくにぬこみみ、たまりませんな"
+        },
+        {
+          "speaker": "shishio",
+          "text": "わたくしは過密なほうがすきでしてな──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "[低]かんじ、、、"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "いわかんがしごとしてしまったのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "もうやけくそ。なまえは──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "まぢてんしおとこのこ"
+        }
+      ],
+      "image_prompt": "abstract collapsing wall of soft pastel letters dissolving into light, chaotic but elegant, dark background, no text, no faces"
+    }
+  ],
+  "caption": "漢字とカタカナ禁止の部屋。罰ゲームは1か月男の娘。ぬこみみまで仕様に含めた結果、最後は全員やけくそで名前が決まりました。",
+  "hashtags": [
+    "#ずんだもん",
+    "#おーぷん2ちゃんねる",
+    "#ひらがな縛り",
+    "#ネットミーム",
+    "#男の娘"
+  ],
+  "broken_premise": "漢字を1字使うと1か月男の娘",
+  "ochi_type": "naming",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "かんじとかたかなきんし",
+  "source_thread": {
+    "id": "news4vip-1784534541",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/news4vip/1784534541/",
+    "title": "かんじとかたかなきんし"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "id": "showa-009",
+  "title": "1958年8月25日、世界初の袋麺が生まれた夜",
+  "emotion": "呆れ",
+  "powerword": "待たせたら負けだ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "お湯だけで飯、1958年の狂気",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "[叫]社長、また徹夜で麺を揚げてるんですか"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、湯をかけるだけで食える麺だ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、揚げ麺にお湯？　何年の話なのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "昭和33年。1958年8月25日、世界で初めて売る"
+        }
+      ],
+      "image_prompt": "night, small backyard workshop, steam rising from a pot, dim single bulb, oil drums, retro Showa era texture, no people, no text, cinematic warm light"
+    },
+    {
+      "caption": "現場の反発と啖呵",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、ラーメンは屋台で食うもんです。袋の麺など──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "誰も見たことがない。だから俺が作る"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、腹を空かせた人間が、寒空で行列して湯気を待つ。あれを見た日から俺は決めたんだ。家で湯さえあれば食える麺を作る。誰も作らんなら俺がやる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ。それ3行でまとめるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]いいか、食い物は待たせたら負けだ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "その一行で良かったのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "[小]……はい。油を仕入れます"
+        }
+      ],
+      "image_prompt": "vintage factory interior at dawn, stacked wooden crates, hanging bare bulbs, dust in light beams, symbolic and abstract, no people, no text"
+    },
+    {
+      "caption": "令和の夜食に着地する締め",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "値が、高いと。うどん玉の何倍も──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "湯を沸かせ。食えば分かる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら衛生でアウトなのだ。……でも、正直うまそう"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "1958年の徹夜がボクの夜食とか、ズルいのだ"
+        }
+      ],
+      "image_prompt": "modern kitchen at midnight, kettle steam, one bowl on a table, soft blue darkness contrasted with warm lamp, nostalgic mood, no people, no text"
+    }
+  ],
+  "caption": "1958年8月25日、世界初のインスタントラーメンが世に出た日。今なら全部アウトな熱量が、今夜の夜食になっている。あなたの最初の一杯は何でしたか。",
+  "hashtags": [
+    "#昭和",
+    "#インスタントラーメン",
+    "#1958年",
+    "#ずんだもん",
+    "#昭和の働き方"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "安藤百福は1958年（昭和33年）8月25日、世界初のインスタントラーメン「チキ",
+  "source_facts": [
+    {
+      "id": "showa-20d75d5ef0",
+      "fact": "安藤百福は1958年（昭和33年）8月25日、世界初のインスタントラーメン「チキンラーメン」を発売した。",
+      "backing_url": "https://www.nissin.com/jp/company/chronicle/",
+      "backing_note": "日清食品グループ公式「安藤百福クロニクル」（企業公式の創業者年譜）。発売日は日本食糧新聞・電子版記事（https://news.nissyoku.co.jp/today/584072）で二重確認。"
+    }
+  ]
+}

@@ -285,6 +285,40 @@ def _ronron_rules() -> str:
    感情も状況も、雑な形容詞ではなく**具体的な比喩か数字**で言わせること。"""
 
 
+def _meme_rules(cfg: dict) -> str:
+    """定番ミーム・コピペから作るときのルール（#205）。
+
+    スレ引用と決定的に違うのは、**元の文章を持っていない**こと。
+    5ch起源のコピペは転載が許可制で、実写動画が元のものは肖像権も絡む。
+    こちらが持つのは「何が起きてどう落ちるか」の骨格だけで、**表現は書き下ろす**
+    （アイデアと事実に著作権は無く、保護されるのは表現。docs/04 2-2章）。
+    """
+    return _skit_rules() + _ronron_rules() + """
+
+ネタ元について（定番ミーム・最重要）:
+与えられるのは**話の骨格（何が起きてどう落ちるか）だけ**で、元の文章はありません。
+これは意図的です。多くの定番コピペは**転載が許可制**で、原文を写すと規約違反になります。
+
+- **原文を思い出して再現しようとしないこと。** 覚えている言い回しがあっても使わない。
+  骨格だけを取り、**セリフは全部このキャラたちの言葉で新しく書く**
+- 元ネタに登場する**実在の人物・団体・番組を特定できる情報は入れない**
+  （固有名詞・役職・地名・年月日）。骨格が成立する範囲で全部ぼかす
+- 「元ネタでは〜」「有名なコピペで〜」のようなメタ言及をしない。
+  **その場で今起きていること**として演じる
+- 骨格に無い展開を足してよい。むしろ足さないと原文の要約になります"""
+
+
+def _meme_context(meme: dict) -> str:
+    """ミームの骨格をプロンプトに渡す形にする。本文は持っていない。"""
+    lines = [f"ミーム: {meme.get('name', '')}",
+             f"話の骨格: {meme['skeleton']}"]
+    if meme.get("note"):
+        lines.append(f"補足: {meme['note']}")
+    lines.append(f"権利の扱い: {meme.get('rights_label', '')}")
+    lines.append("※ 原文は渡していません。骨格から書き下ろしてください。")
+    return "\n".join(lines)
+
+
 def _thread_rules(cfg: dict) -> str:
     """引用スレから作るときの追加ルール（v5: オチ逆算。docs/05 2章）。"""
     base = f"""
@@ -1078,6 +1112,9 @@ _SOURCE_KINDS = (
     ("thread_source", "thread", "引用スレ",
      "tools/fetch_threads.py --board ... で収集し、--adopt で採用してから\n"
      "  make_video.py --channel <ch> --thread <スレID>"),
+    ("thread_source", "meme", "定番ミームの骨格",
+     "tools/fetch_memes.py --add ... --rights ... で登録し、--adopt で採用してから\n"
+     "  make_video.py --channel <ch> --meme <ミームID>"),
 )
 
 
@@ -1096,7 +1133,7 @@ def _require_source(cfg: dict, **given) -> None:
 
 def generate(cfg: dict, theme: str, offline: bool = False,
              thread: dict | None = None, fact: dict | None = None,
-             facts: list | None = None) -> dict:
+             facts: list | None = None, meme: dict | None = None) -> dict:
     """台本JSONを返す。offline=True かAPIキー未設定ならテンプレを返す。
 
     thread は採用スレ（fetch_threads）、fact は裏取り済みネタ（fetch_facts）。
@@ -1104,7 +1141,8 @@ def generate(cfg: dict, theme: str, offline: bool = False,
     LLMの0からの創作は展開もオチも平均値になり、つまらない（docs/04 2-2章・v5）。
     """
     if not offline:
-        _require_source(cfg, thread=thread, fact=fact or (facts[0] if facts else None))
+        _require_source(cfg, thread=thread, meme=meme,
+                        fact=fact or (facts[0] if facts else None))
     api_key = read_secret("ANTHROPIC_API_KEY", "anthropic_key.txt")
     if offline or not api_key:
         if not offline:
@@ -1120,7 +1158,12 @@ def generate(cfg: dict, theme: str, offline: bool = False,
         ) from None
 
     system = _system(cfg)
-    if thread:
+    if meme:
+        system += _meme_rules(cfg)
+        user = (f"チャンネル: {cfg['name']}\n\n{_meme_context(meme)}\n\n"
+                "この骨格から、掛け合いショート動画の台本を**書き下ろして**ください。"
+                "原文の再現ではなく、このキャラたちの言葉で新しく書くこと。")
+    elif thread:
         system += _thread_rules(cfg)
         user = (f"チャンネル: {cfg['name']}\n\n{_thread_context(thread)}\n\n"
                 "このスレを翻案して、オチから逆算した掛け合いショート動画の台本を作ってください。")

@@ -1,0 +1,99 @@
+{
+  "id": "meme-025",
+  "title": "指示を文字どおり実行した新人バイトの初日",
+  "emotion": "笑い",
+  "powerword": "一名様、上げました",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "新人が客を上げてクビ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]初日で店長が泣いたのだ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "何をした"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "お客さんを一人、上げただけなのだ"
+        }
+      ],
+      "image_prompt": "dim izakaya interior at night, empty wooden counter, hanging paper lanterns, spilled beer glass, warm amber light, no people, no text"
+    },
+    {
+      "caption": "店長の指示を1ミリも解釈しない",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "9番のおじさん、上げていいわよ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "店長さん、結婚しよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "了解なのだ。まず膝の裏に腕を──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "待て。腕は使いません"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "使わない!? 78キロのおじさんを胸まで持ち上げて三秒キープしたのだ。拍手が来ると思ったら、換気扇の音しかしなかったのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "メガネも落ちたのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "それ、仕様じゃないですね"
+        }
+      ],
+      "image_prompt": "low angle view of izakaya table with tipped over glasses, fallen eyeglasses on tatami mat, ceiling fan blurred motion, moody amber light, no people, no text"
+    },
+    {
+      "caption": "紳士が謎の名前を与えて終わる",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ボクは言葉どおりに動いただけで──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "動きすぎです"
+        },
+        {
+          "speaker": "shishio",
+          "text": "[低]客を高々と掲げて、一名様、上げました……表彰される側の照れ、たまりませんな"
+        }
+      ],
+      "image_prompt": "silhouette of a trophy shaped like a beer mug held high, single spotlight beam in a dark room, floating dust particles, symbolic, no people, no text"
+    }
+  ],
+  "caption": "「9番のおじさん、上げていいわよ」——解釈違いゼロで実行した新人の初日。残ったのは換気扇の音だけ。あなたの現場の文字どおり新人も聞かせてほしいのだ。",
+  "hashtags": [
+    "#ずんだもん",
+    "#新入社員",
+    "#コピペ",
+    "#バイト初日",
+    "#寸劇"
+  ],
+  "broken_premise": "「客を上げる」を持ち上げる意味で実行",
+  "ochi_type": "naming",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "新入社員の literal 実行",
+  "source_meme": {
+    "id": "meme-classic-d8d501e000",
+    "name": "新入社員の literal 実行",
+    "skeleton": "新人が指示を極端に文字どおり実行して大惨事になる（「つまみを出す」→客をつまみ出す型）",
+    "rights": "classic_unknown",
+    "origin": "なんJ発の「新入社員コピペ」ジャンル。派生1000種以上で単一の原典を特定できない"
+  }
+}

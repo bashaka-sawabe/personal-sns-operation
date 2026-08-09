@@ -32,7 +32,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools import fetch_facts, fetch_threads
+from tools import fetch_facts, fetch_memes, fetch_threads
 from tools.pipeline import channels, media, render, script as script_mod, status as status_mod
 from tools.pipeline.common import (
     ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, ensure_dirs,
@@ -104,10 +104,14 @@ def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
 
 def make_one(channel: str, theme: str, offline: bool, script_only: bool,
              thread_id: str | None = None, fact_id: str | None = None,
-             fact_ids: list | None = None) -> str:
+             fact_ids: list | None = None, meme_id: str | None = None) -> str:
     cfg = channels.load(channel)
-    thread = fact = None
+    thread = fact = meme = None
     facts = None
+    if meme_id:
+        # 権利で使えないミームは load_adopted が拒否する（docs/04 2-2章）
+        meme = fetch_memes.load_adopted(meme_id)
+        theme = theme or meme["name"]
     if thread_id:
         # 未採用スレは load_adopted が拒否する（目視選別を飛ばして生成させない）
         thread = fetch_threads.load_adopted(thread_id)
@@ -127,7 +131,7 @@ def make_one(channel: str, theme: str, offline: bool, script_only: bool,
 
     print("  台本を生成中...")
     data = script_mod.generate(cfg, theme, offline=offline, thread=thread, fact=fact,
-                               facts=facts)
+                               facts=facts, meme=meme)
     data["channel"] = channel
     data["genre"] = channel  # 計測（fetch_metrics）の集計キーとの互換。値はチャンネル名
     data["theme"] = theme
@@ -136,6 +140,11 @@ def make_one(channel: str, theme: str, offline: bool, script_only: bool,
         # 「引用元が転載自由ソース」をファイルだけで確認できるようにする
         data["source_thread"] = {"id": thread["id"], "url": thread["url"],
                                  "title": thread["title"]}
+    if meme:
+        # 来歴。「原文を引用していない」ことを後から確認できるようにする
+        data["source_meme"] = {"id": meme["id"], "name": meme["name"],
+                               "skeleton": meme["skeleton"],
+                               "rights": meme["rights"], "origin": meme.get("origin", "")}
     for f in ([fact] if fact else []) + (facts or []):
         # 裏取りの来歴。「一次ソースURLが台本に記録されている」チェックの実体
         data.setdefault("source_facts", []).append(
@@ -147,6 +156,7 @@ def make_one(channel: str, theme: str, offline: bool, script_only: bool,
     # ネタだけ失う。ここで付けないと単発生成のぶんが adopted のまま残り、
     # 次回の daily_run が同じネタでもう1本作る（#230）
     used = [i for i in ([thread["id"]] if thread else []) if fetch_threads.mark_used(i)]
+    used += [meme["id"]] if meme and fetch_memes.mark_used(meme["id"]) else []
     used += [f["id"] for f in ([fact] if fact else []) + (facts or [])
              if fetch_facts.mark_used(f["id"])]
     if used:
@@ -189,6 +199,7 @@ def main() -> None:
     p.add_argument("--theme", help="テーマ（動画1本の中身。--thread があれば省略可）")
     p.add_argument("--thread", help="採用済みスレのID（fetch_threads.py --adopt 済みのもの）")
     p.add_argument("--fact", help="採用済みネタのID（fetch_facts.py --adopt 済み・裏取り必須）")
+    p.add_argument("--meme", help="採用済みミームのID（fetch_memes.py --adopt 済み・骨格から書き下ろす）")
     p.add_argument("--facts", nargs="+", metavar="ID",
                    help="採用済みネタを複数指定して「◯◯選」形式にする（heisei）")
     p.add_argument("--batch", help="チャンネルとテーマの一覧ファイル（1行1本）")
@@ -224,12 +235,14 @@ def main() -> None:
                 print(f"  - {ch} / {theme}", file=sys.stderr)
             return
 
-        if not channel or not (args.theme or args.thread or args.fact or args.facts):
-            p.error("--channel と、ネタの指定（--theme / --thread / --fact / --facts）"
+        if not channel or not (args.theme or args.thread or args.fact
+                               or args.facts or args.meme):
+            p.error("--channel と、ネタの指定（--theme / --thread / --fact / --facts / --meme）"
                     "（または --batch / --from-script）を指定してください")
 
         out = make_one(channel, args.theme, args.offline, args.script_only,
-                       thread_id=args.thread, fact_id=args.fact, fact_ids=args.facts)
+                       thread_id=args.thread, fact_id=args.fact, fact_ids=args.facts,
+                       meme_id=args.meme)
         print(f"完成: {os.path.relpath(out)}")
 
     except PipelineError as e:

@@ -212,6 +212,8 @@ def _break_score(text: str, i: int) -> int:
         return -100
     if prev in "ぁぃぅぇぉっゃゅょァィゥェォッャュョー":
         return -60                    # 促音・拗音・長音の直後は活用の内部（「悔しかっ/た」）
+    if _HIRAGANA.match(prev) and nxt in "たてだで":
+        return -70                    # 活用語尾＋助動詞（「一体化し/た」）。動詞が真っ二つになる
     if _KATAKANA.match(prev) and _KATAKANA.match(nxt):
         return -60
     if _WORDCHAR.match(prev) and _WORDCHAR.match(nxt):

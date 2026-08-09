@@ -669,9 +669,11 @@ def _write_credits(asset_dir: str, providers: list, used_speakers: list,
     if voicevox_used():
         lines.extend(CHARACTERS[k]["credit"] for k in used_speakers)
     for key in used_speakers:
-        # 持ち込みアイコンのクレジット（サイドカー）。生成アイコンなら何も出ない
-        if icon_image(key) and icon_credit(key):
-            lines.append(icon_credit(key))
+        # 持ち込みアイコンのクレジット（サイドカー）。作者表記を求める素材を
+        # 持ち込んだときだけ出る。話者ごとに同文になるので重複を落とす（#222）
+        line = icon_credit(key) if icon_image(key) else ""
+        if line and line not in lines:
+            lines.append(line)
     for kind in se_kinds or []:
         # 効果音のクレジット（サイドカー）。同文は1行にまとめる
         line = se_credit(kind)

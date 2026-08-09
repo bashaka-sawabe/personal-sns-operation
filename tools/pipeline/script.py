@@ -13,7 +13,9 @@ import os
 import re
 
 from .channels import CHARACTERS, cast_keys, extra_speakers
-from .common import PipelineError, normalize_powerword, read_secret
+from .common import (
+    VOICE_MARKS, PipelineError, normalize_powerword, read_secret, split_voice_marks,
+)
 
 # 台本の型。style.scenes が無いときの既定値。
 # 5シーン×各2〜3行だと1話題1往復で終わり、掛け合いにならなかった（#131）。
@@ -30,6 +32,8 @@ MONOLOGUE_MIN = 60
 # 型が崩れたときに作り直させる回数。3回目以降は同じ壊れ方を繰り返すだけで
 # 費用が増えるだけだった（#212）
 FORM_RETRY = 2
+# 声の演出マーカーを付けてよい行数の上限（#213）。効かせどころが1〜2箇所だから効く
+MARKS_MAX = 4
 # 割り込みの記法。行末をこれで終えると「言い切る前に次の話者に奪われた」を表す。
 # 音声合成には渡さない（media 側で落とす）が、字幕には残る
 INTERRUPT_MARK = "──"
@@ -140,7 +144,9 @@ def _schema(cfg: dict) -> dict:
                                             f"{MONOLOGUE_MIN}〜100字まで伸ばす"
                                             "（1本に必ず1回。ここが一番の見どころ）。"
                                             f"言い切る前に奪われる行は末尾を「{INTERRUPT_MARK}」"
-                                            "で終える（割り込みの記法）"
+                                            "で終える（割り込みの記法）。"
+                                            f"行頭に {'・'.join('[' + m + ']' for m in VOICE_MARKS)} "
+                                            "を置くと読み上げ方が変わる（台本全体で4行まで）"
                                         ),
                                     },
                                 },
@@ -221,8 +227,20 @@ def _skit_rules() -> str:
 **「〜と言われた」「〜という話だ」も報告です。** その場面を演じてください。
 
 - 登場人物が増えるときは**声を変えます**（使える話者は speaker の候補にあるものだけ）。
-- 効果音はありません。音で演出したいときだけ、**ごく稀に**台詞の伸ばしで表現します
-  （例:「ンニィィィィィ」のような発声）。多用すると寒いので1本に1回まで。"""
+
+**音の演出は「音源の効果音」ではなく、声そのものを変えて作ります。**
+行の**先頭**に次のマーカーを置くと、その行の読み上げ方が変わります
+（マーカーは読み上げにも字幕にも出ません）:
+
+  `[間]` 一拍おいてから言う　`[小]` 声を落とす（本音・呟き）
+  `[叫]` 叫ぶ　`[低]` 低く平坦に（真顔・不気味さ）
+  `[早]` まくしたてる　`[伸]` 引き伸ばす（「ンニィィィィィ」のような発声）
+
+  例: `[間][低]で、その後輩なんやけどな`
+
+**多くてもこの台本で4行までにしてください。** 効かせどころが1〜2箇所だから効きます。
+全行に付けると「ずっと変な声」になって、逆に何も際立ちません。
+擬音そのもの（「ルルルル」「ガチャ」「どすん」）は、マーカーではなく**台詞として**書きます。"""
 
 
 def _ronron_rules() -> str:
@@ -799,9 +817,12 @@ def form_issues(script: dict, cfg: dict | None = None) -> list:
     長回し0行・パワーワード埋没）。**検査結果をLLMに返さないと、型は効かない。**
     """
     cfg = cfg or {}
-    lines = [l["text"] for s in script.get("scenes", []) for l in s.get("dialogue", [])]
-    if not lines:
+    raw = [l["text"] for s in script.get("scenes", []) for l in s.get("dialogue", [])]
+    if not raw:
         return []
+    # 演出マーカー（#213）は読み上げにも字幕にも出ないので、字数にも数えない
+    marks_per_line = [split_voice_marks(t) for t in raw]
+    lines = [t for _, t in marks_per_line]
     issues = []
 
     budget = (cfg.get("style") or {}).get("max_chars", 0)
@@ -848,6 +869,26 @@ def form_issues(script: dict, cfg: dict | None = None) -> list:
         issues.append(
             f"broken_premise が複数に見えます（「{premise}」）。"
             "壊す前提は1個だけです。2個以上壊すと知性が消えてただの出鱈目になります"
+        )
+
+    # 声の演出は効かせどころが1〜2箇所だから効く。全行に付けると
+    # 「ずっと変な声」になって、逆に何も強調されない（#203の「基本使わない」を踏襲）
+    marked = sum(1 for m, _ in marks_per_line if m)
+    if marked > MARKS_MAX:
+        issues.append(
+            f"声の演出マーカーが{marked}行に付いています（多くて{MARKS_MAX}行）。"
+            "効かせどころを絞ってください。全行に付けると何も際立ちません"
+        )
+    unknown = sorted({
+        m.group(1)
+        for t in raw
+        for m in re.finditer(r"\[([^\[\]]{1,3})\]", t)
+        if m.group(1) not in VOICE_MARKS
+    })
+    if unknown:
+        issues.append(
+            f"未定義の演出マーカーがあります: {'、'.join(unknown)}。"
+            f"使えるのは {'、'.join(VOICE_MARKS)} だけです（そのまま字幕に出てしまいます）"
         )
     return issues
 

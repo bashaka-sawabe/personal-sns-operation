@@ -126,7 +126,7 @@ python3 tools/gh_board.py add <n> --status Done
 
 | 操作 | 理由 |
 |---|---|
-| **SNSへの公開投稿** | 外部に出たものは取り消せない。`daily_run.py` の予約公開（毎日23時・1ch2本・[#237](https://github.com/bashaka-sawabe/personal-sns-operation/issues/237)）は本人が承認済みだが、**Issue消化のついでに動画を出すのは不可**。既存動画の `--release` / `--reserve` も本人 |
+| **SNSへの公開投稿** | 外部に出たものは取り消せない。`daily_run.py` の予約公開（毎日22時・23時・[#237](https://github.com/bashaka-sawabe/personal-sns-operation/issues/237)）は本人が承認済みだが、**Issue消化のついでに動画を出すのは不可**。既存動画の `--release` / `--reserve` も本人 |
 | **チャンネル名・ハンドルの変更** | APIで不可。加えて14日2回の制限がある |
 | **`main` への直接push** | 必ずPR経由。履歴とレビュー導線が消える |
 | **`decision` ラベルのIssue** | 数字を見て人が決める |

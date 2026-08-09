@@ -23,7 +23,7 @@
 # 2週間テストの本体。3ジャンル12本をまとめて生成する（約14分）
 .venv/bin/python tools/make_video.py --batch data/themes.md
 
-# YouTube Shortsへ投稿し、次の空き枠（毎日23時・1ch2本）で公開予約する
+# YouTube Shortsへ投稿し、次の空き枠（毎日22時・23時）で公開予約する
 .venv/bin/python tools/publish_youtube.py --all --schedule
 ```
 

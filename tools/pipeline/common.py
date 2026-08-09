@@ -228,6 +228,11 @@ def _break_score(text: str, i: int) -> int:
         return 30                     # 助詞の後ろ＋次がかな以外＝文節の頭
     if _HIRAGANA.match(prev) and not _HIRAGANA.match(nxt):
         return 20                     # かな→漢字/カタカナの変わり目
+    if _HIRAGANA.match(nxt):
+        # 文節の頭は内容語（漢字・カタカナ）で始まる。ひらがなの前で切ると
+        # 送り仮名・活用語尾・助詞のどれかを割る（「悔/しかった」「みた/いに」）。
+        # 個別パターンを潰しても別の形で再発したので一般則にした（#210→#219→#224）
+        return -25
     if _KANJI.match(prev) and _KANJI.match(nxt):
         return -30                    # 漢字の連続は熟語の内部（「一/重」）になりやすい
     return 0

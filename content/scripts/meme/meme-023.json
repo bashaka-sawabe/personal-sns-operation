@@ -1,0 +1,89 @@
+{
+  "id": "meme-023",
+  "title": "弁当屋の店員を叩くはずが誤字で自滅",
+  "emotion": "笑い",
+  "powerword": "レンシレンジ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【総ツッコミ】誤字で自滅した苦情",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "弁当屋の定員、いらっしゃいませもないのだ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "定員。エレベーターの話ですね"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "百人乗っても大丈夫なやつ〜"
+        }
+      ],
+      "image_prompt": "empty bento shop counter at night, fluorescent light, no people, moody atmosphere"
+    },
+    {
+      "caption": "誤字を認めず逆ギレ",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "「てんいん」と「ていいん」は別物です"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "定員で通じるやろ？　オリジンやで？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、ボクは怒ってるのだ！　棚から勝手に取らされて、チンできるか聞いたらダルそうに答えられて、ワイの心は半額シールみたいにペラペラなのだ──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "長い。3行でまとめて"
+        }
+      ],
+      "image_prompt": "self service food shelf with half price stickers, dim night store, abstract"
+    },
+    {
+      "caption": "最後の一撃",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "一応聞きます。何を使ってチンを"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？　弁当以外にあるわけ──"
+        },
+        {
+          "speaker": "shishio",
+          "text": "[間]いえ、道具の方の話です"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[叫]レンシレンジに決まってるのだ！"
+        }
+      ],
+      "image_prompt": "old microwave oven glowing in a dark kitchen, symbolic, no text"
+    }
+  ],
+  "caption": "店員を叩くはずが、誤字ひとつで全部持っていかれた弁当屋スレ。最後の一言で終戦です。",
+  "hashtags": [
+    "#ずんだもん",
+    "#2ch",
+    "#なんJ",
+    "#誤字",
+    "#ミーム"
+  ],
+  "broken_premise": "「定員」の誤字を最後まで認めず押し通す",
+  "ochi_type": "naming",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "オリジン弁当の定員ゴミ",
+  "source_thread": {
+    "id": "livejupiter-1786031374",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1786031374/",
+    "title": "オリジン弁当の定員ゴミ"
+  }
+}

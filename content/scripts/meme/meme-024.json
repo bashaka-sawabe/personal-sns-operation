@@ -1,0 +1,93 @@
+{
+  "id": "meme-024",
+  "title": "結婚しろ論争が脱線し「計画外」の男が降臨する",
+  "emotion": "笑い",
+  "powerword": "計画外",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【総ツッコミ】結婚しろ論争",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]趣味は歳とったら飽きる、結婚しろと言われたのだ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "嫁も飽きます。仕様です"
+        }
+      ],
+      "image_prompt": "abstract dark blue message board glow, floating empty speech bubbles, no text, no faces"
+    },
+    {
+      "caption": "なぜかガチャ話へ脱線",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "よし、女になるまでガチャするのだ。1回目行ってくるの──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "[早]おうまた明日な"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "明日はまだ子宮の中やで"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "まず数億の競争に勝ってください"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "そう考えるとボク凄いのだ"
+        }
+      ],
+      "image_prompt": "abstract cosmic race of glowing particles rushing toward a distant light, symbolic, no text"
+    },
+    {
+      "caption": "最強の勝者が現れる",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "[低]私、ピルを貫通して生まれた男でしてね"
+        },
+        {
+          "speaker": "shishio",
+          "text": "おかげで学費も家賃も生活費も親持ち、趣味のアニメ鑑賞が毎日たまりませんな。当時父も学生で、相手の親にどう説明したのかと思うと同情すら──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "[叫]つよ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、それ自慢なのだ？"
+        },
+        {
+          "speaker": "shishio",
+          "text": "親からは「計画外」と呼ばれております"
+        }
+      ],
+      "image_prompt": "quiet student apartment at night, blurred posters on wall, warm lamp light, no faces, no text"
+    }
+  ],
+  "caption": "結婚しろ論争が受精の勝率の話に脱線した末、最強の勝者が降臨するスレ。あなたは何回目のガチャで生まれた？",
+  "hashtags": [
+    "#なんJ",
+    "#スレ民",
+    "#ずんだもん",
+    "#ガチャ",
+    "#ネットの闇"
+  ],
+  "broken_premise": "結婚論争を受精の勝率の話として押し通す",
+  "ochi_type": "naming",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "「趣味はオッサンになったら飽きるから結婚しろ！」←これ",
+  "source_thread": {
+    "id": "livejupiter-1785673077",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1785673077/",
+    "title": "「趣味はオッサンになったら飽きるから結婚しろ！」←これ"
+  }
+}

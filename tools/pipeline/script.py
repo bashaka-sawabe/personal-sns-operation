@@ -802,7 +802,11 @@ _AIZUCHI = re.compile(
 )
 # 伝聞・報告の言い回し。これがあるとキャラがスレの外にいる＝説明文になる（#134）
 _HEARSAY = re.compile(
-    r"(だそう[よねだ]|らしいわ|と言われ|と返され|と諭され|と助言|"
+    # 「〜と言われた」は単体では拾わない（#227）。自分が言われたことを話す
+    # 相談の口火（「結婚しろと言われたのだ！」）は報告ではなく、その人の場面そのもの。
+    # 止めたいのは**他人の場面を外から要約すること**なので、伝聞の印が付いた形だけ見る
+    r"(だそう[よねだ]|らしいわ|と言われたそう|と言われたらしい|"
+    r"と返され|と諭され|と助言|"
     r"そこへ「|レスでは|スレ主は|スレでは|という声が|との声|"
     r"と書かれ|と投稿|みたいよ|とのこと)"
 )
@@ -974,15 +978,18 @@ def dialogue_issues(script: dict, cfg: dict | None = None) -> list:
             + "。その人に直接喋らせてください（寸劇にする）"
         )
 
-    # 1話題あたりの往復。話者が交代する回数が少ないと掛け合いにならない（#131）
-    turns = []
-    for sc in script.get("scenes", []):
-        sp = [l["speaker"] for l in sc.get("dialogue", [])]
-        turns.append(sum(1 for i in range(len(sp) - 1) if sp[i] != sp[i + 1]))
-    if turns and sum(turns) / len(turns) < 2.5:
+    # 掛け合いになっているか。**シーンあたりの回数ではなく行あたりの割合**で見る（#227）。
+    # 回数で見ると、長回しを入れて行数が減っただけの台本を「平坦」と誤検知する。
+    # 実測: 旧世代（平坦）0.93〜1.00、新世代（長回しあり）0.88〜0.92 とほぼ差が無く、
+    # 回数で見ていた頃は後者だけが警告に引っかかっていた
+    speakers_all = [sp for sp, _ in lines]
+    changes = sum(1 for i in range(len(speakers_all) - 1)
+                  if speakers_all[i] != speakers_all[i + 1])
+    rate = changes / max(1, len(speakers_all) - 1)
+    if rate < 0.4:
         issues.append(
-            f"1シーンあたりの話者交代が平均{sum(turns) / len(turns):.1f}回しかありません。"
-            "1つの話題で2往復以上させないと一問一答に見えます"
+            f"話者の交代が全体の{rate:.0%}しかありません。"
+            "1人が喋り続けるだけの構成になっていないか確認してください"
         )
 
     # 一問一答。質問ばかりだとQ&Aになって会話にならない（#129）
@@ -1001,12 +1008,19 @@ def dialogue_issues(script: dict, cfg: dict | None = None) -> list:
         if m and norm not in seen_lines:
             seen_lines.add(norm)
             forms.append(m.group(0))
+    # 必要な本数は**行数ではなく字数**で決める（#227）。行数で決めると、
+    # 長回しを入れて行数が減った台本にだけ厳しくなる（1行に何を書いても1行なので）。
+    # ロンロン型では当事者は大真面目に事実を言い、意見はツッコミ役だけが言う。
+    # 意見だらけの方がむしろ型から外れる
     opinions = len(forms)
-    if opinions < max(2, len(lines) // 6) or len(set(forms)) < 2:
+    need = max(1, sum(len(t) for _, t in lines) // 150)
+    # 言い回しの種類は、そもそも2本以上要求しているときだけ見る
+    if opinions < need or (need >= 2 and len(set(forms)) < 2):
         issues.append(
-            f"意見・立場の表明が{opinions}行（言い回し{len(set(forms))}種類）しかありません。"
+            f"意見・立場の表明が{opinions}行（言い回し{len(set(forms))}種類・"
+            f"この字数なら{need}行は欲しい）しかありません。"
             "決まり文句の繰り返しではなく、断定（〜は〜なのだ）・反語（〜できるか）・"
-            "願望（〜たくない）など、どう思うかを言う行を各シーンに入れてください"
+            "願望（〜たくない）など、どう思うかを言う行を入れてください"
         )
 
     # 連続発話。全員が1行ずつ交互に喋ると、人数を増やしても一問一答のまま（#143）

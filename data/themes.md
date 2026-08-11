@@ -14,3 +14,6 @@
 （`trivia` は 2026-08-08 [#192](https://github.com/bashaka-sawabe/personal-sns-operation/issues/192)、`f1` は 2026-08-02 [#119](https://github.com/bashaka-sawabe/personal-sns-operation/issues/119) で廃止）
 
 書式の記録: `## チャンネル` の見出しと `- テーマ` の箇条書き。行頭が `-` の行だけを拾う。
+
+
+基本契約

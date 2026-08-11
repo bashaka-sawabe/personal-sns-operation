@@ -1,0 +1,126 @@
+{
+  "id": "heisei-015",
+  "title": "地上アナログ停波が2回あった件（2011と2012）",
+  "emotion": "共感",
+  "powerword": "アナログの延長戦",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "テレビが終わった日は2回ある",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "[叫]はぁ!?　2回終わっとるやん、これ"
+        },
+        {
+          "speaker": "himari",
+          "text": "朝から何を数えてるんですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "テレビの話よ。地上アナログ放送が終わった日ね。2011年7月24日、全国で終了って、あの夏はさんざん言われたのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "終わった日が2回ある、って日本語として意味がわからないです"
+        }
+      ],
+      "image_prompt": "abstract living room at dusk, empty wooden TV stand, dust floating in a slanted beam of light, no people, no text, muted nostalgic tones"
+    },
+    {
+      "caption": "全国じゃない全国",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "東日本大震災の被害を受けた岩手・宮城・福島の3県だけね、2012年3月31日まで延期されたの。7月には止めなかったのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "じゃあ2011年のは全国じゃないですよね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "全国や。当時はどこもかしこも全国で終了って言うとったんやから、ワイの中ではそれが全国なんや"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、3県残ってたら全国じゃないです"
+        },
+        {
+          "speaker": "sora",
+          "text": "わたくしはその言い方、悪くないと思うわ。日本にはあの年、全国が二度来た。それだけの話でしょう"
+        }
+      ],
+      "image_prompt": "abstract northeastern coastline shapes on soft paper texture, two overlapping circles of light, no text, no letters, quiet muted palette"
+    },
+    {
+      "caption": "当事者の自分語りが長い",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "ワイは7月24日の夜、実家の居間で正座して、最後まで画面の前におったんや"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "家族全員でテレビの前に集まって、母親が『これで平成のテレビが終わるで』って言うたのは覚えとる。そんで翌年にもう一回終わるって聞いて、ワイだけ卒業式を二回やらされたみたいな気分になったんやで"
+        },
+        {
+          "speaker": "himari",
+          "text": "長い。あと卒業してないですよね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　ワイの思い出に口出すなや、こっちは当事者やぞ──"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、ダメな子ね。二回目の話に入る前から、もう二回目の卒業式で泣いてるじゃない。順番くらい守りなさいな"
+        }
+      ],
+      "image_prompt": "old tatami room at night, low table, flattened floor cushion, warm lamp glow, no people, no text, soft film grain"
+    },
+    {
+      "caption": "締め：8ヶ月遅れの終わり",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "2012年3月31日。年度の最後の日に3県のアナログも止まって、日本はテレビの終わりを、8ヶ月あけて2回に分けて迎えたのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "そこだけ8ヶ月も、まだアナログが映ってたって──"
+        },
+        {
+          "speaker": "sora",
+          "text": "そう。同じ国なのに、テレビが終わった日が二つある。おかしな年よ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "卒業式が終わった体育館で、まだ校歌の練習しとる声が外まで聞こえてくるやろ。あの8ヶ月はな、アナログの延長戦や"
+        }
+      ],
+      "image_prompt": "empty school gymnasium in late afternoon light, open windows, glossy floor reflections, no people, no text, quiet nostalgic atmosphere"
+    }
+  ],
+  "caption": "地上アナログ放送の終了は2011年7月24日。でも岩手・宮城・福島の3県だけは2012年3月31日まで。日本のテレビの終わりは2回に分かれていました。あなたの家は、いつ映らなくなりましたか。",
+  "hashtags": [
+    "#平成",
+    "#アナログ放送",
+    "#地デジ化",
+    "#2011年",
+    "#あったあった"
+  ],
+  "broken_premise": "「全国で終了」の全国が二度来たと押し通す",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "地上アナログテレビ放送は2011年（平成23年）7月24日に全国で終了したが、東",
+  "source_facts": [
+    {
+      "id": "heisei-7684f8e895",
+      "fact": "地上アナログテレビ放送は2011年（平成23年）7月24日に全国で終了したが、東日本大震災の被害を受けた岩手・宮城・福島の被災3県だけは2012年3月31日まで延期され、日本のアナログ停波は「2回」に分かれて完了した。",
+      "backing_url": "https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/h24/pdf/n2030000.pdf",
+      "backing_note": "総務省『平成24年版 情報通信白書』本文PDF（平成24年3月末に被災3県の地上アナログ放送が停波した旨を記載）。あわせて総務省東北総合通信局「地上アナログ放送の終了」（https://www.soumu.go.jp/soutsu/tohoku/digital/decision.html）および『平成22年版 情報通信白書』（https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/h22/html/me522100.html）で2011年7月24日終了を確認。"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "heisei-7684f8e895",
+  "channel": "heisei",
+  "fact": "地上アナログテレビ放送は2011年（平成23年）7月24日に全国で終了したが、東日本大震災の被害を受けた岩手・宮城・福島の被災3県だけは2012年3月31日まで延期され、日本のアナログ停波は「2回」に分かれて完了した。",
+  "discovered_from": "https://www.soumu.go.jp/soutsu/tohoku/digital/decision.html",
+  "backing_url": "https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/h24/pdf/n2030000.pdf",
+  "backing_note": "総務省『平成24年版 情報通信白書』本文PDF（平成24年3月末に被災3県の地上アナログ放送が停波した旨を記載）。あわせて総務省東北総合通信局「地上アナログ放送の終了」（https://www.soumu.go.jp/soutsu/tohoku/digital/decision.html）および『平成22年版 情報通信白書』（https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/h22/html/me522100.html）で2011年7月24日終了を確認。",
+  "fetched_at": "2026-08-10 10:05:21",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-10",
+  "used_at": "2026-08-10"
+}

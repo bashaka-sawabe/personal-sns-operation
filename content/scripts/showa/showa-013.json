@@ -1,0 +1,114 @@
+{
+  "id": "showa-013",
+  "title": "創業3年目、社員11人の要求書を自宅で三日三晩",
+  "emotion": "共感",
+  "powerword": "俺を信じろ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "辞表11枚、社長の家で三日三晩",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "[叫]社長！　我々11名、全員辞めます！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？　いきなり全員なのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "1961年、創業3年目だ。要求書、読んだぞ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "去年入ったばかりの子たちなのだ？"
+        }
+      ],
+      "image_prompt": "1960s Japanese small factory office at dusk, worn wooden desk, a single sheet of paper, warm dim light, no people, no text"
+    },
+    {
+      "caption": "交渉の場を自宅へ移す",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "よし、場所を変える。うちに来い"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "自宅!?　ボクは行きたくないのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "社長、我々が欲しいのは保証の紙で──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "紙は出せん。3年目の会社に10年先の保証を書ける人間がいたらお目にかかりたい。だが俺は逃げん。納得するまで、うちの畳で何日でも話す"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[叫]重いのだ！　今なら一発アウトなのだ！"
+        }
+      ],
+      "image_prompt": "traditional Japanese tatami room at night, low table, teacups, futon folded in corner, single hanging bulb, empty, no people, no text"
+    },
+    {
+      "caption": "三日三晩の結末",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "で、何日かかったのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "三日三晩だ。全員残った"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "三日!?　ボクなら初日の夜に寝るのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、紙より先に要るものがある"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "俺を信じろ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "……社長。分かりました"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは嫌なのだ。でもボクの上司は三分も──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "だろう。理念は、あの畳の上で決まった"
+        }
+      ],
+      "image_prompt": "early morning light through paper sliding door, empty tatami room, tea cups left overnight, faint sunrise glow, no people, no text"
+    }
+  ],
+  "caption": "1961年4月29日、京セラ創業3年目。高卒社員11名の要求書に、稲盛和夫は自宅で三日三晩答えた。今なら考えられない。でも理念はそこで生まれた。",
+  "hashtags": [
+    "#昭和",
+    "#稲盛和夫",
+    "#京セラ",
+    "#働き方",
+    "#寸劇"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "稲盛和夫は京セラ創業3年目の1961年4月29日、前年入社の高卒社員11名から「",
+  "source_facts": [
+    {
+      "id": "showa-475da30972",
+      "fact": "稲盛和夫は京セラ創業3年目の1961年4月29日、前年入社の高卒社員11名から「将来の待遇を保証しなければ全員辞める」という要求書を突きつけられ、交渉の場を自宅にまで移して三日三晩説得し、全員を引き留めた（これが経営理念確立の転換点となった）。",
+      "backing_url": "https://www.kyocera.co.jp/inamori/archive/episode/episode-10.html",
+      "backing_note": "京セラ公式「稲盛和夫オフィシャルサイト／稲盛和夫アーカイブ」エピソード（企業公式一次資料）。補強: https://www.kyocera.co.jp/inamori/library/floor/second/detail02.html（稲盛ライブラリー展示解説）"
+    }
+  ]
+}

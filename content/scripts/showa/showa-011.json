@@ -1,0 +1,110 @@
+{
+  "id": "showa-011",
+  "title": "本田宗一郎のマン島TT宣言 1954年の無茶",
+  "emotion": "呆れ",
+  "powerword": "優勝するために誓う",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "世界一宣言から5年、結果は6位",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "[叫]社長、世界最高峰に出るんですか!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "1954年3月、マン島TTに出る"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、マン島ってどこ？"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "英国の島です。世界一速い連中しか──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "だから出るんだ！"
+        }
+      ],
+      "image_prompt": "vintage 1950s japanese factory interior, rain leaking through corrugated roof, single motorcycle engine on a wooden bench, dim warm light, no people, no text"
+    },
+    {
+      "caption": "誓いの紙を全社員に配る",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ボクは絶対に無理だと思うのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、工場は雨漏りだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "部品も揃わん、金もない。だがな、世界一の連中と同じ土俵に立たんで、日本の機械が良くなるか。俺は誓いを紙に書いて全社員に配った──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ、要点だけ言うのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]TTレースに出場、優勝するために誓う！"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "[小]その紙、もう全員に配りました"
+        }
+      ],
+      "image_prompt": "close-up of an old mimeographed japanese office notice pinned on a wooden wall, blurred illegible ink, 1950s texture, warm dusty light, no readable text, no people"
+    },
+    {
+      "caption": "5年後の結果と、その後",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "1959年6月、初参戦。125ccで6位、7位、8位、11位"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "優勝が無いのだ。ボクなら紙を燃やすのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "バカ野郎、4台が完走した。ここからだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[間]……無茶なのだ。でも5年待った連中が今も世界で走ってるのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "あなたの社長、5年待てるのだ？"
+        }
+      ],
+      "image_prompt": "empty winding coastal road circuit at dawn, stone walls and green hills, faint tire marks on asphalt, misty atmosphere, cinematic, no people, no text"
+    }
+  ],
+  "caption": "1954年3月、雨漏りの工場から世界最高峰へ宣言。5年後の1959年6月、初参戦で125ccクラス6位・7位・8位・11位。今なら考えられない無茶だけど、その5年が今につながっています。",
+  "hashtags": [
+    "#昭和",
+    "#本田宗一郎",
+    "#マン島TT",
+    "#働き方",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "本田宗一郎は1954年3月、二輪世界最高峰のマン島TTレース参戦を宣言し「TTレ",
+  "source_facts": [
+    {
+      "id": "showa-04a9392d37",
+      "fact": "本田宗一郎は1954年3月、二輪世界最高峰のマン島TTレース参戦を宣言し「TTレースに出場、優勝するために、精魂を傾けて創意工夫に努力することを諸君と共に誓う」と表明、5年後の1959年6月のマン島TT初参戦で125ccクラス6位・7位・8位・11位に入った。",
+      "backing_url": "https://global.honda/jp/motorsports/racing-spirit/",
+      "backing_note": "Honda公式「モータースポーツにかける想い」（企業公式一次資料）。補強: https://www.honda.co.jp/50years-history/limitlessdreams/manttraces/page02.html（公式社史『限りない夢、あふれる情熱』）"
+    }
+  ]
+}

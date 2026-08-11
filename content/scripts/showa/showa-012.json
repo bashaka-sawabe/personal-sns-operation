@@ -1,0 +1,110 @@
+{
+  "id": "showa-012",
+  "title": "シャープを作った男が、全部手放した日",
+  "emotion": "切なさ",
+  "powerword": "全部持っていけ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "シャープペンを手放した日",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "早川さん、金は今日返してもらう"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "待ってくれ。工場が焼けて、女房も子も──"
+        },
+        {
+          "speaker": "shishio",
+          "text": "こっちも今日で潰れるんですわ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、昨日9月1日の地震なのだ!?"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[小]……取り立て、早すぎるのだ"
+        }
+      ],
+      "image_prompt": "1923 Tokyo aftermath, collapsed brick workshop smoldering in ash-grey haze, scattered roof tiles, faint dawn light, sepia cinematic tone, no people, no text"
+    },
+    {
+      "caption": "解散と譲渡の啖呵",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "地震の次の日に、借金の話なのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか。早川兄弟商会は今日で解散だ。俺が考えたシャープペンシルも、工場の機械も一式そっくり渡す。寝ずに削って作った物だが、借りた金は借りた金だ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、それ看板商品──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "発明も機械も全部持っていけ"
+        },
+        {
+          "speaker": "shishio",
+          "text": "……ええんですか、それで"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]二人の子も女房も返らねえ。金くらい返させろ！"
+        }
+      ],
+      "image_prompt": "dim old workshop, wooden workbench with metal lathe parts and one mechanical pencil lying alone, dust floating in a single light beam, sepia, symbolic, no people, no text"
+    },
+    {
+      "caption": "身ひとつで大阪へ",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "身ひとつで大阪へ行く。腕は残ってる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクなら三日は布団から出ないのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "なのにこの人、次の朝には歩き出してるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[小]手を止めると、思い出しちまう"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら一発アウトなのだ。……でもボクの筆箱に、まだこの人がいるのだ"
+        }
+      ],
+      "image_prompt": "empty road at dawn heading west, distant factory chimneys on the horizon, warm faint light through haze, sepia symbolic landscape, no people, no text"
+    }
+  ],
+  "caption": "1923年9月1日。工場と家族を失った直後に、発明と機械を全部渡して借金を返し、身ひとつで大阪へ向かった男の話。今なら考えられない、でもこの人がいた。",
+  "hashtags": [
+    "#大正",
+    "#シャープ",
+    "#早川徳次",
+    "#関東大震災",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "シャープ創業者・早川徳次は1923年9月1日の関東大震災で工場と2人の子を失い（",
+  "source_facts": [
+    {
+      "id": "showa-122e62259a",
+      "fact": "シャープ創業者・早川徳次は1923年9月1日の関東大震災で工場と2人の子を失い（妻もやけどで死去）、取引先からの借金返済要求に対し早川兄弟商会を解散、発明したシャープペンシルの事業と機械一式を譲渡して負債処理に充て、身ひとつで大阪へ移った。",
+      "backing_url": "https://corporate.jp.sharp/info/history/voice/year/y06.html",
+      "backing_note": "シャープ公式サイト「創業者 早川徳次／1923年」（企業公式一次資料）"
+    }
+  ]
+}

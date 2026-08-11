@@ -1,0 +1,89 @@
+{
+  "id": "meme-027",
+  "title": "JC質問スレ、気づいたら性癖語りに乗っ取られる",
+  "emotion": "呆れ",
+  "powerword": "義務教育で自動的に",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【完全乗っ取り】JC質問スレ",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "待って。JCって何ですか"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "まずJapaneseは確定ですね"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "え、JCも知らないのだ!?"
+        }
+      ],
+      "image_prompt": "abstract dark blue chatroom glow, floating empty speech bubbles, late night desk lamp, no text, no faces"
+    },
+    {
+      "caption": "話が完全に脇道へ",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "Just Communicationやろ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "違うのだ。ボクは中学生──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "[早]じゃあ質問や。ワイの理想は3割可愛くて7割美人のセミショート、長袖でロングスカート、ワイより4cm高くて、致死量の睡眠薬を用意してくれるヤンデレのお姉さん──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長い！誰も聞いてないのだ"
+        }
+      ],
+      "image_prompt": "abstract night cityscape blurred through window, pink and violet neon haze, empty room, no text, no faces"
+    },
+    {
+      "caption": "仲間が増えて本人は放置",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "実にいい。専用の場を立てますぞ、今から"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "やったな！仲間が増えたぜ！"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "[低]イッチ、なんでJCになったんです"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "義務教育で自動的に"
+        }
+      ],
+      "image_prompt": "abstract quiet school corridor at dusk, empty desks silhouette, soft blue shadow, no text, no faces"
+    }
+  ],
+  "caption": "JCですが質問ありますか！というスレが、いつの間にか一人の理想語りに乗っ取られて専用スレまで生えた話。イッチは最後までド真面目でした。",
+  "hashtags": [
+    "#おーぷん2ちゃんねる",
+    "#ずんだもん",
+    "#スレ立て",
+    "#ネット文化",
+    "#寸劇"
+  ],
+  "broken_premise": "JCになったきっかけを本気で答えさせる",
+  "ochi_type": "generalization",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "JCですが質問ありますか！",
+  "source_thread": {
+    "id": "news4vip-1783516464",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/news4vip/1783516464/",
+    "title": "JCですが質問ありますか！"
+  }
+}

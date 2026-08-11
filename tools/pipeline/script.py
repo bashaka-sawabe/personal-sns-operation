@@ -60,6 +60,23 @@ def _lines_total(cfg: dict) -> str:
     return (cfg.get("style") or {}).get("lines_total", LINES_TOTAL)
 
 
+def _lines_range(cfg: dict) -> tuple:
+    """セリフ総数の下限・上限。`"19〜23"` を (19, 23) にする（#247）。
+
+    テンポは尺ではなく**行数**で決まる。同じ26〜31秒でも12行なら2.4秒/行、
+    21行なら1.4秒/行になる。文章で「19〜23行」と頼むだけでは守られないので
+    `form_issues` が数えて差し戻す（スキーマでは縛れない。上の `_schema` 参照）。
+
+    縛るのは `style.lines_total` を**明示しているチャンネルだけ**。既定値
+    （`LINES_TOTAL`）はプロンプトの目安であって実測値ではなく、`heisei` の
+    「◯選」は31行に達する。測っていない値で差し戻すと、型ではなく事故になる。
+    """
+    nums = re.findall(r"\d+", (cfg.get("style") or {}).get("lines_total", ""))
+    if len(nums) != 2:
+        return ()
+    return int(nums[0]), int(nums[1])
+
+
 def _ronron_form(cfg: dict) -> bool:
     """ロンロン型（docs/02 2-2）を課すチャンネルか。
 
@@ -212,6 +229,9 @@ def _schema(cfg: dict) -> dict:
                                 "required": ["speaker", "text"],
                                 "additionalProperties": False,
                             },
+                            # 行数はここでは縛れない。structured output は配列の
+                            # minItems に 0 と 1 しか許さない（400 が返る・#247 で実測）。
+                            # 合計行数は form_issues が見て差し戻す
                             "description": "1シーンの掛け合い。行数はシーンごとに偏らせる",
                         },
                         "image_prompt": {
@@ -1063,6 +1083,19 @@ def form_issues(script: dict, cfg: dict | None = None) -> list:
             f"セリフが合計{total}字あります（上限{budget}字）。"
             f"{total - budget}字ぶん削ってください。"
             "削るのは短い相槌・説明行で、長回しは残すこと"
+        )
+
+    # テロップのテンポは尺ではなく**行数**で決まる（#247）。同じ28秒でも
+    # 12行なら2.4秒/行、21行なら1.4秒/行。字数上限は別に効いているので、
+    # 行を増やすことは「1行を短くする」ことと同じ意味になる
+    span = _lines_range(cfg)
+    if span and not span[0] <= len(lines) <= span[1]:
+        issues.append(
+            f"セリフが{len(lines)}行です（{span[0]}〜{span[1]}行）。"
+            + (f"{span[0] - len(lines)}行足りません。長い行を切って往復を増やしてください"
+               "（字数を増やすのではなく、1行を短く割る）"
+               if len(lines) < span[0] else
+               f"{len(lines) - span[1]}行多すぎます。相槌を削ってください")
         )
 
     # 寸劇チャンネル（meme / showa）だけ。heisei は「◯選」の列挙型で場面が無く、

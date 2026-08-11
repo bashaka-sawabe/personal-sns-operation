@@ -60,6 +60,16 @@ PUNCH_ZOOM = 1.09      # style.punch_zoom が無いときのフォールバッ�
 PUNCH_FRAMES = 7       # 戻り切るまでのフレーム数（30fpsで約0.23秒）
 SE_VOLUME = 0.55       # ナレーションを塗り潰さない音量
 
+# BGMの敷き方（#256）。ロンロン実測5本は**最後まで音が切れない**（-50dB以下の無音が
+# 0箇所）のに対し、こちらは動画の途中で完全な無音が0.15〜0.35秒できていた（docs/02 2-4）。
+# 原因は2つあり、どちらも下の3定数で潰す:
+#   1. 曲の頭が無音（実測0.38〜0.85秒）＋数秒かけて立ち上がる → 頭を送る
+#   2. ダッキングの復帰が台詞の間（最長0.49秒）より遅く、沈んだBGMが戻らない → 250msにする
+# 値は実測で決めた。変えたら `silencedetect=n=-50dB:d=0.15` が0箇所であることを測り直す
+BGM_VOLUME = 0.30          # ダッキングされていないときのBGMの音量
+BGM_HEAD_TRIM_DB = -35     # これ以下で始まる曲の頭は捨てる（鳴っている所から使う）
+BGM_DUCK_RELEASE = 250     # ダッキングからの復帰(ms)。台詞の間より短くする
+
 # 背景を一定間隔で切り替える演出（#121）。ロンロンの天秤（51.2万）は
 # 背景のハードカット（一定間隔で位置が跳ぶ疑似カット割り）は**復活させないこと**。
 # ロンロンの実測（docs/02 2章）を根拠に入れたが、本人が2度拒否している
@@ -444,8 +454,13 @@ def concat(parts: list, out_path: str, work_dir: str,
         args += [
             *loop, "-i", bgm,
             "-filter_complex",
-            "[1:a]volume=0.25[bgm];"
-            "[bgm][0:a]sidechaincompress=threshold=0.02:ratio=12:attack=40:release=500[duck];"
+            # 曲の頭は無音か、鳴っていても聞こえない立ち上がりで始まる（実測で
+            # 0.38〜0.85秒の完全な無音＋数秒の swell）。そのまま重ねると
+            # **動画の冒頭にBGMが無い**。鳴っているところまで送ってから使う（#256）
+            f"[1:a]silenceremove=start_periods=1:start_threshold={BGM_HEAD_TRIM_DB}dB,"
+            f"volume={BGM_VOLUME}[bgm];"
+            f"[bgm][0:a]sidechaincompress=threshold=0.03:ratio=8:attack=20:"
+            f"release={BGM_DUCK_RELEASE}[duck];"
             f"[0:a][duck]amix=inputs=2:duration=first:normalize=0{fade}[a]",
             "-map", "0:v", "-map", "[a]",
         ]

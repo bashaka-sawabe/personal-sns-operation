@@ -34,6 +34,12 @@ MONOLOGUE_MIN = 60
 FORM_RETRY = 2
 # 声の演出マーカーを付けてよい行数の上限（#213）。効かせどころが1〜2箇所だから効く
 MARKS_MAX = 4
+# タイトルに出してはいけない語（docs/02 1章）。登録者51万のチャンネルでの
+# 使用率は0%で、これを使う従来型のチャンネルは再生数が2桁落ちている。
+# 現状55本すべてで守れているので、これは**守れているものを壊さない**ための検査
+_TITLE_BANNED_BRACKETS = ("【悲報】", "【朗報】", "【速報】", "【衝撃】")
+_TITLE_BANNED_LAUGH = ("www", "ｗｗｗ", "ｗ")
+TITLE_BANNED = _TITLE_BANNED_BRACKETS + ("www",)
 # 割り込みの記法。行末をこれで終えると「言い切る前に次の話者に奪われた」を表す。
 # 音声合成には渡さない（media 側で落とす）が、字幕には残る
 INTERRUPT_MARK = "──"
@@ -69,6 +75,47 @@ FIRST_HAND_SCENE = 4
 PLACEHOLDER = "【要実体験】"
 
 
+def _hook(cfg: dict) -> dict:
+    """このチャンネルのタイトルのフック型（`data/channels/<ch>.json` の `hook`）。
+
+    フックの型はチャンネルごとに実測が違う（docs/02 1章。meme は
+    「【4〜6字の煽り】＋短文」、heisei は「世代の明示＋位」）。コードに埋めると
+    ベンチマークを測り直すたびにコードを触ることになるので設定に置く（#246）。
+
+    `showa` はタイトルの型をまだ実測していない（#152 で測ったのは尺）。
+    未設定のチャンネルは型を課さない——測っていない型を機械に守らせても、
+    根拠のない形に固定されるだけになる。
+    """
+    return cfg.get("hook") or {}
+
+
+def _title_rules(cfg: dict) -> str:
+    """タイトルのフック型をプロンプトに差す（#246）。
+
+    タイトルは**YouTubeの一覧に出る唯一の文字**で、サムネの次に見るかを決める。
+    避ける側（`【悲報】`・`www` を使わない）は守れていたが、乗せる側が
+    実装されていなかった（55本中 `【】` 0本・平均21.5字 vs ロンロン28字）。
+    """
+    hook = _hook(cfg)
+    if not hook:
+        return ""
+    out = ["\n\n**タイトル（title）— YouTubeの一覧に出る唯一の文字。ここで見るか決まります:**",
+           f"参照ベンチマーク: {hook['benchmark']}", f"- {hook['rule']}。"]
+    if hook.get("bracket"):
+        lo, hi = hook["bracket"]
+        out.append(f"- **先頭は必ず `【】`** で始め、中は{lo}〜{hi}字の名詞句にする。"
+                   "状態を言い切る語（盲点／説得力／大誤算／総ツッコミ／完全論破 など）。")
+    for group in hook.get("must_include", []):
+        out.append(f"- **「{'」か「'.join(group.split('|'))}」を必ず入れる。**")
+    if hook.get("chars"):
+        lo, hi = hook["chars"]
+        out.append(f"- 全体で{lo}〜{hi}字（短いと素通りされ、長いと一覧で切られます）。")
+    out.append(f"- **{'・'.join(TITLE_BANNED)} は使わない。**"
+               "登録者51万のチャンネルでの使用率は0%で、使う従来型は再生数が2桁落ちています。")
+    out.append("- 良い例:\n" + "\n".join(f"    {e}" for e in hook.get("examples", [])))
+    return "\n".join(out)
+
+
 def _allowed_speakers(cfg: dict) -> list:
     """この台本で使える話者。主役＋（寸劇を許すチャンネルなら）脇役。
 
@@ -84,10 +131,22 @@ def _allowed_speakers(cfg: dict) -> list:
 def _schema(cfg: dict) -> dict:
     """台本のJSONスキーマ。話者はこのチャンネルで使える声に限定する。"""
     speakers = _allowed_speakers(cfg)
+    hook = _hook(cfg)
+    # 字数は文章で頼まず**スキーマで縛る**（#246）。「28字くらい」と書いても
+    # 平均21.5字にしかならなかった。数の制約は構造で持たせないと守られない
+    lo, hi = hook.get("chars", [0, 40])
+    title = {
+        "type": "string",
+        "maxLength": hi,
+        "description": (f"YouTubeに出るタイトル。{lo}〜{hi}字" if lo
+                        else "社内管理用のタイトル。40字以内"),
+    }
+    if lo:
+        title["minLength"] = lo
     schema = {
         "type": "object",
         "properties": {
-            "title": {"type": "string", "description": "社内管理用のタイトル。40字以内"},
+            "title": title,
             "emotion": {
                 "type": "string",
                 "enum": ["笑い", "切なさ", "呆れ", "共感", "怒り"],
@@ -773,7 +832,9 @@ def _system(cfg: dict) -> str:
 教える側のセリフに1本あたりちょうど1回、「このチャンネルの中の人（一人社長）」への
 言及を入れてください。例: 「このチャンネルの中の人は、実際は…」。
 2回以上入れると宣伝臭くなるので、必ず1回だけにします。"""
-    return base
+    # フックの型は最後に置く。前の指示に埋もれさせない（タイトルは
+    # 一覧で見るかどうかを決める唯一の文字で、ここが弱いと中身が見られない）
+    return base + _title_rules(cfg)
 
 
 def validate(script: dict) -> None:
@@ -919,6 +980,64 @@ def has_onomatopoeia(lines: list) -> bool:
                for text in lines for seg in _SEGMENTS.split(text))
 
 
+_TITLE_BRACKET = re.compile(r"^【([^【】]*)】")
+
+
+def title_issues(title: str, cfg: dict) -> list:
+    """タイトルがチャンネルのフック型から外れていないか（#246）。
+
+    避ける側（`【悲報】`・`www`）はどのチャンネルでも見る。乗せる側は
+    実測のあるチャンネル（`hook` を持つもの）だけに課す。
+    """
+    title = (title or "").strip()
+    if not title:
+        return ["title が空です"]
+    issues = []
+    for word in _TITLE_BANNED_BRACKETS + _TITLE_BANNED_LAUGH:
+        if word in title:
+            issues.append(
+                f"タイトルに「{word}」が入っています。"
+                "登録者51万のチャンネルでの使用率は0%で、使う型は再生数が2桁落ちています"
+            )
+            break
+
+    hook = _hook(cfg)
+    if not hook:
+        return issues
+
+    bracket = hook.get("bracket")
+    if bracket:
+        m = _TITLE_BRACKET.match(title)
+        lo, hi = bracket
+        if not m:
+            issues.append(
+                f"タイトルが `【…】` で始まっていません（「{title}」）。"
+                f"読後感を{lo}〜{hi}字の名詞句で言い切った煽りを先頭に置いてください"
+                "（内容の要約ではありません）"
+            )
+        elif not lo <= len(m.group(1)) <= hi:
+            issues.append(
+                f"タイトル先頭の【{m.group(1)}】が{len(m.group(1))}字です（{lo}〜{hi}字）。"
+                "状態を言い切る名詞句にしてください"
+            )
+
+    for group in hook.get("must_include", []):
+        if not any(word in title for word in group.split("|")):
+            issues.append(
+                f"タイトルに「{'」か「'.join(group.split('|'))}」が入っていません"
+                f"（「{title}」）。{hook['rule']}"
+            )
+
+    if hook.get("chars"):
+        lo, hi = hook["chars"]
+        if not lo <= len(title) <= hi:
+            issues.append(
+                f"タイトルが{len(title)}字です（{lo}〜{hi}字）。"
+                "短いと一覧で素通りされ、長いと途中で切られます"
+            )
+    return issues
+
+
 def form_issues(script: dict, cfg: dict | None = None) -> list:
     """型が壊れていて**作り直すべき**箇所を返す（#212）。
 
@@ -932,10 +1051,10 @@ def form_issues(script: dict, cfg: dict | None = None) -> list:
     raw = [l["text"] for s in script.get("scenes", []) for l in s.get("dialogue", [])]
     if not raw:
         return []
+    issues = title_issues(script.get("title", ""), cfg)
     # 演出マーカー（#213）は読み上げにも字幕にも出ないので、字数にも数えない
     marks_per_line = [split_voice_marks(t) for t in raw]
     lines = [t for _, t in marks_per_line]
-    issues = []
 
     budget = (cfg.get("style") or {}).get("max_chars", 0)
     total = sum(len(t) for t in lines)

@@ -58,6 +58,18 @@ SCENE_TAIL = 0.15      # シーン末尾の余白。読み終わり即カット�
 SE_DIR = os.path.join(ASSETS_DIR, "se")
 
 STOCK_DIR = os.path.join(ASSETS_DIR, "stock")
+
+# ---- 素材の明滅検査（#261） ----
+# チカチカは「見るのが疲れる」で3度指摘されている。3度目は素材そのものが原因だったので、
+# 演出（#177 #203）だけでなく取得段階でも弾く。閾値はキャッシュ44本の実測で決めた:
+#   明滅する素材  6.7 / 17.3 / 19.2 / 21.1 回/秒
+#   正常な素材    最大でも 0.40 回/秒
+# 6倍以上開いているので 1.0 に置く。誤検出（正常素材を弾いて画が枯れる）を避ける側に倒した
+FLICKER_MAX = 1.0      # これ以上なら採用しない（回/秒）
+FLICKER_AMP = 2.0      # 明滅とみなす輝度振幅。これ未満は圧縮ノイズとして無視する
+FLICKER_FPS = 30       # 検査時のサンプリング。素材の実fpsに依らず揃える
+FLICKER_PROBE_SEC = 20  # 冒頭何秒を測るか。全長を測っても判定は変わらず、時間だけ延びる
+
 PEXELS_SEARCH = "https://api.pexels.com/videos/search"
 # Openverse はサインアップ不要（Pexelsに登録できない環境のための本命。#50）。
 # CC0/パブリックドメインに絞れば帰属表示も不要になる
@@ -276,6 +288,76 @@ def _stock_query(image_prompt: str) -> str:
     return " ".join(words[:4])
 
 
+def flicker_rate(path: str, seconds: float = FLICKER_PROBE_SEC) -> float:
+    """映像の明滅の激しさを「1秒あたりの明滅回数」で返す。
+
+    背景のチカチカは3度再発している（#177 ズーム振動 → #203 ハードカット全廃 → #261）。
+    3度目は演出ではなく**素材そのもの**が原因で、溶接の火花のように光源が明滅している
+    映像を引いていた。検索語を消して回るのは追いつかない（キャッシュ40本を測ったら
+    別に3本見つかった）ので、docs/09 4-9 の禁止事項をここで機械的に守らせる。
+
+    測り方は、フレームごとの平均輝度 YAVG の差分の**符号反転**を数える。
+    単調な明転・暗転（日の出、カメラのパン）は反転しないので拾わず、
+    往復する明滅だけが残る。振幅の下限を置くのは、圧縮ノイズを明滅と呼ばないため。
+    """
+    out = os.path.join(
+        STOCK_DIR, "_flicker_" + hashlib.sha1(path.encode()).hexdigest()[:12] + ".txt")
+    try:
+        ffmpeg([
+            "-nostdin", "-t", f"{seconds:g}", "-i", path,
+            "-vf", f"fps={FLICKER_FPS},signalstats,"
+                   f"metadata=print:key=lavfi.signalstats.YAVG:file={out}",
+            "-f", "null", "-",
+        ])
+        with open(out, encoding="utf-8") as fp:
+            y = [float(m) for m in re.findall(r"YAVG=([0-9.]+)", fp.read())]
+    except (PipelineError, OSError, ValueError):
+        # 測れないものを弾くと素材が枯れる。判定不能は「明滅なし」に倒す
+        return 0.0
+    finally:
+        if os.path.exists(out):
+            os.remove(out)
+
+    if len(y) < FLICKER_FPS:   # 1秒に満たない素材は割り算が暴れるので測らない
+        return 0.0
+    d = [y[i + 1] - y[i] for i in range(len(y) - 1)]
+    blinks = sum(
+        1 for i in range(1, len(d))
+        if d[i - 1] * d[i] < 0 and max(abs(d[i - 1]), abs(d[i])) >= FLICKER_AMP
+    )
+    return blinks / (len(y) / FLICKER_FPS)
+
+
+def _flicker_sidecar(cached: str) -> str:
+    """素材ごとの明滅の実測値を置く場所。
+
+    毎回測ると日次実行が素材の本数ぶん延びるので、1度測ったら使い回す。
+    **素材が消えてもサイドカーは残す**。これが「前に弾いた検索語」の記録になり、
+    同じ素材を毎日落とし直しては弾く無駄を防ぐ。
+    """
+    return cached + ".flicker"
+
+
+def _flicker_ok(cached: str, query: str) -> bool:
+    """キャッシュ済みの素材が明滅検査を通るか。未測定なら測って記録する。
+
+    検査の導入前に落とした素材が210本あり、抜き取り44本のうち4本が明滅していた。
+    ここで測り直さないと、既にキャッシュにある明滅素材が使われ続ける。
+    """
+    side = _flicker_sidecar(cached)
+    try:
+        rate = float(open(side, encoding="utf-8").read().split("\t")[0])
+    except (OSError, ValueError, IndexError):
+        rate = flicker_rate(cached)
+        with open(side, "w", encoding="utf-8") as fp:
+            fp.write(f"{rate:.2f}\t{query}\n")
+    if rate >= FLICKER_MAX:
+        print(f"  明滅が強いので不採用（{query}: {rate:.1f}回/秒）", file=sys.stderr)
+        os.remove(cached)   # サイドカーだけ残せば、次回は落とし直さずに済む
+        return False
+    return True
+
+
 def _pick_video_file(video: dict) -> dict | None:
     """縦動画で1080x1920を賄える最小のファイルを選ぶ（帯域と画質のバランス）。"""
     files = [
@@ -293,13 +375,18 @@ def stock_background(image_prompt: str, api_key: str) -> str | None:
 
     検索の質はOpenverseより高いが、「題材は合っているがトーンが違う」「暗すぎて画に
     ならない」は検索語では防げない。Openverseと同じ目視選別を通す（#83）。
+
+    明滅する素材は静止画のプレビューでは見分けられない（溶接の火花は1枚絵だと綺麗に写る）。
+    落としてから実際に測って弾く（#261）。
     """
     query = _stock_query(image_prompt)
     if not query:
         return None
     cached = os.path.join(STOCK_DIR, hashlib.sha1(query.encode()).hexdigest()[:16] + ".mp4")
     if os.path.exists(cached):
-        return cached
+        return cached if _flicker_ok(cached, query) else None
+    if os.path.exists(_flicker_sidecar(cached)):
+        return None   # 前に明滅で弾いた検索語。落とし直さず次の検索語へ譲る
 
     try:
         q = urllib.parse.urlencode({
@@ -319,8 +406,18 @@ def stock_background(image_prompt: str, api_key: str) -> str | None:
         f = _pick_video_file(chosen["video"])
         os.makedirs(STOCK_DIR, exist_ok=True)
         data = _http(f["link"], timeout=120)
-        with open(cached, "wb") as fp:
+        # 検査に落ちたものを cached の名前で置くと、次回キャッシュヒットで素通りする
+        staging = cached + ".part"
+        with open(staging, "wb") as fp:
             fp.write(data)
+        rate = flicker_rate(staging)
+        with open(_flicker_sidecar(cached), "w", encoding="utf-8") as fp:
+            fp.write(f"{rate:.2f}\t{query}\n")
+        if rate >= FLICKER_MAX:
+            os.remove(staging)
+            print(f"  明滅が強いので不採用（{query}: {rate:.1f}回/秒）", file=sys.stderr)
+            return None
+        os.replace(staging, cached)
         return cached
     except (OSError, ValueError) as e:
         print(f"  ストック映像の取得に失敗（{query}）: {e}", file=sys.stderr)

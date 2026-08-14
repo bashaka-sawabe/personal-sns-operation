@@ -65,10 +65,11 @@ STOCK_DIR = os.path.join(ASSETS_DIR, "stock")
 #   明滅する素材  6.7 / 17.3 / 19.2 / 21.1 回/秒
 #   正常な素材    最大でも 0.40 回/秒
 # 6倍以上開いているので 1.0 に置く。誤検出（正常素材を弾いて画が枯れる）を避ける側に倒した
-FLICKER_MAX = 1.0      # これ以上なら採用しない（回/秒）
+FLICKER_MAX = 1.0      # これ以上なら採用しない（回/秒）。完成動画の判定にも同じ値を使う
 FLICKER_AMP = 2.0      # 明滅とみなす輝度振幅。これ未満は圧縮ノイズとして無視する
 FLICKER_FPS = 30       # 検査時のサンプリング。素材の実fpsに依らず揃える
 FLICKER_PROBE_SEC = 20  # 冒頭何秒を測るか。全長を測っても判定は変わらず、時間だけ延びる
+FLICKER_WINDOW_SEC = 10  # 完成動画を測る窓（#264）。短いと正常な動画の字幕切替が窓を埋める
 
 PEXELS_SEARCH = "https://api.pexels.com/videos/search"
 # Openverse はサインアップ不要（Pexelsに登録できない環境のための本命。#50）。
@@ -288,44 +289,89 @@ def _stock_query(image_prompt: str) -> str:
     return " ".join(words[:4])
 
 
+def _yavg_series(path: str, seconds: float | None) -> list:
+    """フレームごとの平均輝度 YAVG を FLICKER_FPS で拾う。測れなければ空を返す。
+
+    seconds に None を渡すと全長を測る。ffmpeg を1回しか叩かないので、
+    窓ごとの走査（flicker_peak）もこの1本の系列を切り直して済ませる。
+    """
+    # 素材を1本も落としていない実行（--offline・完成動画だけの検査）でも書き込めるようにする
+    os.makedirs(STOCK_DIR, exist_ok=True)
+    out = os.path.join(
+        STOCK_DIR, "_flicker_" + hashlib.sha1(path.encode()).hexdigest()[:12] + ".txt")
+    try:
+        ffmpeg([
+            "-nostdin", *(["-t", f"{seconds:g}"] if seconds is not None else []), "-i", path,
+            "-vf", f"fps={FLICKER_FPS},signalstats,"
+                   f"metadata=print:key=lavfi.signalstats.YAVG:file={out}",
+            "-f", "null", "-",
+        ])
+        with open(out, encoding="utf-8") as fp:
+            return [float(m) for m in re.findall(r"YAVG=([0-9.]+)", fp.read())]
+    except (PipelineError, OSError, ValueError):
+        # 測れないものを弾くと素材が枯れる。判定不能は「明滅なし」に倒す
+        return []
+    finally:
+        if os.path.exists(out):
+            os.remove(out)
+
+
+def _blink_frames(y: list) -> list:
+    """明滅とみなしたフレームの位置を返す。**明滅の定義はここだけに置く。**
+
+    平均輝度 YAVG の差分の**符号反転**を数える。単調な明転・暗転（日の出、カメラのパン）は
+    反転しないので拾わず、往復する明滅だけが残る。振幅の下限を置くのは、
+    圧縮ノイズを明滅と呼ばないため。
+    """
+    d = [y[i + 1] - y[i] for i in range(len(y) - 1)]
+    return [i for i in range(1, len(d))
+            if d[i - 1] * d[i] < 0 and max(abs(d[i - 1]), abs(d[i])) >= FLICKER_AMP]
+
+
 def flicker_rate(path: str, seconds: float = FLICKER_PROBE_SEC) -> float:
-    """映像の明滅の激しさを「1秒あたりの明滅回数」で返す。
+    """素材の明滅の激しさを「1秒あたりの明滅回数」で返す。
 
     背景のチカチカは3度再発している（#177 ズーム振動 → #203 ハードカット全廃 → #261）。
     3度目は演出ではなく**素材そのもの**が原因で、溶接の火花のように光源が明滅している
     映像を引いていた。検索語を消して回るのは追いつかない（キャッシュ40本を測ったら
     別に3本見つかった）ので、docs/09 4-9 の禁止事項をここで機械的に守らせる。
 
-    測り方は、フレームごとの平均輝度 YAVG の差分の**符号反転**を数える。
-    単調な明転・暗転（日の出、カメラのパン）は反転しないので拾わず、
-    往復する明滅だけが残る。振幅の下限を置くのは、圧縮ノイズを明滅と呼ばないため。
+    冒頭だけを見る前提なのは、素材が数秒〜十数秒の単一カットだから。
+    完成した動画は場面ごとに素材が違うので flicker_peak を使う。
     """
-    out = os.path.join(
-        STOCK_DIR, "_flicker_" + hashlib.sha1(path.encode()).hexdigest()[:12] + ".txt")
-    try:
-        ffmpeg([
-            "-nostdin", "-t", f"{seconds:g}", "-i", path,
-            "-vf", f"fps={FLICKER_FPS},signalstats,"
-                   f"metadata=print:key=lavfi.signalstats.YAVG:file={out}",
-            "-f", "null", "-",
-        ])
-        with open(out, encoding="utf-8") as fp:
-            y = [float(m) for m in re.findall(r"YAVG=([0-9.]+)", fp.read())]
-    except (PipelineError, OSError, ValueError):
-        # 測れないものを弾くと素材が枯れる。判定不能は「明滅なし」に倒す
-        return 0.0
-    finally:
-        if os.path.exists(out):
-            os.remove(out)
-
+    y = _yavg_series(path, seconds)
     if len(y) < FLICKER_FPS:   # 1秒に満たない素材は割り算が暴れるので測らない
         return 0.0
-    d = [y[i + 1] - y[i] for i in range(len(y) - 1)]
-    blinks = sum(
-        1 for i in range(1, len(d))
-        if d[i - 1] * d[i] < 0 and max(abs(d[i - 1]), abs(d[i])) >= FLICKER_AMP
-    )
-    return blinks / (len(y) / FLICKER_FPS)
+    return len(_blink_frames(y)) / (len(y) / FLICKER_FPS)
+
+
+def flicker_peak(path: str) -> tuple[float, float]:
+    """完成した動画の全長を走査し、一番明滅している窓の (開始秒, 回/秒) を返す。
+
+    **全長の平均では見つからない。** 1シーンだけ明滅していても長さで割ると薄まる。
+    実測（#264）で heisei-021（95秒）は全長 0.58回/秒、heisei-012 は 0.83回/秒 と
+    どちらも閾値を下回るのに、区間で見れば 3.8 / 4.7回/秒 明滅していた。
+    見る側が疲れるのは平均ではなく区間なので、窓の最悪値で判定する。
+
+    窓の長さは既存32本の実測で決めた（窓10秒での最悪値）:
+
+        明滅していた showa-007〜014 / heisei-012・014・021   3.8〜20.6回/秒
+        現行の showa-015〜020 / heisei-016〜024 / meme       最大でも 0.6回/秒
+
+    5秒窓だと正常な meme-020 が 1.0回/秒 ちょうどに達して閾値と並ぶ。
+    字幕の切り替えが窓に対して相対的に重くなるためで、10秒に伸ばすと 0.6 に落ちる。
+    閾値は素材と同じ FLICKER_MAX を使う（判定基準を2箇所に持たない）。
+    """
+    y = _yavg_series(path, None)
+    if len(y) < FLICKER_FPS:
+        return 0.0, 0.0
+    blinks = _blink_frames(y)
+    win = min(int(FLICKER_WINDOW_SEC * FLICKER_FPS), len(y))
+    # 1秒ずつずらす。最後の窓が末尾に届くよう、開始位置は len(y) - win まで取る
+    starts = range(0, max(1, len(y) - win + 1), FLICKER_FPS)
+    count = {s: sum(1 for i in blinks if s <= i < s + win) for s in starts}
+    worst = max(count, key=lambda s: (count[s], -s))   # 同数なら先に出る方を指す
+    return worst / FLICKER_FPS, count[worst] / (win / FLICKER_FPS)
 
 
 def _flicker_sidecar(cached: str) -> str:

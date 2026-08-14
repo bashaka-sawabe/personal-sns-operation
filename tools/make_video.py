@@ -75,6 +75,21 @@ def warn_flat_dialogue(data: dict, cfg: dict | None = None) -> None:
         print(f"  ⚠️ 会話が平坦です: {issue}", file=sys.stderr)
 
 
+def flicker_issue(out_path: str) -> str:
+    """完成した動画が明滅していたら、その内容を一行で返す（問題なければ空文字）。
+
+    素材の取得時にも同じ検査をしている（media.stock_background・#261）が、
+    **入り口が1つとは限らない。** 背景を生成AIに替えれば素材の検査は通らなくなり（#35）、
+    render.py を触れば演出側から明滅が戻る（#177 のズーム振動が実際そうだった）。
+    チカチカは3度別の入り口から再発しているので、原因がどこでも必ず通る
+    「出来上がった mp4 そのもの」で測る。
+    """
+    at, rate = media.flicker_peak(out_path)
+    if rate < media.FLICKER_MAX:
+        return ""
+    return f"明滅 {rate:.1f}回/秒（{at:.0f}秒付近）"
+
+
 def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
     script_mod.validate(data)  # 旧形式（ナレーション形式）はここで明確に落とす
     channel = data.get("channel") or data.get("genre") or ""
@@ -97,10 +112,20 @@ def build_from_script(data: dict, script_id: str, offline: bool = False) -> str:
     print(f"  合成中（尺 {total:.1f}秒{'・BGMあり' if bgm else '・BGMなし'}）...")
     render.build(scenes, out_path, asset_dir, bgm=bgm, style=style,
                  powerword=data.get("powerword", ""))
+    flicker = flicker_issue(out_path)
     # 行が無ければここで作る。作らないと、自動生成した動画が台帳に載らないまま
     # 投稿・公開予約まで進み、公開を止める --unreserve が効かなくなる（#243）
-    if status_mod.ensure(script_id, channel, "rendered"):
+    # 明滅で落とす場合も、行だけは残して理由を書く（後から「なぜ出さなかったか」を読める）
+    if status_mod.ensure(script_id, channel, "rendered", note=flicker or None):
         print(f"  台帳: {script_id} を rendered に更新しました")
+    if flicker:
+        # ここで落とすと daily_run は**この1本だけ**を投稿せず次の本へ進む（#242）。
+        # mp4 は消さずに残す。目で確かめないと素材と演出のどちらが原因か分からない
+        raise PipelineError(
+            f"完成した動画がチカチカしています（{flicker}）。投稿しません。\n"
+            f"  {os.path.relpath(out_path)} の該当箇所を見て、"
+            f"背景素材（台本の image_prompt）か演出（render.py）を直してから作り直してください。"
+        )
     return out_path
 
 

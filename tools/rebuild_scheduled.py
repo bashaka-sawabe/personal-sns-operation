@@ -37,6 +37,12 @@ from tools.pipeline.common import OUT_DIR, PipelineError
 # 進捗つきの差し替え計画。ledger（.published_youtube.json）と同じく実行時の状態なのでgit外
 PLAN = os.path.join(OUT_DIR, ".reschedule_plan.json")
 
+# 台帳に残す理由の既定値。以前は「新演出で作り直し（#208）」を焼き込んでいたが、
+# この道具は理由を問わず使うので、実際は別件（#261 のチカチカ）で差し替えた6本まで
+# #208 として記録されてしまった。既定は**確実に真であること**だけを書き、
+# 理由は --reason で呼び出し側が渡す
+DEFAULT_REASON = "作り直したmp4で差し替え"
+
 
 def load_plan() -> list[dict]:
     if os.path.exists(PLAN):
@@ -190,7 +196,7 @@ def upload_replacement(entry: dict) -> str | None:
     return res["id"]
 
 
-def run() -> None:
+def run(reason: str = DEFAULT_REASON) -> None:
     plan = load_plan()
     todo = pending(plan)
     if not todo:
@@ -230,7 +236,7 @@ def run() -> None:
                                  "replaced": entry["old_id"]}
         yt.save_ledger(ledger)
         status_mod.advance(entry["stem"], "posted", url=url,
-                           note=f"新演出で作り直し・{entry['publish_at']}公開予約（#208）")
+                           note=f"{reason}・{entry['publish_at']}公開予約")
         print(f"  {entry['stem']}: {url} を {entry['publish_at']} で予約しました")
 
     remain = pending(plan)
@@ -245,6 +251,8 @@ def main() -> None:
     g.add_argument("--scan", action="store_true", help="予約中の動画から差し替え計画を作る")
     g.add_argument("--run", action="store_true", help="計画を実行する（冪等）")
     g.add_argument("--status", action="store_true", help="計画の進捗を表示する")
+    p.add_argument("--reason", default=DEFAULT_REASON,
+                   help="台帳に残す差し替えの理由（既定: 差し替えた事実だけを書く）")
     args = p.parse_args()
     try:
         if args.scan:
@@ -252,7 +260,7 @@ def main() -> None:
         elif args.status:
             show_status()
         else:
-            run()
+            run(args.reason)
     except PipelineError as e:
         sys.exit(f"エラー: {e}")
 

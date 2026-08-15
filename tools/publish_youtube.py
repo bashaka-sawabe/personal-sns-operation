@@ -52,6 +52,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from tools.pipeline import (
     channels as channels_mod,
+    media as media_mod,
     schedule as schedule_mod,
     script as script_mod,
     status as status_mod,
@@ -228,6 +229,32 @@ def blocking_reason(script: dict | None) -> str | None:
     )
 
 
+# 明滅の実測はフレームを全部デコードするので安くない。同じ動画を2度測らない
+# （投稿ループで1回・upload の最終確認で1回、同じ結果を使う）
+_flicker_cache: dict[str, str | None] = {}
+
+
+def flicker_reason(video_path: str) -> str | None:
+    """チカチカする動画かを判定する。問題なければ None。
+
+    生成時にも同じ検査をしている（make_video.flicker_issue・#264）が、
+    **生成を通らない動画がある。** 検査を入れる前に焼いた mp4、`rebuild_scheduled.py` の
+    差し替え、手元の mp4 の直接投稿はどれも素通りする。実際 heisei-021（3.8回/秒）は
+    生成時の検査より前に焼かれ、公開まで行った（#267）。
+
+    `blocking_reason` と同じ理由でここに置く: **生成時の警告は素通りできるが、
+    投稿は取り消せない。** 台本が無い旧世代の動画にも効く（mp4 そのものを測るため）。
+    """
+    if video_path not in _flicker_cache:
+        at, rate = media_mod.flicker_peak(video_path)
+        _flicker_cache[video_path] = None if rate < media_mod.FLICKER_MAX else (
+            f"チカチカしています（明滅 {rate:.1f}回/秒・{at:.0f}秒付近）。"
+            "背景素材か演出を直して make_video.py --from-script で作り直してから"
+            "投稿してください。"
+        )
+    return _flicker_cache[video_path]
+
+
 def channel_title(service) -> str:
     """トークンが実際に紐づいているチャンネル名。投稿先の取り違えを見えるようにする。"""
     _, _, _, _, HttpError, _ = _imports()
@@ -244,7 +271,7 @@ def upload(video_path: str, script: dict | None, privacy: str, interactive: bool
     if not os.path.exists(video_path):
         raise PipelineError(f"動画が見つかりません: {video_path}")
     # 呼び出し側の事前チェックを信用しない。投稿は取り消せないので最後にもう一度見る
-    reason = blocking_reason(script)
+    reason = blocking_reason(script) or flicker_reason(video_path)
     if reason:
         raise PipelineError(f"{os.path.basename(video_path)}: {reason}")
 
@@ -914,7 +941,7 @@ def main() -> None:
             if not os.path.exists(path):
                 raise PipelineError(f"動画が見つかりません: {path}")
 
-            reason = blocking_reason(script)
+            reason = blocking_reason(script) or flicker_reason(path)
             if reason:
                 # --all は1本の未記入で残りを道連れにしない。末尾にまとめて報告する
                 if args.all:

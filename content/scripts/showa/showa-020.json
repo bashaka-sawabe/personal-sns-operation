@@ -1,0 +1,106 @@
+{
+  "id": "showa-020",
+  "title": "昭和4年、10万ポンドの契約が値切られた日",
+  "emotion": "呆れ",
+  "powerword": "減らすのは金だけだ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "昭和4年、英国に特許を売った男",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]待つのだ、日本人が英国に特許を売るのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "昭和4年12月21日、俺は英国のプラット社に杼換式自動織機の特許を譲った"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "杼換式……噛むのだ。ボクは売らない派なのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]売って世界に認めさせるんだ！"
+        }
+      ],
+      "image_prompt": "1920s ocean liner departing a misty harbor at dawn, silhouette of smokestacks, cold blue sea, no people, no text, cinematic"
+    },
+    {
+      "caption": "契約は総額10万ポンド・4回払い",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "総額10万ポンド、毎年2万5,000ポンドの4回払いで"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "冷蔵庫と同じ払い方なのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、契約書に判を押した時、俺は震えたんだ。親父が命を削って作った織機が、本家の英国に認められた。金の話じゃない。俺は船の上で──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ。3行でまとめるのだ"
+        }
+      ],
+      "image_prompt": "vintage industrial loom in a dim textile mill, cotton threads in shafts of light, sepia tones, no people, no text"
+    },
+    {
+      "caption": "5年後、残金が減額される",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "で、10万ポンドは入ったのだ？"
+        },
+        {
+          "speaker": "shishio",
+          "text": "[低]残り6万1,500ポンドは、4万5,000ポンドに──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？1万6,500ポンド消えたのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[間]ドン"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "昭和9年7月、俺は判を押した。減らすのは金だけだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "で、この人が後に始めたのが自動車"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら一発アウト。でも羨ましいのだ"
+        }
+      ],
+      "image_prompt": "old contract paper with a red seal stamp on a dark wooden desk, 1930s office lamp glow, shallow depth of field, no faces, no readable text"
+    }
+  ],
+  "caption": "昭和4年、豊田喜一郎が英プラット社と結んだ10万ポンドの特許契約。5年後に残金は減額され、総額8万3,500ポンドで決済された。この判の後に、あの事業が始まる。",
+  "hashtags": [
+    "#昭和",
+    "#豊田喜一郎",
+    "#トヨタ",
+    "#働き方",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "豊田喜一郎は1929年（昭和4年）12月21日に渡英して英プラット社と杼換式自動",
+  "source_facts": [
+    {
+      "id": "showa-6cdfa70043",
+      "fact": "豊田喜一郎は1929年（昭和4年）12月21日に渡英して英プラット社と杼換式自動織機の特許権譲渡契約を締結し、総額10万ポンドを毎年2万5,000ポンドずつ4回払いとする条件だったが、最終的に1934年7月に未払い6万1,500ポンドを4万5,000ポンドへ減額して決済され、総額8万3,500ポンドとなった。",
+      "backing_url": "https://www.toyota.co.jp/jpn/company/history/75years/text/taking_on_the_automotive_business/chapter1/section4/item2.html",
+      "backing_note": "トヨタ自動車 公式社史『トヨタ自動車75年史』第1部第1章第4節第2項「プラット社との特許権譲渡契約」（企業公式）"
+    }
+  ]
+}

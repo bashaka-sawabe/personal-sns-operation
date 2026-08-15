@@ -1,0 +1,126 @@
+{
+  "id": "heisei-020",
+  "title": "1985年生まれ位が初めて改札にかざした日",
+  "emotion": "笑い",
+  "powerword": "非接触って言葉が悪い",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "非接触を信じすぎた改札の朝",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "[叫]はぁ!?　アタシはポスターの通りにやっただけよ！"
+        },
+        {
+          "speaker": "sora",
+          "text": "2001年11月18日の日曜日。リツさんが改札で駅員さんに手を掴まれた日の話よ。"
+        },
+        {
+          "speaker": "himari",
+          "text": "止められた側の人が朝からキレてるの、初めて見ましたけど。"
+        }
+      ],
+      "image_prompt": "abstract empty station ticket gate at early morning, soft warm light, blurred bokeh, no people, no text, no logos, nostalgic film grain"
+    },
+    {
+      "caption": "デビュー初日の触れ込み",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "その日、SuicaがJR東日本でデビューしたの。切符も買わない、財布からも出さない、改札にかざすだけで通れる。当時はもう魔法みたいな話だったのよ。"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "そう、その『かざす』よ。そこが罠なの。非接触って書いてある以上──"
+        },
+        {
+          "speaker": "himari",
+          "text": "罠って言われても、わたし毎朝かざしてますけど。"
+        },
+        {
+          "speaker": "sora",
+          "text": "駅のポスターに『非接触ICカード乗車券』って大きく出てたの。リツさん、その『非接触』の三文字だけ、やたら真面目に読んだのよね。"
+        }
+      ],
+      "image_prompt": "abstract station corridor with blank poster panels, no text, cool fluorescent light, distant blurred silhouettes, early 2000s atmosphere"
+    },
+    {
+      "caption": "三センチの攻防、山場",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えておかしいですよね。かざすって書いてあるんだから、当てればいいじゃないですか。"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "おかしくないわよ。アタシは改札の三センチ上でカードを水平に保って、指一本触れないよう腕だけ動かして通ったの。後ろに七人並んでたけど、非接触って書いてある以上、触れたら反応しないと思うじゃない。"
+        },
+        {
+          "speaker": "sora",
+          "text": "[小]三回やっても鳴らなかったのよ。ピピッとも言わない改札の前で、真顔で腕を上下させてるおばさんが一人。日曜の朝にね。"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "四回目でよ、駅員さんが走ってきて、アタシの手を掴んで──"
+        },
+        {
+          "speaker": "himari",
+          "text": "[早]それ、駅員さんの方が正しいですって。"
+        }
+      ],
+      "image_prompt": "close abstract view of a card hovering above a gate reader, shallow depth of field, blue indicator glow, no text, no logos"
+    },
+    {
+      "caption": "ピピッで全部許した",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "その駅員さん、笑いもせずに『そっと当てて大丈夫です』って。デビュー初日だもの、戸惑ってたのはリツさんだけじゃなかったでしょうね。"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "……ピピッ。"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "通ったわよ。あの音、悔しいけど気持ちよかったわ。"
+        },
+        {
+          "speaker": "himari",
+          "text": "ピピッで機嫌直るの、ちょっと草なんですけど。"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、じゃあ誰が悪かったのかしらね。"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "アタシじゃないわ。非接触って言葉が悪いのよ。"
+        }
+      ],
+      "image_prompt": "warm nostalgic dusk light over an abstract ticket gate lane, soft reflections on floor, empty, no people, no text, no logos, gentle film grain"
+    }
+  ],
+  "caption": "2001年11月18日、Suicaデビューの日曜日。かざすだけって言われても、最初の一回は改札の前で固まってた。あなたの初めての一回はどうでした？",
+  "hashtags": [
+    "#平成",
+    "#Suica",
+    "#2001年",
+    "#あったあった",
+    "#懐かしい"
+  ],
+  "broken_premise": "「非接触」を触れたら無効の意味だと信じ切る",
+  "ochi_type": "generalization",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "JR東日本の非接触ICカード乗車券「Suica」は、平成13年（2001年）11",
+  "source_facts": [
+    {
+      "id": "heisei-3ff97b1e4a",
+      "fact": "JR東日本の非接触ICカード乗車券「Suica」は、平成13年（2001年）11月18日（日）にサービスを開始した。",
+      "backing_url": "https://www.jreast.co.jp/press/2001_1/20010904/",
+      "backing_note": "JR東日本 公式プレスリリース（2001年9月4日付、表題『2001年11月18日（日）「Suica（スイカ）」デビュー！』）"
+    }
+  ]
+}

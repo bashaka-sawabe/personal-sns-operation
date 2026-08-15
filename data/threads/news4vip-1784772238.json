@@ -48,5 +48,8 @@
     }
   ],
   "fetched_at": "2026-08-10 10:01:32",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 8,
+  "ronron_premise": "",
+  "ronron_reason": "短い相槌の羅列。素材量が足りない"
 }

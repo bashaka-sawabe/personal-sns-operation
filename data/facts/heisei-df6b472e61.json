@@ -1,0 +1,12 @@
+{
+  "id": "heisei-df6b472e61",
+  "channel": "heisei",
+  "fact": "東京ディズニーシーは2001年（平成13年）9月4日に開園し、2016年9月4日に開園15周年を迎えた。",
+  "discovered_from": "https://www.tokyodisneyresort.jp/tdrblog/detail/190904/",
+  "backing_url": "https://www.tokyodisneyresort.jp/tdrblog/detail/pr160904/",
+  "backing_note": "東京ディズニーリゾート公式ブログ（オリエンタルランド）の「本日9月4日（日）、東京ディズニーシーは開園15周年を迎えました！」記事",
+  "fetched_at": "2026-08-15 15:31:09",
+  "status": "adopted",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-15"
+}

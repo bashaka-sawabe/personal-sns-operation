@@ -1,0 +1,13 @@
+{
+  "id": "heisei-0766627fac",
+  "channel": "heisei",
+  "fact": "500円硬貨は平成11年（1999年）の偽造・変造貨急増を受け、平成12年（2000年）に材質を白銅からニッケル黄銅へ変更した2代目が発行開始され、大量生産型貨幣として世界初の「斜めギザ」と潜像加工が採用された。",
+  "discovered_from": "https://www.mof.go.jp/policy/currency/fake_money/500yen/index.html",
+  "backing_url": "https://www.mof.go.jp/policy/currency/fake_money/500yen/500gizoubousi.pdf",
+  "backing_note": "財務省「新500円貨の偽造防止」PDF（斜めギザ・潜像加工・微細点加工）。発行年は財務省ページ https://www.mof.go.jp/policy/currency/fake_money/500yen/index.html 、材質変更の経緯は財務省広報誌『ファイナンス』2012年8月号 https://www.mof.go.jp/policy/currency/link/201208c.pdf",
+  "fetched_at": "2026-08-13 10:08:48",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-13",
+  "used_at": "2026-08-13"
+}

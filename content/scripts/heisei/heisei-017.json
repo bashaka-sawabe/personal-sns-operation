@@ -1,0 +1,126 @@
+{
+  "id": "heisei-017",
+  "title": "1985年生まれ位が最初に差し替えた平成の機械",
+  "emotion": "共感",
+  "powerword": "カチッ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "電源入れる前が本番だった",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "は？　平成が始まった年に、もう発売されてたんですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "1989年の4月21日よ。任天堂のゲームボーイ。ソフトを差し替えて遊べる携帯型のゲーム機が、元号が変わって三ヶ月後に来たの"
+        },
+        {
+          "speaker": "himari",
+          "text": "平成が始まってすぐ、手のひらに来てたんですね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　平成の話じゃないだろ。あれはな、電源入れる前が本番なんだよ。差し替えが本番"
+        }
+      ],
+      "image_prompt": "still life of an anonymous grey plastic handheld device shape lying on a wooden desk in a late-1980s Japanese living room, warm evening lamp light, dust in the air, no text, no logos, no people"
+    },
+    {
+      "caption": "差し替えそのものが遊びだと押し通す",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "差し替えが本番って、どういう意味ですか"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[早]ゲームの方じゃない。アンタ今聞いただろ、差し替えて遊べる機械だって。差し替えて、遊べるんだよ。つまり抜いて差す行為そのものが遊びとして認められてんの。画面が映る前から、もう遊びは始まってるんだよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "だからワイは日曜の朝、持ってる分を机に並べて、順番に抜いて差して──"
+        },
+        {
+          "speaker": "himari",
+          "text": "それ、朝から一本も起動してないじゃないですか"
+        }
+      ],
+      "image_prompt": "macro shot of several blank unlabeled plastic game cartridges lined up neatly on a school desk, morning sunbeam, floating dust, shallow depth of field, no text, no logos, no people"
+    },
+    {
+      "caption": "儀式派と作業派で意見が割れる",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "わたくしはね、あの儀式、悪くないと思うわ。焦らされてる時間って、案外いちばん濃いのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、あれはどう考えてもただの入れ替え作業です"
+        },
+        {
+          "speaker": "sora",
+          "text": "一台の機械が、ソフトを替えるだけで何本分にもなるのよ。平成元年に、子どもがそれを手のひらで持ち歩いてたの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "シャッ。……ほら、指が今でも勝手に動くんだよ。三十年以上経ってもこれだよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "音の話に寄ってますよね。わたしが聞きたかったのは──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　音が全部だろ"
+        }
+      ],
+      "image_prompt": "empty tatami room at dusk, thin curtain moving, low table with a small rectangular plastic object shape, soft blue light, nostalgic quiet mood, no text, no logos, no people"
+    },
+    {
+      "caption": "手間が消えた今との落差で締める",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "今はもう、押したら十秒で始まりますよ。ソフトを差し替える手間、まるごと消えました"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[低]知らん。十秒で始まる遊びなんか知らん。あの抜いた時のシャッと、入った時の手応えが全部なんだよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "……わたし、旅行の前の日に荷物を三回詰め直します。あれと同じ気持ちなら、ちょっと分かります"
+        },
+        {
+          "speaker": "sora",
+          "text": "[間]そう、あのカチッはね、遠足の前の日にリュックの中身を全部出して、入れ直して、結局同じ並びに戻す、あの意味のない幸せの音なのよ"
+        }
+      ],
+      "image_prompt": "open desk drawer at night, a modern glowing smartphone beside an old grey handheld device silhouette, single warm lamp, soft shadows, quiet nostalgic mood, no text, no logos, no people"
+    }
+  ],
+  "caption": "1989年4月21日、任天堂のゲームボーイ発売。ソフトを差し替えて遊べる携帯型。あの抜き差しの手応え、覚えてる人いますか。",
+  "hashtags": [
+    "#平成レトロ",
+    "#ゲームボーイ",
+    "#平成元年",
+    "#あったあった",
+    "#懐かしい"
+  ],
+  "broken_premise": "「差し替えて遊べる」を差し替え自体が遊びだと押し通す",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "ゲームボーイは平成元年の1989年4月21日に任天堂が発売した、ソフトを差し替え",
+  "source_facts": [
+    {
+      "id": "heisei-48f92292b0",
+      "fact": "ゲームボーイは平成元年の1989年4月21日に任天堂が発売した、ソフトを差し替えて遊べる携帯型ゲーム機だった。",
+      "backing_url": "https://www.nikkei.com/article/DGKKZO85882540Q5A420C1KB2000/",
+      "backing_note": "日本経済新聞の記事に「1989年4月21日『ゲームボーイ』発売」と発売日が明記（信頼できる一次報道）"
+    }
+  ]
+}

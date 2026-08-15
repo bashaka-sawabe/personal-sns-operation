@@ -1,0 +1,13 @@
+{
+  "id": "heisei-48f92292b0",
+  "channel": "heisei",
+  "fact": "ゲームボーイは平成元年の1989年4月21日に任天堂が発売した、ソフトを差し替えて遊べる携帯型ゲーム機だった。",
+  "discovered_from": "https://game.watch.impress.co.jp/docs/news/1320082.html",
+  "backing_url": "https://www.nikkei.com/article/DGKKZO85882540Q5A420C1KB2000/",
+  "backing_note": "日本経済新聞の記事に「1989年4月21日『ゲームボーイ』発売」と発売日が明記（信頼できる一次報道）",
+  "fetched_at": "2026-08-12 10:04:07",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-12",
+  "used_at": "2026-08-12"
+}

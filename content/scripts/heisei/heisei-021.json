@@ -1,0 +1,126 @@
+{
+  "id": "heisei-021",
+  "title": "1983年生まれ位が覚えてる1円玉だらけの年",
+  "emotion": "共感",
+  "powerword": "23億枚",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "平成元年、1円玉が倍になった",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "は？　1円玉が1年で倍に増えた年があるって、そんなことあり得るんですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "あるのよ。平成元年。1989年に造られた1円玉ね、その前の年の倍近くあるの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "知らん。1円は1円やろ。何枚あろうが1円や"
+        }
+      ],
+      "image_prompt": "a huge pile of small aluminum coins glittering under warm indoor light, shallow depth of field, no text, no logos, no people, nostalgic late-1980s Japanese atmosphere"
+    },
+    {
+      "caption": "理由は消費税3%の端数",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "なんでその年だけ──"
+        },
+        {
+          "speaker": "sora",
+          "text": "消費税。3%が始まったのが1989年の4月なの。それまで100円で買えていたものが、レジで103円。世の中が一斉に、端数を払うための1円玉を欲しがったのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "あー……たった3円のために"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "アンタ、あの頃のレジの列見たことないやろ。全員が財布の底ほじって1円玉探して、レジのお姉ちゃんの指先も真っ黒やったんやで"
+        },
+        {
+          "speaker": "sora",
+          "text": "チャリン、チャリン、チャリン。……あれが平成最初のレジの音よ"
+        }
+      ],
+      "image_prompt": "vintage cash register on a shop counter, coins scattered beside it, soft evening light, retro Japanese shop interior, no text, no logos, no people"
+    },
+    {
+      "caption": "財布が重かった話でキレる",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "ワイの財布な、あの年から底に1円玉が溜まる一方でな"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "買い物一回で3円、4円って戻ってくるやろ。毎回レジの前でチャリン、チャリン言わせて数えて、後ろのおっちゃんに舌打ちされて──"
+        },
+        {
+          "speaker": "himari",
+          "text": "長いです。要するに、不便だったんですよね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　不便ちゃうわ！　あれは日本人全員の小銭の修行やったんや！"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら。わたくしは、あの重い財布、嫌いじゃなかったわ。ジャラジャラ鳴る音の大きさで、今月使いすぎたかが分かったんだもの"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、私は無理です。1円玉って、今はもう募金箱に入れる存在ですよ"
+        }
+      ],
+      "image_prompt": "an old worn leather wallet lying open with coins spilling out onto a wooden table, warm nostalgic lighting, no text, no logos, no people"
+    },
+    {
+      "caption": "数字で見ると本当に1.9倍",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "造幣局の記録に残っているの。昭和63年が約12億6904万枚、平成元年が約23億6697万枚。気分の話じゃなくて、ちゃんと1.9倍なのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "国が1年で1円玉を倍刷ったって、地味に大事件ですよね。誰も騒がなかったんですね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "せやから言うたやろ、最初から。平成っちゅう時代は1円玉から始まったんや"
+        },
+        {
+          "speaker": "sora",
+          "text": "レジの前で財布の底をかき回して、1円玉が4枚チャリンと鳴るまでの、あの数秒の焦り。あれが23億枚ぶん、日本中で起きてたのよ"
+        }
+      ],
+      "image_prompt": "macro shot of stacked aluminum one-yen coins on a pale desk, soft daylight, archival document paper blurred in background, no readable text, no logos, no people"
+    }
+  ],
+  "caption": "平成元年、1円玉の製造枚数が前年の約1.9倍に急増。消費税3%が始まった年のレジ前、財布の底で鳴っていた小銭の音を覚えている人はけっこう多いはず。あなたの財布はどうでした？",
+  "hashtags": [
+    "#平成",
+    "#平成元年",
+    "#1円玉",
+    "#懐かしい",
+    "#昭和生まれ"
+  ],
+  "broken_premise": "1円玉の急増を平成の勢いだと言い張る",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "消費税3%が導入された平成元年（1989年）の1円アルミニウム貨幣の製造枚数は2",
+  "source_facts": [
+    {
+      "id": "heisei-76da19a874",
+      "fact": "消費税3%が導入された平成元年（1989年）の1円アルミニウム貨幣の製造枚数は2,366,970千枚（約23億6,697万枚）で、昭和63年の1,269,042千枚（約12億6,904万枚）の約1.9倍に急増した。",
+      "backing_url": "https://www.mint.go.jp/media/2021/02/nenmeibetsuR2.pdf",
+      "backing_note": "独立行政法人造幣局「年銘別貨幣製造枚数」（単位：千枚、昭和23年〜令和2年）"
+    }
+  ]
+}

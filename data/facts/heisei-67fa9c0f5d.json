@@ -1,0 +1,13 @@
+{
+  "id": "heisei-67fa9c0f5d",
+  "channel": "heisei",
+  "fact": "NTT東西の深夜23時〜翌朝8時の定額サービス「テレホーダイ」は1995年に始まり、固定電話網のIP化に伴い2023年12月31日、約28年の歴史に幕を下ろした。",
+  "discovered_from": "https://pc.watch.impress.co.jp/docs/news/1535496.html",
+  "backing_url": "https://www.itmedia.co.jp/pcuser/articles/2309/30/news065.html",
+  "backing_note": "ITmedia PC USERの報道。NTT東日本・西日本が新規受付を9月30日で終了し、2023年12月31日にサービス終息すると伝える一次報道",
+  "fetched_at": "2026-08-12 10:04:07",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-12",
+  "used_at": "2026-08-12"
+}

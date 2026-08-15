@@ -1,0 +1,13 @@
+{
+  "id": "heisei-76da19a874",
+  "channel": "heisei",
+  "fact": "消費税3%が導入された平成元年（1989年）の1円アルミニウム貨幣の製造枚数は2,366,970千枚（約23億6,697万枚）で、昭和63年の1,269,042千枚（約12億6,904万枚）の約1.9倍に急増した。",
+  "discovered_from": "https://okbizcs.okwave.jp/money/qa/q10166662.html",
+  "backing_url": "https://www.mint.go.jp/media/2021/02/nenmeibetsuR2.pdf",
+  "backing_note": "独立行政法人造幣局「年銘別貨幣製造枚数」（単位：千枚、昭和23年〜令和2年）",
+  "fetched_at": "2026-08-13 10:08:48",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-13",
+  "used_at": "2026-08-13"
+}

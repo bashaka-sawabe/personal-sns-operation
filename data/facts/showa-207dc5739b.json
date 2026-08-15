@@ -1,0 +1,13 @@
+{
+  "id": "showa-207dc5739b",
+  "channel": "showa",
+  "fact": "豊田喜一郎は1949年12月23日に労働組合と「人員整理は絶対に行わない」との覚書を結んだが、資金繰り悪化で1950年4月に1,600名の人員整理を提案せざるを得なくなり、争議終結5日前の1950年6月5日、副社長・常務とともに責任を取って社長を辞任した。",
+  "discovered_from": "https://www.toyota.co.jp/jpn/company/history/75years/data/company_information/personnel/labor-management_relations/outline.html",
+  "backing_url": "https://www.toyota.co.jp/jpn/company/history/75years/text/taking_on_the_automotive_business/chapter2/section6/item6_d.html",
+  "backing_note": "企業公式一次資料「トヨタ自動車75年史」本文（辞任日・退職者2,146名・残留者5,994名まで記載）",
+  "fetched_at": "2026-08-12 10:07:20",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-12",
+  "used_at": "2026-08-12"
+}

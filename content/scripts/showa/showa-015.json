@@ -1,0 +1,110 @@
+{
+  "id": "showa-015",
+  "title": "電力の鬼・松永安左ェ門 76％値上げの啖呵",
+  "emotion": "呆れ",
+  "powerword": "電力の鬼",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "電気代76％上げろと叫んだ男",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]は？　電気代を76％上げるのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "昭和26年、九つの電力会社が揃ってそう申請してきた"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクなら電気消すのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "消せ。それでも足りん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、足りんって何の話なのだ"
+        }
+      ],
+      "image_prompt": "Vintage 1950s Japanese electric power lines silhouetted against a smoky dusk sky, wooden utility poles, faded sepia tone, no people, no text"
+    },
+    {
+      "caption": "世論の猛反発と、長い言い訳",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "松永さん、新聞も国会も反対です！　街の声も値上げ反対で──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "承知だ。それでも上げる"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、戦争で焼けた発電所も送電線も、まだ半分は死んだままだ。今の値段では誰も直せん。10年、20年を見通せば、日本の復興にどうしても必要な銭で──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ！　二行にまとめるのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは10年後より今月の電気代が大事なのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[低]俺は10年後の日本を取る"
+        }
+      ],
+      "image_prompt": "Old ruined concrete power station and broken transmission towers in postwar Japan, grey overcast sky, weeds growing, documentary photo style, no people, no text"
+    },
+    {
+      "caption": "鬼と呼ばれた男の一言",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "ドンッ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]電力の鬼と呼べ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら一発アウトなのだ。世論全部を敵にする値上げ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[小]鬼で構わん。灯りが点けばいい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……その灯りで、ボクは今夜も動画を見てるのだ"
+        }
+      ],
+      "image_prompt": "A single bare incandescent bulb glowing warmly in a dark tatami room, faint dust in the air, nostalgic showa atmosphere, no people, no text"
+    }
+  ],
+  "caption": "昭和26年、電気代76％値上げを世論の猛反発の中で押し通そうとした男。呼ばれた名は「電力の鬼」。今なら一発アウト、でもその灯りは今も点いている。",
+  "hashtags": [
+    "#昭和",
+    "#電力の鬼",
+    "#松永安左ェ門",
+    "#昭和の働き方",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "松永安左ェ門は昭和26年（1951年）、発足直後の民営九電力体制の電気料金適正価",
+  "source_facts": [
+    {
+      "id": "showa-9c07fcedae",
+      "fact": "松永安左ェ門は昭和26年（1951年）、発足直後の民営九電力体制の電気料金適正価格算出にあたり、各電力会社が求めた76％値上げを世論の猛反発の中で「日本復興のため10年、20年を見通せば必要」と主張し、この時に「電力の鬼」と呼ばれた。",
+      "backing_url": "https://criepi.denken.or.jp/intro/founding_story4.html",
+      "backing_note": "電力中央研究所（松永が創設・第2代理事長を務めた研究機関）公式サイトの創設者記録"
+    }
+  ]
+}

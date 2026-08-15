@@ -120,7 +120,11 @@ def ensure(video_id: str, channel: str, status: str, url: str | None = None,
 def _write(fields: list, rows: list) -> None:
     tmp = STATUS_CSV + ".tmp"
     with open(tmp, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fields)
+        # csv の既定（excel方言）は行終端が CRLF。1行直すだけでファイル全体が
+        # CRLF になり、LF でコミットされている台帳との差分が**毎回全行**に出る。
+        # 台帳は人が読んでレビューするもの（docs/06 5章）なので、
+        # どの行が動いたか読めなくなるのは困る（#269）
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     os.replace(tmp, STATUS_CSV)  # 書き途中で落ちても台帳を壊さない

@@ -24,6 +24,9 @@
     # 予約カレンダーを見る
     .venv/bin/python tools/publish_youtube.py --slots
 
+    # 出てしまったものを取り下げる（限定公開に落とす。公開された事実は消えない）
+    .venv/bin/python tools/publish_youtube.py --unpublish heisei-021 --reason "明滅（#264）"
+
 なぜYouTubeを入れるか（docs/09 6章）:
 - Shortsのエンゲージメント率はTikTokの約2倍と報告されている
 - YouTubeは検索エンジンでもあるため、IG/TikTokと違い**投稿の寿命が長い**。
@@ -725,7 +728,7 @@ def unreserve(video_ids: list[str], dry_run: bool = False) -> None:
             status_mod.advance(vid, "measuring")
             raise PipelineError(
                 f"{vid} はすでに公開済みです（予約時刻を過ぎています）。予約解除ではもう戻せません。\n"
-                "本当に取り下げるなら YouTube Studio で限定公開に落としてください"
+                f"本当に取り下げるなら --unpublish {vid} --reason \"理由\" を使ってください"
                 "（公開された事実は消えません）。"
             )
         if not current.get("publishAt"):
@@ -749,6 +752,57 @@ def unreserve(video_ids: list[str], dry_run: bool = False) -> None:
             save_ledger(ledger)
         status_mod.advance(vid, "posted", note="公開予約を解除・限定公開のまま（#237）")
         print(f"予約解除: {vid}  {row['url']}")
+
+
+def unpublish(video_ids: list[str], reason: str, dry_run: bool = False) -> None:
+    """公開済みの動画を限定公開に落とす＝取り下げる（#267）。
+
+    `--unreserve` は公開済みを明確に拒む。予約解除のつもりで取り下げが起きるのを
+    防ぐためで、その判断は正しい。だが「出してはいけないものが出てしまった」ときに
+    受け皿が無く、YouTube Studio で手で落とすと**台帳と実態がずれる**
+    （台帳は measuring のまま＝公開中に見える）。取り下げも道具の側に持つ。
+
+    **公開された事実は消えない。** 消えるのは「今後それが見られること」だけなので、
+    理由を必ず書かせ、台帳にも残す。実際 heisei-021 は明滅（3.8回/秒）に気づいたのが
+    公開時刻の後で、これが要った。
+    """
+    if not reason.strip():
+        raise PipelineError("--reason に取り下げの理由を書いてください（台帳に残ります）。")
+    _, rows = status_mod.load()
+    if not rows:
+        raise PipelineError(f"台帳がありません: {status_mod.STATUS_CSV}")
+    for vid in video_ids:
+        row = next((r for r in rows if r.get("video_id") == vid), None)
+        if row is None:
+            raise PipelineError(f"台帳に {vid} がありません。video_id を確認してください。")
+        if not row.get("url"):
+            raise PipelineError(f"{vid} に投稿URLが記録されていません。台帳を確認してください。")
+        channel = row.get("channel") or ""
+        yt_id = row["url"].rstrip("/").rsplit("/", 1)[-1]
+        current = _youtube_status(channel, yt_id)
+        if current.get("privacyStatus") != "public":
+            # 予約中のものをここで落とすと、枠を空けずに予約だけ消える。--unreserve の仕事
+            print(f"公開されていないので何もしません（{current.get('privacyStatus')}）: {vid}"
+                  f"{'（予約中。外すなら --unreserve）' if current.get('publishAt') else ''}")
+            continue
+        if dry_run:
+            print(f"取り下げ予定: {vid} ({channel}) 公開 → 限定公開  {row['url']}")
+            continue
+        _set_status(channel, yt_id, {
+            "privacyStatus": "unlisted",
+            "selfDeclaredMadeForKids": False,
+        }, f"{vid} の取り下げ")
+        ledger = load_ledger()
+        name = _ledger_name_for(vid)
+        if name:
+            entry = {**ledger[name], "privacy": "unlisted"}
+            entry.pop("publish_at", None)
+            ledger[name] = entry
+            save_ledger(ledger)
+        # measuring（公開中で計測対象）から posted（投稿済み・未公開）へ戻す。
+        # 数字を取る対象から外さないと、伸びない行として週次レビューに出続ける
+        status_mod.revert(vid, "posted", f"公開を取り下げ・限定公開に戻した（{reason}）")
+        print(f"取り下げ: {vid}  {row['url']}")
 
 
 def main() -> None:
@@ -777,6 +831,10 @@ def main() -> None:
                    help="投稿済みの動画を次の空き枠で公開予約に切り替える")
     p.add_argument("--unreserve", nargs="+", metavar="video_id",
                    help="公開予約を外して限定公開に戻す")
+    p.add_argument("--unpublish", nargs="+", metavar="video_id",
+                   help="公開済みの動画を限定公開に落とす＝取り下げる（--reason が要る）")
+    p.add_argument("--reason", default="",
+                   help="--unpublish で台帳に残す取り下げの理由")
     p.add_argument("--as", dest="as_channel", metavar="ch",
                    help="どのチャンネルとして扱うか（girls / biz / meme）。"
                         "投稿時は台本から自動で決まるので、--auth などで使う")
@@ -812,6 +870,10 @@ def main() -> None:
 
         if args.unreserve:
             unreserve(args.unreserve, dry_run=args.dry_run)
+            return
+
+        if args.unpublish:
+            unpublish(args.unpublish, args.reason, dry_run=args.dry_run)
             return
 
         description = args.description

@@ -71,6 +71,27 @@ def advance(video_id: str, status: str, url: str | None = None,
     return True
 
 
+def revert(video_id: str, status: str, note: str) -> bool:
+    """台帳を**意図して**前の状態に戻す（公開の取り下げ。#267）。
+
+    `advance` が後戻りを拒むのは、作り直しで `posted` の行が `rendered` に落ちると
+    公開済みかどうかが台帳から読めなくなるからで、後戻り自体が禁じ手なわけではない。
+    公開を取り下げたときは**実態が本当に戻る**ので、台帳も戻さないと嘘になる。
+
+    間違って呼ばれても気づけるよう、理由（note）は省略できない。
+    """
+    fields, rows = load()
+    target = next((r for r in rows if r.get("video_id") == video_id), None)
+    if target is None:
+        return False
+
+    target["status"] = status
+    target["updated"] = datetime.date.today().isoformat()
+    target["note"] = note
+    _write(fields, rows)
+    return True
+
+
 def ensure(video_id: str, channel: str, status: str, url: str | None = None,
            note: str | None = None) -> bool:
     """行が無ければ作り、あれば `advance` と同じに進める（#243）。

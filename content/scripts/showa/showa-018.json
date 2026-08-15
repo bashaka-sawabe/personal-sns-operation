@@ -1,0 +1,114 @@
+{
+  "id": "showa-018",
+  "title": "真珠王・御木本幸吉、真珠を焼く",
+  "emotion": "呆れ",
+  "powerword": "全部焼け",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "昭和7年、真珠を路上で焼いた社長",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "[叫]社長っ、真珠が燃えてます！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "は？ 真珠を燃やすのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "燃やしとるんじゃ、俺がな！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、商工会議所の前で火を──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "見せるために焼くんじゃ！"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "昭和7年、真っ昼間の人だかりの前でな"
+        }
+      ],
+      "image_prompt": "1930s Kobe street, smoke and embers rising from a metal brazier on stone pavement, blurred crowd silhouettes in background, sepia tone, no faces, no text"
+    },
+    {
+      "caption": "部下vs社長、啖呵",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、売れば金になります。安物でも真珠は真珠で──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、俺が海で貝に玉を入れとった頃はな、十年かけて一粒じゃ。それを安物と混ぜて売る奴が出た。日本の真珠は偽物やと世界に言われる。ほんなら俺が、ここでかたをつける"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ。貝から世界に飛んだのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ぱちぱち……ぼうっ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "火柱なのだ!? ボクは止めるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]これは売り物じゃない。全部焼け"
+        }
+      ],
+      "image_prompt": "close view of glowing coals and pale round beads scattered on a hot iron plate, dark smoke, dramatic warm light, cinematic, no people, no text"
+    },
+    {
+      "caption": "呆れと敬意で締める",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "[小]帳簿は、どう書きましょう"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクは嫌なのだ。売ればよかったのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "安物を許したら、百年後が死ぬ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……令和の真珠が信用されてるの、これのせい？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[間]わしは焼いただけじゃ"
+        }
+      ],
+      "image_prompt": "single pearl resting on dark cloth beside faint wisps of smoke, soft window light, quiet still life, muted colors, no people, no text"
+    }
+  ],
+  "caption": "昭和7年、神戸商工会議所前。真珠王・御木本幸吉は自社の粗悪真珠を人前で焼いた。令和なら大騒ぎ、当時は本気。あなたなら売る？ 焼く？",
+  "hashtags": [
+    "#昭和",
+    "#御木本幸吉",
+    "#真珠",
+    "#昭和の経営者",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "「真珠王」御木本幸吉は1932年（昭和7年）、神戸商工会議所前で自社の粗悪真珠を",
+  "source_facts": [
+    {
+      "id": "showa-f486317a3d",
+      "fact": "「真珠王」御木本幸吉は1932年（昭和7年）、神戸商工会議所前で自社の粗悪真珠を焼却した。",
+      "backing_url": "https://www.mikimoto-jf.co.jp/history",
+      "backing_note": "ミキモトグループ公式（株式会社ミキモト装身具）の社史年表。1932年の項に「御木本幸吉、神戸商工会議所前で粗悪真珠を焼却」と明記"
+    }
+  ]
+}

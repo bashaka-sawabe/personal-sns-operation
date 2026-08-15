@@ -1,0 +1,126 @@
+{
+  "id": "heisei-024",
+  "title": "1995年生まれ位が実力だと信じた虫のじゃんけん",
+  "emotion": "笑い",
+  "powerword": "じゃんけんは実力",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "あのじゃんけんは実力だった",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "[叫]はぁ!?　あんなのが運だって？　ふざけんじゃないよ！"
+        },
+        {
+          "speaker": "himari",
+          "text": "え、急になんの話ですか。まだ会議の途中ですけど"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、ごめんなさいね。この人、20年前のじゃんけんで負けたのを、いまだに根に持ってるのよ。休憩のたびにこの話"
+        }
+      ],
+      "image_prompt": "dim game arcade corner at dusk, abstract glow of a cabinet screen, dust in the light beam, no people, no text, no logos, cinematic soft focus"
+    },
+    {
+      "caption": "ムシキングとは何か",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "甲虫王者ムシキング。2003年にセガが出したカードのゲームでね。カードを筐体に通すと画面の甲虫が出てきて、あとはグーチョキパーで技を出し合うの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[小]シャッ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "カードを通す音。あれだけは20年経っても耳に残ってる。ゲーセンの入口で聞こえると足が止まった"
+        }
+      ],
+      "image_prompt": "close-up abstract image of a card slot on a retro arcade machine, blue LED light, glossy plastic surface, no text, no logos, no hands"
+    },
+    {
+      "caption": "読み合いか運かで揉める",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "勝敗がグーチョキパーで決まるって、それはもう、ただのじゃんけん──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ちょっとアンタ！　あたしの前でじゃんけんって言うな！"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "いいか、相手の虫の技を見れば出す手なんてだいたい絞れるんだよ。負けてる子は必殺技に賭けてパー、勝ってる子はグーで守りに入る。あたしは筐体の前で毎回その読み合いをやってたんだ。運で片付けるな"
+        },
+        {
+          "speaker": "himari",
+          "text": "その小学生、そこまで読んでたんですか？"
+        },
+        {
+          "speaker": "sora",
+          "text": "読んでたのよ。カードの出荷はね、2007年11月の時点で4億9,800万枚。それだけの紙が、全国の子どもの手に渡ったの"
+        },
+        {
+          "speaker": "himari",
+          "text": "4億9,800万枚って、もう草しか生えないです。日本の小学生、全員が何十枚も持ってた計算じゃないですか"
+        }
+      ],
+      "image_prompt": "huge abstract pile of blank glossy trading cards spilling across a floor, warm nostalgic light, no illustrations, no text, no logos"
+    },
+    {
+      "caption": "世界記録という落差で締め",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "公式の大会も10万回も開かれてね。2008年には──"
+        },
+        {
+          "speaker": "himari",
+          "text": "[早]待ってください。ギネスとか言わないですよね"
+        },
+        {
+          "speaker": "sora",
+          "text": "ギネス世界記録に認定されたのよ。わたくしはね、あれを実力って呼ぶの、そんなに悪くないと思うわ"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えて運ですよね。三分の一ですよ、それ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "だから読み合いだって言ってんだろ！"
+        },
+        {
+          "speaker": "sora",
+          "text": "[低]あら。あなた今の顔ね、じゃんけんは実力って言い切った小学三年生が、そのまま大人になった顔よ"
+        }
+      ],
+      "image_prompt": "empty tournament stage in a shopping mall event space, folding chairs, spotlight on an empty floor, nostalgic haze, no people, no text, no logos"
+    }
+  ],
+  "caption": "2003年にセガが出した甲虫王者ムシキング。カードは2007年11月時点で4億9,800万枚、公式大会は10万回、2008年にギネス世界記録。あの三択、あなたは何を出す派でした？",
+  "hashtags": [
+    "#平成",
+    "#ムシキング",
+    "#あったあった",
+    "#懐かしい",
+    "#平成レトロ"
+  ],
+  "broken_premise": "じゃんけんは運という前提を実力だと押し通す",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "セガのキッズ向けアーケードカードゲーム『甲虫王者ムシキング』は2003年にリリー",
+  "source_facts": [
+    {
+      "id": "heisei-ed52c0afc8",
+      "fact": "セガのキッズ向けアーケードカードゲーム『甲虫王者ムシキング』は2003年にリリースされ、カードの累計出荷枚数は2007年11月時点で4億9,800万枚、公式大会開催数は10万大会に達し2008年にギネス世界記録に認定された。",
+      "backing_url": "https://www.sega.jp/history/arcade/topics/6625/index.html",
+      "backing_note": "セガ公式「セガ・アーケードゲームヒストリー（2002年〜2009年 カードゲームとネットワークゲーム）」＝メーカー一次情報（補強: 同社製品ページ https://www.sega.jp/history/arcade/product/10974/ にも「2003年から2010年、カード累計4億9,800万枚、公式大会10万大会」の記載）"
+    }
+  ]
+}

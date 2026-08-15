@@ -1,0 +1,13 @@
+{
+  "id": "heisei-06af1d9d53",
+  "channel": "heisei",
+  "fact": "日本の郵便番号が3桁・5桁から現在の7桁になったのは、平成10年（1998年）2月2日からである。",
+  "discovered_from": "https://jiji.com/jc/d4?d=d4_ftee&p=hsm100-jpp00540219",
+  "backing_url": "https://www.post.japanpost.jp/question/36.html",
+  "backing_note": "日本郵便の公式Q&A「郵便番号が7桁になったのはいつからですか？」で平成10年2月2日と明記",
+  "fetched_at": "2026-08-12 10:04:07",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-12",
+  "used_at": "2026-08-12"
+}

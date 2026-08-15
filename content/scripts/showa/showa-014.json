@@ -1,0 +1,118 @@
+{
+  "id": "showa-014",
+  "title": "豊田喜一郎、覚書を破り自ら辞めた話",
+  "emotion": "切なさ",
+  "powerword": "約束を破って社長が残れるか",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "約束を破った社長は、自分を切った",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "は？ 首を切って、自分も辞めた!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]書け！人員整理は絶対に行わない、とな！"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "ドン"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、ボクなら紙には書かないのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "1949年12月23日、組合と交わした覚書だ"
+        }
+      ],
+      "image_prompt": "old Japanese factory office in late 1940s, wooden desk, inkstone and red seal, stacked documents, dim tungsten light, no people, no text, cinematic dusty atmosphere"
+    },
+    {
+      "caption": "4ヶ月後、その紙が牙を剥く",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "で、4ヶ月後になんて言ったのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "……1,600名、整理させてくれ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[叫]半年で破ったのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、車が売れんのだ。手形が回らん、給料も払えん、工場を止めれば全員が路頭に迷う。俺は寝とらん、残る者を守るために──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ。要は約束を破ったのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[小]……そうだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクはそういうの、嫌なのだ"
+        }
+      ],
+      "image_prompt": "empty postwar Japanese automobile assembly line, halted conveyor, unfinished truck frames, scattered papers, cold morning light through broken windows, no people, no text"
+    },
+    {
+      "caption": "辞めたのは社員だけじゃなかった",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "だから1950年6月5日、俺は社長を辞めた。副社長と常務も一緒だ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "え? 辞めるのは社員だけじゃ──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]約束を破って社長が残れるか！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "三人まとめて!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "争議が終わる5日前だ。それが筋だ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら一発アウトなのだ。でもボクの上司は絶対辞めないのだ"
+        }
+      ],
+      "image_prompt": "empty executive chair in a small 1950s Japanese office, open window, curtain moving, faint factory silhouette outside, warm fading light, no people, no text"
+    }
+  ],
+  "caption": "1949年に「人員整理は絶対に行わない」と紙に書いた社長が、翌年その約束を破り、争議終結5日前に自ら社長を辞めた。今なら考えられない責任の取り方。",
+  "hashtags": [
+    "#昭和",
+    "#トヨタ",
+    "#働き方",
+    "#経営者",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "豊田喜一郎は1949年12月23日に労働組合と「人員整理は絶対に行わない」との覚",
+  "source_facts": [
+    {
+      "id": "showa-207dc5739b",
+      "fact": "豊田喜一郎は1949年12月23日に労働組合と「人員整理は絶対に行わない」との覚書を結んだが、資金繰り悪化で1950年4月に1,600名の人員整理を提案せざるを得なくなり、争議終結5日前の1950年6月5日、副社長・常務とともに責任を取って社長を辞任した。",
+      "backing_url": "https://www.toyota.co.jp/jpn/company/history/75years/text/taking_on_the_automotive_business/chapter2/section6/item6_d.html",
+      "backing_note": "企業公式一次資料「トヨタ自動車75年史」本文（辞任日・退職者2,146名・残留者5,994名まで記載）"
+    }
+  ]
+}

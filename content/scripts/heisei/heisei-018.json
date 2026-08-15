@@ -1,0 +1,126 @@
+{
+  "id": "heisei-018",
+  "title": "1985年生まれ位が23時まで待った理由",
+  "emotion": "笑い",
+  "powerword": "23時5分前",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "23時まで待ってから本気出す",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!? 22時58分に繋ぐな言うたやろ！"
+        },
+        {
+          "speaker": "himari",
+          "text": "何ですかその2分。全然意味が分からないです"
+        },
+        {
+          "speaker": "sora",
+          "text": "[小]……あと2分でね、この国の夜が丸ごと安くなるのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "時間で電話代が変わるって、普通に考えておかしいですよね"
+        }
+      ],
+      "image_prompt": "An analog wall clock reading 22:58 in a dim 1990s Japanese living room, warm lamp glow, tatami and low table, nostalgic film grain, no people, no text, no logos"
+    },
+    {
+      "caption": "テレホーダイという夜の制度",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "テレホーダイ。1995年に始まった、夜23時から朝8時までなら電話代が定額になるサービスよ。だから23時が『解禁』なの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "解禁やない、開戦や。23時00分00秒にワイら全国で一斉に繋ぐんやから、混みすぎて繋がらん夜もようあったわ"
+        },
+        {
+          "speaker": "himari",
+          "text": "みんなで同じ時間に押し寄せたら、そりゃ繋がらないですよ。時間ずらす人はいなかったんですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "いないわ、そんな人。22時台に1分繋げば、その1分ぶん料金が乗るのよ"
+        }
+      ],
+      "image_prompt": "Coiled telephone cord and cables on tatami floor at night, faint moonlight through a paper screen, retro Japanese home interior, no people, no text, no logos"
+    },
+    {
+      "caption": "22時40分から正座して待つ",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "わたくしね、22時40分から正座して待つの。送る文章は先に紙に書いておいて、23時ぴったりに流し込むのよ。1秒でも早いと、無駄なお金を払った気がして眠れないの"
+        },
+        {
+          "speaker": "sora",
+          "text": "で、23時00分。ピー、ガー、ヒョロロロ──"
+        },
+        {
+          "speaker": "himari",
+          "text": "[早]待って、今の音こわいです。私は絶対無理ですよ、その我慢は"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "その音で親が起きて『まだ起きとんのか』言われる夜の絶望、アンタには分からん"
+        },
+        {
+          "speaker": "sora",
+          "text": "掲示板に一行書いて、知らない誰かの返事を朝まで待つの。顔も名前も知らない人と、夜だけ同じ部屋にいるような感じよ"
+        }
+      ],
+      "image_prompt": "Small desk lit by a single lamp at midnight, handwritten notes on a notebook, tangled cables, dark window, nostalgic mood, no people, no text, no logos"
+    },
+    {
+      "caption": "28年で幕、そして命名オチ",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "そのテレホーダイね、固定電話の回線が新しい仕組みに変わるのに合わせて、2023年12月31日に、静かに──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "静かに終わらすな！"
+        },
+        {
+          "speaker": "himari",
+          "text": "28年も『夜だけ安い』が続いたんですね。私が生まれる前から、みんな毎晩23時を待ってたんだ"
+        },
+        {
+          "speaker": "himari",
+          "text": "……先輩、その待ってる時間って何だったんですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "23時5分前のあの空気はね、年越しそば茹でながら紅白のラストを待ってる家族の団結と、まったく同じなのよ"
+        }
+      ],
+      "image_prompt": "Empty quiet room at midnight, clock hands near twelve, cool blue light fading into warm memory tones, unplugged cable on the floor, no people, no text, no logos"
+    }
+  ],
+  "caption": "1995年に始まり、2023年12月31日に終わった深夜定額「テレホーダイ」。23時00分00秒に一斉に繋いだあの夜。あなたは何時から待ってましたか。",
+  "hashtags": [
+    "#平成",
+    "#テレホーダイ",
+    "#懐かしい",
+    "#平成生まれ",
+    "#あるある"
+  ],
+  "broken_premise": "23時0分に夜が無料になると全員が信じる",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "NTT東西の深夜23時〜翌朝8時の定額サービス「テレホーダイ」は1995年に始ま",
+  "source_facts": [
+    {
+      "id": "heisei-67fa9c0f5d",
+      "fact": "NTT東西の深夜23時〜翌朝8時の定額サービス「テレホーダイ」は1995年に始まり、固定電話網のIP化に伴い2023年12月31日、約28年の歴史に幕を下ろした。",
+      "backing_url": "https://www.itmedia.co.jp/pcuser/articles/2309/30/news065.html",
+      "backing_note": "ITmedia PC USERの報道。NTT東日本・西日本が新規受付を9月30日で終了し、2023年12月31日にサービス終息すると伝える一次報道"
+    }
+  ]
+}

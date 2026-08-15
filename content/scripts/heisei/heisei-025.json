@@ -1,0 +1,126 @@
+{
+  "id": "heisei-025",
+  "title": "1986年生まれ位がまだ新しいと言う場所",
+  "emotion": "共感",
+  "powerword": "新しい方",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "まだ最近だと思ってる場所",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　だから、あとからできた方だって、さっきから言ってんでしょ！"
+        },
+        {
+          "speaker": "himari",
+          "text": "朝から何と戦ってるんですか、それ"
+        },
+        {
+          "speaker": "sora",
+          "text": "東京ディズニーシーの話。2001年9月4日、平成13年の開園ね。リツさんの中では、いまだに先月あたりの出来事ってことになってるらしいの"
+        },
+        {
+          "speaker": "himari",
+          "text": "2001年って、わたし小学生ですよ。最近って感覚がもう分からないです"
+        }
+      ],
+      "image_prompt": "abstract calm harbor water at dawn, soft ripples, distant pier silhouette, muted teal and warm amber tones, no people, no text, cinematic wide shot"
+    },
+    {
+      "caption": "順番が後なら永遠に新しい理論",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "いい？　ランドが先にあって、海はそのあとにできたの。順番が変わらない以上、こっちはずっとあとの方なの"
+        },
+        {
+          "speaker": "himari",
+          "text": "順番と新しさって、そもそも別の話じゃないですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "わたくしはね、開園の日をちゃんと覚えてるのよ。テレビに海みたいな景色が映って、これが千葉にできたのって、朝からずっと騒いでたもの"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えて、20年以上経ってるものは新しくないですって"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "アンタ、生まれた時からあるでしょ。ある人とできた人じゃ話が違うのよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "学校で誰が最初に行くかで揉めて、行った子が写真持ってきて、教室でぐるぐる回して、順番待ってる間にホームルーム終わったの。あれ、こないだのことなの"
+        }
+      ],
+      "image_prompt": "empty 1990s style classroom desks with a stack of photo prints, afternoon light through windows, dust in air, no people, no text, nostalgic film grain"
+    },
+    {
+      "caption": "15周年がもう10年前",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "ちなみにね、東京ディズニーシーが開園15周年を迎えたのが2016年の9月4日──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　15!?　まだ8年目くらいの気分なんだけど──"
+        },
+        {
+          "speaker": "sora",
+          "text": "公式が『15周年を迎えました』って発表した日よ。しかもそれ、もう10年近く前の話。あなた、年数も周年も二段階でずれてるわ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "……ザッパーン"
+        },
+        {
+          "speaker": "himari",
+          "text": "今、海の音出してごまかしましたよね。効果音で逃げるのずるいです"
+        }
+      ],
+      "image_prompt": "wall calendar pages scattered in dim light, blurred numbers, deep blue shadows, symbolic passage of time, no readable text, no people"
+    },
+    {
+      "caption": "呼び名だけが残る",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "あら、ダメな子ね。都合が悪くなると海の音でごまかすの、平成のころから一つも変わらないわね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "うるさいわね。あそこはまだできたばっかりなの。ランドの方が本店で、海は新館なの"
+        },
+        {
+          "speaker": "himari",
+          "text": "……20年前に建て替えた実家のトイレを、いまだに『新しい方』って呼ぶうちの母と同じ顔してますよ、それ"
+        }
+      ],
+      "image_prompt": "old family house hallway with two doors, one with slightly newer paint, warm dim lamp light, quiet domestic atmosphere, no people, no text"
+    }
+  ],
+  "caption": "東京ディズニーシーは2001年9月4日開園、2016年9月4日に開園15周年。それでも「あとにできた方」と言い張る平成組。あなたの初シーはいつでしたか。",
+  "hashtags": [
+    "#平成",
+    "#ディズニーシー",
+    "#2001年",
+    "#あるある",
+    "#懐かしい"
+  ],
+  "broken_premise": "順番が後なら20年経っても新しい扱い",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "東京ディズニーシーは2001年（平成13年）9月4日に開園し、2016年9月4日",
+  "source_facts": [
+    {
+      "id": "heisei-df6b472e61",
+      "fact": "東京ディズニーシーは2001年（平成13年）9月4日に開園し、2016年9月4日に開園15周年を迎えた。",
+      "backing_url": "https://www.tokyodisneyresort.jp/tdrblog/detail/pr160904/",
+      "backing_note": "東京ディズニーリゾート公式ブログ（オリエンタルランド）の「本日9月4日（日）、東京ディズニーシーは開園15周年を迎えました！」記事"
+    }
+  ]
+}

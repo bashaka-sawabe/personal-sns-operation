@@ -76,5 +76,8 @@
     }
   ],
   "fetched_at": "2026-08-11 10:01:11",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 15,
+  "ronron_premise": "",
+  "ronron_reason": "常連の内輪会話中心。前提の破壊が弱い"
 }

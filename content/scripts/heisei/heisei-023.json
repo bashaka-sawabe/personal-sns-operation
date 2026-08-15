@@ -1,0 +1,126 @@
+{
+  "id": "heisei-023",
+  "title": "1985年生まれ位が並んだ夏の日本一決定戦",
+  "emotion": "共感",
+  "powerword": "頭の中で予選",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "100万人が日本一を目指した平成",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "は？　100万人が日本一を決める大会に出てたって、それ決まらないでしょ"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、おかしいかしら。平成にはね、日本中の子が本気で日本一を取りに行く大会が、ちゃんと毎年あったのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "100万人から1人って、計算する前から無理が──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　ちょっとアンタ、その100万人の1人がワタシだよ。始発で会場の列に並んでたんだ"
+        }
+      ],
+      "image_prompt": "abstract close-up of a dusty cardboard box in a dim closet, soft late-summer light, no text, no logos, no people"
+    },
+    {
+      "caption": "何の大会かを後出しする",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "で、結局なんの大会なんです？"
+        },
+        {
+          "speaker": "sora",
+          "text": "ミニ四駆よ。タミヤ公認の日本一決定戦、ジャパンカップ。始まったのは1988年で、夏になると全国を回っていたの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "電池2本で走る手のひらのマシンだよ。それで大人も子どもも、夏の朝から本気で会場の列に並んでたんだ"
+        },
+        {
+          "speaker": "himari",
+          "text": "模型屋の棚にあるあれで日本一……車が手のひらサイズなのに、競う規模が国なんですね"
+        }
+      ],
+      "image_prompt": "symbolic image of a long winding plastic race track lane curving through empty air, harsh summer sunlight, no text, no people"
+    },
+    {
+      "caption": "休止した12年が山場",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "それがね、1994年から1999年。タミヤが第2次ブームと呼んでるその時期の終わりに、大会は──"
+        },
+        {
+          "speaker": "himari",
+          "text": "止まっちゃったんですか。じゃあその100万人、みんなどこ行ったんですか"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "どこにも行ってないよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ワタシは押し入れの奥に箱ごとしまって、それでも夜中に電池だけ入れて、畳の上を一往復させてたんだよ。競う相手も大会もないのに、タイムだけは毎回ノートの隅に書いてた。0.2秒縮んだ日は普通にうれしいんだ"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、可愛い。わたくしはね、そういう12年の待ち方をした人、悪くないと思うわ"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えておかしいですよね"
+        }
+      ],
+      "image_prompt": "a worn notebook page with faint pencil marks on tatami floor at night, single lamp glow, abstract, no readable text, no people"
+    },
+    {
+      "caption": "2012年の復活で締める",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "そして2012年、ジャパンカップは戻ってきたの。12年ぶりに、同じ名前で、同じ夏に"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "復活の知らせを見た夜、ワタシは押し入れの奥から12年ぶりに、あの箱を引っぱり出したんだよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ぼふっ"
+        },
+        {
+          "speaker": "himari",
+          "text": "それ、閉店した店の前を12年通い続けた人の顔ですよ。大会が無いだけで、頭の中で予選、ずっと終わってなかったんですね"
+        }
+      ],
+      "image_prompt": "dust motes floating in a beam of light as an old lid lifts, warm nostalgic haze, abstract, no text, no logos, no people"
+    }
+  ],
+  "caption": "1988年に始まったミニ四駆ジャパンカップ。第2次ブームの終わりで休止して、2012年に12年ぶりの復活。累計100万人以上が並んだ夏、あなたのマシンはどこにありますか。",
+  "hashtags": [
+    "#平成",
+    "#ミニ四駆",
+    "#ジャパンカップ",
+    "#あったあった",
+    "#昭和から平成"
+  ],
+  "broken_premise": "休止した12年も予選は続いていた扱い",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "タミヤ公認のミニ四駆日本一決定戦「ミニ四駆ジャパンカップ」は1988年にスタート",
+  "source_facts": [
+    {
+      "id": "heisei-d263229fd8",
+      "fact": "タミヤ公認のミニ四駆日本一決定戦「ミニ四駆ジャパンカップ」は1988年にスタートし、第2次ブーム（1994〜1999年）の終焉とともに休止、2012年に12年ぶりに復活するまでに累計100万人以上のミニ四レーサーが参加した。",
+      "backing_url": "https://www.tamiya.com/japan/mini4wd/mini4news_01",
+      "backing_note": "タミヤ公式「ミニ四駆 ジャパンカップヒストリー」＝主催者自身による大会史（第1次ブーム1988〜1993／第2次ブーム1994〜1999／第3次2012〜の区分もタミヤ公式の定義）"
+    }
+  ]
+}

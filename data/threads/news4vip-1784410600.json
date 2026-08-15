@@ -200,5 +200,8 @@
     }
   ],
   "fetched_at": "2026-08-10 10:01:44",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 30,
+  "ronron_premise": "メッシ本人が2ch実況",
+  "ronron_reason": "なりきり途中で実況化。言葉の裏切りは薄い"
 }

@@ -1,0 +1,126 @@
+{
+  "id": "heisei-019",
+  "title": "1985年生まれ位がレジで傾けた500円玉",
+  "emotion": "笑い",
+  "powerword": "ご先祖入ってる",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "500円玉、ご先祖が入ってる説",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "は？　500円玉にご先祖が入ってる？"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "入ってるのよ。斜めに傾けたら、うっすら浮かんでくるでしょうが"
+        },
+        {
+          "speaker": "sora",
+          "text": "……リツさん、それ潜像加工よ。せ・ん・ぞ・う。角度を変えると500の数字が浮かぶ仕掛け"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[叫]はぁ!?　だからご先祖でしょ！　何回言わせるのアンタ"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えておかしいですよね。硬貨に誰も住んでません"
+        }
+      ],
+      "image_prompt": "macro close-up of a silver-gold coin edge on a dark wooden counter, dramatic side light, shallow depth of field, no text, no faces"
+    },
+    {
+      "caption": "何の話かを後出しする",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "待ってください、さっきから話が全然見えません"
+        },
+        {
+          "speaker": "sora",
+          "text": "平成12年、2000年に出た二代目の500円玉の話よ。材質が白銅からニッケル黄銅に変わって、ほんの少し黄色っぽくなったの。前の年に偽造や変造の硬貨が急に増えて、作り直しになったのよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "あの頃の自販機、500円入れたら即『ガチャン』って返してきたのよ。本物なのに突き返される、あの冷たい音"
+        }
+      ],
+      "image_prompt": "old vending machine coin slot in dim evening light, faint reflections, retro industrial texture, no text, no logos, no people"
+    },
+    {
+      "caption": "斜めギザと検品の二秒で意見が割れる",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "偽造対策でね、ギザギザを斜めに刻んだの。大量生産の硬貨で斜めギザは世界初。縁の内側に細かい点まで打ってあるのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "斜めって、そんなに効くんですか"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "効くわよ。指の腹で撫でれば、本物かどうか手だけで分かるんだから"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ワイら当時はね、お釣りの500円を蛍光灯に傾けて、浮かんだ数字を確認して、指の腹でギザの角度まで確かめてたの。レジの列が伸びても止められなかったのよ、だってご先祖が──"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、ご先祖の話にはもう戻らなくていいです"
+        },
+        {
+          "speaker": "sora",
+          "text": "わたくしはあの二秒、嫌いじゃなかったわ。お釣りを疑うのが礼儀みたいな時代だったのよ。みんな真顔でやってたわ"
+        }
+      ],
+      "image_prompt": "fingertip texture study beside a coin's diagonal milled edge under fluorescent light, extreme macro, cool tones, no text, no faces"
+    },
+    {
+      "caption": "当時は当たり前だった落差で締める",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "私は無理です。お釣りを一枚ずつ検品する時代って、ちょっと怖いですよ"
+        },
+        {
+          "speaker": "sora",
+          "text": "今の子は色も見ないで財布に入れるでしょう。わたくしたちの頃はね──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "今でも確かめてるわよ。雑に扱ったらご先祖に失礼でしょ"
+        },
+        {
+          "speaker": "sora",
+          "text": "[間]レジで500円玉を光に傾ける平成の大人、あれね全員、ご先祖入ってるかを確かめてる顔なのよ"
+        }
+      ],
+      "image_prompt": "single coin held up toward a ceiling light in a quiet convenience store, blurred background, warm glow, no text, no faces"
+    }
+  ],
+  "caption": "平成12年に二代目へ切り替わった500円玉。斜めギザと潜像で、レジのお釣りを光に傾ける大人が量産された時代の話です。あなたも傾けてました？",
+  "hashtags": [
+    "#平成",
+    "#500円玉",
+    "#あったあった",
+    "#平成生まれ",
+    "#懐かしい"
+  ],
+  "broken_premise": "潜像加工を「ご先祖」と聞き違えたまま押し通す",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "500円硬貨は平成11年（1999年）の偽造・変造貨急増を受け、平成12年（20",
+  "source_facts": [
+    {
+      "id": "heisei-0766627fac",
+      "fact": "500円硬貨は平成11年（1999年）の偽造・変造貨急増を受け、平成12年（2000年）に材質を白銅からニッケル黄銅へ変更した2代目が発行開始され、大量生産型貨幣として世界初の「斜めギザ」と潜像加工が採用された。",
+      "backing_url": "https://www.mof.go.jp/policy/currency/fake_money/500yen/500gizoubousi.pdf",
+      "backing_note": "財務省「新500円貨の偽造防止」PDF（斜めギザ・潜像加工・微細点加工）。発行年は財務省ページ https://www.mof.go.jp/policy/currency/fake_money/500yen/index.html 、材質変更の経緯は財務省広報誌『ファイナンス』2012年8月号 https://www.mof.go.jp/policy/currency/link/201208c.pdf"
+    }
+  ]
+}

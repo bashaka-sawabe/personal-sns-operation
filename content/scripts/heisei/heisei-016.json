@@ -1,0 +1,126 @@
+{
+  "id": "heisei-016",
+  "title": "1985年生まれ位が書き直した7桁の番号",
+  "emotion": "共感",
+  "powerword": "日本の住所が悪い",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "平成10年2月2日、郵便番号が7桁に",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "ちょっと待って、宛名が数字7個だけなんですけど"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "7桁書いたやろ。それで町名まで決まるんやから、住所なんか書く意味ないやろ"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えておかしいですよね、それ──"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、懐かしい揉め方ね。その7桁が始まったのは平成10年の2月2日。日本郵便が今でも公式に、その日付で答えてるわ"
+        }
+      ],
+      "image_prompt": "a stack of plain white envelopes on a wooden desk, soft late afternoon light through a window, shallow depth of field, no text, no logos, no people"
+    },
+    {
+      "caption": "3桁・5桁時代は全部手書きだった",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "2月2日って、日付までピンポイントで残ってるんですね"
+        },
+        {
+          "speaker": "sora",
+          "text": "それまでは3桁か5桁だったの。だから町名も番地も全部自分の手で書いて、一文字書き損じたら封筒ごと捨てる。それが当たり前だったのよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "分かるわ！　郵便屋さんが全部分かってくれてたんや。3桁でもちゃんと届いてたんやから、無駄が多かったみたいな言い方やめてくれる？"
+        }
+      ],
+      "image_prompt": "vintage red mailbox on a quiet residential street corner, faded paint, evening light, nostalgic mood, no text, no logos, no people"
+    },
+    {
+      "caption": "意見が割れる／年賀状五十枚の長回し",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "わたくしはね、4桁増えたのは悪くないと思ってるわ。宛名を書く時間が、はっきり短くなったもの。手も汚れなくなったし"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "いや、ワイは反対や。増えた下4桁、誰が覚えられるん──"
+        },
+        {
+          "speaker": "himari",
+          "text": "覚えなくていいんですよ、調べればすぐです"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[叫]調べる手間があるやろ！"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "だいたいな、うちは平成10年の2月にちょうど引っ越ししててな、必死に覚えた5桁が一週間で紙くずになったんや。書きかけの年賀状五十枚、全部住所から書き直しやで"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、五十枚。そこだけ解像度が高いのね"
+        }
+      ],
+      "image_prompt": "blank new year postcards scattered on a kotatsu table with a ballpoint pen and eraser crumbs, warm winter room light, no text, no faces"
+    },
+    {
+      "caption": "締め：番号だけの封筒はどうなる",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "で、結局その封筒、どうするんですか"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[低]知らん。出すわ。コトン"
+        },
+        {
+          "speaker": "sora",
+          "text": "[間]……戻ってくるわよ。7桁で町名までは分かっても、その先の番地は誰も教えてくれないの。だから今でもみんな、番号を書いた上で住所もきちんと書いてるでしょう"
+        },
+        {
+          "speaker": "himari",
+          "text": "え、じゃあ4桁増えた分、手間だけ増えてません？"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "……ええわ、もう。7桁も長いし、そもそも日本の住所が悪い"
+        }
+      ],
+      "image_prompt": "single white envelope resting half inside a mail slot, dim entrance hallway, dust in the air, cinematic quiet, no text, no logos, no people"
+    }
+  ],
+  "caption": "郵便番号が7桁になったのは平成10年2月2日。それまでは3桁か5桁で、町名も番地も全部手書きでした。覚えた5桁が紙くずになった記憶、ありますか。",
+  "hashtags": [
+    "#平成",
+    "#あったあった",
+    "#郵便番号",
+    "#昭和生まれ",
+    "#懐かしい"
+  ],
+  "broken_premise": "7桁あるなら住所は不要と押し通す",
+  "ochi_type": "generalization",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "日本の郵便番号が3桁・5桁から現在の7桁になったのは、平成10年（1998年）2",
+  "source_facts": [
+    {
+      "id": "heisei-06af1d9d53",
+      "fact": "日本の郵便番号が3桁・5桁から現在の7桁になったのは、平成10年（1998年）2月2日からである。",
+      "backing_url": "https://www.post.japanpost.jp/question/36.html",
+      "backing_note": "日本郵便の公式Q&A「郵便番号が7桁になったのはいつからですか？」で平成10年2月2日と明記"
+    }
+  ]
+}

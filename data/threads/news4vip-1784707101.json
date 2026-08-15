@@ -288,5 +288,8 @@
     }
   ],
   "fetched_at": "2026-08-10 10:01:20",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 25,
+  "ronron_premise": "",
+  "ronron_reason": "自作キャラ設定書き。会話も破綻の押し通しも無い"
 }

@@ -52,5 +52,8 @@
     }
   ],
   "fetched_at": "2026-08-10 10:02:16",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 20,
+  "ronron_premise": "",
+  "ronron_reason": "らっきょう賛美の羅列のみ。ロジックの裏切り無し"
 }

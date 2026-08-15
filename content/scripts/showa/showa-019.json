@@ -1,0 +1,106 @@
+{
+  "id": "showa-019",
+  "title": "特許料を社員6,000人に配った昭和6年の社長",
+  "emotion": "共感",
+  "powerword": "親父の供養だ、全員に配れ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "特許料、全額社員に配った社長",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "は？　特許料を社員に配ったのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]昭和6年2月15日、イギリスから金が届いた！"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "2万5,000ポンド。約25万円です"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、それ昭和6年の25万円なのだ!?"
+        }
+      ],
+      "image_prompt": "1930s Japanese textile factory interior, abstract, dusty light beams through high windows, rows of mechanical looms, no people, no text, cinematic sepia"
+    },
+    {
+      "caption": "経理vs社長、緊張から啖呵へ",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、これは織機の特許料です。運転資金に回すのが──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "回さん。工場9つ、従業員6,000人だな？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、親父は死ぬまで織機の前に立っとった。その機械が海の向こうで金に化けたんだ。稼いだのは9つの工場で糸を触ってきた6,000人だ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]親父の供養だ、全員に配れ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "百か日の供養でボーナス!?　名目が強引なのだ"
+        }
+      ],
+      "image_prompt": "old wooden office desk with ledger books and an inkpad, abstract low angle, single lamp, 1930s Japan, no people, no text, warm shadows"
+    },
+    {
+      "caption": "呆れと羨ましさで締める",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "ボクは反対なのだ。翌年に不況が来て会社が傾いたら──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "傾いたら俺が走る。人を減らすのは最後だ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "[小]……名簿、作り直します"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ドン。ドン。ドン"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら株主総会で一発アウトなのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[間]……その6,000人の会社が、後に車を作るのだ"
+        }
+      ],
+      "image_prompt": "long list of names on aged paper, abstract close view blurred illegible, stamp marks, 1930s Japan, no faces, no readable text, soft light"
+    }
+  ],
+  "caption": "昭和6年、英国から入った織機の特許料の一部を、父の百か日供養を名目に9工場・従業員6,000人へ。今なら一発アウト、でもこの熱が後の車を作った。（出典：トヨタ自動車75年史）",
+  "hashtags": [
+    "#昭和",
+    "#昭和の働き方",
+    "#豊田喜一郎",
+    "#寸劇",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "豊田喜一郎は、1931年（昭和6年）2月15日、英プラット社から入った自動織機特",
+  "source_facts": [
+    {
+      "id": "showa-15e743c170",
+      "fact": "豊田喜一郎は、1931年（昭和6年）2月15日、英プラット社から入った自動織機特許料の一部2万5,000ポンド（約25万円）を、父・豊田佐吉の「百か日供養」を名目に豊田関連企業9工場・従業員6,000人へ金品として贈呈した。",
+      "backing_url": "https://www.toyota.co.jp/jpn/company/history/75years/text/taking_on_the_automotive_business/chapter1/section4/item3.html",
+      "backing_note": "トヨタ自動車 公式社史『トヨタ自動車75年史』第1部第1章第4節第3項「一転して綿業不況へ」（企業公式）"
+    }
+  ]
+}

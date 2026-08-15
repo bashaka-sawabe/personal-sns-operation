@@ -1,0 +1,13 @@
+{
+  "id": "heisei-a651aeb81c",
+  "channel": "heisei",
+  "fact": "携帯・自動車電話・PHSの電話番号は平成11年（1999年）1月1日午前2時に全国一斉で10桁から11桁になり、携帯は「090」、PHSは「070」に整理された。",
+  "discovered_from": "https://www.soumu.go.jp/main_sosiki/joho_tsusin/top/tel_number/060keitai.html",
+  "backing_url": "https://www.rtpro.yamaha.co.jp/RT/FAQ/TOPIC/mobile11.html",
+  "backing_note": "ヤマハ（ルーターRTシリーズ）の当時の技術告知ページに「平成11年(1999年)1月1日AM 2:00より、携帯・自動車電話・PHSの電話番号が11桁に変更されます」と明記。補強報道として日本経済新聞 https://www.nikkei.com/article/DGXNASFE1701U_X11C13A2000000/ 。※官公庁の一次資料（郵政省告示・通信白書）は未確認のため準確認扱い",
+  "fetched_at": "2026-08-14 10:05:26",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-14",
+  "used_at": "2026-08-14"
+}

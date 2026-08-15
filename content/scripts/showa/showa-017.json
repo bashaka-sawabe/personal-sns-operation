@@ -1,0 +1,114 @@
+{
+  "id": "showa-017",
+  "title": "1955年 SONYマーク第一号 TR-55",
+  "emotion": "共感",
+  "powerword": "売れるまで作れ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "部品から自作した男たち",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]いいか、このトランジスタはうちで試作したもんだ！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "部品から自作。正気じゃないのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクなら買ってくるのだ"
+        }
+      ],
+      "image_prompt": "1950s Japanese small electronics workshop interior, soldering bench, tiny hand-made transistors on wooden table, warm dim light, no people, no text, no logo"
+    },
+    {
+      "caption": "昭和30年9月、TR-55",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "それ売り物になるのだ？"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "なる。昭和30年の9月から売る。名前はTR-55だ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "日本初のトランジスタラジオだ。しかもうちのマークを──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "マーク。初耳なのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "SONY。この四文字を初めて機械に打つ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "ザーッ……ピー"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[間]……そのマーク、ボクの家に三個あるのだ"
+        }
+      ],
+      "image_prompt": "vintage 1950s portable radio on a workbench, brushed metal dial, morning light through factory window, symbolic close-up, no people, no text, no logo"
+    },
+    {
+      "caption": "啖呵と、その後の七十年",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "無名の会社なのだ。ボクの考えでは──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "思うか思わんかじゃない。売れるまで作れ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "精神論なのだ。一発アウト"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[小]……失敗した若いのを、俺は責めとらん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "そこは、ちょっと好きなのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、机で悩んだ分は一銭にもならん。手を動かした分だけ残る。おまえの家の三個は、部品から自分で作ると言い出した奴らが残したもんだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[間]……ボクの部屋、急に歴史なのだ"
+        }
+      ],
+      "image_prompt": "modern living room shelf with a small speaker beside an old radio, soft evening light, quiet nostalgic mood, no people, no text, no logo"
+    }
+  ],
+  "caption": "1955年9月、東京通信工業が自社試作のトランジスタでSONYマーク付きの日本初トランジスタラジオTR-55の製造販売を開始。部品から自作した会社の話です。",
+  "hashtags": [
+    "#昭和",
+    "#ソニー",
+    "#TR55",
+    "#昭和の働き方",
+    "#ずんだもん"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "東京通信工業（現ソニー）は1955年（昭和30年）9月、自社で試作したトランジス",
+  "source_facts": [
+    {
+      "id": "showa-6e7f292f6c",
+      "fact": "東京通信工業（現ソニー）は1955年（昭和30年）9月、自社で試作したトランジスタを使い、SONYマークを付けた日本初のトランジスタラジオ「TR-55」の本格的な製造・販売を開始した。",
+      "backing_url": "https://www.iee.jp/file/foundation/data02/ishi-06/ishi-1617.pdf",
+      "backing_note": "電気学会（IEEJ）顕彰事業「でんきの礎」の認定資料PDF（学術団体の一次認定文書）"
+    }
+  ]
+}

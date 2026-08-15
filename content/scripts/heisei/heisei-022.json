@@ -1,0 +1,126 @@
+{
+  "id": "heisei-022",
+  "title": "1988年生まれ位が覚えてる番号が増えた夜",
+  "emotion": "呆れ",
+  "powerword": "0が生えた",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "平成11年、番号に0が生えた夜",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "[叫]はぁ!?　番号が1桁増えた夜、知らないの?"
+        },
+        {
+          "speaker": "himari",
+          "text": "桁って、勝手に増えたりするものなんですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "増えたのよ。平成11年1月1日の午前2時ちょうど。携帯と自動車電話とPHSの番号が、全国いっせいに10桁から11桁になったの。眠ってる人の分も、まとめてね"
+        }
+      ],
+      "image_prompt": "abstract dark night sky over a quiet 1990s Japanese residential block, glowing digital numerals dissolving in the air, no people, no text, cinematic soft grain"
+    },
+    {
+      "caption": "午前2時の公衆電話に立った女",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "午前2時って、ふつうに考えて変ですよね。朝でいいのに"
+        },
+        {
+          "speaker": "sora",
+          "text": "いちばん人が動かない時間だからよ。年が明けて、初詣に出かける前に、もう番号は入れ替わってたわけ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ワイは寝てないよ。1時59分、団地の下の公衆電話の前に立ってた"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "立ち会いたいじゃないか。1時59分なら10桁でまだ繋がる、2時を過ぎたらこの番号はもう世の中に無い。その境目を自分の耳で確かめたくて、自分の番号を10桁で押して、受話器に耳を押しつけて──"
+        },
+        {
+          "speaker": "himari",
+          "text": "[間]あの、まだ続きます?"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[低]ツーッ"
+        }
+      ],
+      "image_prompt": "abstract empty public payphone booth at deep night, pale green light spilling on wet asphalt, winter air, no people, no text, no logos"
+    },
+    {
+      "caption": "090と070、頭三つの意味",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "そのとき決まったのが、携帯は090、PHSは070。頭の三つで種類が分かるように整理されたのよ"
+        },
+        {
+          "speaker": "sora",
+          "text": "わたくしはあの並び、好きだったわ。相手の番号を見るだけで、どんな機械を握ってるか想像できたんだから"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　そこが最悪だったんだよ。070だと、名刺出した瞬間にPHSってバレて──"
+        },
+        {
+          "speaker": "himari",
+          "text": "PHSでも、ふつうに電話できますよね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "知らん。でも当時は気にしたんだよ。手帳の番号、全部0を書き足したしね"
+        }
+      ],
+      "image_prompt": "abstract close-up of a worn paper address notebook page with blurred handwritten strokes, unreadable, warm desk lamp light, no faces, no legible text"
+    },
+    {
+      "caption": "寝てる間に桁が伸びた話",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "今は会社を変えても番号はそのままでしょう。あの頃は、みんなが寝てる間に桁のほうが1つ伸びたのよ。誰も選べないまま、いっせいに"
+        },
+        {
+          "speaker": "himari",
+          "text": "番号って、そんなに気軽に増えるものなんですね"
+        },
+        {
+          "speaker": "sora",
+          "text": "ふふ。あの午前2時、自分がどこにいたか。覚えてる人、けっこういるはずよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[低]気軽じゃないよ。あの夜だけ、ワイの番号に0が生えたんだ。抜けた歯がいつのまにか生え変わってるみたいに、誰にも気づかれないまま静かにね"
+        }
+      ],
+      "image_prompt": "abstract new year dawn light over silent city rooftops, faint glowing numeric grid fading into sky, nostalgic film tone, no people, no text"
+    }
+  ],
+  "caption": "平成11年1月1日午前2時、携帯・自動車電話・PHSの番号が全国いっせいに10桁から11桁へ。携帯は090、PHSは070に整理されました。あの夜、あなたはどこにいましたか。",
+  "hashtags": [
+    "#平成レトロ",
+    "#あるある",
+    "#PHS",
+    "#昭和生まれ",
+    "#懐かしい"
+  ],
+  "broken_premise": "桁が増える瞬間に立ち会うため深夜2時に自分へ電話",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "携帯・自動車電話・PHSの電話番号は平成11年（1999年）1月1日午前2時に全",
+  "source_facts": [
+    {
+      "id": "heisei-a651aeb81c",
+      "fact": "携帯・自動車電話・PHSの電話番号は平成11年（1999年）1月1日午前2時に全国一斉で10桁から11桁になり、携帯は「090」、PHSは「070」に整理された。",
+      "backing_url": "https://www.rtpro.yamaha.co.jp/RT/FAQ/TOPIC/mobile11.html",
+      "backing_note": "ヤマハ（ルーターRTシリーズ）の当時の技術告知ページに「平成11年(1999年)1月1日AM 2:00より、携帯・自動車電話・PHSの電話番号が11桁に変更されます」と明記。補強報道として日本経済新聞 https://www.nikkei.com/article/DGXNASFE1701U_X11C13A2000000/ 。※官公庁の一次資料（郵政省告示・通信白書）は未確認のため準確認扱い"
+    }
+  ]
+}

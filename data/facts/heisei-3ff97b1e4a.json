@@ -1,0 +1,13 @@
+{
+  "id": "heisei-3ff97b1e4a",
+  "channel": "heisei",
+  "fact": "JR東日本の非接触ICカード乗車券「Suica」は、平成13年（2001年）11月18日（日）にサービスを開始した。",
+  "discovered_from": "https://www.jreast.co.jp/press/2001_1/20010904/",
+  "backing_url": "https://www.jreast.co.jp/press/2001_1/20010904/",
+  "backing_note": "JR東日本 公式プレスリリース（2001年9月4日付、表題『2001年11月18日（日）「Suica（スイカ）」デビュー！』）",
+  "fetched_at": "2026-08-13 10:08:48",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-13",
+  "used_at": "2026-08-13"
+}

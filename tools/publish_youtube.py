@@ -60,10 +60,13 @@ from tools.pipeline import (
 from tools.pipeline.common import ASSETS_DIR, OUT_DIR, SCRIPTS_DIR, PipelineError, secret_path
 
 # upload だけでは channels.list / channels.update ができないため youtube も要求する。
+# yt-analytics.readonly が無いと完走率・登録者増（youtube_metrics.py の Analytics 系）が
+# 永久に None になる（#290）。ここに足すだけでは既存トークンは変わらない点に注意。
 # スコープを増やしたら再認可が必要（get_service が不足を検知して自動で促す）。
 SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload",
     "https://www.googleapis.com/auth/youtube",
+    "https://www.googleapis.com/auth/yt-analytics.readonly",
 ]
 CLIENT_SECRET_FILE = "youtube_client_secret.json"
 # チャンネルを分けたので、トークンもチャンネルごとに要る（docs/09 3章）。

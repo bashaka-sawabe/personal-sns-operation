@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.bashaka.sns.weekly-metrics</string>
+	<!-- 毎週日曜19:50。週次レビューの直前に数字を揃える（docs/08 4章・#291）。
+	     Weekday 0 = 日曜。cron案からlaunchdへ移行（daily-videoと同じ管理方法） -->
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/zsh</string>
+		<string>-lc</string>
+		<string>export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"; cd /Users/bashaka/repo/personal/personal-sns-operation &amp;&amp; .venv/bin/python tools/fetch_metrics.py</string>
+	</array>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Weekday</key>
+		<integer>0</integer>
+		<key>Hour</key>
+		<integer>19</integer>
+		<key>Minute</key>
+		<integer>50</integer>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>/Users/bashaka/repo/personal/personal-sns-operation/logs/fetch_metrics.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/bashaka/repo/personal/personal-sns-operation/logs/fetch_metrics.log</string>
+</dict>
+</plist>

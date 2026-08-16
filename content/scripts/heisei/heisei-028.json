@@ -1,0 +1,126 @@
+{
+  "id": "heisei-028",
+  "title": "1988年生まれ位が公衆電話まで走った話",
+  "emotion": "共感",
+  "powerword": "10円玉の残機",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "10円玉の残機で生きてた平成",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "[叫]は？　電話するのに、走ってたんですか？"
+        },
+        {
+          "speaker": "sora",
+          "text": "走るわよ。ポケベルが鳴ったら、財布掴んで公衆電話まで全力ダッシュ。今どき誰も走らないでしょうけど、平成はそれが普通だったの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "しかも並ぶんだよ、行列。前のやつが長話してると、背中に穴が開くくらい睨むんだよ"
+        }
+      ],
+      "image_prompt": "An empty Japanese suburban street at dusk, a lone green public telephone booth glowing faintly, no people, nostalgic 1990s atmosphere, cinematic soft grain"
+    },
+    {
+      "caption": "小銭が命綱だった話",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "でも電話するたびにお金要りますよね。小銭って何枚くらい持ち歩いてたんですか"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "そこが一番大事なんだよ。ワイらは財布に10円玉を最低5枚キープしてた。3枚しかない日はな、話す順番を頭ん中で組み立ててから受話器を上げるの。世間話は切り捨てて要件だけ。あれ通話じゃなくてプレゼンだよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "完全に作戦会議じゃないですか。話す前に台本作ってるんですよ、それ"
+        },
+        {
+          "speaker": "sora",
+          "text": "そうよ。で、決まって一番いいところで音が鳴るの"
+        },
+        {
+          "speaker": "sora",
+          "text": "ピー、ガシャン"
+        }
+      ],
+      "image_prompt": "Macro shot of scattered old ten-yen coins on a worn leather wallet, warm lamp light, shallow depth of field, no text, no people"
+    },
+    {
+      "caption": "受話器の記憶で割れる",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "あの受話器の重さ、今でも手が覚えてるわ。冷たくて、少し湿ってて──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "湿ってた!?　やめろって、思い出すだろうが"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えて衛生的にどうなんですか。みんなが口つけたやつですよね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　みんなで使うから良かったんだろうが。受話器も、ボタンのくぼみも、みんなの手垢で丸くなってたんだよ"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、綺麗な子ね。でもわたくしは好きだったわ。あの四角い箱に入ると、世界から切り離されて、話す相手ひとりしかいなくなる感じ。あれ、今のスマホには無いのよ"
+        }
+      ],
+      "image_prompt": "Interior of an old phone booth, heavy handset hanging by a coiled cord, cold blue evening light through fogged glass, no people, no text"
+    },
+    {
+      "caption": "今も残ってる台数で締める",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "今、街で公衆電話を見た記憶が無いんですけど"
+        },
+        {
+          "speaker": "sora",
+          "text": "あるわよ。総務省の白書だと、NTT東西で平成30年度末に15.5万台。前の年から1.7％減ってるの"
+        },
+        {
+          "speaker": "himari",
+          "text": "え、15万も残ってるなら、まだ全然──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "多くねぇよ。昔はどこの街角にもあって、探さなくても目に入ったんだよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "スマホの充電が3％になった時の顔、あるだろ。あれが平成の、ワイらの10円玉の残機だよ"
+        }
+      ],
+      "image_prompt": "A single lone phone booth on a modern night city sidewalk, neon reflections on wet asphalt, distant framing, melancholic mood, no people, no text"
+    }
+  ],
+  "caption": "ポケベル鳴ったら公衆電話まで全力ダッシュ。財布の10円玉を数えてから受話器を上げてた平成の話。NTT東西の公衆電話は平成30年度末で15.5万台（総務省の白書より）。",
+  "hashtags": [
+    "#平成",
+    "#公衆電話",
+    "#あったあった",
+    "#平成レトロ",
+    "#懐かしい"
+  ],
+  "broken_premise": "10円玉の枚数を通話の残機として本気で管理する",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "平成の必需品だった公衆電話は激減し、NTT東日本・西日本の公衆電話施設数は201",
+  "source_facts": [
+    {
+      "id": "heisei-e1e28ca6fe",
+      "fact": "平成の必需品だった公衆電話は激減し、NTT東日本・西日本の公衆電話施設数は2018年度末（平成30年度末）に15.5万台（前年度比1.7％減）まで減った。",
+      "backing_url": "https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r01/html/nd232210.html",
+      "backing_note": "総務省『令和元年版 情報通信白書』本文・図表3-2-2-7「NTT東西における公衆電話施設構成数の推移」に、2018年度末15.5万台（前年度比1.7％減）と明記"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": "showa-021",
+  "title": "会社の目的、一番上が『愉快』だった話",
+  "emotion": "共感",
+  "powerword": "愉快ナル理想工場",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "一行目に『愉快』と書いた会社",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]は？　会社の一番の目的が『愉快』なのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "昭和21年に書いたぞ。自由闊達ニシテ愉快ナル理想工場ノ建設！"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクの会社の一番は売上なのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "順番が命だ。愉快じゃない工場でいい物ができるか"
+        }
+      ],
+      "image_prompt": "An old typewritten Japanese document on aged paper, soft desk lamp light, dust in the air, no readable text, no faces, 1940s office atmosphere, cinematic warm tone"
+    },
+    {
+      "caption": "焼け跡・技術者20人・給料未定",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "社長、機械も材料も焼けました"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "バンッ！"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、俺が作るのは工場じゃない。焼け跡で行き場を失った技術屋が、誰にも遠慮せず好きな物を作って笑っていられる場所だ。それを紙に書いて──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "長いのだ。それ部室なのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "[小]あの、給料の話を──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "すまん、まだ払えん。だが必ず返す"
+        }
+      ],
+      "image_prompt": "Post-war Japanese burnt-out cityscape at dusk, makeshift wooden workshop, scattered tools and vacuum tubes on a workbench, no people, no text, muted sepia light"
+    },
+    {
+      "caption": "12年後の名前",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "給料未定で20人。ボクは入らないのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[低]来た奴が20人いた。それで足りる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "で、東京通信工業はどうなったのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "12年後、ソニーに名を変えた"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[間]は？　一行目が『愉快』の会社が、あれなのだ!?"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……ボクの会社の一行目、なんて書いてあるのだ"
+        }
+      ],
+      "image_prompt": "Vintage radio and small electronics silhouetted on a shelf, soft window light, dust motes, no logos, no text, no faces, nostalgic Showa era interior"
+    }
+  ],
+  "caption": "1946年1月の設立趣意書。会社の目的の第一は『自由闊達ニシテ愉快ナル理想工場ノ建設』。技術者約20名で始まったその会社は、1958年にソニーへ改称した。あなたの会社の一行目は？",
+  "hashtags": [
+    "#昭和",
+    "#ソニー",
+    "#設立趣意書",
+    "#働き方",
+    "#昭和の会社"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "1946年（昭和21年）1月に井深大が起草した「東京通信工業株式会社設立趣意書」",
+  "source_facts": [
+    {
+      "id": "showa-89d24da546",
+      "fact": "1946年（昭和21年）1月に井深大が起草した「東京通信工業株式会社設立趣意書」は、会社設立の目的の第一に「自由闊達ニシテ愉快ナル理想工場ノ建設」を掲げ、終戦で職を失った約20名の技術者を核に出発した（同社は1958年にソニー株式会社へ改称）。",
+      "backing_url": "https://www.sony.co.jp/SonyInfo/CorporateInfo/History/prospectus.html",
+      "backing_note": "ソニー公式サイトが掲載する設立趣意書の全文（原典・企業公式一次文書）"
+    }
+  ]
+}

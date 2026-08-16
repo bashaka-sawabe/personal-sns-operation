@@ -1,0 +1,126 @@
+{
+  "id": "heisei-027",
+  "title": "1980年生まれ位が体で覚えてる1月15日",
+  "emotion": "共感",
+  "powerword": "ハッピーマンデー",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "成人の日は1月15日だった",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "ペラッ。……はぁ!?"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ちょっとアンタ！　なんで成人の日、年によって日にちが違うのよ！"
+        },
+        {
+          "speaker": "himari",
+          "text": "カレンダーに怒鳴らないでください"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら。あなた、まだ1月15日の世界で生きてるのね"
+        }
+      ],
+      "image_prompt": "A plain wall calendar page fluttering in dim morning light, abstract, no text, no faces, soft grain, nostalgic Japanese living room atmosphere"
+    },
+    {
+      "caption": "日付が固定だった時代の感覚",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "1月15日？　成人の日って、1月の第2月曜日ですよね"
+        },
+        {
+          "speaker": "sora",
+          "text": "今はね。1999年までは毎年1月15日だったのよ。曜日は一切関係なし。火曜だろうが木曜だろうが──"
+        },
+        {
+          "speaker": "himari",
+          "text": "会社も学校もある日に、振袖で駅に立ってたって、そんなの事件ですよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "それが良かったのよ。15日は15日。何曜日でもそこにある。動かないものが1個あるだけで、人って安心すんの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "アタシね、今でも1月15日の朝だけパチッて目が覚めるのよ。布団の中でカレンダー見て、黒い数字がぽつんとあって、ああ今日は会社かって天井見んの"
+        }
+      ],
+      "image_prompt": "Empty commuter train platform at winter dawn, cold blue light, abstract wide composition, no people, no text, nostalgic Japanese suburb"
+    },
+    {
+      "caption": "体育の日も動いた",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "体育の日も動きましたよね。10月10日だった、って親が言ってました"
+        },
+        {
+          "speaker": "sora",
+          "text": "そう。あれも2000年から10月の第2月曜日になったの。わたくしは三連休が増えて、正直ありがたかったけれど"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　10と10で並んでたのよ。あの気持ちよさ、アンタどこに捨てたの"
+        }
+      ],
+      "image_prompt": "Autumn school ground with faded white lines on dirt, warm October afternoon light, abstract wide shot, no people, no text"
+    },
+    {
+      "caption": "締め・名前だけが幸せ",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "で、誰がそんなこと決めたんですか。日にちって勝手に動かせるものなんです？"
+        },
+        {
+          "speaker": "sora",
+          "text": "平成10年に法律が変わってね。2000年から、成人の日も体育の日も月曜に寄せて、三連休にしましょうって話になったの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　月曜を幸せにするために、こっちの15日を差し出せって、そんな話が通って──"
+        },
+        {
+          "speaker": "himari",
+          "text": "制度の名前です。月曜の気持ちの話じゃないです"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら。あなた、25年経ってもまだ根に持ってるのね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "持つわよ。1月15日が普通の平日になったあの感じ、久しぶりに実家帰ったら自分の部屋が物置になってて、それでも笑って麦茶飲んだ時の顔してんのよ。ハッピーマンデーって聞くたびにね"
+        }
+      ],
+      "image_prompt": "A cluttered storage room that used to be a child's bedroom, soft afternoon light through curtains, abstract, no people, no text"
+    }
+  ],
+  "caption": "成人の日は1999年まで毎年1月15日、体育の日は10月10日。平成10年の法律で2000年から第2月曜に移りました。あなたの体はまだ15日で目が覚めますか。",
+  "hashtags": [
+    "#平成",
+    "#あったあった",
+    "#ハッピーマンデー",
+    "#1980年生まれ",
+    "#懐かしい"
+  ],
+  "broken_premise": "ハッピーマンデーを月曜を幸せにする制度だと信じ切る",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "成人の日は1999年（平成11年）まで毎年1月15日、体育の日は10月10日だっ",
+  "source_facts": [
+    {
+      "id": "heisei-17fcae2024",
+      "fact": "成人の日は1999年（平成11年）まで毎年1月15日、体育の日は10月10日だったが、「国民の祝日に関する法律の一部を改正する法律」（平成10年法律第141号＝ハッピーマンデー制度）により、2000年（平成12年）からそれぞれ「1月の第2月曜日」「10月の第2月曜日」に移された。",
+      "backing_url": "https://www.shugiin.go.jp/internet/itdb_housei.nsf/html/housei/h143141.htm",
+      "backing_note": "衆議院「制定法律」ページの改正法（平成10年法律第141号）条文原文。「第二条成人の日の項中『一月十五日』を『一月の第二月曜日』に改め、同条体育の日の項中『十月十日』を『十月の第二月曜日』に改める」と規定。補強として内閣府「国民の祝日」公式解説（https://www8.cao.go.jp/chosei/shukujitsu/gaiyou/kaku.html）が平成10年改正・平成12年施行を説明、国立天文台暦計算室（https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2000.html）も公布1998年10月21日・適用2000年1月1日と記載。"
+    }
+  ]
+}

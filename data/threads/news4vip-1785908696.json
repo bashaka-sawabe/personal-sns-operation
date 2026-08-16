@@ -64,5 +64,8 @@
     }
   ],
   "fetched_at": "2026-08-10 02:10:30",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 5,
+  "ronron_premise": "",
+  "ronron_reason": "断片の羅列で会話もオチも成立せず"
 }

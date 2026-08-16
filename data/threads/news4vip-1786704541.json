@@ -72,5 +72,8 @@
     }
   ],
   "fetched_at": "2026-08-15 12:20:07",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 24,
+  "ronron_premise": "",
+  "ronron_reason": "過疎談義で言語的裏切り無し"
 }

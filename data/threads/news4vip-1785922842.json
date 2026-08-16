@@ -52,5 +52,8 @@
     }
   ],
   "fetched_at": "2026-08-10 02:10:36",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 20,
+  "ronron_premise": "",
+  "ronron_reason": "鶏肉礼賛の反復のみで弱い"
 }

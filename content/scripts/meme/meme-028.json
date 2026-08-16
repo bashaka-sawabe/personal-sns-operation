@@ -1,0 +1,125 @@
+{
+  "id": "meme-028",
+  "title": "【致命の誤字】かんじきんしスレで大切さを語り損なう",
+  "emotion": "笑い",
+  "powerword": "がんじのたいせつさ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【致命の誤字】漢字禁止スレ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]かんじはきんし"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "おとなです"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "いまはこども"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "へいわだね"
+        }
+      ],
+      "image_prompt": "abstract soft pastel background, blank paper squares scattered, crayon texture, warm gentle light, no text, no faces"
+    },
+    {
+      "caption": "カタカナと変換で穴が開く",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "かたかなも?"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "だめ。えもじも──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "ぽち"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "えぃびぃしぃ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "できてるのだ!?"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "しようです"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ほもでありたい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "それはいいのだ"
+        }
+      ],
+      "image_prompt": "abstract macro of glowing keyboard keys, blurred bokeh, cool blue light, no letters visible, no faces"
+    },
+    {
+      "caption": "正論に反論して自壊",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "かんじはとうぜん"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ちがう、ぼくは──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "ながい"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[早]まとめられないのだ！ぼくはただしいにほんごをつかほうとおもひました、ちがう、つかおうとおもいました、こどものあたまなのだ"
+        },
+        {
+          "speaker": "shishio",
+          "text": "じつにいい"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "かんじつかうやで"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ぎすぎすなのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[間]がんじのたいせつさをしりました。にっこり"
+        }
+      ],
+      "image_prompt": "abstract warm sunset gradient over a blank notebook page, soft focus, floating dust in light, no text, no faces"
+    }
+  ],
+  "caption": "漢字を禁止してみんな子供に返るスレ。カタカナも変換も穴だらけのまま進み、最後に大切さを語ろうとしたイッチが自壊する。あなたはどこで気づいた？",
+  "hashtags": [
+    "#ずんだもん",
+    "#おーぷん2ちゃんねる",
+    "#ひらがな",
+    "#誤字",
+    "#スレ民"
+  ],
+  "broken_premise": "誤字を訂正せずそのまま押し通す",
+  "ochi_type": "naming",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "かんじはきんしみんなこどもにかえろう",
+  "source_thread": {
+    "id": "livejupiter-1693568326",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1693568326/",
+    "title": "かんじはきんしみんなこどもにかえろう"
+  }
+}

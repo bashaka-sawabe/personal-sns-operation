@@ -1,0 +1,55 @@
+{
+  "id": "livejupiter-1684711104",
+  "board": "livejupiter",
+  "thread": "1684711104",
+  "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1684711104/",
+  "title": "おんj、チクチク言葉きんし部?",
+  "res_count": 10,
+  "res": [
+    {
+      "no": 1,
+      "text": "みんな優しくありましょう"
+    },
+    {
+      "no": 2,
+      "text": ">>1\nうるさい"
+    },
+    {
+      "no": 3,
+      "text": ">>2\nなんでそんな事言うの！！"
+    },
+    {
+      "no": 4,
+      "text": "ハゲ"
+    },
+    {
+      "no": 5,
+      "text": "!aku4\n死ね\n★アク禁：>>4"
+    },
+    {
+      "no": 6,
+      "text": "入部ちたいです?"
+    },
+    {
+      "no": 7,
+      "text": ">>6\n?ぶぁぁぁぁか?"
+    },
+    {
+      "no": 8,
+      "text": ">>5\nひえっ?\nチクチク言葉?"
+    },
+    {
+      "no": 9,
+      "text": "ちくびちくび言葉！！"
+    },
+    {
+      "no": 10,
+      "text": ">>5\nイッチさんも ちくちく言葉\"で反論しては行けないよ?"
+    }
+  ],
+  "fetched_at": "2026-08-16 21:27:56",
+  "status": "candidate",
+  "ronron_score": 45,
+  "ronron_premise": "優しい言葉のみ禁止部",
+  "ronron_reason": "型に近いが即崩壊、言葉遊びの精度不足"
+}

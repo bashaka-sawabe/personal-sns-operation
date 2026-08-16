@@ -1,0 +1,126 @@
+{
+  "id": "heisei-029",
+  "title": "1985年生まれ位しか知らない0990の請求",
+  "emotion": "笑い",
+  "powerword": "家族共有の財布",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "平成の電話は家族共有の財布だった",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "[叫]ちょっと待ってください、電話代の紙に、覚えのない情報料が乗ってるんですけど!?"
+        },
+        {
+          "speaker": "sora",
+          "text": "あら、実家の押し入れから出てきたのね、それ。0990。ダイヤルQ2っていうのよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "懐かしいわね。平成元年の7月に始まったやつよ、それ"
+        }
+      ],
+      "image_prompt": "close-up of an old crumpled telephone bill paper on a tatami floor, dim nostalgic light, no text no letters no logos, soft grain, 1990s japanese home atmosphere"
+    },
+    {
+      "caption": "仕組みの説明と、名義の屁理屈",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "Q2って、クイズ番組みたいな名前ですけど"
+        },
+        {
+          "speaker": "sora",
+          "text": "NTTの情報料回収代行サービスよ。0990にかけると、聞いた分の情報料が毎月の電話料金にまとめて乗ってくるの。財布もカードもいらないでしょ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "そうよ、あれが一番楽だったの。受話器を上げて番号を回すだけで、向こうから話が聞けたんだから"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えておかしいですよね。楽なのは払ってない人だけで──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "[低]家の電話は父親名義。かけたのはアタシだけど、払ったのは父親。つまりアタシは一円も払っていない。理屈でしょ"
+        }
+      ],
+      "image_prompt": "vintage black rotary telephone on a wooden shelf, receiver slightly off the cradle, warm evening lamp light, shallow depth of field, no text, no faces"
+    },
+    {
+      "caption": "占いの言い訳が止まらない",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "理屈じゃなくてただの犯行声明ですよね"
+        },
+        {
+          "speaker": "sora",
+          "text": "で、あなたは毎晩なにを聞いてたのかしら。やけに詳しいじゃない"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　占いよ、占い！　星座の運勢を毎朝ひとつ聞いてただけ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "だいたい当時は、情報っていえば電話の向こうにしかなかったの。天気も運勢も全部それ。しかも一分いくらだから、話の長い占い師に当たった朝は最悪よ。切ったら結論が聞けないんだから、最後まで──"
+        },
+        {
+          "speaker": "himari",
+          "text": "長い。まず切ってください、あと普通に草"
+        },
+        {
+          "speaker": "sora",
+          "text": "[間]ジーッ……ジーッ……"
+        }
+      ],
+      "image_prompt": "a finger-shaped shadow over a rotary dial, motion blur of the dial returning, dark hallway at night, nostalgic film grain, no text, no faces"
+    },
+    {
+      "caption": "終了年と、財布のオチ",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "やめてよ！　その黒電話を回す音、夜中に家族に聞こえてないか、毎回ヒヤヒヤしてたんだから"
+        },
+        {
+          "speaker": "sora",
+          "text": "新規の受付が終わったのが平成23年の12月15日。それから平成26年の2月28日に、サービスそのものが静かに終わったのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "25年も現役だったんですか。わたし、まだ生まれてもいません"
+        },
+        {
+          "speaker": "sora",
+          "text": "あの頃の電話はね、家族共有の財布だったの。誰がいくら抜いたのか、翌月の紙が届くまで、家の誰にも分からないっていうね"
+        }
+      ],
+      "image_prompt": "empty telephone stand by a hallway wall, faded wallpaper, single unplugged cord coiled on the floor, quiet morning light, no text, no faces"
+    }
+  ],
+  "caption": "0990で始まる番号「ダイヤルQ2」。平成元年7月に始まり、平成26年2月28日で終了。あの請求書の緊張感、覚えてる人いますか。",
+  "hashtags": [
+    "#平成",
+    "#ダイヤルQ2",
+    "#昭和生まれ",
+    "#懐かしい",
+    "#黒電話"
+  ],
+  "broken_premise": "電話代は名義人が払うから自分は無料という理屈",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "NTT東日本・西日本の情報料回収代行サービス「ダイヤルQ2」（0990で始まる番",
+  "source_facts": [
+    {
+      "id": "heisei-183a9b8d21",
+      "fact": "NTT東日本・西日本の情報料回収代行サービス「ダイヤルQ2」（0990で始まる番号）は平成元年（1989年）7月に提供開始され、平成23年（2011年）12月15日に新規申し込み受付を終了、平成26年（2014年）2月28日をもってサービス提供を終了した。",
+      "backing_url": "https://www.ntt-east.co.jp/release/detail/20111115_01.html",
+      "backing_note": "NTT東日本・NTT西日本の連名報道発表資料（企業公式・一次資料）。「平成元年7月より提供」「平成26年2月28日終了」「平成23年12月15日新規受付終了」が本文に明記。"
+    }
+  ]
+}

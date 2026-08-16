@@ -1,0 +1,126 @@
+{
+  "id": "heisei-030",
+  "title": "1988年生まれ位が握ってたピッチの終わり方",
+  "emotion": "切なさ",
+  "powerword": "自販機の中のピッチ",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "最後まで残ったピッチは人間じゃない",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　だから2023年まで生きてたって言ってんでしょ！"
+        },
+        {
+          "speaker": "himari",
+          "text": "[小]……主語が、ないです"
+        },
+        {
+          "speaker": "sora",
+          "text": "ピッチよ、PHS。あなたが小学校に上がる頃には、もう街の景色から静かに消えかけてた小さな電話"
+        }
+      ],
+      "image_prompt": "A dim empty office desk drawer slightly open, faint blue glow, dust particles in the air, nostalgic late-90s Japanese interior, no text, no people, cinematic soft light"
+    },
+    {
+      "caption": "ピッチ自慢と、電波が狭いという言い分",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "ピッチ……あの細長い携帯みたいなやつですよね。写真でしか見たことないです"
+        },
+        {
+          "speaker": "sora",
+          "text": "そう。ワイモバイルのPHSはね、2021年1月31日に、業務用の一本を残して全部おしまいになったの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "アタシは最後の最後まで持ってたわよ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "電波が弱いってみんな言うけどね、弱いんじゃなくて狭いだけなの。その狭い中なら今の電話よりずっと綺麗に──"
+        },
+        {
+          "speaker": "himari",
+          "text": "[早]その綺麗な声、誰に聞かせてたんですか"
+        }
+      ],
+      "image_prompt": "Old Japanese public phone booth at dusk beside a vending machine, rain-wet asphalt reflecting light, no text, no logos, no people, moody nostalgic tone"
+    },
+    {
+      "caption": "2023年まで働き続けた機械たち",
+      "dialogue": [
+        {
+          "speaker": "himari",
+          "text": "じゃあ2023年3月31日まで残ってたのは誰なんですか"
+        },
+        {
+          "speaker": "sora",
+          "text": "機械よ。自動販売機みたいに人が持たない側のPHSだけが、テレメタリングっていう業務用の枠で最後まで数字を送ってたの"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "あのねぇ、アタシだって2021年でちゃんとお別れしたのよ。自分の番号にかけて鳴るのを確認して、電池抜いて、引き出しの奥にしまって、これで平成も本当に終わりだって泣いたのに──"
+        },
+        {
+          "speaker": "himari",
+          "text": "[早]待って。人間が卒業した後も、まだ働いてた子がいるってことですよね"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "そうよ！　こっちは強制的に卒業させられたのに、自販機だけ二年も残業してたってことでしょ！"
+        },
+        {
+          "speaker": "sora",
+          "text": "残業じゃないわ。あの子たちはただ、人よりちょっとだけ長く必要とされてたの"
+        }
+      ],
+      "image_prompt": "Row of vending machines glowing in a deserted night street, faint electronic hum atmosphere, low angle, no text, no logos, no people"
+    },
+    {
+      "caption": "誰も聞かない発信音で締める",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "知らん。アタシのなんて引き出しの奥で電池切れよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "……先輩、今どんな気持ちなんですかそれ"
+        },
+        {
+          "speaker": "sora",
+          "text": "[小]ピ、ピ、ピ……"
+        },
+        {
+          "speaker": "sora",
+          "text": "卒業式の日に体育館の裏でひとりだけ整列してたみたいな、誰も聞いてない二年分の発信音を送り続けてた、自販機の中のピッチ"
+        }
+      ],
+      "image_prompt": "Close-up of a small blinking indicator light inside dark machinery, single faint green dot, deep shadows, quiet melancholic mood, no text, no people"
+    }
+  ],
+  "caption": "ワイモバイルのPHSは2021年1月31日に一般向けが終了、業務用のテレメタリングだけが2023年3月31日まで残りました。最後に鳴っていたのは人ではなく機械でした。",
+  "hashtags": [
+    "#平成",
+    "#PHS",
+    "#ピッチ",
+    "#懐かしい",
+    "#平成生まれ"
+  ],
+  "broken_premise": "2年長く残った自販機を留年した後輩扱いする",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "ワイモバイル（ソフトバンク）のPHSは、テレメタリングプランを除く全てのPHS向",
+  "source_facts": [
+    {
+      "id": "heisei-afd96f73e9",
+      "fact": "ワイモバイル（ソフトバンク）のPHSは、テレメタリングプランを除く全てのPHS向け料金プランが2021年1月31日に提供終了し、最後まで残った業務用のテレメタリングプランも2023年3月31日に終了した。",
+      "backing_url": "https://www.ymobile.jp/info/press/2021/21020101.html",
+      "backing_note": "ソフトバンク（Y!mobile）公式の新着情報プレスおよび公式サポートページ。終了日「2021年1月31日：テレメタリングプラン以外／2023年3月31日：テレメタリングプラン」が明記。"
+    }
+  ]
+}

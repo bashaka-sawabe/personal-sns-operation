@@ -1,0 +1,13 @@
+{
+  "id": "heisei-183a9b8d21",
+  "channel": "heisei",
+  "fact": "NTT東日本・西日本の情報料回収代行サービス「ダイヤルQ2」（0990で始まる番号）は平成元年（1989年）7月に提供開始され、平成23年（2011年）12月15日に新規申し込み受付を終了、平成26年（2014年）2月28日をもってサービス提供を終了した。",
+  "discovered_from": "https://www.itmedia.co.jp/news/article/1111/15/1111115070/",
+  "backing_url": "https://www.ntt-east.co.jp/release/detail/20111115_01.html",
+  "backing_note": "NTT東日本・NTT西日本の連名報道発表資料（企業公式・一次資料）。「平成元年7月より提供」「平成26年2月28日終了」「平成23年12月15日新規受付終了」が本文に明記。",
+  "fetched_at": "2026-08-16 21:30:48",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-16",
+  "used_at": "2026-08-16"
+}

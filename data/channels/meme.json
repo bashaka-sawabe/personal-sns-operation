@@ -24,21 +24,22 @@
     }
   ],
   "hook": {
-    "benchmark": "ロンロンの天秤（51.2万・直近中央値180万回）。docs/02 1章の実測",
-    "rule": "先頭の【】に、内容の要約ではなく**読後感**を名詞句で言い切った煽りを置き、そのあとに何が起きたかを言い切る短文を続ける",
+    "benchmark": "ロンロンの天秤（52.1万・直近24本の中央値100万回）。docs/02 2-5章の実測",
+    "rule": "先頭の【】は読後感を最上級で言い切る煽り（神センス・王者の発言 級）。本文は何が起きたかの言い切り。末尾のシリーズタグは毎回同じ文言",
     "bracket": [
-      4,
-      6
+      3,
+      7
     ],
     "chars": [
-      22,
-      32
+      14,
+      22
     ],
+    "suffix": "【面白スレ】",
     "examples": [
-      "【ルールの盲点】無限に買える自販機に人が群がる",
-      "【妙な説得力】上司の遅刻理由が完璧すぎて誰も怒れない",
-      "【斜め上の祝福】結婚報告スレが謎の宗派対立になる",
-      "【類語の勝利】言い換えだけで議論に勝った男の末路"
+      "【神業返し】言い換えだけで議論を制した男【面白スレ】",
+      "【完璧な理屈】無限に買える自販機に人が群がる【面白スレ】",
+      "【王者の風格】遅刻理由が完璧すぎて誰も怒れない【面白スレ】",
+      "【天才の発想】結婚報告スレが謎の宗派対立になる【面白スレ】"
     ]
   },
   "style": {
@@ -48,15 +49,23 @@
     "punch_zoom": 1.14,
     "scenes": 3,
     "skit": true,
+    "subtitle": "center",
+    "title_card": 1.5,
+    "icon_size": 190,
+    "icon_speakers": "lead",
+    "lead_speaker": "zundamon",
+    "speaker_labels": true,
     "bg_queries": [
       "melting cheese close up",
       "chocolate pouring slow motion",
       "kinetic sand cutting",
       "ramen noodles steam",
       "paint mixing swirl",
-      "espresso pouring macro"
+      "espresso pouring macro",
+      "noodle factory machine",
+      "candy production line"
     ],
-    "max_chars": 195,
-    "lines_total": "20〜24"
+    "max_chars": 140,
+    "lines_total": "16〜22"
   }
 }

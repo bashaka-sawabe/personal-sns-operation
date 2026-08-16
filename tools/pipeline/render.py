@@ -112,6 +112,13 @@ ICON_RING = 9          # 白い縁。背景に沈ませない
 ICON_WRAP = 5          # アイコン内に書く名前の折り返し幅
 ICON_FONT = 52         # 1行のとき。2行以上は自動で縮める
 
+# 中央字幕レイアウト（style.subtitle="center"・#296）。ベンチマーク実測（docs/02 2-5章）:
+# 字幕は縦45〜55%の中央1行、アイコン中心は縦41〜42%、大きさは幅の17%（1080で約190px）。
+# 相手役はアイコンではなく、字幕直上の極小役名ラベルで示す（アイコンとラベルは同時に出ない）
+ICON_BOTTOM_CENTER = 880
+SIZE_LABEL = 36        # 役名ラベル。読めればよい大きさで、台詞の邪魔をしない
+LABEL_Y = 856          # 役名ラベルの中心Y（字幕の直上）
+
 # 静止画背景の Ken Burns。
 # 中央固定の微ズームは「動いていない」と見える（毎秒1.8%・1フレーム0.06%では目が拾えない上に、
 # 中心が動かないと画面の端に手がかりが出ない）。シーンごとに寄り／引きとパンの向きを変え、
@@ -197,7 +204,7 @@ def _bgr_to_rgb(bgr: str) -> str:
     return bgr[4:6] + bgr[2:4] + bgr[0:2]
 
 
-def _speaker_icon(key: str, work_dir: str) -> str:
+def _speaker_icon(key: str, work_dir: str, size: int = ICON_SIZE) -> str:
     """話者アイコン（丸）を作る。既に作ってあれば使い回す。
 
     素材の有無をブロッカーにしない（#140）。立ち絵は「規約を確認した本人が置く」
@@ -205,12 +212,13 @@ def _speaker_icon(key: str, work_dir: str) -> str:
     喋っているのに姿が無いという事故になった。
     アイコンはキャラ色と名前から**その場で生成できる**ので、誰でも即座に出せる。
     content/assets/icons/<key>.png があれば、そちらを丸く切り抜いて使う。
+    キャッシュ名に寸法を含める（チャンネルごとに大きさが違う。#296）。
     """
-    out = os.path.join(work_dir, f"icon_{key}.png")
+    out = os.path.join(work_dir, f"icon_{key}_{size}.png")
     if os.path.exists(out):
         return out
     char = CHARACTERS[key]
-    c = ICON_SIZE / 2
+    c = size / 2
     # 円の外は透過、縁は白。hypot はフレーム座標（X,Y）で測る
     edge = f"hypot(X-{c},Y-{c})"
     geq = (
@@ -223,20 +231,21 @@ def _speaker_icon(key: str, work_dir: str) -> str:
     src = icon_image(key)   # 持ち込みアイコンがあれば丸く切り抜いて使う
     if src:
         inputs = ["-i", src]
-        chain = (f"scale={ICON_SIZE}:{ICON_SIZE}:force_original_aspect_ratio=increase,"
-                 f"crop={ICON_SIZE}:{ICON_SIZE}," + geq)
+        chain = (f"scale={size}:{size}:force_original_aspect_ratio=increase,"
+                 f"crop={size}:{size}," + geq)
     else:
         # 名前を焼いた色パネル。drawtext は特殊文字の escape が面倒なので textfile で渡す
         lines = wrap_japanese(char["name"], ICON_WRAP).split("\n")
         namefile = os.path.join(work_dir, f"icon_{key}.txt")
         with open(namefile, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
-        size = ICON_FONT if len(lines) == 1 else int(ICON_FONT * 0.72)
+        font_size = ICON_FONT if len(lines) == 1 else int(ICON_FONT * 0.72)
+        font_size = int(font_size * size / ICON_SIZE)  # 寸法に追随させる
         inputs = ["-f", "lavfi", "-i",
-                  f"color=c=0x{_bgr_to_rgb(char['color_bgr'])}:s={ICON_SIZE}x{ICON_SIZE}"]
+                  f"color=c=0x{_bgr_to_rgb(char['color_bgr'])}:s={size}x{size}"]
         chain = (
             f"drawtext=fontfile='{font_path()}':textfile='{namefile}'"
-            f":fontcolor=black@0.82:fontsize={size}:line_spacing=6"
+            f":fontcolor=black@0.82:fontsize={font_size}:line_spacing=6"
             f":x=(w-text_w)/2:y=(h-text_h)/2," + geq
         )
     ffmpeg([*inputs, "-frames:v", "1", "-vf", chain, out])
@@ -262,20 +271,34 @@ def _speaker_windows(scene: dict, powerword: str = "") -> dict:
 
 
 def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str,
-               powerword: str = "") -> str:
+               powerword: str = "", style: dict | None = None) -> str:
     """1シーン分の字幕（スレタイ＋セリフ同期）を書き出す。セリフは話者の色で塗る。
 
-    シーンごとのセクション見出しは出さない（#93）。登録者10万超の同形式チャンネルは
-    スレタイだけを全編上部に出しつづける型で、セクション見出しは教材感が出てテンポを削ぐ。
-    「スクショ1枚で意味が通る」要件はスレタイ常時表示で維持する。
+    シーンごとのセクション見出しは出さない（#93）。
+    フックの出し方はチャンネル設定で分かれる（#296・docs/02 2-5章）:
+    - 既定: 全編上部に常時表示（#93。「スクショ1枚で意味が通る」）
+    - `style.title_card` 秒指定: ベンチマーク型。シーン1の冒頭だけタイトルカードとして
+      出し、以後は消す（常時表示はベンチに無い）
+    `style.subtitle="center"` で字幕を画面中央へ（ベンチは縦45〜55%の中央1行）。
+    中央レイアウトでは、主役以外の台詞に極小の役名ラベルを字幕直上へ出す
+    （ベンチは話者をアイコンではなく色字幕＋役名ラベルで区別する）。
     """
+    style = style or {}
+    center = style.get("subtitle") == "center"
+    title_card = float(style.get("title_card") or 0)
+    lead = style.get("lead_speaker")
     dur = scene["dur"]
     # フェードはシーン1だけ。2以降は前シーンから出続けている体なので、明滅させない
     fade = "{\\fad(150,0)}" if index == 0 else ""
-    events = [
-        f"Dialogue: 0,{_ass_time(0)},{_ass_time(dur)},Hook,,0,0,0,,"
-        + fade + _ass_text(hook, WRAP_HOOK),
-    ]
+    events = []
+    if not title_card:
+        events.append(
+            f"Dialogue: 0,{_ass_time(0)},{_ass_time(dur)},Hook,,0,0,0,,"
+            + fade + _ass_text(hook, WRAP_HOOK))
+    elif index == 0:
+        events.append(
+            f"Dialogue: 0,{_ass_time(0)},{_ass_time(min(title_card, dur))},Hook,,0,0,0,,"
+            + fade + _ass_text(hook, WRAP_HOOK))
     t = 0.0
     key_word = normalize_powerword(powerword or "")
     for i, p in enumerate(scene["phrases"]):
@@ -294,11 +317,23 @@ def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str,
                 + POP + _ass_text(p["text"], WRAP_LINE,
                                   base_bgr=CHARACTERS[p["speaker"]]["color_bgr"])
             )
+            # 役名ラベル: 主役はアイコンが出るのでラベル不要。アイコンとラベルは
+            # 同時に出ない（ベンチ実測。docs/02 2-5章A）
+            if (center and style.get("speaker_labels") and lead
+                    and p["speaker"] != lead):
+                name = CHARACTERS[p["speaker"]]["name"]
+                events.append(
+                    f"Dialogue: 1,{_ass_time(t)},{_ass_time(end)},Label,,0,0,0,,"
+                    + f"{{\\pos({WIDTH // 2},{LABEL_Y})}}" + name
+                )
         t += p["dur"]
 
-    # 話者ごとのセリフスタイル。色の違いは話者アイコンと対で「誰の声か」を伝える
+    # 話者ごとのセリフスタイル。色の違いは「誰の声か」を伝える（中央レイアウトでは
+    # 役名ラベルと対になる）
+    line_align, line_margin = (5, 0) if center else (2, 560)
     speaker_styles = [
-        (f"Line_{key}", SIZE_LINE, 10, 2, 560, CHARACTERS[key]["color_bgr"])
+        (f"Line_{key}", SIZE_LINE, 10, line_align, line_margin,
+         CHARACTERS[key]["color_bgr"])
         for key in sorted({p["speaker"] for p in scene["phrases"]})
     ]
     styles = "\n".join(
@@ -306,9 +341,10 @@ def _scene_ass(scene: dict, index: int, path: str, font: str, hook: str,
         f"-1,0,0,0,100,100,0,0,1,{outline},2,{align},"
         f"{TEXT_MARGIN_X},{TEXT_MARGIN_X},{margin_v},1"
         for name, size, outline, align, margin_v, color in (
-            ("Hook", SIZE_HOOK, 13, 8, 210, WHITE_BGR),   # 画面上部（UIに隠れない位置）に常時
+            ("Hook", SIZE_HOOK, 13, 8, 210, WHITE_BGR),   # 画面上部（UIに隠れない位置）
             ("Punch", SIZE_PUNCH, 18, 5, 0, PUNCH_BGR),   # 画面中央（align=5）を占有する1語
-            *speaker_styles,                              # 下寄せ（キャプション欄を避ける）
+            ("Label", SIZE_LABEL, 5, 5, 0, WHITE_BGR),    # 役名ラベル（\posで字幕直上へ）
+            *speaker_styles,
         )
     )
     content = f"""[Script Info]
@@ -372,7 +408,7 @@ def render_scene(scene: dict, index: int, work_dir: str,
     style = style or {}
     out = os.path.join(work_dir, f"scene{index:02d}.mp4")
     ass = _scene_ass(scene, index, os.path.join(work_dir, f"sub{index:02d}.ass"),
-                     _font_family(), hook or scene["caption"], powerword)
+                     _font_family(), hook or scene["caption"], powerword, style)
     audio = _scene_audio(scene, index, work_dir)
     subs = f"ass='{ass}':fontsdir='{os.path.dirname(font_path())}'"
 
@@ -395,13 +431,20 @@ def render_scene(scene: dict, index: int, work_dir: str,
     # 話者アイコンは配役ではなく**このシーンで実際に喋る人**から作る。
     # そうしないと cast に載っていない脇役が喋ったときに画面が変わらない（#140）
     windows = _speaker_windows(scene, powerword)
+    # ベンチマーク型（#296・docs/02 2-5章A）: アイコンは主役（スレ主）だけに出し、
+    # 相手役は色字幕＋役名ラベル（_scene_ass）で示す
+    if style.get("icon_speakers") == "lead" and style.get("lead_speaker"):
+        windows = {k: v for k, v in windows.items() if k == style["lead_speaker"]}
+    icon_size = int(style.get("icon_size") or ICON_SIZE)
+    icon_bottom = (ICON_BOTTOM_CENTER if style.get("subtitle") == "center"
+                   else ICON_BOTTOM)
     graph = [f"[0:v]{base_chain}[v0]"]
     last = "v0"
     for n, key in enumerate(sorted(windows)):
-        inputs += ["-i", _speaker_icon(key, work_dir)]
+        inputs += ["-i", _speaker_icon(key, work_dir, icon_size)]
         idx = 2 + n  # 0=背景, 1=音声 の後ろにアイコンが並ぶ
         graph.append(
-            f"[{last}][{idx}:v]overlay=x=(main_w-overlay_w)/2:y={ICON_BOTTOM - ICON_SIZE}"
+            f"[{last}][{idx}:v]overlay=x=(main_w-overlay_w)/2:y={icon_bottom - icon_size}"
             f":enable='{_enable_expr(windows[key])}'[b{n}]"
         )
         last = f"b{n}"

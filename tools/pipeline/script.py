@@ -124,9 +124,13 @@ def _title_rules(cfg: dict) -> str:
                    "状態を言い切る語（盲点／説得力／大誤算／総ツッコミ／完全論破 など）。")
     for group in hook.get("must_include", []):
         out.append(f"- **「{'」か「'.join(group.split('|'))}」を必ず入れる。**")
+    if hook.get("suffix"):
+        out.append(f"- **末尾に毎回シリーズタグ「{hook['suffix']}」を付ける**"
+                   "（検索と回遊の入口。文言は一字も変えない）。")
     if hook.get("chars"):
         lo, hi = hook["chars"]
-        out.append(f"- 全体で{lo}〜{hi}字（短いと素通りされ、長いと一覧で切られます）。")
+        what = "タグを除いた本文" if hook.get("suffix") else "全体"
+        out.append(f"- {what}で{lo}〜{hi}字（短いと素通りされ、長いと一覧で切られます）。")
     out.append(f"- **{'・'.join(TITLE_BANNED)} は使わない。**"
                "登録者51万のチャンネルでの使用率は0%で、使う従来型は再生数が2桁落ちています。")
     out.append("- 良い例:\n" + "\n".join(f"    {e}" for e in hook.get("examples", [])))
@@ -152,14 +156,18 @@ def _schema(cfg: dict) -> dict:
     # 字数は文章で頼まず**スキーマで縛る**（#246）。「28字くらい」と書いても
     # 平均21.5字にしかならなかった。数の制約は構造で持たせないと守られない
     lo, hi = hook.get("chars", [0, 40])
+    # シリーズタグ（#296）は字数検査の対象外なので、スキーマの上限にはタグ分を足す
+    suffix = (hook.get("suffix") or "").strip()
     title = {
         "type": "string",
-        "maxLength": hi,
-        "description": (f"YouTubeに出るタイトル。{lo}〜{hi}字" if lo
-                        else "社内管理用のタイトル。40字以内"),
+        "maxLength": hi + len(suffix),
+        "description": (
+            (f"YouTubeに出るタイトル。本文{lo}〜{hi}字＋末尾にタグ「{suffix}」" if suffix
+             else f"YouTubeに出るタイトル。{lo}〜{hi}字") if lo
+            else "社内管理用のタイトル。40字以内"),
     }
     if lo:
-        title["minLength"] = lo
+        title["minLength"] = lo + len(suffix)
     schema = {
         "type": "object",
         "properties": {
@@ -368,7 +376,17 @@ def _ronron_rules() -> str:
 10. **気持ち悪さは「精度」で出す。** 汚い言葉や下ネタの量ではありません。
    本人だけが本気で、**どうでもいいことを異常な解像度で語る**から気持ち悪くなります
    （「右が1.5、左が0.7です」「登録者16人しかいない」「保留BGMのサビ直前にガチャ」）。
-   感情も状況も、雑な形容詞ではなく**具体的な比喩か数字**で言わせること。"""
+   感情も状況も、雑な形容詞ではなく**具体的な比喩か数字**で言わせること。
+11. **開幕は役名コール（寸劇チャンネルのみ）**（直近24本の実測・docs/02 2-5章）。
+   シーン1の1行目は、スレ主が自分の立場・状況を名乗るだけの**12字以内・句点なし**の
+   一言にする（「帰宅したワイ」「バイト先のワイ」級）。3の「リアクション開幕」は
+   その直後に置く。列挙型のチャンネルには適用しない。
+12. **心の声は行全体を（括弧）で括る。** 建前を声に出し、本音を（括弧）で挟む
+   二重放送ができる。括弧の行は地の声で読まれるので、口調は変えない。
+13. **危ない語は「☆」で1字伏せる**（「ガ☆」級）。伏せた形が台詞としてそのまま
+   読まれて成立する場合だけ使い、成立しないなら語ごと言い換える。
+14. **締めの決まり文句はオチの行に統合する。**「ゲームセット」「これもう〜や」のような
+   短い断定で切る。パワーワードの行の後ろに行を足してはいけない（5の規則が優先）。"""
 
 
 def _meme_rules(cfg: dict) -> str:
@@ -1025,6 +1043,19 @@ def title_issues(title: str, cfg: dict) -> list:
     if not hook:
         return issues
 
+    # シリーズタグ（#296・docs/02 2-5章C）。ベンチは24/24本が末尾固定タグで、
+    # 検索・回遊の入口になっている。字数検査はタグを除いた本文に対して行う
+    suffix = (hook.get("suffix") or "").strip()
+    body = title
+    if suffix:
+        if title.endswith(suffix):
+            body = title[: -len(suffix)]
+        else:
+            issues.append(
+                f"タイトルの末尾にシリーズタグ「{suffix}」がありません（「{title}」）。"
+                "タグは毎回同じ文言を末尾に付けてください"
+            )
+
     bracket = hook.get("bracket")
     if bracket:
         m = _TITLE_BRACKET.match(title)
@@ -1050,9 +1081,10 @@ def title_issues(title: str, cfg: dict) -> list:
 
     if hook.get("chars"):
         lo, hi = hook["chars"]
-        if not lo <= len(title) <= hi:
+        if not lo <= len(body) <= hi:
+            what = "タグを除いた本文" if suffix else "タイトル"
             issues.append(
-                f"タイトルが{len(title)}字です（{lo}〜{hi}字）。"
+                f"タイトルの{what}が{len(body)}字です（{lo}〜{hi}字）。"
                 "短いと一覧で素通りされ、長いと途中で切られます"
             )
     return issues
@@ -1111,6 +1143,17 @@ def form_issues(script: dict, cfg: dict | None = None) -> list:
 
     if not _ronron_form(cfg):
         return issues
+
+    # 開幕の役名コール（#296・docs/02 2-5章B）。寸劇だけに課す（heisei は列挙型で
+    # 役が無い）。ベンチ直近24本の大半が0.2秒から役名→即1行目で入る
+    if (cfg.get("style") or {}).get("skit"):
+        first = lines[0]
+        if len(first) > 12 or "。" in first:
+            issues.append(
+                f"シーン1の1行目「{first}」が役名コールになっていません。"
+                "スレ主が立場・状況を名乗るだけの12字以内・句点なしの一言"
+                "（「帰宅したワイ」級）にしてください"
+            )
 
     longest = max(len(t) for t in lines)
     if longest < MONOLOGUE_MIN:

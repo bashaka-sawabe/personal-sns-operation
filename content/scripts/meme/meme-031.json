@@ -1,0 +1,109 @@
+{
+  "id": "meme-031",
+  "title": "【完全論破】反省を宣言するたびスレが増える男【面白スレ】",
+  "emotion": "呆れ",
+  "powerword": "まいったまいった降参です",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【謎の矛盾】謝るたびスレが増える",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "控えるワイ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "[低]3本目"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "なにこれ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "告知なのだ"
+        }
+      ],
+      "image_prompt": "abstract dark bulletin board interface, stacked identical empty message cards, faint blue glow, minimal, no text, no faces"
+    },
+    {
+      "caption": "控える宣言を全部読み上げる長回し",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[早]違法な投稿も条例違反も規約違反も控えますよ、調べがつくごとに順番に撤回と謝罪と反省しますよ、だから今のこれは告知で投稿じゃ──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "投稿です"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "表現なのだ"
+        },
+        {
+          "speaker": "shishio",
+          "text": "減ってませんな"
+        }
+      ],
+      "image_prompt": "long endless paper scroll unrolling in dim room, repeating blurred lines, soft spotlight, symbolic, no readable text, no people"
+    },
+    {
+      "caption": "反省の勢いで4本目が立つ",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "最後なのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ポチ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "4本目"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "増えた"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "勢いなのだ"
+        },
+        {
+          "speaker": "shishio",
+          "text": "実にいい"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "[間]控えると言いつつ──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "まいったまいった降参です"
+        }
+      ],
+      "image_prompt": "glowing submit button pressed, ripples spreading into rows of duplicated cards, night blue tones, symbolic, no text, no faces"
+    }
+  ],
+  "caption": "控えると宣言するたびにスレが増える男。反省の告知そのものが投稿になっていく無限ループ、誰が止めるのか。",
+  "hashtags": [
+    "#面白スレ",
+    "#ずんだもん",
+    "#おーぷん2ちゃんねる",
+    "#無限ループ",
+    "#ネットの闇"
+  ],
+  "broken_premise": "反省の告知は投稿に数えない",
+  "ochi_type": "generalization",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "俺がおとなしく投稿しますよ。",
+  "source_thread": {
+    "id": "news4vip-1784188142",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/news4vip/1784188142/",
+    "title": "俺がおとなしく投稿しますよ。"
+  }
+}

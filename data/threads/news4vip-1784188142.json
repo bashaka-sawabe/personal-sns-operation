@@ -56,8 +56,11 @@
     }
   ],
   "fetched_at": "2026-08-10 10:02:28",
-  "status": "candidate",
+  "status": "used",
   "ronron_score": 58,
   "ronron_premise": "「控える」宣言者が控えず連投",
-  "ronron_reason": "官僚的謝罪文の一点破壊は型に近いが尺と伸びが薄い"
+  "ronron_reason": "官僚的謝罪文の一点破壊は型に近いが尺と伸びが薄い",
+  "powerword": "まいったまいった降参です",
+  "ochi": "控えると言いながら次々とスレ立てして矛盾する言動をしているのは何故だ",
+  "used_at": "2026-08-17"
 }

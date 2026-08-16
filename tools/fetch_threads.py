@@ -243,8 +243,13 @@ def check_criteria(data: dict, powerword: str, ochi: str) -> None:
 # レス数で選ぶと「荒れたスレ」「長い雑談」が上位に来る。実際、候補29本のうち
 # 上位はほぼ画像投稿スレ・順位表・実況で、型に乗るスレは数本しか無かった
 RONRON_MIN = 60
-# 1回のAPI呼び出しで採点する候補数。まとめて渡して相対評価させる
-SCORE_BATCH = 12
+# 敗者復活の余地を残すボーダー線。採点済みでこれ未満のスレは RONRON_MIN に
+# 届く見込みが無いので、sweep_scored_out() が candidate から下ろす（#279）
+RONRON_SWEEP = 50
+# 1回のAPI呼び出しで採点する候補数。まとめて渡して相対評価させる。
+# max_tokens=12000 はもともと30本を見込んだ値（#241）。12本だと1日の収集分を
+# 採点し切れず、未採点が翌日へ繰り越されて回転が詰まっていた（#279）
+SCORE_BATCH = 30
 # 採点に渡す本文の長さ。全文だと候補12本で数万字になる
 _SCORE_BODY = 900
 
@@ -398,6 +403,25 @@ def score_candidates(threads: list) -> int:
         _save(data)
         scored += 1
     return scored
+
+
+def sweep_scored_out() -> int:
+    """採点済みで見込みの無い candidate を rejected へ落とす。落とした本数を返す。
+
+    不合格スレを candidate のまま残すと、台帳は「候補あり」に見えるのに
+    作れるものが無い、という見かけ倒しが膨らみ続ける（128本堆積・#279）。
+    ボーダー層（RONRON_SWEEP 以上 RONRON_MIN 未満）は採点のブレで沈んだ
+    可能性があるため候補に残す（敗者復活の検証は別Issueの材料）。
+    """
+    swept = 0
+    for t in saved_threads():
+        if (t.get("status") == "candidate"
+                and t.get("ronron_score") is not None
+                and t["ronron_score"] < RONRON_SWEEP):
+            t["status"] = "rejected"
+            _save(t)
+            swept += 1
+    return swept
 
 
 def collect(board: str, limit: int) -> list:

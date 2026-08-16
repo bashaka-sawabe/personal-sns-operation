@@ -10,7 +10,7 @@
 
 集計の考え方は docs/06_KPI・運用.md のKPIツリーに合わせている:
 - 北極星は「保存率」「完走率」「コメント率」。フォロワー数は遅行指標として併記のみ
-- **ジャンル別（money / relationship / trivia）の比較を必ず出す。**
+- **チャンネル別（showa / heisei / meme）の比較を必ず出す。**
   2週間テストの判定はこの比較そのもの（docs/06 2章）
 - 完走率はジャンルではなく「作り」の指標。全ジャンルで低ければ台本か画変化を疑う
 - プロフィールアクセス率は顔出し判断の分母（docs/07 Phase 3）。
@@ -42,11 +42,12 @@ OWNER = "bashaka-sawabe"
 REPO = "personal-sns-operation"
 API = "https://api.github.com"
 
-# data/themes.md の3ジャンル。判定はこの3つの比較で行う（docs/06 2章）
+# 現行3チャンネル（v8構成・docs/00）。判定はこの3つの比較で行う（docs/06 2章）。
+# 廃止済み（trivia 等）の過去データはラベル無しの生値のまま末尾に出る
 GENRE_LABELS = {
-    "money": "money（お金・経費・会社）",
-    "relationship": "relationship（人間関係）",
-    "trivia": "trivia（雑学・由来）",
+    "showa": "showa（灰皿とコッペパン・昭和）",
+    "heisei": "heisei（チャイム鳴り止ます・平成）",
+    "meme": "meme（おでん定点観測・スレ寸劇）",
 }
 
 
@@ -154,7 +155,7 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
     by_genre = {}
     for row in rows:
         by_genre.setdefault((row.get("genre") or "未設定").strip() or "未設定", []).append(row)
-    # money→relationship→trivia の順。未設定など想定外は末尾にまとめる
+    # showa→heisei→meme の順。廃止済み・未設定など想定外は末尾にまとめる
     order = list(GENRE_LABELS) + sorted(k for k in by_genre if k not in GENRE_LABELS)
     for genre in [k for k in order if k in by_genre]:
         genre_rows = by_genre[genre]
@@ -199,7 +200,7 @@ def build_report(week: str, rows: list, prev_rows: list) -> str:
         todo.append("`genre` 未設定の行がある（**ジャンル別比較に入らない＝判定に使えない**）")
     if any(not has(r, "completion_rate") for r in rows):
         todo.append("`completion_rate` 未入力の行がある"
-                    "（YouTubeはAnalytics再認可で自動。他PFは手入力）")
+                    "（YouTubeは自動取得・#290。Analyticsの反映は1〜2日遅れる。他PFは手入力）")
     if any(not has(r, "profile_visits") and not has(r, "follows_gained") for r in rows):
         todo.append("`profile_visits` / `follows_gained` が両方空の行がある"
                     "（**顔出し判断の分母が欠ける**。取れないPFは手入力）")

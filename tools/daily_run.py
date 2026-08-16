@@ -39,7 +39,7 @@ import urllib.error
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools import fetch_facts, fetch_threads, publish_youtube as yt
+from tools import export_tiktok, fetch_facts, fetch_threads, publish_youtube as yt
 from tools.pipeline import schedule as schedule_mod
 
 # meme スレ候補の補充閾値（目標本数に対する倍率）。自動採用（#191）は目視選別より
@@ -386,6 +386,7 @@ def main() -> None:
         return
 
     posted: list[str] = []
+    made: list[str] = []
     for ch, item in plan:
         if item.get("_auto") and not auto_adopt(ch, item):
             continue
@@ -395,6 +396,7 @@ def main() -> None:
         video = generate(ch, item)
         if not video:
             continue
+        made.append(video)
         result = upload(video)
         if result:
             url, when = result
@@ -407,6 +409,20 @@ def main() -> None:
         print("\n出したくない本は、公開時刻までに予約を外してください:")
         print("  .venv/bin/python tools/publish_youtube.py --slots        # 予約カレンダー")
         print("  .venv/bin/python tools/publish_youtube.py --unreserve <video_id> ...")
+
+    # TikTokの持ち出し（#277）: アップロード操作だけ本人・準備はここまで（docs/08 3章）。
+    # 対象は今日作った本だけ。過去分の一括は export_tiktok --all を手で叩く
+    if made:
+        ledger = export_tiktok.load_ledger()
+        exported = 0
+        for video in made:
+            try:
+                export_tiktok.export_one(video, ledger)
+                exported += 1
+            except PipelineError as e:
+                print(f"TikTok持ち出し見送り: {e}")
+        print(f"TikTok持ち出し: {exported}本 → "
+              f"{os.path.relpath(export_tiktok.TIKTOK_DIR, REPO)}/")
 
 
 if __name__ == "__main__":

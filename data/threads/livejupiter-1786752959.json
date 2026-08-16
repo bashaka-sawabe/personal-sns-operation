@@ -344,7 +344,7 @@
     }
   ],
   "fetched_at": "2026-08-15 10:45:02",
-  "status": "candidate",
+  "status": "rejected",
   "ronron_score": 45,
   "ronron_premise": "チアガールは見る側という前提",
   "ronron_reason": "前提1個ズレで大真面目だが、言語的裏切りが弱い"

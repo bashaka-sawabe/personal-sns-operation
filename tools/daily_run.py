@@ -88,6 +88,11 @@ def replenish_threads(per_channel: int) -> None:
     （FETCH_INTERVAL・429対策 #99）は fetch_threads.collect が持つ。
     閾値以上あるときは外部を一切叩かない。
     """
+    # 収集の前に、採点済みで見込みの無い候補を台帳から下ろす（#279）。
+    # 残すと「候補は百本あるのに作れるものが0本」の見かけ倒しが膨らみ続ける
+    swept = fetch_threads.sweep_scored_out()
+    if swept:
+        print(f"[meme] 見込みの無い採点済み候補{swept}本を不採用に整理しました")
     # 適性で落ちると分かっているスレは在庫として数えない（数えると補充が止まり、
     # 「候補は30本あるのに作れるものが0本」で詰まる。#214）
     candidates = [

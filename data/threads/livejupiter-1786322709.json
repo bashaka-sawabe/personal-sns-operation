@@ -80,7 +80,7 @@
     }
   ],
   "fetched_at": "2026-08-10 10:00:11",
-  "status": "candidate",
+  "status": "rejected",
   "ronron_score": 25,
   "ronron_premise": "",
   "ronron_reason": "単語羅列で会話不成立、途中から出鱈目化"

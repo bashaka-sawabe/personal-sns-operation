@@ -76,7 +76,7 @@
     }
   ],
   "fetched_at": "2026-08-14 10:00:18",
-  "status": "candidate",
+  "status": "rejected",
   "ronron_score": 26,
   "ronron_premise": "割合をパーセントで答える",
   "ronron_reason": "「五百億」の単位取り違えは光るが一行止まり"

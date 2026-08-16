@@ -39,7 +39,8 @@ import urllib.error
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools import export_tiktok, fetch_facts, fetch_threads, publish_youtube as yt
+from tools import export_tiktok, fetch_facts, fetch_threads, feedback
+from tools import publish_youtube as yt
 from tools.pipeline import schedule as schedule_mod
 
 # meme スレ候補の補充閾値（目標本数に対する倍率）。自動採用（#191）は目視選別より
@@ -153,8 +154,15 @@ def auto_candidates(channel: str, scoring: bool = True) -> list[dict]:
                 print(f"[meme] 適性の採点に失敗（採点済みのぶんだけ使います）: "
                       f"{str(e).splitlines()[0]}")
         fit = [t for t in rows if (t.get("ronron_score") or 0) >= fetch_threads.RONRON_MIN]
-        # 合格が無い日は**作らない**。弱いネタで1本埋めるより在庫不足として報告する
-        fit.sort(key=lambda t: -(t.get("ronron_score") or 0))
+        # 合格が無い日は**作らない**。弱いネタで1本埋めるより在庫不足として報告する。
+        # 実績係数（#293）は**並び順にだけ**効かせる。合格ライン（RONRON_MIN）に
+        # 掛けると、実績の解釈が採点の合否まで動かしてしまう
+        factors = feedback.kind_factors("meme")
+        note = feedback.describe_factors("meme")
+        if note:
+            print(f"[meme] {note}")
+        fit.sort(key=lambda t: -(t.get("ronron_score") or 0)
+                 * factors.get(t.get("ronron_kind"), 1.0))
         # 型のミックス（#295・docs/02 2-5章E）: ベンチは寸劇・擬人化・一発ネタが
         # 分布している。点数順だけだと同じ型が並ぶ日ができるので、1本目は最高点、
         # 2本目以降は「まだ選んでいない型」の最高点を優先する（無ければ点数順のまま）

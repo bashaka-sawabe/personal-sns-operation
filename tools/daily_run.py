@@ -107,15 +107,27 @@ def replenish_threads(per_channel: int) -> None:
     need = threshold - len(candidates)
     print(f"[meme] 使える候補{len(candidates)}本（閾値{threshold}本）のため収集中...")
     per_board = max(1, -(-need // len(fetch_threads.BOARDS)))
+    got = 0
     for i, board in enumerate(fetch_threads.BOARDS):
         if i:
             # 板は違ってもサーバーは同じ（hayabusa）なので、板間でも間隔を空ける
             time.sleep(fetch_threads.FETCH_INTERVAL)
         try:
             saved = fetch_threads.collect(board, per_board)
+            got += len(saved)
             print(f"  {board}: {len(saved)}本を候補登録")
         except (PipelineError, urllib.error.URLError, OSError) as e:
             print(f"  {board}: 収集失敗（{e}）")
+    # 勢いの窓（直近150件）は板を増やしても60点級が湧かなかった（#280）。
+    # 足りない分はスレタイ検索→dat直読みで時間を遡って積む（#281）
+    if len(candidates) + got < threshold:
+        query = fetch_threads.kako_query_today()
+        print(f"[meme] 過去ログを発掘中（スレタイ検索:「{query}」）...")
+        try:
+            saved = fetch_threads.collect_kako(query, threshold - len(candidates) - got)
+            print(f"  過去ログから{len(saved)}本を候補登録")
+        except (PipelineError, urllib.error.URLError, OSError) as e:
+            print(f"  過去ログの発掘に失敗（{e}）")
 
 
 def auto_candidates(channel: str, scoring: bool = True) -> list[dict]:

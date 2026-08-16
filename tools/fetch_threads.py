@@ -448,6 +448,69 @@ def collect(board: str, limit: int) -> list:
     return saved
 
 
+# 過去ログ発掘の検索クエリ。「当事者が大真面目に語り出す」タイトルの定型を狙う
+# （used実績: JC・元警備員・Vtuber は全部「〜だけど質問ある」型）。
+# 勢いと違って過去ログは尽きないので、日替わりで一巡させて検索結果の偏りを避ける。
+# ヒットが薄い・ノイズが多い語は実測で入れ替えていく
+KAKO_QUERIES = (
+    "だけど質問ある",
+    "気づいてしまった",
+    "って言われたんやが",
+    "納得いかない",
+    "きんし",
+    "教えてほしいんだが",
+    "ガチで悩んでる",
+    "俺だけ",
+)
+
+
+def kako_query_today() -> str:
+    """今日使う発掘クエリ。日替わりで一巡させる（#281）。"""
+    return KAKO_QUERIES[datetime.date.today().toordinal() % len(KAKO_QUERIES)]
+
+
+def collect_kako(query: str, limit: int) -> list:
+    """スレタイ検索（find.open2ch.net）→ dat直読みで過去スレを候補にする（#281）。
+
+    勢い（subject.txt）は直近150件の窓しか無く、板を増やしても60点級は
+    湧かなかった（#280）。datは板の窓から落ちても残り続ける（実測）ので、
+    検索でIDさえ引ければ時間を遡って母集団を広げられる。
+    過去ログ倉庫（/板/kako/）は中身が空で使えない（実測）。検索が唯一の入口。
+    """
+    page = _http("https://find.open2ch.net/?q=" + urllib.parse.quote(query))
+    text = page.decode("utf-8", errors="replace")  # 検索はUTF-8（datのCP932と違う）
+    known = {t["id"] for t in saved_threads()}
+    saved = []
+    for board, thread in dict.fromkeys(re.findall(r"read\.cgi/([a-z0-9]+)/(\d+)", text)):
+        if len(saved) >= limit:
+            break
+        if f"{board}-{thread}" in known:
+            continue
+        if board not in BOARDS:
+            # 検索は全板に当たる。サーバ名は結果のURLに入っているので、
+            # from_url と同じ流儀でプロセス内だけ登録する
+            m = re.search(
+                rf"//([a-z0-9]+)\.{re.escape(ALLOWED_DOMAIN)}/test/read\.cgi/{board}/{thread}",
+                text)
+            if not m:
+                continue
+            BOARDS[board] = m.group(1)
+        # 検索ページ取得の直後に dat を引くので、1本目の前にも間隔を空ける
+        # （collect と違い直前のHTTPが同一ドメインへの検索アクセス。429の実測あり）
+        time.sleep(FETCH_INTERVAL)
+        try:
+            data = fetch_thread(board, thread)
+        except (PipelineError, urllib.error.URLError, OSError) as e:
+            print(f"  取得失敗: {board}/{thread} ({e})", file=sys.stderr)
+            continue
+        # 検索結果にレス数が載らないので取得後に絞る。短すぎは展開もオチも無い。
+        # 長すぎ側は KEEP_RES が刈るので検査しない
+        if data["res_count"] < MIN_RES or _is_noise(data["title"]):
+            continue
+        saved.append(_save(data))
+    return saved
+
+
 def from_url(url: str) -> str:
     """read.cgi / dat のURLを1本取り込む。ドメイン検査は _http が必ず通す。"""
     _check_domain(url)
@@ -521,6 +584,8 @@ def main() -> None:
     p.add_argument("--board", help=f"収集する板（{' / '.join(BOARDS)}）")
     p.add_argument("--limit", type=int, default=10, help="収集する候補数（既定10）")
     p.add_argument("--url", help="スレのURLを1本だけ取り込む（open2ch限定）")
+    p.add_argument("--kako", metavar="QUERY",
+                   help="スレタイ検索で過去ログから収集する（--limit で本数指定）")
     p.add_argument("--list", action="store_true", help="保存済み候補の一覧")
     p.add_argument("--adopt", metavar="ID", help="候補を採用にする（--powerword / --ochi が要る）")
     p.add_argument("--powerword", default="",
@@ -541,12 +606,16 @@ def main() -> None:
             print(f"不採用: {args.reject}")
         elif args.url:
             print(f"取り込み: {os.path.relpath(from_url(args.url))}")
+        elif args.kako:
+            saved = collect_kako(args.kako, args.limit)
+            print(f"{len(saved)}本を保存しました → data/threads/")
+            print("次: --list で眺めて --adopt / --reject を付けてください（採用は人の目視）")
         elif args.board:
             saved = collect(args.board, args.limit)
             print(f"{len(saved)}本を保存しました → data/threads/")
             print("次: --list で眺めて --adopt / --reject を付けてください（採用は人の目視）")
         else:
-            p.error("--board / --url / --list / --adopt / --reject のいずれかを指定してください")
+            p.error("--board / --kako / --url / --list / --adopt / --reject のいずれかを指定してください")
     except PipelineError as e:
         sys.exit(f"エラー: {e}")
 

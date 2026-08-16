@@ -154,7 +154,17 @@ def auto_candidates(channel: str, scoring: bool = True) -> list[dict]:
                       f"{str(e).splitlines()[0]}")
         fit = [t for t in rows if (t.get("ronron_score") or 0) >= fetch_threads.RONRON_MIN]
         # 合格が無い日は**作らない**。弱いネタで1本埋めるより在庫不足として報告する
-        return sorted(fit, key=lambda t: -(t.get("ronron_score") or 0))
+        fit.sort(key=lambda t: -(t.get("ronron_score") or 0))
+        # 型のミックス（#295・docs/02 2-5章E）: ベンチは寸劇・擬人化・一発ネタが
+        # 分布している。点数順だけだと同じ型が並ぶ日ができるので、1本目は最高点、
+        # 2本目以降は「まだ選んでいない型」の最高点を優先する（無ければ点数順のまま）
+        picked, rest, kinds_used = [], fit[:], set()
+        while rest:
+            nxt = next((t for t in rest if t.get("ronron_kind") not in kinds_used), rest[0])
+            picked.append(nxt)
+            rest.remove(nxt)
+            kinds_used.add(nxt.get("ronron_kind"))
+        return picked
     prefix = {"heisei": "heisei-", "showa": "showa-"}[channel]
     return [f for f in _load_all(FACTS_DIR)
             if f["status"] == "candidate" and (f.get("backing_url") or "").strip()

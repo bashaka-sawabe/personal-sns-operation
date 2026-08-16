@@ -240,7 +240,7 @@
     }
   ],
   "fetched_at": "2026-08-16 20:41:48",
-  "status": "candidate",
+  "status": "rejected",
   "ronron_score": 42,
   "ronron_premise": "個人情報の回答粒度",
   "ronron_reason": "住所東京・勤務先東京の答え方は面白いが単発"

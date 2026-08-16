@@ -6,5 +6,8 @@
   "backing_url": "https://www.sony.co.jp/SonyInfo/CorporateInfo/History/prospectus.html",
   "backing_note": "ソニー公式サイトが掲載する設立趣意書の全文（原典・企業公式一次文書）",
   "fetched_at": "2026-08-15 15:34:19",
-  "status": "candidate"
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-16",
+  "used_at": "2026-08-16"
 }

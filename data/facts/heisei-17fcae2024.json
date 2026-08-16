@@ -1,0 +1,13 @@
+{
+  "id": "heisei-17fcae2024",
+  "channel": "heisei",
+  "fact": "成人の日は1999年（平成11年）まで毎年1月15日、体育の日は10月10日だったが、「国民の祝日に関する法律の一部を改正する法律」（平成10年法律第141号＝ハッピーマンデー制度）により、2000年（平成12年）からそれぞれ「1月の第2月曜日」「10月の第2月曜日」に移された。",
+  "discovered_from": "https://ja.wikipedia.org/wiki/成人の日",
+  "backing_url": "https://www.shugiin.go.jp/internet/itdb_housei.nsf/html/housei/h143141.htm",
+  "backing_note": "衆議院「制定法律」ページの改正法（平成10年法律第141号）条文原文。「第二条成人の日の項中『一月十五日』を『一月の第二月曜日』に改め、同条体育の日の項中『十月十日』を『十月の第二月曜日』に改める」と規定。補強として内閣府「国民の祝日」公式解説（https://www8.cao.go.jp/chosei/shukujitsu/gaiyou/kaku.html）が平成10年改正・平成12年施行を説明、国立天文台暦計算室（https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2000.html）も公布1998年10月21日・適用2000年1月1日と記載。",
+  "fetched_at": "2026-08-16 13:21:49",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-16",
+  "used_at": "2026-08-16"
+}

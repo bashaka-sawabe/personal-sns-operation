@@ -1,0 +1,126 @@
+{
+  "id": "heisei-026",
+  "title": "1985年生まれ位が今も新しい方と呼ぶ場所",
+  "emotion": "共感",
+  "powerword": "新しい方の炊飯器",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "今も新しい方って呼んでるパーク",
+      "dialogue": [
+        {
+          "speaker": "ritsu",
+          "text": "はぁ!?　何言ってんの、あそこは新しい方でしょ!"
+        },
+        {
+          "speaker": "sora",
+          "text": "リツさんね、さっきから東京ディズニーシーのことを、ずーっと『新しい方のパーク』って呼んでるのよ。ランドと区別するために、ね"
+        },
+        {
+          "speaker": "himari",
+          "text": "新しい方って、2001年の開園ですよね。私、その頃もう生まれてます"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "そうよ、平成13年の9月4日。ついこないだの話じゃない"
+        }
+      ],
+      "image_prompt": "abstract harbor at dusk, calm water reflecting warm lamps, no people, no text, no logos, nostalgic film grain, wide angle"
+    },
+    {
+      "caption": "15周年ですら遠い昔",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "公式のブログにね、2016年の9月4日に開園15周年を迎えましたって書いてあるの。……つまり、あなたが『こないだ』って言ってるその開園から15年経った日ですら、もう遠い昔ってことになるのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "待ってください。15周年の方が昔って──"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "ちょっとアンタ、計算すんなって言ってんの!"
+        },
+        {
+          "speaker": "himari",
+          "text": "私、その15周年の年に高校を卒業してるんですけど"
+        }
+      ],
+      "image_prompt": "old paper calendar pages scattered on a wooden table, soft window light, no readable text, shallow depth of field, quiet nostalgic mood"
+    },
+    {
+      "caption": "開園の年に行った人の記憶",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "わたくしはね、新しい方って呼び方、悪くないと思うわ。後からできた方は、いつまでも後からできた方。開園日を覚えてる人の特権よ"
+        },
+        {
+          "speaker": "himari",
+          "text": "いや、普通に考えておかしいですよね。15年前が新しいなら、この世に古い物なんて無いです"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "アタシは開園の年に行ったのよ。九月なのに真夏みたいな暑さでさ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "まだ誰も地図が頭に入ってないから、火山の前で全員立ち止まって『これ登れんの?』って真顔で言い合っててさ。カメラは27枚撮りの使い捨てだから、一回シャッター切るのに三人で相談してたのよ"
+        },
+        {
+          "speaker": "sora",
+          "text": "ドオォン"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "そう、それ! あの音がするたびに、園内の全員が一斉に振り返って──"
+        },
+        {
+          "speaker": "himari",
+          "text": "それ、完全に昔話の語り口ですってば"
+        }
+      ],
+      "image_prompt": "disposable film camera and a folded paper map on a wooden bench, late summer sunlight, no people, no text, no logos, warm nostalgic tones"
+    },
+    {
+      "caption": "実家の家電と同じ扱い",
+      "dialogue": [
+        {
+          "speaker": "sora",
+          "text": "あら、まだ言い張るのね。もっと困った顔が見たいわ"
+        },
+        {
+          "speaker": "ritsu",
+          "text": "……知らん。新しい方は新しい方でしょ。アタシが勝手に決めたわけじゃないのよ"
+        },
+        {
+          "speaker": "himari",
+          "text": "わかりました。それ、実家にある新しい方の炊飯器と同じですね。15年使ってるのに、まだ新しい方って呼ばれてるやつ"
+        }
+      ],
+      "image_prompt": "old rice cooker on a kitchen counter in a family home, evening light, no text, no logos, slightly worn surfaces, quiet domestic nostalgia"
+    }
+  ],
+  "caption": "東京ディズニーシーは2001年9月4日開園、2016年9月4日に15周年。それでもまだ「新しい方」と呼んでしまう人、たぶん一人じゃないはず。",
+  "hashtags": [
+    "#平成",
+    "#懐かしい",
+    "#東京ディズニーシー",
+    "#2001年",
+    "#あるある"
+  ],
+  "broken_premise": "後からできた方は永久に新しい方",
+  "ochi_type": "naming",
+  "channel": "heisei",
+  "genre": "heisei",
+  "theme": "東京ディズニーシーは2001年（平成13年）9月4日に開園し、2016年9月4日",
+  "source_facts": [
+    {
+      "id": "heisei-df6b472e61",
+      "fact": "東京ディズニーシーは2001年（平成13年）9月4日に開園し、2016年9月4日に開園15周年を迎えた。",
+      "backing_url": "https://www.tokyodisneyresort.jp/tdrblog/detail/pr160904/",
+      "backing_note": "東京ディズニーリゾート公式ブログ（オリエンタルランド）の「本日9月4日（日）、東京ディズニーシーは開園15周年を迎えました！」記事"
+    }
+  ]
+}

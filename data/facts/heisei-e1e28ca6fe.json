@@ -6,5 +6,8 @@
   "backing_url": "https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r01/html/nd232210.html",
   "backing_note": "総務省『令和元年版 情報通信白書』本文・図表3-2-2-7「NTT東西における公衆電話施設構成数の推移」に、2018年度末15.5万台（前年度比1.7％減）と明記",
   "fetched_at": "2026-08-15 15:31:09",
-  "status": "candidate"
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-16",
+  "used_at": "2026-08-16"
 }

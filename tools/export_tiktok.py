@@ -8,6 +8,9 @@
     # 1本だけ
     .venv/bin/python tools/export_tiktok.py content/out/meme-016.mp4
 
+    # 本人がアップロードしたあと、投稿URLを台帳と週次CSVへ繋ぐ（#278）
+    .venv/bin/python tools/export_tiktok.py --posted meme-016 "https://www.tiktok.com/@xxx/video/123"
+
 TikTokのContent Posting APIは未審査だと投稿が SELF_ONLY（本人しか見えない）に
 固定されるため、**アップロード操作だけ本人・準備は全部ここ**で済ませる
 （#275・docs/08 3章）。アカウントはチャンネル1:1なので、アップロード先
@@ -17,6 +20,7 @@ TikTokのContent Posting APIは未審査だと投稿が SELF_ONLY（本人しか
 キャプション欄に貼り、AI生成ラベルをONにして予約投稿する（docs/08 3章の手順）。
 """
 import argparse
+import glob
 import json
 import os
 import shutil
@@ -25,6 +29,7 @@ from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from tools import fetch_metrics as metrics
 from tools import publish_youtube as yt
 from tools.pipeline.channels import CHANNELS_DIR
 from tools.pipeline.common import OUT_DIR, PipelineError
@@ -147,12 +152,79 @@ def export_all() -> tuple[list[str], list[tuple[str, str]]]:
     return exported, skipped
 
 
+def _find_csv_row(url: str, old_url: str | None) -> tuple[str, list, dict | None]:
+    """全週次CSVから該当のTikTok行を探す。(パス, 行一覧, 行 or None) を返す。
+
+    週をまたいで --posted し直しても行が二重にならないよう、今週のファイル
+    だけでなく全部を見る（fetch_metrics は url で行をマッチするため、
+    同じ投稿の行が2枚のCSVにあると数字の置き場が割れる）。
+    """
+    urls = {u for u in (url, old_url) if u}
+    for path in sorted(glob.glob(os.path.join(metrics.DATA_DIR, "????-W??.csv"))):
+        rows = metrics.load_rows(path)
+        row = next((r for r in rows
+                    if r.get("platform") == "tiktok" and r.get("url") in urls), None)
+        if row:
+            return path, rows, row
+    return "", [], None
+
+
+def record_posted(stem: str, url: str) -> str:
+    """本人が上げた投稿のURLを台帳と週次CSVへ繋ぐ。書き込んだCSVパスを返す。
+
+    ここが繋がると、TikTokの手作業は「アップロード操作」と「週次の数字入力」
+    だけになる（#278・docs/08 3章の分担表）。数値列は空のまま作り、
+    fetch_metrics の MANUAL_COLUMNS と同様に機械では埋めない（APIが無い）。
+    """
+    name = os.path.basename(stem if stem.endswith(".mp4") else f"{stem}.mp4")
+    ledger = load_ledger()
+    if name not in ledger:
+        raise PipelineError(
+            f"{name} は書き出していません。先に export_tiktok.py で書き出したものを"
+            "アップロードしてから、--posted でURLを記録してください。"
+        )
+    entry = ledger[name]
+    old_url = entry.get("url")
+    now = datetime.now(JST)
+    entry["url"] = url
+    entry["posted_at"] = now.isoformat(timespec="seconds")
+    save_ledger(ledger)
+
+    script = yt.script_for(name)
+    # genre の既定はチャンネル名。YouTube計測（youtube_metrics.py）と同じ規則
+    genre = (script or {}).get("genre", "") or entry.get("channel", "")
+    title = (script or {}).get("title", "") or os.path.splitext(name)[0]
+
+    path, rows, row = _find_csv_row(url, old_url)
+    if row is None:
+        week = metrics.week_of(now)
+        path = os.path.join(metrics.DATA_DIR, f"{week}.csv")
+        rows = metrics.load_rows(path)
+        row = {c: "" for c in metrics.COLUMNS}
+        row.update({"week": week, "post_date": now.strftime("%Y-%m-%d")})
+        rows.append(row)
+    # 数値列・手入力列（views_total / hypothesis 等）には触らない。
+    # 2度目の --posted はURLの貼り直しとして既存行を更新する
+    row.update({"platform": "tiktok", "genre": genre, "title": title, "url": url})
+    metrics.save_rows(path, rows)
+    return path
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description="完成動画をTikTok持ち出しフォルダへ書き出す")
     p.add_argument("video", nargs="?", help="書き出す動画ファイル")
     p.add_argument("--all", action="store_true",
                    help="content/out/ の未書き出しを全部書き出す")
+    p.add_argument("--posted", nargs=2, metavar=("stem", "URL"),
+                   help="投稿済みURLを台帳と週次CSVに記録する（例: --posted meme-016 <URL>）")
     args = p.parse_args()
+
+    if args.posted:
+        stem, url = args.posted
+        path = record_posted(stem, url)
+        print(f"記録: {stem} → {url}")
+        print(f"週次CSV: {os.path.relpath(path)}（数値は週次レビューで手入力）")
+        return
 
     if args.all:
         exported, skipped = export_all()

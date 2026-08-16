@@ -241,11 +241,11 @@ def check_criteria(data: dict, powerword: str, ochi: str) -> None:
 
 # ロンロン適性の合格点（#214）。これ未満のスレでは作らない。
 # レス数で選ぶと「荒れたスレ」「長い雑談」が上位に来る。実際、候補29本のうち
-# 上位はほぼ画像投稿スレ・順位表・実況で、型に乗るスレは数本しか無かった
-RONRON_MIN = 60
-# 敗者復活の余地を残すボーダー線。採点済みでこれ未満のスレは RONRON_MIN に
-# 届く見込みが無いので、sweep_scored_out() が candidate から下ろす（#279）
-RONRON_SWEEP = 50
+# 上位はほぼ画像投稿スレ・順位表・実況で、型に乗るスレは数本しか無かった。
+# 60→50（#284・2026-08-16 本人決定）: 採点器のドリフトで、当時60点超で動画化した
+# 実績スレの多くが現行尺度では44〜52点帯に落ちると実測されたため、実績の分布に
+# ラインを合わせた。50点台ネタの質は2週間、公開後の数字で検証する
+RONRON_MIN = 50
 # 1回のAPI呼び出しで採点する候補数。まとめて渡して相対評価させる。
 # max_tokens=12000 はもともと30本を見込んだ値（#241）。12本だと1日の収集分を
 # 採点し切れず、未採点が翌日へ繰り越されて回転が詰まっていた（#279）
@@ -406,18 +406,16 @@ def score_candidates(threads: list) -> int:
 
 
 def sweep_scored_out() -> int:
-    """採点済みで見込みの無い candidate を rejected へ落とす。落とした本数を返す。
+    """合格ラインに届かない採点済み candidate を rejected へ落とす。落とした本数を返す。
 
     不合格スレを candidate のまま残すと、台帳は「候補あり」に見えるのに
     作れるものが無い、という見かけ倒しが膨らみ続ける（128本堆積・#279）。
-    ボーダー層（RONRON_SWEEP 以上 RONRON_MIN 未満）は採点のブレで沈んだ
-    可能性があるため候補に残す（敗者復活の検証は別Issueの材料）。
     """
     swept = 0
     for t in saved_threads():
         if (t.get("status") == "candidate"
                 and t.get("ronron_score") is not None
-                and t["ronron_score"] < RONRON_SWEEP):
+                and t["ronron_score"] < RONRON_MIN):
             t["status"] = "rejected"
             _save(t)
             swept += 1

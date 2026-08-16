@@ -104,5 +104,8 @@
     }
   ],
   "fetched_at": "2026-08-08 20:51:42",
-  "status": "candidate"
+  "status": "candidate",
+  "ronron_score": 40,
+  "ronron_premise": "車内に詰められた状態を快適化",
+  "ronron_reason": "当事者が大真面目に相談するが展開が短い"
 }

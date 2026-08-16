@@ -1,0 +1,67 @@
+{
+  "id": "livejupiter-1680009598",
+  "board": "livejupiter",
+  "thread": "1680009598",
+  "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1680009598/",
+  "title": "?????????←これきんし",
+  "res_count": 13,
+  "res": [
+    {
+      "no": 1,
+      "text": "やめよう?"
+    },
+    {
+      "no": 2,
+      "text": "?<ﾁｰﾁｰ"
+    },
+    {
+      "no": 3,
+      "text": "おっけー?"
+    },
+    {
+      "no": 4,
+      "text": "?"
+    },
+    {
+      "no": 5,
+      "text": "?"
+    },
+    {
+      "no": 6,
+      "text": "?????"
+    },
+    {
+      "no": 7,
+      "text": "?"
+    },
+    {
+      "no": 8,
+      "text": "?"
+    },
+    {
+      "no": 9,
+      "text": "おけー?"
+    },
+    {
+      "no": 10,
+      "text": "?「ﾁｰ」\n???"
+    },
+    {
+      "no": 11,
+      "text": "ゆるされた?"
+    },
+    {
+      "no": 12,
+      "text": "昔はワイが代表だったのに?"
+    },
+    {
+      "no": 13,
+      "text": "????\n????"
+    }
+  ],
+  "fetched_at": "2026-08-16 21:28:02",
+  "status": "candidate",
+  "ronron_score": 25,
+  "ronron_premise": "「?」禁止という記号ルール",
+  "ronron_reason": "文字化けで判読不能、ロジックが読めない"
+}

@@ -1,0 +1,125 @@
+{
+  "id": "meme-029",
+  "title": "【自滅の予感】自分で自分を出禁にした男の末路",
+  "emotion": "笑い",
+  "powerword": "一巻の終わり",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【自滅の予感】自分を出禁",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]自分を自分で出禁にできるのだ？"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "何する気だ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ボクのスレでボクを追放なのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "自滅やろ"
+        }
+      ],
+      "image_prompt": "abstract dark blue forum interface glow, empty chat room, symbolic, no faces, no text"
+    },
+    {
+      "caption": "やってみなの圧",
+      "dialogue": [
+        {
+          "speaker": "takehiro",
+          "text": "やってみな"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "やってみな"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "軽すぎるのだ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "いいか、ボクはこの掲示板しか居場所がないのだ。使えなくなったらもう何も出来ん、残るのは忍者の里から手紙を出す位なのだ──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "長い。仕様です"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "仕様で済ますな"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ポチ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[叫]押すな──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "Doneです"
+        }
+      ],
+      "image_prompt": "abstract glowing red button on dark surface, symbolic warning light, minimal, no faces, no text"
+    },
+    {
+      "caption": "誰も検証しない",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "戻せるのだ？"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "解除もある"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "試せやカス"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "誰も試さんのが草"
+        },
+        {
+          "speaker": "shishio",
+          "text": "[低]私が消しましょう"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "こわい人おる"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[小]呼ばれた時点で一巻の終わり"
+        }
+      ],
+      "image_prompt": "abstract fading digital silhouette dissolving into dark pixels, symbolic vanishing, no faces, no text"
+    }
+  ],
+  "caption": "自分で自分を出禁にできるのか。大真面目な検証スレは、結局誰も試さないまま、こわい人だけが残って終わりました。",
+  "hashtags": [
+    "#ずんだもん",
+    "#ネット文化",
+    "#掲示板",
+    "#寸劇",
+    "#ミーム"
+  ],
+  "broken_premise": "自分で自分を出禁にできるか大真面目に検討",
+  "ochi_type": "naming",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "もし自分で自分をアクキンしたら",
+  "source_thread": {
+    "id": "livejupiter-1755760420",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1755760420/",
+    "title": "もし自分で自分をアクキンしたら"
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "id": "showa-022",
+  "title": "すぐやる課を作った薬屋の市長",
+  "emotion": "呆れ",
+  "powerword": "すぐやる課",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "すぐやる課、作ったのは薬屋の社長",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]は？　役所に電話して、その日に来るのだ!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "当たり前だ。昭和44年10月6日、俺がそういう課を作った"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "待つのだ、マツモトキヨシの人!?"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "薬屋の社長で、松戸の市長だ。文句あるか"
+        }
+      ],
+      "image_prompt": "retro 1960s Japanese city hall building exterior, faded concrete, showa era architecture, warm nostalgic light, no people, no text"
+    },
+    {
+      "caption": "たらい回し vs 市長",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "ルルルル……ガチャ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "はい、松戸市役所──"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "[叫]市長だ！　側溝が詰まっとる、今すぐ行け！"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "お待ちください市長、それは道路の担当でして、申請書を回して判をもらって、予算を確かめて、それから順番に現場へ行くのが決まりで──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "その間に水が溢れるのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "たらい回しにするな。判はあとだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "先に走れ。責任は全部、俺が取る"
+        }
+      ],
+      "image_prompt": "showa era government office interior, stacks of paper documents, old wooden desks, black rotary telephone, dusty afternoon light, no people, no text"
+    },
+    {
+      "caption": "啖呵と、その後",
+      "dialogue": [
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "いいか、名前は『すぐやる課』だ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ひねりゼロ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "市民が名前で迷ってどうする"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "今なら一発アウトなのだ"
+        },
+        {
+          "speaker": "takehiro_nekketsu",
+          "text": "アウトで結構。困っとる人は明日まで──"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[小]待てないのだ、確かに"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "……その課、今もあるらしいのだ"
+        }
+      ],
+      "image_prompt": "vintage japanese neighborhood street at dusk, drainage ditch, utility poles, showa nostalgia, soft orange sky, no people, no text"
+    }
+  ],
+  "caption": "昭和44年10月6日、松戸市に発足した「すぐやる課」。発案したのは薬屋出身の市長。たらい回しをやめさせるための一手が、半世紀たった今も残っている。",
+  "hashtags": [
+    "#昭和",
+    "#すぐやる課",
+    "#マツモトキヨシ",
+    "#松戸市",
+    "#昭和の熱血"
+  ],
+  "channel": "showa",
+  "genre": "showa",
+  "theme": "ドラッグストア「マツモトキヨシ」創業者の松本清は、松戸市長として昭和44年（19",
+  "source_facts": [
+    {
+      "id": "showa-eba9db1773",
+      "fact": "ドラッグストア「マツモトキヨシ」創業者の松本清は、松戸市長として昭和44年（1969年）10月6日、市民の困りごとに即応する市長発案の部署「すぐやる課」を発足させた。",
+      "backing_url": "https://www.city.matsudo.chiba.jp/kurashi/suguyaru/suguyaru_tanjou.html",
+      "backing_note": "松戸市公式サイト「すぐやる課の誕生」（自治体＝官公庁の一次情報）。昭和44年10月6日発足、たらい回し排除のため松本清市長発案と明記。"
+    }
+  ]
+}

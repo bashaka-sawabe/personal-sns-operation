@@ -1,0 +1,125 @@
+{
+  "id": "meme-030",
+  "title": "【厨二の孤独】必殺の名乗りが晩飯の話で流される",
+  "emotion": "笑い",
+  "powerword": "グランミラオスの武器名",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "【厨二の孤独】名乗りが無視される",
+      "dialogue": [
+        {
+          "speaker": "zundamon",
+          "text": "[叫]我、運命ノ河ヲ堰キ止メル者──"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "晩飯食った？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "名乗り中なのだ!?"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "まだなら作れ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "目玉焼きなのだ"
+        }
+      ],
+      "image_prompt": "a dark stylized river blocked by a massive stone dam, dramatic fantasy atmosphere, glowing mist, no people, no text"
+    },
+    {
+      "caption": "半熟の解像度だけ異常に高い",
+      "dialogue": [
+        {
+          "speaker": "kotaro",
+          "text": "半熟か!?"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "ガチャ"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "聞くのだ、半熟なのだ。白身の縁はカリッと、黄身は箸で割って三秒で流れる硬さが正解、そこまで見届けてから名乗りを考えるのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "関係ないですね"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "能力見せてや"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "使うと落ちるのだ"
+        },
+        {
+          "speaker": "takehiro",
+          "text": "仕様です"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "使わぬ優しさなのだ"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "草"
+        }
+      ],
+      "image_prompt": "close up of a frying pan with a half cooked egg, warm kitchen light, steam rising, shallow depth of field, no people, no text"
+    },
+    {
+      "caption": "気遣われて終わる",
+      "dialogue": [
+        {
+          "speaker": "shishio",
+          "text": "最近どう？"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[小]たまに病むけど──"
+        },
+        {
+          "speaker": "kotaro",
+          "text": "ぼちぼちか"
+        },
+        {
+          "speaker": "shishio",
+          "text": "それなら良かった"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[叫]名乗りは!?"
+        },
+        {
+          "speaker": "zundamon",
+          "text": "[小]グランミラオスの武器名なのだ"
+        }
+      ],
+      "image_prompt": "quiet night kitchen window with warm lamp light, an empty plate on a table, calm lonely mood, no people, no text"
+    }
+  ],
+  "caption": "仰々しい名乗りで登場したのに、返ってきたのは晩飯と近況の心配だけ。誰も能力に触れてくれない夜の記録。名乗りの元ネタは最後の一行にあります。",
+  "hashtags": [
+    "#ずんだもん",
+    "#ネットの話題",
+    "#掛け合い",
+    "#厨二病",
+    "#モンハン"
+  ],
+  "broken_premise": "必殺の名乗りを晩飯の話題として処理する",
+  "ochi_type": "naming",
+  "channel": "meme",
+  "genre": "meme",
+  "theme": "運命ノ河ヲ堰キ止メル者 ～レス・ストッパー～だけど質問ある？",
+  "source_thread": {
+    "id": "livejupiter-1770726895",
+    "url": "https://hayabusa.open2ch.net/test/read.cgi/livejupiter/1770726895/",
+    "title": "運命ノ河ヲ堰キ止メル者 ～レス・ストッパー～だけど質問ある？"
+  }
+}

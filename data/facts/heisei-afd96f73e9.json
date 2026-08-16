@@ -1,0 +1,13 @@
+{
+  "id": "heisei-afd96f73e9",
+  "channel": "heisei",
+  "fact": "ワイモバイル（ソフトバンク）のPHSは、テレメタリングプランを除く全てのPHS向け料金プランが2021年1月31日に提供終了し、最後まで残った業務用のテレメタリングプランも2023年3月31日に終了した。",
+  "discovered_from": "https://www.zaikei.co.jp/article/20210201/605903.html",
+  "backing_url": "https://www.ymobile.jp/info/press/2021/21020101.html",
+  "backing_note": "ソフトバンク（Y!mobile）公式の新着情報プレスおよび公式サポートページ。終了日「2021年1月31日：テレメタリングプラン以外／2023年3月31日：テレメタリングプラン」が明記。",
+  "fetched_at": "2026-08-16 21:30:48",
+  "status": "used",
+  "adopted_by": "auto",
+  "adopted_at": "2026-08-16",
+  "used_at": "2026-08-16"
+}

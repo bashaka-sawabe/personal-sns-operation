@@ -144,7 +144,10 @@ def _allowed_speakers(cfg: dict) -> list:
     「スレを外から報告する」形にしかならず、説明文になってしまう（#134）。
     """
     keys = cast_keys(cfg)
-    if (cfg.get("style") or {}).get("skit"):
+    style = cfg.get("style") or {}
+    # cast_only のチャンネルは配役の外から声を借りない。jiji は専属8人の
+    # 座組そのものが型なので、ずんだもん達が乱入すると世界観が壊れる（#310）
+    if style.get("skit") and not style.get("cast_only"):
         keys = keys + [k for k in extra_speakers() if k not in keys]
     return keys
 
@@ -423,6 +426,37 @@ def _meme_context(meme: dict) -> str:
     return "\n".join(lines)
 
 
+def _jiji_rules(cfg: dict) -> str:
+    """jiji「東京だいたい銀行」の座組ルール（docs/02 1-3の実測・#310）。
+
+    ロンロン型（前提破壊）ではなく**キャラの立場の衝突**で笑いを作る別路線。
+    実測の型: 前置きゼロ・オチや見出しの先出し・登場2〜3人・画面同時2人まで。
+    座組（泊開幕・頭取/野木締め・人数・政党名）は _jiji_issues が数えて差し戻す。
+    """
+    sample = "\n".join(f"  {t}" for t in cfg.get("tone_sample", []))
+    rules = f"""
+
+**このチャンネルの座組（絶対に守る）:**
+- 舞台は架空のメガバンク「東京だいたい銀行」。ニュースを行内の出来事のように扱う。
+- **1本に登場させるのは2〜3人だけ。** 配役全員を出さない（当番制で回す）。
+- **1行目は必ず tomari（泊）。**「ここだけの話だけど」等で今日のネタを持ち込む。
+  挨拶・自己紹介・状況説明はしない。0秒から会話の途中に放り込むか、オチを先に言う。
+- 泊がネタを置いたら、当番のキャラが**自分の立場から**ニュースに噛みつく。
+  笑いは立場の衝突から作る（銀行員の報復理屈 vs 弁護士の正論 vs 検査官の帳簿）。
+- **最後の行は todori（頭取）か nogi（野木）の一言**で締める。後ろにまとめ・解説を足さない。
+- 各キャラの決め台詞は**1本に1回まで**。毎回同じ形だと死ぬので、ネタに合わせて変形する。
+- ニュースの当事者を実名で叩かない。実在の人物名・企業名はぼかすか役職・一般名詞で言う。
+
+**口調の見本（この温度で書く）:**
+{sample}"""
+    if cfg.get("guardrails"):
+        rules += f"""
+
+**絶対の線引き（違反した台本は破棄されます）:**
+{cfg['guardrails']}"""
+    return rules
+
+
 def _thread_rules(cfg: dict) -> str:
     """引用スレから作るときの追加ルール（v5: オチ逆算。docs/05 2章）。"""
     base = f"""
@@ -447,6 +481,10 @@ def _thread_rules(cfg: dict) -> str:
 - **落とす**: 実在人物への誹謗中傷・個人の特定・差別・違法行為の推奨
 - 「敬意を払う」のは**元ネタの文化**に対してであって、
   **スレの登場人物を上品に描き直すことではありません**。"""
+
+    if cfg["name"] == "jiji":
+        return base + _skit_rules() + _jiji_rules(cfg) + """
+- シーン1の caption はスレタイを20字以内に整えたもの（スレタイとして全編表示される）。"""
 
     if cfg["name"] != "meme":
         return base + """
@@ -1090,6 +1128,55 @@ def title_issues(title: str, cfg: dict) -> list:
     return issues
 
 
+# jiji の政治の線引き（docs/00 v9.1・data/channels/jiji.json の guardrails）。
+# 政党名・投票の呼びかけは機械で確実に拾えるので form で差し戻す。
+# 政治家個人の名前は列挙しきれないため、プロンプト側の禁止に委ねる（検査の限界）。
+# 「維新」単体を見ないのは「明治維新」を誤検知するため
+_PARTY_WORDS = re.compile(
+    r"自民党|自由民主党|立憲民主|日本維新|維新の会|公明党|共産党|国民民主|"
+    r"れいわ新選組|参政党|社民党|に投票し|へ投票し|投票に行こう"
+)
+
+
+def _jiji_issues(script: dict) -> list:
+    """jiji の座組検査（#310）。プロンプトに座組を書くだけでは守られない前提で数える。"""
+    pairs = [(l["speaker"], split_voice_marks(l["text"])[1])
+             for s in script.get("scenes", []) for l in s.get("dialogue", [])]
+    if not pairs:
+        return []
+    issues = []
+    used = list(dict.fromkeys(sp for sp, _ in pairs))
+    if not 2 <= len(used) <= 3:
+        issues.append(
+            f"登場人物が{len(used)}人います（{'、'.join(used)}）。"
+            "1本に出すのは2〜3人だけです。配役全員を出さず、当番制で回してください"
+        )
+    if pairs[0][0] != "tomari":
+        issues.append(
+            f"1行目の話者が {pairs[0][0]} です。"
+            "ネタは泊（tomari）が持ち込む座組なので、1行目は必ず泊にしてください"
+        )
+    if pairs[-1][0] not in ("todori", "nogi"):
+        issues.append(
+            f"最後の行の話者が {pairs[-1][0]} です。"
+            "締めは頭取（todori）か野木（nogi）の一言です。後ろにまとめを足さないでください"
+        )
+    long_nogi = [t for sp, t in pairs if sp == "nogi" and len(t) > 30]
+    if long_nogi:
+        issues.append(
+            f"野木のセリフが{len(long_nogi[0])}字あります（「{long_nogi[0][:20]}…」）。"
+            "野木は無口です。1文・30字以内の一言しか喋りません"
+        )
+    texts = [script.get("title", ""), script.get("caption", "")] + [t for _, t in pairs]
+    hits = sorted({m.group(0) for t in texts if (m := _PARTY_WORDS.search(t))})
+    if hits:
+        issues.append(
+            f"政党名・投票の呼びかけが入っています: {'、'.join(hits)}。"
+            "特定政党・候補者には触れず、制度・構造・現象の話に置き換えてください"
+        )
+    return issues
+
+
 def form_issues(script: dict, cfg: dict | None = None) -> list:
     """型が壊れていて**作り直すべき**箇所を返す（#212）。
 
@@ -1140,6 +1227,9 @@ def form_issues(script: dict, cfg: dict | None = None) -> list:
             "「ガチャ」「ルルルル」「どすん」のような擬音を**独立した1つの台詞**として"
             "1回以上入れてください（「ガチャという音がした」は音の説明であって発声ではありません）"
         )
+
+    if cfg.get("name") == "jiji":
+        issues += _jiji_issues(script)
 
     if not _ronron_form(cfg):
         return issues

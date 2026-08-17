@@ -47,10 +47,21 @@ THREADS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # 引用してよいドメイン。これ以外は理由の如何を問わず拒否する（docs/04 2-2章）
 ALLOWED_DOMAIN = "open2ch.net"
 
-# 板 → サーバのサブドメイン。おーぷんの主要板はほぼ hayabusa に載っている
+# 板 → サーバのサブドメイン。おーぷんの主要板はほぼ hayabusa に載っている。
+# ここは meme の収集対象（daily_run.replenish_threads が全キーを回る）なので、
+# 別チャンネルの板を混ぜてはいけない
 BOARDS = {
     "livejupiter": "hayabusa",   # なんでも実況（おんJ）。雑談・実話系の主力
     "news4vip": "hayabusa",      # VIP。ネタ・大喜利系
+}
+
+# jiji「東京だいたい銀行」用のニュース系板（#309）。ここで集めたスレには
+# channel="jiji" が刻まれ、meme の在庫・自動採用から見えなくなる。
+# 候補に挙げた他のニュース系板は実測で除外した（2026-08-17）:
+# poverty=誹謗スレばかり／seijinewsplus=死板（スレ6本）／bizplus=スパムの巣
+JIJI_BOARDS = {
+    "newsplus": "hayabusa",      # ニュース速報+。時事の主力
+    "news": "hayabusa",          # ニュース速報。時事雑談・世相ネタ
 }
 
 # 相手サーバーに負荷をかけない取得間隔（秒）。
@@ -105,14 +116,20 @@ def _decode(data: bytes) -> str:
     return data.decode("cp932", errors="replace")
 
 
-def _base_url(board: str) -> str:
-    server = BOARDS.get(board)
+def _server(board: str) -> str:
+    """板のサーバ名。meme（BOARDS）と jiji（JIJI_BOARDS）の両方から引く。"""
+    server = BOARDS.get(board) or JIJI_BOARDS.get(board)
     if not server:
         raise PipelineError(
-            f"未登録の板です: {board}（登録済み: {', '.join(BOARDS)}）\n"
-            "  板を増やすときは fetch_threads.py の BOARDS にサーバごと追記してください。"
+            f"未登録の板です: {board}（登録済み: {', '.join([*BOARDS, *JIJI_BOARDS])}）\n"
+            "  板を増やすときは fetch_threads.py の BOARDS（meme）か "
+            "JIJI_BOARDS（jiji）にサーバごと追記してください。"
         )
-    return f"https://{server}.{ALLOWED_DOMAIN}/{board}"
+    return server
+
+
+def _base_url(board: str) -> str:
+    return f"https://{_server(board)}.{ALLOWED_DOMAIN}/{board}"
 
 
 def _clean_body(body: str) -> str:
@@ -181,7 +198,7 @@ def fetch_thread(board: str, thread: str) -> dict:
         "id": f"{board}-{thread}",
         "board": board,
         "thread": thread,
-        "url": f"https://{BOARDS[board]}.{ALLOWED_DOMAIN}/test/read.cgi/{board}/{thread}/",
+        "url": f"https://{_server(board)}.{ALLOWED_DOMAIN}/test/read.cgi/{board}/{thread}/",
         "title": title or res[0]["text"][:40],
         "res_count": len(res),
         "res": res,
@@ -440,13 +457,25 @@ def sweep_scored_out() -> int:
     """
     swept = 0
     for t in saved_threads():
+        # meme の資産だけを掃く。jiji の合格ラインはロンロン尺度とは別に
+        # 決める余地を残す（daily_run への組み込み #312 で判断）
         if (t.get("status") == "candidate"
+                and thread_channel(t) == "meme"
                 and t.get("ronron_score") is not None
                 and t["ronron_score"] < RONRON_MIN):
             t["status"] = "rejected"
             _save(t)
             swept += 1
     return swept
+
+
+def thread_channel(t: dict) -> str:
+    """このスレがどのチャンネルの資産か。刻印の無い旧スレは全部 meme（#309）。
+
+    スレは1つのディレクトリに同居するので、ここで分けないと meme の
+    自動採用がニューススレを消費してしまう（逆も起きる）。
+    """
+    return t.get("channel", "meme")
 
 
 def collect(board: str, limit: int) -> list:
@@ -467,7 +496,10 @@ def collect(board: str, limit: int) -> list:
         if i:
             time.sleep(FETCH_INTERVAL)  # 相手サーバーへの負荷を抑える
         try:
-            saved.append(_save(fetch_thread(board, row["thread"])))
+            data = fetch_thread(board, row["thread"])
+            # どのチャンネルの資産かは「どの板から集めたか」で決まる
+            data["channel"] = "jiji" if board in JIJI_BOARDS else "meme"
+            saved.append(_save(data))
         except (urllib.error.URLError, OSError) as e:
             print(f"  取得失敗: {row['title']} ({e})", file=sys.stderr)
     return saved
@@ -494,13 +526,31 @@ KAKO_QUERIES = (
     "の気持ち",
 )
 
+# jiji 用の発掘クエリ（#309）。時事・世代論・制度の理不尽が集まるスレタイの定型。
+# 政党名は入れない（guardrails: 党派ではなく制度・構造を扱う。docs/00 v9.1）
+JIJI_KAKO_QUERIES = (
+    "Z世代",
+    "ゆとり",
+    "退職代行",
+    "値上げ",
+    "増税",
+    "新社会人",
+    "年金",
+    "サブスク",
+)
+
 
 def kako_query_today() -> str:
     """今日使う発掘クエリ。日替わりで一巡させる（#281）。"""
     return KAKO_QUERIES[datetime.date.today().toordinal() % len(KAKO_QUERIES)]
 
 
-def collect_kako(query: str, limit: int) -> list:
+def jiji_kako_query_today() -> str:
+    """jiji の今日の発掘クエリ。meme と同じ日替わり一巡（#309）。"""
+    return JIJI_KAKO_QUERIES[datetime.date.today().toordinal() % len(JIJI_KAKO_QUERIES)]
+
+
+def collect_kako(query: str, limit: int, channel: str = "meme") -> list:
     """スレタイ検索（find.open2ch.net）→ dat直読みで過去スレを候補にする（#281）。
 
     勢い（subject.txt）は直近150件の窓しか無く、板を増やしても60点級は
@@ -517,7 +567,7 @@ def collect_kako(query: str, limit: int) -> list:
             break
         if f"{board}-{thread}" in known:
             continue
-        if board not in BOARDS:
+        if board not in BOARDS and board not in JIJI_BOARDS:
             # 検索は全板に当たる。サーバ名は結果のURLに入っているので、
             # from_url と同じ流儀でプロセス内だけ登録する
             m = re.search(
@@ -538,11 +588,13 @@ def collect_kako(query: str, limit: int) -> list:
         # 長すぎ側は KEEP_RES が刈るので検査しない
         if data["res_count"] < MIN_RES or _is_noise(data["title"]):
             continue
+        # 発掘はどの板に当たるか分からないので、板ではなく**検索の主**で刻む
+        data["channel"] = channel
         saved.append(_save(data))
     return saved
 
 
-def from_url(url: str) -> str:
+def from_url(url: str, channel: str = "meme") -> str:
     """read.cgi / dat のURLを1本取り込む。ドメイン検査は _http が必ず通す。"""
     _check_domain(url)
     m = (re.search(r"/test/read\.cgi/([a-z0-9]+)/(\d+)", url)
@@ -550,11 +602,13 @@ def from_url(url: str) -> str:
     if not m:
         raise PipelineError(f"スレのURLとして解釈できません: {url}")
     board, thread = m.group(1), m.group(2)
-    if board not in BOARDS:
+    if board not in BOARDS and board not in JIJI_BOARDS:
         # URL直指定は板の登録が無くてもサーバ名がURLに入っているので、そのまま使う
         server = urllib.parse.urlparse(url).hostname.split(".")[0]
         BOARDS[board] = server
-    return _save(fetch_thread(board, thread))
+    data = fetch_thread(board, thread)
+    data["channel"] = channel
+    return _save(data)
 
 
 def mark(thread_id: str, status: str, powerword: str = "", ochi: str = "",
@@ -612,11 +666,16 @@ def show_list() -> None:
 
 def main() -> None:
     p = argparse.ArgumentParser(description="おーぷん2ちゃんねるからスレを収集する")
-    p.add_argument("--board", help=f"収集する板（{' / '.join(BOARDS)}）")
+    p.add_argument("--board",
+                   help=f"収集する板（meme: {' / '.join(BOARDS)}｜jiji: {' / '.join(JIJI_BOARDS)}。"
+                        "jiji板のスレは自動で channel=jiji になる）")
     p.add_argument("--limit", type=int, default=10, help="収集する候補数（既定10）")
     p.add_argument("--url", help="スレのURLを1本だけ取り込む（open2ch限定）")
     p.add_argument("--kako", metavar="QUERY",
                    help="スレタイ検索で過去ログから収集する（--limit で本数指定）")
+    p.add_argument("--channel", choices=("meme", "jiji"), default="meme",
+                   help="--kako / --url で集めたスレをどちらの資産にするか（既定 meme。"
+                        "--board は板から自動判定される）")
     p.add_argument("--list", action="store_true", help="保存済み候補の一覧")
     p.add_argument("--adopt", metavar="ID", help="候補を採用にする（--powerword / --ochi が要る）")
     p.add_argument("--powerword", default="",
@@ -636,9 +695,9 @@ def main() -> None:
             mark(args.reject, "rejected")
             print(f"不採用: {args.reject}")
         elif args.url:
-            print(f"取り込み: {os.path.relpath(from_url(args.url))}")
+            print(f"取り込み: {os.path.relpath(from_url(args.url, args.channel))}")
         elif args.kako:
-            saved = collect_kako(args.kako, args.limit)
+            saved = collect_kako(args.kako, args.limit, args.channel)
             print(f"{len(saved)}本を保存しました → data/threads/")
             print("次: --list で眺めて --adopt / --reject を付けてください（採用は人の目視）")
         elif args.board:

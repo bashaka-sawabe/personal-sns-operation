@@ -76,7 +76,11 @@ def _load_all(directory: str) -> list[dict]:
 def stock_for(channel: str) -> list[dict]:
     """チャンネルの未消費ネタ（人・委任で採用済みのもの）を返す。"""
     if channel == "meme":
-        return [t for t in _load_all(THREADS_DIR) if t["status"] == "adopted"]
+        # jiji のニューススレが同じディレクトリに同居するようになった（#309）。
+        # 刻印で分けないと meme がニュースネタを消費してしまう
+        return [t for t in _load_all(THREADS_DIR)
+                if t["status"] == "adopted"
+                and fetch_threads.thread_channel(t) == "meme"]
     prefix = {"heisei": "heisei-", "showa": "showa-"}[channel]
     return [f for f in _load_all(FACTS_DIR)
             if f["status"] == "adopted" and os.path.basename(f["_path"]).startswith(prefix)]
@@ -99,6 +103,7 @@ def replenish_threads(per_channel: int) -> None:
     candidates = [
         t for t in _load_all(THREADS_DIR)
         if t["status"] == "candidate"
+        and fetch_threads.thread_channel(t) == "meme"
         and (t.get("ronron_score") is None
              or t["ronron_score"] >= fetch_threads.RONRON_MIN)
     ]
@@ -141,7 +146,9 @@ def auto_candidates(channel: str, scoring: bool = True) -> list[dict]:
     採用の自動化とは別の品質保証なので、自動化しても緩めない（docs/08 1章）。
     """
     if channel == "meme":
-        rows = [t for t in _load_all(THREADS_DIR) if t["status"] == "candidate"]
+        rows = [t for t in _load_all(THREADS_DIR)
+                if t["status"] == "candidate"
+                and fetch_threads.thread_channel(t) == "meme"]
         # 目利きの代替は**レス数ではなくロンロン適性**（#214）。レス数順だと
         # 画像投稿スレ・順位表・実況が上位に来て、型に乗らないネタで作ってしまう
         if scoring:  # dry-run では外部を叩かない（採点済みのぶんだけ見る）
@@ -149,7 +156,9 @@ def auto_candidates(channel: str, scoring: bool = True) -> list[dict]:
                 scored = fetch_threads.score_candidates(rows)
                 if scored:
                     print(f"[meme] スレ候補{scored}本の適性を採点しました")
-                    rows = [t for t in _load_all(THREADS_DIR) if t["status"] == "candidate"]
+                    rows = [t for t in _load_all(THREADS_DIR)
+                            if t["status"] == "candidate"
+                            and fetch_threads.thread_channel(t) == "meme"]
             except PipelineError as e:
                 print(f"[meme] 適性の採点に失敗（採点済みのぶんだけ使います）: "
                       f"{str(e).splitlines()[0]}")

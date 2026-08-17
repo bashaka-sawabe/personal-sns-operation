@@ -48,7 +48,7 @@
     }
   ],
   "fetched_at": "2026-08-16 21:27:56",
-  "status": "candidate",
+  "status": "rejected",
   "ronron_score": 45,
   "ronron_premise": "優しい言葉のみ禁止部",
   "ronron_reason": "型に近いが即崩壊、言葉遊びの精度不足"

@@ -6,8 +6,9 @@ import random
 
 from PIL import Image, ImageDraw, ImageFont
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "branding")
-os.makedirs(OUT, exist_ok=True)
+# 出力はこのスクリプトと同じ場所（コミットされている icon_*.png / banner_*.png の実置き場）。
+# 以前は branding/ サブディレクトリに出ていて、実ファイルと食い違っていた（#306で修正）
+OUT = os.path.dirname(os.path.abspath(__file__))
 
 HEAVY = "/System/Library/Fonts/ヒラギノ角ゴシック W8.ttc"
 ROUND = "/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc"
@@ -120,11 +121,35 @@ def draw_showa(d, cx, cy, s, bg):
           start=200, end=340, fill=bg, width=max(3, int(s * 0.04)))
 
 
+def draw_yunomi(d, cx, cy, s, bg):
+    """頭取の湯呑み。緩やかに窄まる茶碗＋高台＋湯気2筋。"""
+    top_w, bottom_w, h = s * 0.78, s * 0.60, s * 1.0
+    d.polygon([(cx - top_w, cy - h * 0.45), (cx + top_w, cy - h * 0.45),
+               (cx + bottom_w, cy + h * 0.55), (cx - bottom_w, cy + h * 0.55)], fill=BLACK)
+    d.ellipse([cx - top_w, cy - h * 0.45 - s * 0.12, cx + top_w, cy - h * 0.45 + s * 0.12],
+              fill=BLACK)
+    d.ellipse([cx - top_w * 0.82, cy - h * 0.45 - s * 0.07, cx + top_w * 0.82,
+               cy - h * 0.45 + s * 0.07], fill=bg)
+    d.rounded_rectangle([cx - bottom_w * 0.55, cy + h * 0.55, cx + bottom_w * 0.55,
+                         cy + h * 0.72], radius=s * 0.05, fill=BLACK)
+    # 茶碗の帯（bg色の一本線）。無地だとただの台形に見える
+    d.line([(cx - top_w * 0.92, cy - h * 0.05), (cx + top_w * 0.92, cy - h * 0.05)],
+           fill=bg, width=int(s * 0.07))
+    for dx in (-s * 0.28, s * 0.24):
+        brush_curve(d, [
+            (cx + dx, cy - h * 0.72),
+            (cx + dx + s * 0.12, cy - h * 0.95),
+            (cx + dx - s * 0.06, cy - h * 1.18),
+            (cx + dx + s * 0.08, cy - h * 1.38),
+        ], s * 0.07)
+
+
 CHANNELS = [
     dict(key="meme", bg=(227, 181, 5), name="おでん定点観測", tiny="本日も観測は継続しています",
          motif=draw_oden),
-    dict(key="trivia", bg=(167, 198, 217), name="ゾウの鼻毛", tiny="※ゾウに鼻毛が生えているかは諸説あります",
-         motif=draw_elephant),
+    # 旧trivia（ゾウの鼻毛）はチャンネルごと jiji へ転用（docs/00 v9.1・#306）
+    dict(key="jiji", bg=(151, 191, 178), name="東京だいたい銀行", tiny="※本日の窓口は15時に終了しました",
+         motif=draw_yunomi),
     dict(key="heisei", bg=(240, 138, 36), name="チャイム鳴り止ます", tiny="キーンコーンカーンコー",
          motif=draw_chime),
     dict(key="showa", bg=(240, 223, 184), name="灰皿とコッペパン", tiny="当チャンネルは全席禁煙です",

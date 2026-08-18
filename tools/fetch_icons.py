@@ -15,6 +15,7 @@
 レンダが読むのは content/assets/icons/（git外）で、欠けていれば原本からコピーする。
 新しいアイコンに差し替えるときは assets/icons/ の原本を置き換えること。
 """
+import glob
 import os
 import shutil
 import sys
@@ -38,6 +39,14 @@ def main() -> None:
         if not os.path.exists(png) and os.path.exists(source):
             shutil.copyfile(source, png)
             restored.append(key)
+        # 表情差分（<key>_<表情>.png・#311）も原本から復元する。
+        # 差分はあるキャラにしか無いので、欠けていてもエラーにしない
+        # （render は基本アイコンに落ちる）
+        for src in glob.glob(os.path.join(SOURCE_DIR, f"{key}_*.png")):
+            dst = os.path.join(ICONS_DIR, os.path.basename(src))
+            if not os.path.exists(dst):
+                shutil.copyfile(src, dst)
+                restored.append(os.path.splitext(os.path.basename(src))[0])
         # アイコンにクレジットの .txt は置かない（#222）。ChatGPT生成画像は
         # OpenAI利用規約上ユーザーの所有物で、表記義務が無い。BGM・効果音のように
         # 規約が表記を求める素材だけがサイドカーを持つ

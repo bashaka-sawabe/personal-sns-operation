@@ -1,0 +1,126 @@
+{
+  "id": "jiji-001",
+  "title": "【査定不能】日本に近い国、沖縄が三位で入選【だいたい銀行】",
+  "emotion": "呆れ",
+  "powerword": "思想強い",
+  "first_hand": "",
+  "scenes": [
+    {
+      "caption": "Z世代「日本に近い国は沖縄」",
+      "dialogue": [
+        {
+          "speaker": "tomari",
+          "expression": "normal",
+          "text": "ここだけの話、新人研修のクイズ。日本に近い国は？　韓国、中国、そして沖縄"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "shock",
+          "text": "[叫]沖縄は国じゃないでしょ"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "normal",
+          "text": "行内の地図では、那覇支店はうちの支店です"
+        },
+        {
+          "speaker": "tomari",
+          "expression": "smug",
+          "text": "本人は真顔。パスポート要りますかって"
+        },
+        {
+          "speaker": "tomari",
+          "expression": "normal",
+          "text": "距離感だけなら、俺は嘘じゃないと思う"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "normal",
+          "text": "いや、国と県は別です"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "normal",
+          "text": "はい出た国際感覚。思想強いだけです"
+        }
+      ],
+      "image_prompt": "abstract map of an archipelago rendered in soft pastel paper texture, blurred boundaries, no text, no labels, no logos, no people, quiet meeting room lighting"
+    },
+    {
+      "caption": "琉球独立論が乱入してくる",
+      "dialogue": [
+        {
+          "speaker": "tomari",
+          "expression": "normal",
+          "text": "隣の若手が食い気味に。『琉球は独立国です』"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "angry",
+          "text": "[早]はい出た独立国。歴史の話と地理の問題を混ぜないでください。外交史を語れなんて誰も頼んでない。そういう方、一日三回同じ演説するでしょ、朝礼でも喫煙所でも──"
+        },
+        {
+          "speaker": "tomari",
+          "expression": "normal",
+          "text": "喫煙所、先月潰れた"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "normal",
+          "text": "そこ拾わないでください"
+        }
+      ],
+      "image_prompt": "empty corporate corridor with a sealed former smoking room, frosted glass, cool fluorescent light, abstract and symbolic, no text, no logos, no people"
+    },
+    {
+      "caption": "北海道まで消える結末",
+      "dialogue": [
+        {
+          "speaker": "tomari",
+          "expression": "normal",
+          "text": "[小]で、三人目が真顔で。『北海道ってロシアですよね』"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "shock",
+          "text": "ガタッ"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "normal",
+          "text": "領土まで減らすのやめてください"
+        },
+        {
+          "speaker": "tomari",
+          "expression": "normal",
+          "text": "で、正解は？"
+        },
+        {
+          "speaker": "kobikado",
+          "expression": "angry",
+          "text": "地理の問題に、思想と北海道が乱入してるだけですよ。だから答えは──"
+        },
+        {
+          "speaker": "todori",
+          "expression": "normal",
+          "text": "[間]……試験の途中で、国が増えたり減ったり"
+        },
+        {
+          "speaker": "todori",
+          "expression": "normal",
+          "text": "……それでも答えを探しただけで、偉い"
+        }
+      ],
+      "image_prompt": "a paper test sheet on a wooden desk beside a steaming teacup, abstract shapes instead of writing, warm dim light, no text, no logos, no people"
+    }
+  ],
+  "caption": "研修の地理クイズに思想と北海道が乱入した回。答えを探しただけで偉い、で片付いた会議です。あなたの職場にも一日三回同じ演説する人、いますか？※実在ドラマの非公式パロディです",
+  "hashtags": [
+    "#だいたい銀行",
+    "#Z世代",
+    "#地理クイズ",
+    "#会議室",
+    "#時事ネタ"
+  ],
+  "channel": "jiji"
+}

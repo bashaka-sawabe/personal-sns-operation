@@ -222,6 +222,20 @@ def _schema(cfg: dict) -> dict:
                                 "type": "object",
                                 "properties": {
                                     "speaker": {"type": "string", "enum": speakers},
+                                    # 表情はプロンプトで頼まず**スキーマで縛る**（#311）。
+                                    # 許可される値は用意してある表情差分と1対1
+                                    **({"expression": {
+                                        "type": "string",
+                                        "enum": ["normal", "angry", "shock", "smug"],
+                                        "description": (
+                                            "この行の話者の表情。基本は normal。"
+                                            "感情の山の行だけ angry（激昂）・"
+                                            "shock（驚愕・呆れ）・smug（ドヤ）に変える"
+                                            "（表情変化は1シーンに1〜2回まで。"
+                                            "全行で変えると何も際立たない）"
+                                        ),
+                                    }} if (cfg.get("style") or {}).get(
+                                        "expression_variants") else {}),
                                     "text": {
                                         "type": "string",
                                         "description": (
@@ -446,6 +460,8 @@ def _jiji_rules(cfg: dict) -> str:
 - **最後の行は todori（頭取）か nogi（野木）の一言**で締める。後ろにまとめ・解説を足さない。
 - 各キャラの決め台詞は**1本に1回まで**。毎回同じ形だと死ぬので、ネタに合わせて変形する。
 - ニュースの当事者を実名で叩かない。実在の人物名・企業名はぼかすか役職・一般名詞で言う。
+- 表情（expression）は感情の山の行だけ変える（基本 normal）。爆発の行に angry、
+  信じられない事実に shock、詭弁が決まった行に smug。全行で変えると何も際立たない。
 
 **口調の見本（この温度で書く）:**
 {sample}"""

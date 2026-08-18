@@ -69,9 +69,7 @@
     "subtitle": "center",
     "title_card": 1.5,
     "icon_size": 190,
-    "icon_speakers": "lead",
-    "lead_speaker": "banzawa",
-    "speaker_labels": true,
+    "speaker_labels": false,
     "max_speakers_on_screen": 2,
     "expression_variants": true,
     "bg_queries": [

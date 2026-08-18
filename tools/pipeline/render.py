@@ -204,7 +204,8 @@ def _bgr_to_rgb(bgr: str) -> str:
     return bgr[4:6] + bgr[2:4] + bgr[0:2]
 
 
-def _speaker_icon(key: str, work_dir: str, size: int = ICON_SIZE) -> str:
+def _speaker_icon(key: str, work_dir: str, size: int = ICON_SIZE,
+                  expression: str = "") -> str:
     """話者アイコン（丸）を作る。既に作ってあれば使い回す。
 
     素材の有無をブロッカーにしない（#140）。立ち絵は「規約を確認した本人が置く」
@@ -212,11 +213,16 @@ def _speaker_icon(key: str, work_dir: str, size: int = ICON_SIZE) -> str:
     喋っているのに姿が無いという事故になった。
     アイコンはキャラ色と名前から**その場で生成できる**ので、誰でも即座に出せる。
     content/assets/icons/<key>.png があれば、そちらを丸く切り抜いて使う。
+    表情差分（#311）は `<key>_<expression>.png` を使い、無ければ基本アイコンに落ちる。
     キャッシュ名に寸法を含める（チャンネルごとに大きさが違う。#296）。
     """
-    out = os.path.join(work_dir, f"icon_{key}_{size}.png")
+    out = os.path.join(work_dir, f"icon_{key}_{expression or 'base'}_{size}.png")
+    src = icon_image(key, expression)   # 持ち込みアイコンがあれば丸く切り抜いて使う
     if os.path.exists(out):
-        return out
+        # 原本が差し替わっていたらキャッシュを使わない。表情差分の後入れ（#311）で
+        # 「差し替えたのに古い円形キャッシュが出続ける」事故が実際に起きた
+        if not src or os.path.getmtime(src) <= os.path.getmtime(out):
+            return out
     char = CHARACTERS[key]
     c = size / 2
     # 円の外は透過、縁は白。hypot はフレーム座標（X,Y）で測る
@@ -228,7 +234,6 @@ def _speaker_icon(key: str, work_dir: str, size: int = ICON_SIZE) -> str:
         )
         + f":a='if(lte({edge},{c}),255,0)'"
     )
-    src = icon_image(key)   # 持ち込みアイコンがあれば丸く切り抜いて使う
     if src:
         inputs = ["-i", src]
         chain = (f"scale={size}:{size}:force_original_aspect_ratio=increase,"
@@ -253,7 +258,11 @@ def _speaker_icon(key: str, work_dir: str, size: int = ICON_SIZE) -> str:
 
 
 def _speaker_windows(scene: dict, powerword: str = "") -> dict:
-    """話者ごとの発話区間 [(start, end), ...]。アイコンの出し分けに使う。
+    """(話者, 表情) ごとの発話区間 [(start, end), ...]。アイコンの出し分けに使う。
+
+    キーを話者だけでなく表情との組にするのは、同じ話者でも表情ごとに
+    別のアイコン画像をオーバーレイするため（#311）。表情なしの台本では
+    表情が常に "" になり、従来と同じ「話者ごと1枚」に退化する。
 
     パワーワードの区間は**どの話者のアイコンも出さない**（#142）。
     そこは画面いっぱいの1語だけを見せる瞬間で、アイコンが重なると読めなくなる。
@@ -265,7 +274,8 @@ def _speaker_windows(scene: dict, powerword: str = "") -> dict:
         # 最後のフレーズはシーン末尾の余白まで（字幕の表示と揃える）
         end = scene["dur"] if i == n - 1 else t + p["dur"]
         if not (key_word and key_word in normalize_powerword(p["text"])):
-            wins.setdefault(p["speaker"], []).append((t, end))
+            wins.setdefault((p["speaker"], p.get("expression") or ""),
+                            []).append((t, end))
         t += p["dur"]
     return wins
 
@@ -434,18 +444,18 @@ def render_scene(scene: dict, index: int, work_dir: str,
     # ベンチマーク型（#296・docs/02 2-5章A）: アイコンは主役（スレ主）だけに出し、
     # 相手役は色字幕＋役名ラベル（_scene_ass）で示す
     if style.get("icon_speakers") == "lead" and style.get("lead_speaker"):
-        windows = {k: v for k, v in windows.items() if k == style["lead_speaker"]}
+        windows = {k: v for k, v in windows.items() if k[0] == style["lead_speaker"]}
     icon_size = int(style.get("icon_size") or ICON_SIZE)
     icon_bottom = (ICON_BOTTOM_CENTER if style.get("subtitle") == "center"
                    else ICON_BOTTOM)
     graph = [f"[0:v]{base_chain}[v0]"]
     last = "v0"
-    for n, key in enumerate(sorted(windows)):
-        inputs += ["-i", _speaker_icon(key, work_dir, icon_size)]
+    for n, (key, expr) in enumerate(sorted(windows)):
+        inputs += ["-i", _speaker_icon(key, work_dir, icon_size, expr)]
         idx = 2 + n  # 0=背景, 1=音声 の後ろにアイコンが並ぶ
         graph.append(
             f"[{last}][{idx}:v]overlay=x=(main_w-overlay_w)/2:y={icon_bottom - icon_size}"
-            f":enable='{_enable_expr(windows[key])}'[b{n}]"
+            f":enable='{_enable_expr(windows[(key, expr)])}'[b{n}]"
         )
         last = f"b{n}"
     graph.append(f"[{last}]{subs}[vsub]")

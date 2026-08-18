@@ -258,13 +258,20 @@ def se_credit(kind: str) -> str:
 
 # ---------------------------------------------------------------- 話者アイコン
 
-def icon_image(key: str) -> str | None:
+def icon_image(key: str, expression: str = "") -> str | None:
     """持ち込みアイコンのパス。無ければ None（render 側がキャラ色と名前で生成する）。
 
     立ち絵は「規約を確認した本人が置く」運用にした結果、置かれていないキャラは
     画面に出られず、喋っているのに姿が無いという事故になった（#140）。
     アイコンは素材が無くても生成できるので、ここは**任意の差し替え口**でしかない。
+
+    表情差分（`<key>_<expression>.png`・#311）があればそちらを優先する。
+    無い表情は基本アイコンに落とす——表情の指定を素材のブロッカーにしない。
     """
+    if expression and expression != "normal":
+        p = os.path.join(ICONS_DIR, f"{key}_{expression}.png")
+        if os.path.exists(p):
+            return p
     path = os.path.join(ICONS_DIR, f"{key}.png")
     return path if os.path.exists(path) else None
 
@@ -776,7 +783,10 @@ def build_scene_assets(script: dict, asset_dir: str, offline: bool = False,
                                   speaker=style_id, speed=char_speed,
                                   gap=0.0 if cut else gap, effects=eff)
                 phrases.append({"text": text, "audio": audio,
-                                "dur": probe_duration(audio), "speaker": key})
+                                "dur": probe_duration(audio), "speaker": key,
+                                # 表情はセリフ行の属性。フレーズに割ってもその行の間は
+                                # 同じ顔でいる（#311）
+                                "expression": line.get("expression") or ""})
         # 読み終わりで即カットすると詰まって聞こえるのでシーン末尾に余白を足す
         dur = round(sum(p["dur"] for p in phrases) + tail, 2)
         # シーン頭の効果音。最終シーン（オチ）だけ音を変える。
